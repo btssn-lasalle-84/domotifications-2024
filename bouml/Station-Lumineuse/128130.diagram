@@ -1,0 +1,52 @@
+format 224
+
+classcanvas 128002 class_ref 128130 // StationLumineuse
+  classdiagramsettings member_max_width 0 end
+  xyz 58 101 2000
+end
+classcanvas 128130 class_ref 128258 // CommunicationWifi
+  classdiagramsettings member_max_width 0 end
+  xyz 461 96 2000
+end
+classcanvas 128258 class_ref 128386 // ServeurWeb
+  classdiagramsettings show_members_full_definition yes show_members_visibility yes member_max_width 0 end
+  xyz 464 167 2000
+end
+classcanvas 128386 class_ref 128514 // Poubelle
+  classdiagramsettings show_members_full_definition yes show_members_visibility yes member_max_width 0 end
+  xyz 399 345 2000
+end
+classcanvas 128514 class_ref 128642 // Boite
+  classdiagramsettings show_members_full_definition yes show_members_visibility yes member_max_width 0 end
+  xyz 217 347 2000
+end
+classcanvas 128642 class_ref 128770 // Machine
+  classdiagramsettings show_members_full_definition yes show_members_visibility yes member_max_width 0 end
+  xyz 38 348 2000
+end
+relationcanvas 128898 relation_ref 128258 // <unidirectional association>
+  from ref 128002 z 2001 to ref 128642
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129026 relation_ref 128386 // <unidirectional association>
+  from ref 128002 z 2001 to ref 128514
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129154 relation_ref 128514 // <unidirectional association>
+  from ref 128002 z 2001 to ref 128386
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129282 relation_ref 128642 // <association>
+  from ref 128002 z 2001 to ref 128130
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129410 relation_ref 128770 // <association>
+  from ref 128002 z 2001 to ref 128258
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+end
