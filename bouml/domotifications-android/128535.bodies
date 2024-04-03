@@ -1,0 +1,20 @@
+class IHM
+!!!128407.java!!!	onCreate(inout savedInstanceState : Bundle) : void
+        super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate()");
+        setContentView(R.layout.activity_main);
+!!!128535.java!!!	onStart() : void
+        super.onStart();
+        Log.d(TAG, "onStart()");
+!!!128663.java!!!	onResume() : void
+        super.onResume();
+        Log.d(TAG, "onResume()");
+!!!128791.java!!!	onPause() : void
+        super.onPause();
+        Log.d(TAG, "onPause()");
+!!!128919.java!!!	onStop() : void
+        super.onStop();
+        Log.d(TAG, "onStop()");
+!!!129047.java!!!	onDestroy() : void
+        super.onDestroy();
+        Log.d(TAG, "onDestroy()");

@@ -1,0 +1,50 @@
+format 224
+
+classcanvas 128023 class_ref 128535 // IHM
+  classdiagramsettings member_max_width 0 end
+  xyz 312 8 2000
+end
+classcanvas 128151 class_ref 128279 // Domotifications
+  classdiagramsettings member_max_width 0 end
+  xyz 423 252 2000
+end
+classcanvas 128279 class_ref 128407 // Module
+  classdiagramsettings member_max_width 0 end
+  xyz 13 463 3005
+end
+classcanvas 128919 class_ref 128151 // Communication
+  classdiagramsettings member_max_width 0 end
+  xyz 795 247 2006
+end
+relationcanvas 128407 relation_ref 128151 // <unidirectional association>
+  decenter_begin 841
+  decenter_end 676
+  from ref 128151 z 3006 stereotype "<<List>>" xyz 571.5 382 3006 to ref 128279
+  role_a_pos 666 442 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 128535 relation_ref 128279 // <unidirectional association>
+  decenter_begin 690
+  decenter_end 567
+  from ref 128151 z 3006 stereotype "<<List>>" xyz 509 381.5 3006 to ref 128279
+  role_a_pos 565 442 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 128663 relation_ref 128407 // <unidirectional association>
+  from ref 128151 z 3006 stereotype "<<List>>" xyz 464 381.5 3006 to ref 128279
+  role_a_pos 502 442 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 128791 relation_ref 128535 // <unidirectional association>
+  decenter_begin 223
+  decenter_end 400
+  from ref 128151 z 3006 stereotype "<<List>>" xyz 396.5 381.5 3006 to ref 128279
+  role_a_pos 408 442 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129047 relation_ref 128663 // <unidirectional association>
+  from ref 128151 z 2007 to ref 128919
+  role_a_pos 681 257 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+end
