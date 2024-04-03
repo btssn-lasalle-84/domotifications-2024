@@ -1,0 +1,34 @@
+class Poubelle
+!!!128535.cpp!!!	getActivation() : bool
+    return activation;
+!!!128663.cpp!!!	setActivation(in etat : bool) : void
+    if(etat != activation)
+    {
+        activation = etat;
+        // @todo Sauvegarder le nouvel état dans Preferences
+    }
+!!!128791.cpp!!!	getEtatNotification() : bool
+    return notification;
+!!!128919.cpp!!!	setEtatNotification(in etat : bool) : void
+    if(etat != notification)
+    {
+        notification = etat;
+        // @todo Sauvegarder le nouvel état dans Preferences
+        if(notification)
+        {
+            allumerNotification();
+        }
+        else
+        {
+            eteindreNotification();
+        }
+    }
+!!!129047.cpp!!!	resetEtatNotification() : void
+    setEtatNotification(false);
+!!!129175.cpp!!!	allumerNotification() : void
+    leds.setPixelColor(INDEX_LEDS_NOTIFICATION_POUBELLES + numeroLed,
+                       couleur); // Appliquer la couleur correspondante
+    leds.show();
+!!!129303.cpp!!!	eteindreNotification() : void
+    leds.setPixelColor(INDEX_LEDS_NOTIFICATION_POUBELLES + numeroLed, leds.Color(0, 0, 0));
+    leds.show();
