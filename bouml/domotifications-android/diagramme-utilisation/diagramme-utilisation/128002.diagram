@@ -1,0 +1,53 @@
+format 224
+
+classcanvas 128002 class_ref 128002 // Utilisateur
+  simpleclassdiagramsettings end
+  xyz 27 244 2000
+end
+usecasecanvas 128130 usecase_ref 128002 // Acquitter une notification
+  xyzwh 383 271 3005 64 32 label_xy 312 309
+end
+usecasecanvas 128258 usecase_ref 128130 // Configurer le système
+  xyzwh 401 102 3005 64 32 label_xy 362 134
+end
+usecasecanvas 128386 usecase_ref 128258 // Visualiser une notification
+  xyzwh 384 440 3005 64 32 label_xy 333 472
+end
+usecasecanvas 128514 usecase_ref 128386 // Dialoguer avec la station lumineuse
+  xyzwh 683 382 3005 64 32 label_xy 600 414
+end
+usecasecanvas 128642 usecase_ref 128514 // Activer/désactiver un module
+  xyzwh 693 47 3005 64 32 label_xy 628 32
+end
+textcanvas 129922 "<<extend>>"
+  xyzwh 563 66 3011 79 15
+textcanvas 130050 "<<include>>"
+  xyzwh 528.5 206.5 3011 79 15
+textcanvas 130178 "<<include>>"
+  xyzwh 493.5 440.5 3011 79 15
+textcanvas 130434 "<<include>>"
+  xyzwh 720.5 192.5 3011 79 15
+textcanvas 130562 "<<include>>"
+  xyzwh 524.5 315.5 3011 79 15
+line 128770 ----
+  from ref 128002 z 3006 to ref 128130
+line 128898 ----
+  from ref 128002 z 3006 to ref 128386
+line 129026 ---- decenter_end 437
+  from ref 128002 z 3006 to ref 128258
+simplerelationcanvas 129154 simplerelation_ref 128002
+  from ref 128258 z 3006 to ref 128514
+end
+simplerelationcanvas 129282 simplerelation_ref 128130
+  from ref 128130 z 3006 to ref 128514
+end
+simplerelationcanvas 129410 simplerelation_ref 128258
+  from ref 128386 z 3006 to ref 128514
+end
+simplerelationcanvas 129538 simplerelation_ref 128386
+  from ref 128642 z 3006 to ref 128258
+end
+simplerelationcanvas 129794 simplerelation_ref 128514
+  from ref 128642 z 3006 to ref 128514
+end
+end
