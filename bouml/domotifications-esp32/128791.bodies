@@ -1,0 +1,13 @@
+class StationLumineuse
+!!!130199.cpp!!!	StationLumineuse()
+    // exemple pour 3 poubelles
+    // poubelle bleue
+    poubelles.push_back(new Poubelle(1, 0, leds.Color(0, 0, 255), leds));
+    // poubelle verte
+    poubelles.push_back(new Poubelle(2, 1, leds.Color(0, 255, 0), leds));
+    // poubelle rouge
+    poubelles.push_back(new Poubelle(3, 2, leds.Color(255, 255, 0), leds));
+!!!130327.cpp!!!	demarrer() : void
+    serveurWeb->demarrer();
+!!!130455.cpp!!!	traiterRequetes() : void
+    serveurWeb->traiterRequetes();

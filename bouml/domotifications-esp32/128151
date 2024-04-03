@@ -1,0 +1,36 @@
+format 224
+"domotifications-esp32" // domotifications-esp32
+  revision 1
+  modified_by 23 "tvaira"
+  // class settings
+  
+  classdiagramsettings member_max_width 0 end
+  
+  classcompositediagramsettings end
+  
+  usecasediagramsettings end
+  
+  sequencediagramsettings end
+  
+  collaborationdiagramsettings end
+  
+  objectdiagramsettings end
+  
+  objectcompositediagramsettings end
+  
+  componentdiagramsettings
+   end
+  
+  deploymentdiagramsettings
+   end
+  
+  statediagramsettings
+   end
+  
+  activitydiagramsettings
+   end
+  
+  cpp_h_dir "domotifications-esp32/"
+  cpp_src_dir "domotifications-esp32/"
+  package_ref 128279 // lib
+end

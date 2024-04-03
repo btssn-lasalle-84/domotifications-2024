@@ -1,0 +1,44 @@
+format 224
+"lib" // domotifications-esp32::lib
+  revision 1
+  modified_by 23 "tvaira"
+  // class settings
+  
+  classdiagramsettings member_max_width 0 end
+  
+  classcompositediagramsettings end
+  
+  usecasediagramsettings end
+  
+  sequencediagramsettings end
+  
+  collaborationdiagramsettings end
+  
+  objectdiagramsettings end
+  
+  objectcompositediagramsettings end
+  
+  componentdiagramsettings
+   end
+  
+  deploymentdiagramsettings
+   end
+  
+  statediagramsettings
+   end
+  
+  activitydiagramsettings
+   end
+  
+  cpp_h_dir "/home/tvaira/Documents/git/projets/domotifications-2024/domotifications-esp32/lib/"
+  cpp_src_dir "/home/tvaira/Documents/git/projets/domotifications-2024/domotifications-esp32/lib/"
+  package_ref 128407 // Boite
+
+  package_ref 128535 // Machine
+
+  package_ref 128663 // Poubelle
+
+  package_ref 128791 // ServeurWeb
+
+  package_ref 128919 // StationLumineuse
+end
