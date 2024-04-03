@@ -11,7 +11,7 @@ usecasecanvas 128258 usecase_ref 128258 // Assurer les notifications lumineuses
   xyzwh 217 307 3005 64 32 label_xy 133 339
 end
 usecasecanvas 128386 usecase_ref 128386 // Sauvegarder l'état de la notification
-  xyzwh 411 177 3005 64 32 label_xy 329 209
+  xyzwh 411 177 3005 64 32 label_xy 335 209
 end
 usecasecanvas 128514 usecase_ref 128514 // Dialoguer avec les modules
   xyzwh 576 308 3005 64 32 label_xy 518 340
