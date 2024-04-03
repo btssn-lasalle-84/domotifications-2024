@@ -1,0 +1,7 @@
+class Module
+!!!129175.java!!!	Module(in idModule : int, in nomModule : String, inout typeModule : Module::TypeModule, inout etatActivation : boolean, inout etatModification : boolean)
+        this.idModule         = idModule;
+        this.nomModule        = nomModule;
+        this.typeModule       = typeModule;
+        this.etatActivation   = etatActivation;
+        this.etatModification = etatModification;
