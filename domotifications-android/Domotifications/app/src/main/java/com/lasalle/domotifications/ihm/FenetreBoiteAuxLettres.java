@@ -10,7 +10,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.lasalle.domotifications.R;
 
-public class MenuBoiteAuxLettres extends AppCompatActivity {
+public class FenetreBoiteAuxLettres extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

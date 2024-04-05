@@ -6,6 +6,7 @@
 
 package com.lasalle.domotifications;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
@@ -41,7 +42,6 @@ public class IHM extends AppCompatActivity
         Log.d(TAG, "onCreate()");
         setContentView(R.layout.activity_main);
 
-        menuPoubelle = findViewById(R.id.menu_poubelle_image);
         menuPoubelle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
