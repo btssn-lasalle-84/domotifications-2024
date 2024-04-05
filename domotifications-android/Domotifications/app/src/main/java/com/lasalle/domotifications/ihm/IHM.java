@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 /**
  * @class EcranPrincipal
@@ -27,6 +29,8 @@ public class IHM extends AppCompatActivity
     private String nomInterface;
     private String adresseIP;
 
+    private ImageView menuPoubelle;
+
     /**
      * @brief Méthode appelée à la création de l'activité
      */
@@ -36,6 +40,14 @@ public class IHM extends AppCompatActivity
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()");
         setContentView(R.layout.activity_main);
+
+        menuPoubelle = findViewById(R.id.menu_poubelle_image);
+        menuPoubelle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "_TEST CLICK");
+            }
+        });
     }
 
     /**
