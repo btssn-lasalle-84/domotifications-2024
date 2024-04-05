@@ -12,6 +12,7 @@
   - [Protocole](#protocole)
   - [Screenshots](#screenshots)
   - [Historique des versions](#historique-des-versions)
+    - 0.1
   - [Auteurs](#auteurs)
 
 ---
@@ -26,7 +27,21 @@ La station de notifications lumineuses est composée d’un bandeau circulaire �
 - en rouge : la présence d’un colis dans la boîte aux lettres,
 - en rouge/bleu/vert/gris/jaune : la notification d'une poubelle de tri à sortir.
 
+
+![alt text](images/modules.png)
+
 ## Fonctionnalités
+
+![diagramme-cas-utilisation.PNG](images%2Fdiagramme-cas-utilisation.PNG)
+
+| Fonctionnalité                         | OUI  | NON |
+|----------------------------------------|------|-----|
+| Application mobile fonctionnelle       |  X   |     |
+| Afficher une notification              |      |  X  |
+| Acquitter une notification             |      |  X  |
+| Dialoguer avec l'IHM                   |      |  X  |
+| Activer/Désactiver un module           |      |  X  |
+
 
 
 ## Documentation du code
@@ -34,6 +49,7 @@ La station de notifications lumineuses est composée d’un bandeau circulaire �
 https://btssn-lasalle-84.github.io/domotifications-2024/
 
 ## Diagramme de classes
+
 
 
 ## Protocole
@@ -44,6 +60,9 @@ https://btssn-lasalle-84.github.io/domotifications-2024/
 
 ## Historique des versions
 
+- 0.1
+
+![alt text](images/jira.PNG)
 
 ## Auteurs
 
