@@ -12,7 +12,6 @@
   - [Protocole](#protocole)
   - [Screenshots](#screenshots)
   - [Historique des versions](#historique-des-versions)
-    - 0.1
   - [Auteurs](#auteurs)
 
 ---
@@ -32,10 +31,10 @@ La station de notifications lumineuses est composée d’un bandeau circulaire �
 
 ## Fonctionnalités
 
-![diagramme-cas-utilisation.PNG](images%2Fdiagramme-cas-utilisation.PNG)
+![diagramme-cas-utilisation](images/diagramme-cas-utilisation.png)
 
 | Fonctionnalité                         | OUI  | NON |
-|----------------------------------------|------|-----|
+|----------------------------------------|:----:|:---:|
 | Application mobile fonctionnelle       |  X   |     |
 | Afficher une notification              |      |  X  |
 | Acquitter une notification             |      |  X  |
@@ -50,13 +49,16 @@ https://btssn-lasalle-84.github.io/domotifications-2024/
 
 ## Diagramme de classes
 
-
+![diagramme-classes-android](images/domotifications-android-classes.png)
 
 ## Protocole
 
 
 ## Screenshots
 
+- Version 0.1 (Android)
+
+![](images/screenshot-android-v0.1.png)
 
 ## Historique des versions
 
@@ -66,8 +68,8 @@ https://btssn-lasalle-84.github.io/domotifications-2024/
 
 ## Auteurs
 
-- Étudiant IR : LATYAOUI Othman <<othmanlatyaoui.pro@gmail.com>>
-- Étudiant IR : MOUTTE Corentin <<corentinmoutte@gmail.com>>
+- Étudiant IR (Android) : LATYAOUI Othman <<othmanlatyaoui.pro@gmail.com>>
+- Étudiant IR (ESP32) : MOUTTE Corentin <<corentinmoutte@gmail.com>>
 
 ---
 ©️ LaSalle Avignon 2024
