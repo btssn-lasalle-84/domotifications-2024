@@ -7,7 +7,12 @@ public class Module
     private TypeModule typeModule;
     private boolean    etatActivation;
     private boolean    etatModification;
-    public enum TypeModule { BoiteAuxLettres, Machine, Poubelle }
+    public enum TypeModule
+    {
+        BoiteAuxLettres,
+        Machine,
+        Poubelle
+    }
 
     // Constructeur
     public Module(int        idModule,

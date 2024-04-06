@@ -118,7 +118,7 @@ ${members}}
       end
     end
 
-    usecase 128130 "Configurer le système"
+    usecase 128130 "Configurer le systÃ¨me"
       
       usecasediagramsettings end
       
@@ -197,7 +197,7 @@ ${members}}
        end
     end
 
-    usecase 128514 "Activer/désactiver un module"
+    usecase 128514 "Activer/dÃ©sactiver un module"
       
       usecasediagramsettings end
       
@@ -221,7 +221,7 @@ ${members}}
       simplerelation 128386
 	-_->
 	  stereotype "extend"
-	  on usecase_ref 128130 // Configurer le système
+	  on usecase_ref 128130 // Configurer le systÃ¨me
       end
 
       simplerelation 128514
