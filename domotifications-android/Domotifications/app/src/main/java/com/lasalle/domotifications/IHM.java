@@ -10,6 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 /**
  * @class EcranPrincipal
@@ -24,8 +27,15 @@ public class IHM extends AppCompatActivity
     /**
      * Attributs
      */
+    private Domotifications domotifications;
     private String nomInterface;
     private String adresseIP;
+    /**
+     * GUI
+     */
+    private ImageButton boutonPoubelle;
+    private ImageButton boutonMachine;
+    private ImageButton boutonBoiteAuxLettres;
 
     /**
      * @brief Méthode appelée à la création de l'activité
@@ -35,7 +45,9 @@ public class IHM extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()");
-        setContentView(R.layout.activity_main);
+
+
+        initialiserGUI();
     }
 
     /**
@@ -89,5 +101,26 @@ public class IHM extends AppCompatActivity
     {
         super.onDestroy();
         Log.d(TAG, "onDestroy()");
+    }
+
+    /**
+     * @brief Initialise les ressources graphiques de l'activité
+     */
+    private void initialiserGUI()
+    {
+        setContentView(R.layout.activity_main);
+
+        boutonPoubelle        = (ImageButton)findViewById(R.id.boutonPoubelle);
+        boutonMachine         = (ImageButton)findViewById(R.id.boutonMachine);
+        boutonBoiteAuxLettres = (ImageButton)findViewById(R.id.boutonBoiteAuxLettres);
+
+        boutonPoubelle.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)
+            {
+                Log.d(TAG, "clic boutonPoubelle");
+                Intent fenetreBoiteAuxLettres = new Intent(IHM.this, FenetreBoiteAuxLettres.class);
+                startActivity(fenetreBoiteAuxLettres);
+            }
+        });
     }
 }

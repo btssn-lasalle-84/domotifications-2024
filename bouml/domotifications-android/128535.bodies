@@ -2,7 +2,9 @@ class IHM
 !!!128407.java!!!	onCreate(inout savedInstanceState : Bundle) : void
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()");
-        setContentView(R.layout.activity_main);
+
+
+        initialiserGUI();
 !!!128535.java!!!	onStart() : void
         super.onStart();
         Log.d(TAG, "onStart()");
@@ -18,3 +20,18 @@ class IHM
 !!!129047.java!!!	onDestroy() : void
         super.onDestroy();
         Log.d(TAG, "onDestroy()");
+!!!135082.java!!!	initialiserGUI() : void
+        setContentView(R.layout.activity_main);
+
+        boutonPoubelle        = (ImageButton)findViewById(R.id.boutonPoubelle);
+        boutonMachine         = (ImageButton)findViewById(R.id.boutonMachine);
+        boutonBoiteAuxLettres = (ImageButton)findViewById(R.id.boutonBoiteAuxLettres);
+
+        boutonPoubelle.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)
+            {
+                Log.d(TAG, "clic boutonPoubelle");
+                Intent fenetreBoiteAuxLettres = new Intent(IHM.this, FenetreBoiteAuxLettres.class);
+                startActivity(fenetreBoiteAuxLettres);
+            }
+        });
