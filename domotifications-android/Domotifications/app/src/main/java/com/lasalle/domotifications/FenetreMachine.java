@@ -1,6 +1,7 @@
-package com.lasalle.domotifications.ihm;
+package com.lasalle.domotifications;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,11 +11,20 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.lasalle.domotifications.R;
 
-public class FenetreMachine extends AppCompatActivity {
+public class FenetreMachine extends AppCompatActivity
+{
+    /**
+     * Constantes
+     */
+    private static final String TAG = "_FenetreMachine"; //!< TAG pour les logs
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate()");
+
+        // contenu bord à bord
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_menu_machine);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
