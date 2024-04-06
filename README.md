@@ -26,7 +26,21 @@ La station de notifications lumineuses est composée d’un bandeau circulaire �
 - en rouge : la présence d’un colis dans la boîte aux lettres,
 - en rouge/bleu/vert/gris/jaune : la notification d'une poubelle de tri à sortir.
 
+
+![alt text](images/modules.png)
+
 ## Fonctionnalités
+
+![diagramme-cas-utilisation](images/diagramme-cas-utilisation.png)
+
+| Fonctionnalité                         | OUI  | NON |
+|----------------------------------------|:----:|:---:|
+| Application mobile fonctionnelle       |  X   |     |
+| Afficher une notification              |      |  X  |
+| Acquitter une notification             |      |  X  |
+| Dialoguer avec l'IHM                   |      |  X  |
+| Activer/Désactiver un module           |      |  X  |
+
 
 
 ## Documentation du code
@@ -35,20 +49,27 @@ https://btssn-lasalle-84.github.io/domotifications-2024/
 
 ## Diagramme de classes
 
+![diagramme-classes-android](images/domotifications-android-classes.png)
 
 ## Protocole
 
 
 ## Screenshots
 
+- Version 0.1 (Android)
+
+![](images/screenshot-android-v0.1.png)
 
 ## Historique des versions
 
+- 0.1
+
+![alt text](images/jira.PNG)
 
 ## Auteurs
 
-- Étudiant IR : LATYAOUI Othman <<othmanlatyaoui.pro@gmail.com>>
-- Étudiant IR : MOUTTE Corentin <<corentinmoutte@gmail.com>>
+- Étudiant IR (Android) : LATYAOUI Othman <<othmanlatyaoui.pro@gmail.com>>
+- Étudiant IR (ESP32) : MOUTTE Corentin <<corentinmoutte@gmail.com>>
 
 ---
 ©️ LaSalle Avignon 2024
