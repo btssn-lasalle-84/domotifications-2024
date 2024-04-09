@@ -1,6 +1,6 @@
 format 224
 "domotifications" // domotifications
-  revision 2
+  revision 3
   modified_by 42 "tv"
   // class settings
   
@@ -131,7 +131,6 @@ ${members}}
 	
 	
       end
-
     end
 
     class 128407 "Module"
@@ -369,6 +368,31 @@ Attributs
 	MysqlColumn
       end
 
+      classrelation 141866 // baseDeDonnees (<unidirectional association>)
+	relation 141866 --->
+	  a role_name "baseDeDonnees" private
+	    comment " Exemple d'accès à la base de données
+!< Association avec la base de donnees"
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 141866 // baseDeDonnees (<unidirectional association>)
+	  b parent class_ref 141354 // BaseDeDonnees
+      end
+
+      attribute 143786 "nomsModules"
+	private explicit_type "String"
+	stereotype "Vector"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " test"
+      end
+
       attribute 135082 "boutonPoubelle"
 	private explicit_type "ImageButton"
 	cpp_decl ""
@@ -521,6 +545,13 @@ et détruite par le système Android)
 	comment "@brief Initialise les ressources graphiques de l'activité
 "
       end
+
+      classrelation 141994 // <dependency>
+	relation 141994 -_->
+	  a public
+	    classrelation_ref 141994 // <dependency>
+	  b parent class_ref 134826 // FenetrePoubelle
+      end
     end
 
     classdiagram 128151 "diagramme de classes"
@@ -663,6 +694,21 @@ ${members}};
 !< TAG pour les logs"
       end
 
+      attribute 142378 "boutonAccueil"
+	private explicit_type "ImageButton"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "GUI
+
+"
+      end
+
       operation 134826 "onCreate"
 	protected explicit_return_type "void"
 	nparams 1
@@ -715,6 +761,177 @@ ${members}}
 !< TAG pour les logs"
       end
 
+      classrelation 141738 // baseDeDonnees (<unidirectional association>)
+	relation 141738 --->
+	  a role_name "baseDeDonnees" private
+	    comment "
+Attributs
+
+ Exemple d'accès à la base de données
+!< Association avec la base de donnees"
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 141738 // baseDeDonnees (<unidirectional association>)
+	  b parent class_ref 141354 // BaseDeDonnees
+      end
+
+      attribute 142506 "nbModulesPoubelles"
+	private explicit_type "int"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< le nombre de poubelles gérées"
+      end
+
+      attribute 142634 "BLEUE"
+	class_attribute const_attribute public explicit_type "int"
+	init_value " 0"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "GUI
+
+!< Poubelle bleue"
+      end
+
+      attribute 142762 "VERTE"
+	class_attribute const_attribute public explicit_type "int"
+	init_value " 1"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Poubelle verte"
+      end
+
+      attribute 142890 "JAUNE"
+	class_attribute const_attribute public explicit_type "int"
+	init_value " 2"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Poubelle jaune"
+      end
+
+      attribute 143018 "GRISE"
+	class_attribute const_attribute public explicit_type "int"
+	init_value " 3"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Poubelle grise"
+      end
+
+      attribute 143146 "ROUGE"
+	class_attribute const_attribute public explicit_type "int"
+	init_value " 4"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Poubelle rouge"
+      end
+
+      attribute 143274 "NB_COULEURS_POUBELLE"
+	class_attribute const_attribute public explicit_type "int"
+	init_value " 5"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " pour les tests (cf. todo ci-dessous)
+!< Nombre de couleurs max pour les poubelles"
+      end
+
+      attribute 143402 "IMAGES_POUBELLES"
+	class_attribute const_attribute public explicit_type "int"
+	multiplicity "[]"
+	init_value " {
+          R.drawable.poubelle,
+          R.drawable.poubelle,
+          R.drawable.poubelle,
+          R.drawable.poubelle,
+          R.drawable.poubelle
+    }"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Id des images des poubelles dans les ressources Android"
+      end
+
+      attribute 143530 "imagesPoubelles"
+	private explicit_type "ImageView"
+	multiplicity "[]"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " @todo jusqu'à 5 poubelles en couleurs
+
+public static final int[] IMAGES_POUBELLES   = {
+R.drawable.poubelle_bleue,
+R.drawable.poubelle_verte,
+R.drawable.poubelle_jaune,
+R.drawable.poubelle_grise,
+R.drawable.poubelle_rouge
+}; //!< Id des images des poubelles dans les ressources Android
+
+!< Images des poubelles de couleur"
+      end
+
+      attribute 143658 "boutonAccueil"
+	private explicit_type "ImageButton"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
       operation 134954 "onCreate"
 	protected explicit_return_type "void"
 	nparams 1
@@ -728,6 +945,319 @@ ${members}}
 	
 	
 	
+      end
+
+      operation 143274 "initialiserGUI"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "@brief Initialise les ressources graphiques de l'activité
+"
+      end
+    end
+
+    class 141354 "BaseDeDonnees"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${static}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment "@class BaseDeDonnees
+@brief La classe assurant la gestion de la base de données SQLite \"domotifications.db\"
+"
+      classrelation 141482 // <generalisation>
+	relation 141482 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 141482 // <generalisation>
+	  b parent class_ref 141482 // SQLiteOpenHelper
+      end
+
+      attribute 141866 "TAG"
+	class_attribute const_attribute private explicit_type "String"
+	init_value " \"_BaseDeDonnees\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "Constantes
+
+!< TAG pour les logs"
+      end
+
+      attribute 141994 "DOMOTIFICATIONS_BDD"
+	class_attribute const_attribute private explicit_type "String"
+	init_value "
+      \"domotifications.db\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Nom de la base de données"
+      end
+
+      attribute 142122 "VERSION_DOMOTIFICATIONS_BDD"
+	class_attribute const_attribute private explicit_type "int"
+	init_value " 1"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Version de la base de données"
+      end
+
+      classrelation 141610 // baseDeDonnees (<unidirectional association>)
+	relation 141610 --->
+	  a role_name "baseDeDonnees" init_value "
+      null" class_relation private
+	    comment "
+Attributs
+
+!< Instance unique de BaseDeDonnees (singleton)"
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 141610 // baseDeDonnees (<unidirectional association>)
+	  b parent class_ref 141354 // BaseDeDonnees
+      end
+
+      attribute 142250 "sqlite"
+	private explicit_type "SQLiteDatabase"
+	init_value " null"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "<! Accès à la base de données SQLite"
+      end
+
+      operation 141610 "BaseDeDonnees"
+	private explicit_return_type ""
+	nparams 1
+	  param inout name "context" explicit_type "Context"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "@brief Constructeur de la classe BaseDeDonnees
+"
+      end
+
+      operation 141738 "getInstance"
+	class_operation public return_type class_ref 141354 // BaseDeDonnees
+	nparams 1
+	  param inout name "context" explicit_type "Context"
+	
+	preserve_java_body_indent synchronized java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "@fn getInstance
+@brief Retourne l'instance BaseDeDonnees
+"
+      end
+
+      operation 141866 "getNomModules"
+	public explicit_return_type "Vector<String>"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment " Exemples de requêtes SQL
+
+@brief Renvoie un vecteur de string contenant le noms des participants enregistrés
+"
+      end
+
+      operation 141994 "getNbMaxModulesPoubelles"
+	public explicit_return_type "int"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "@brief Renvoie le nombre max de modules de type Poubelle
+"
+      end
+
+      operation 142122 "getNbModulesPoubelles"
+	public explicit_return_type "int"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "@brief Renvoie le nombre de modules installés de type Poubelle
+"
+      end
+
+      operation 142250 "inserer"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "data" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "@brief Inserer un enregistrement dans une table
+"
+      end
+
+      operation 142378 "actualiser"
+	private explicit_return_type "void"
+	nparams 2
+	  param in name "id" explicit_type "String"
+	  param in name "data" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "@brief Actualiser les données d'un enregistrement
+"
+      end
+
+      operation 142506 "supprimerJoueur"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "nom" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "@brief Supprime un enregistrement
+"
+      end
+
+      operation 142634 "onCreate"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "sqlite" explicit_type "SQLiteDatabase"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	
+	comment "@brief Crée les différentes tables de la base de données
+"
+      end
+
+      operation 142762 "initialiserBaseDeDonnees"
+	private explicit_return_type "void"
+	nparams 1
+	  param inout name "sqlite" explicit_type "SQLiteDatabase"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "@brief Ajoute des données initiales dans la base de données
+"
+      end
+
+      operation 142890 "initialiserTestBaseDeDonnees"
+	private explicit_return_type "void"
+	nparams 1
+	  param inout name "sqlite" explicit_type "SQLiteDatabase"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "@brief Ajoute des données initiales dans la base de données pour les tests
+"
+      end
+
+      operation 143018 "effacer"
+	public explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "@brief Supprime les tables existantes pour en recréer des vierges
+"
+      end
+
+      operation 143146 "onUpgrade"
+	public explicit_return_type "void"
+	nparams 3
+	  param inout name "sqlite" explicit_type "SQLiteDatabase"
+	  param in name "oldVersion" explicit_type "int"
+	  param in name "newVersion" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+  ${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	
+	comment "@brief Supprimer les tables existantes pour en recréer des vierges
+@warning le plus simple est de supprimer l'application puis de la réinstaller !
+"
       end
     end
   end
@@ -762,6 +1292,22 @@ ${definition}"
 
     artifact 128407 "IHM"
       stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
       java_src "${comment}
 ${package}
 ${imports}
@@ -772,7 +1318,29 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import java.util.Vector;
 ${definition}"
+      php_src "<?php
+${comment}
+${namespace}
+${require_once}
+${use}
+${definition}
+?>
+"
+      python_src "${comment}
+${import}
+${definition}"
+      idl_src "#ifndef ${MODULE}_${NAME}_H
+#define ${MODULE}_${NAME}_H
+
+${comment}
+${includes}
+${module_start}
+${definition}
+${module_end}
+#endif
+"
       associated_elems
 	class_ref 128535 // IHM
       end
@@ -795,6 +1363,22 @@ ${definition}"
 
     artifact 134570 "FenetreBoiteAuxLettres"
       stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
       java_src "${comment}
 ${package}
 ${imports}
@@ -810,6 +1394,27 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import com.lasalle.domotifications.R;
 ${definition}"
+      php_src "<?php
+${comment}
+${namespace}
+${require_once}
+${use}
+${definition}
+?>
+"
+      python_src "${comment}
+${import}
+${definition}"
+      idl_src "#ifndef ${MODULE}_${NAME}_H
+#define ${MODULE}_${NAME}_H
+
+${comment}
+${includes}
+${module_start}
+${definition}
+${module_end}
+#endif
+"
       associated_elems
 	class_ref 134570 // FenetreBoiteAuxLettres
       end
@@ -817,11 +1422,28 @@ ${definition}"
 
     artifact 134698 "FenetreMachine"
       stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
       java_src "${comment}
 ${package}
 ${imports}
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageButton;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -829,6 +1451,27 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import com.lasalle.domotifications.R;
 ${definition}"
+      php_src "<?php
+${comment}
+${namespace}
+${require_once}
+${use}
+${definition}
+?>
+"
+      python_src "${comment}
+${import}
+${definition}"
+      idl_src "#ifndef ${MODULE}_${NAME}_H
+#define ${MODULE}_${NAME}_H
+
+${comment}
+${includes}
+${module_start}
+${definition}
+${module_end}
+#endif
+"
       associated_elems
 	class_ref 134698 // FenetreMachine
       end
@@ -839,17 +1482,42 @@ ${definition}"
       java_src "${comment}
 ${package}
 ${imports}
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import com.lasalle.domotifications.R;
+import java.util.Vector;
 ${definition}"
       associated_elems
 	class_ref 134826 // FenetrePoubelle
+      end
+    end
+
+    artifact 141354 "BaseDeDonnees"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import java.util.ArrayList;
+import java.util.Vector;
+import static android.provider.MediaStore.getVersion;
+${definition}"
+      associated_elems
+	class_ref 141354 // BaseDeDonnees
       end
     end
   end
