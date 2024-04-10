@@ -2,47 +2,47 @@ format 224
 
 classcanvas 128023 class_ref 128791 // StationLumineuse
   classdiagramsettings member_max_width 0 end
-  xyz 656.5 31 2000
+  xyz 656.7 31.2 2000
 end
 classcanvas 128151 class_ref 128535 // ServeurWeb
   classdiagramsettings member_max_width 0 end
-  xyz 1241.2 11.7 2006
+  xyz 1241.1 11.9 2006
 end
 classcanvas 128535 class_ref 128151 // Boite
   classdiagramsettings member_max_width 0 end
-  xyz 7.4 286.2 2006
+  xyz 44.3 286.3 2006
 end
 classcanvas 128791 class_ref 128279 // Machine
   classdiagramsettings member_max_width 0 end
-  xyz 443.8 592.8 3005
+  xyz 443 592.3 3005
 end
 classcanvas 129047 class_ref 128407 // Poubelle
   classdiagramsettings member_max_width 0 end
-  xyz 1000.8 288.2 3010
+  xyz 1000.2 288.2 3010
 end
 relationcanvas 128279 relation_ref 128279 // <unidirectional association>
   from ref 128151 z 2007 to ref 128023
-  role_a_pos 850 57 3000 no_role_b
+  role_a_pos 850 58 3000 no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 128407 relation_ref 128407 // <unidirectional association>
   from ref 128023 z 2007 to ref 128151
-  role_a_pos 1144 57 3000 no_role_b
+  role_a_pos 1146 58 3000 no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 128663 relation_ref 128535 // <unidirectional association>
-  from ref 128023 z 2007 stereotype "<<:vector>>" xyz 501.5 204 2007 to ref 128535
-  role_a_pos 428 256 3000 no_role_b
+  from ref 128023 z 2007 stereotype "<<:vector>>" xyz 518 204 2007 to ref 128535
+  role_a_pos 448 260 3000 no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 128919 relation_ref 128663 // <unidirectional association>
-  from ref 128023 z 3006 stereotype "<<:vector>>" xyz 709.5 357.5 3006 to ref 128791
-  role_a_pos 760 569 3000 no_role_b
+  from ref 128023 z 3006 stereotype "<<:vector>>" xyz 709 357 3006 to ref 128791
+  role_a_pos 758 571 3000 no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 129175 relation_ref 128791 // <unidirectional association>
-  from ref 128023 z 3011 stereotype "<<:vector>>" xyz 920.5 206.5 3011 to ref 129047
-  role_a_pos 1006 271 3000 no_role_b
+  from ref 128023 z 3011 stereotype "<<:vector>>" xyz 920 206 3011 to ref 129047
+  role_a_pos 1015 273 3000 no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 end

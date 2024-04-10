@@ -1,6 +1,6 @@
 format 224
 "domotifications-esp32"
-  revision 2
+  revision 3
   modified_by 2 "btssn2"
   cpp_root_dir "../../"
 
