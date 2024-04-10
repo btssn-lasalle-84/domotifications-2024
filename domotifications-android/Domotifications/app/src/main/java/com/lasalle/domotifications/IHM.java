@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
@@ -114,12 +115,20 @@ public class IHM extends AppCompatActivity
         boutonMachine         = (ImageButton)findViewById(R.id.boutonMachine);
         boutonBoiteAuxLettres = (ImageButton)findViewById(R.id.boutonBoiteAuxLettres);
 
-        boutonPoubelle.setOnClickListener(new View.OnClickListener() {
+        initialiserBouton(boutonPoubelle, FenetrePoubelle.class);
+        initialiserBouton(boutonMachine, FenetreMachine.class);
+        initialiserBouton(boutonBoiteAuxLettres, FenetreBoiteAuxLettres.class);
+
+
+    }
+
+    public void initialiserBouton(ImageButton bouton, Class<?> typeDeClasse) {
+        bouton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)
             {
-                Log.d(TAG, "clic boutonPoubelle");
-                Intent fenetreBoiteAuxLettres = new Intent(IHM.this, FenetreBoiteAuxLettres.class);
-                startActivity(fenetreBoiteAuxLettres);
+                Log.d(TAG, "clic " + typeDeClasse.getName());
+                Intent fenetre = new Intent(IHM.this, typeDeClasse);
+                startActivity(fenetre);
             }
         });
     }
