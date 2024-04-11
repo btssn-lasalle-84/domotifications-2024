@@ -3,8 +3,12 @@ class IHM
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()");
 
-
         initialiserGUI();
+
+        // Test BDD
+        baseDeDonnees    = BaseDeDonnees.getInstance(this);
+        nomsModules = baseDeDonnees.getNomModules();
+        Log.d(TAG, "nomsModules = " + nomsModules);
 !!!128535.java!!!	onStart() : void
         super.onStart();
         Log.d(TAG, "onStart()");
@@ -31,7 +35,7 @@ class IHM
             public void onClick(View v)
             {
                 Log.d(TAG, "clic boutonPoubelle");
-                Intent fenetreBoiteAuxLettres = new Intent(IHM.this, FenetreBoiteAuxLettres.class);
-                startActivity(fenetreBoiteAuxLettres);
+                Intent fenetrePoubelle = new Intent(IHM.this, FenetrePoubelle.class);
+                startActivity(fenetrePoubelle);
             }
         });

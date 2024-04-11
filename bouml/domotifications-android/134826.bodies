@@ -3,6 +3,12 @@ class FenetrePoubelle
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()");
 
+        baseDeDonnees      = BaseDeDonnees.getInstance(this);
+        nbModulesPoubelles = baseDeDonnees.getNbModulesPoubelles();
+        Log.d(TAG, "nbModulesPoubelles = " + nbModulesPoubelles);
+
+        initialiserGUI();
+!!!143274.java!!!	initialiserGUI() : void
         // contenu bord à bord
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_menu_poubelle);
@@ -10,4 +16,35 @@ class FenetrePoubelle
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+
+        imagesPoubelles    = new ImageView[NB_COULEURS_POUBELLE];
+        imagesPoubelles[0] = (ImageView)findViewById(R.id.poubelle0);
+        imagesPoubelles[1] = (ImageView)findViewById(R.id.poubelle1);
+        imagesPoubelles[2] = (ImageView)findViewById(R.id.poubelle2);
+        imagesPoubelles[3] = (ImageView)findViewById(R.id.poubelle3);
+        imagesPoubelles[4] = (ImageView)findViewById(R.id.poubelle4);
+
+        for(int i = 0; i < NB_COULEURS_POUBELLE; ++i)
+        {
+            imagesPoubelles[i].setImageResource(IMAGES_POUBELLES[i]);
+        }
+
+        for(int i = 0; i < NB_COULEURS_POUBELLE; ++i)
+        {
+            imagesPoubelles[i].setVisibility(View.INVISIBLE);
+        }
+
+        for(int i = 0; i < nbModulesPoubelles; ++i)
+        {
+            imagesPoubelles[i].setVisibility(View.VISIBLE);
+        }
+
+        boutonAccueil = (ImageButton)findViewById(R.id.boutonAccueil);
+        boutonAccueil.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)
+            {
+                Log.d(TAG, "clic boutonAccueil");
+                finish();
+            }
         });

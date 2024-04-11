@@ -2,6 +2,7 @@ package com.lasalle.domotifications;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,10 @@ public class FenetreMachine extends AppCompatActivity
      * Constantes
      */
     private static final String TAG = "_FenetreMachine"; //!< TAG pour les logs
+    /**
+     * GUI
+     */
+    private ImageButton boutonAccueil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
