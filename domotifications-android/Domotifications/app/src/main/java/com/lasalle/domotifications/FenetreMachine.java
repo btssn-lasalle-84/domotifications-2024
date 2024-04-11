@@ -21,7 +21,9 @@ public class FenetreMachine extends AppCompatActivity
      * Constantes
      */
     private static final String TAG = "_FenetreMachine"; //!< TAG pour les logs
-
+    /**
+     * GUI
+     */
     private ImageButton boutonAccueil;
 
     @Override
@@ -39,8 +41,7 @@ public class FenetreMachine extends AppCompatActivity
             return insets;
         });
 
-        boutonAccueil        = (ImageButton)findViewById(R.id.boutonAccueil);
-
+        boutonAccueil = (ImageButton)findViewById(R.id.boutonAccueil);
         boutonAccueil.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)
             {
@@ -49,5 +50,4 @@ public class FenetreMachine extends AppCompatActivity
             }
         });
     }
-
 }

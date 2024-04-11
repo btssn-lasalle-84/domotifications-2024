@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import java.util.Vector;
+
 /**
  * @class EcranPrincipal
  * @brief L'activité principale
@@ -31,6 +33,9 @@ public class IHM extends AppCompatActivity
     private Domotifications domotifications;
     private String nomInterface;
     private String adresseIP;
+    // Exemple d'accès à la base de données
+    private BaseDeDonnees  baseDeDonnees;    //!< Association avec la base de donnees
+    private Vector<String> nomsModules; // test
     /**
      * GUI
      */
@@ -47,8 +52,12 @@ public class IHM extends AppCompatActivity
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()");
 
-
         initialiserGUI();
+
+        // Test BDD
+        baseDeDonnees    = BaseDeDonnees.getInstance(this);
+        nomsModules = baseDeDonnees.getNomModules();
+        Log.d(TAG, "nomsModules = " + nomsModules);
     }
 
     /**

@@ -48,8 +48,7 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
             return insets;
         });
 
-        boutonAccueil        = (ImageButton)findViewById(R.id.boutonAccueil);
-
+        boutonAccueil = (ImageButton)findViewById(R.id.boutonAccueil);
         boutonAccueil.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)
             {

@@ -20,15 +20,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FenetreBoiteAuxLettres"
-            android:exported="false">
-        </activity>
-        <activity
             android:name=".FenetrePoubelle"
             android:exported="false">
         </activity>
         <activity
             android:name=".FenetreMachine"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".FenetreBoiteAuxLettres"
             android:exported="false">
         </activity>
     </application>

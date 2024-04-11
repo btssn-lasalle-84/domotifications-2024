@@ -5,26 +5,100 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ihm.MenuPoubelle">
+    tools:context=".FenetrePoubelle">
 
     <TextView
         android:id="@+id/titre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Notifications Poubelles"
-        android:textSize="50sp"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.047" />
 
+    <ImageView
+        android:id="@+id/poubelle0"
+        android:src="@drawable/poubelle"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="15dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@android:color/transparent"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/poubelle1"
+        android:src="@drawable/poubelle"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="15dp"
+        android:scaleType="fitXY"
+        android:layout_gravity="center_horizontal"
+        android:background="@android:color/transparent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/poubelle0"
+        app:layout_constraintRight_toLeftOf="@+id/poubelle2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/poubelle2"
+        android:src="@drawable/poubelle"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="15dp"
+        android:scaleType="fitXY"
+        android:layout_gravity="center_horizontal"
+        android:background="@android:color/transparent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/poubelle1"
+        app:layout_constraintRight_toLeftOf="@+id/poubelle3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/poubelle3"
+        android:src="@drawable/poubelle"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="15dp"
+        android:scaleType="fitXY"
+        android:layout_gravity="center_horizontal"
+        android:background="@android:color/transparent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/poubelle2"
+        app:layout_constraintRight_toLeftOf="@+id/poubelle4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/poubelle4"
+        android:src="@drawable/poubelle"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="15dp"
+        android:scaleType="fitXY"
+        android:layout_gravity="center_horizontal"
+        android:background="@android:color/transparent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/poubelle3"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="MissingConstraints" />
+
     <ImageButton
         android:id="@+id/boutonAccueil"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="64dp"
+        android:layout_margin="24dp"
         android:background="@android:color/transparent"
         android:scaleType="fitXY"
         android:src="@drawable/ic_home_black_24dp"
@@ -32,4 +106,5 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:ignore="MissingConstraints" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

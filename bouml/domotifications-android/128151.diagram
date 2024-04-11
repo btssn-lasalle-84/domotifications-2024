@@ -2,47 +2,79 @@ format 224
 
 classcanvas 128023 class_ref 128535 // IHM
   classdiagramsettings member_max_width 0 end
-  xyz 396 22 2000
+  color lightmediumblue
+  xyz 387.5 461.5 2000
 end
 classcanvas 128042 class_ref 134570 // FenetreBoiteAuxLettres
   classdiagramsettings member_max_width 0 end
-  xyz 872 22 2000
+  color lightmediumblue
+  xyz 1548.3 465 2000
 end
 classcanvas 128151 class_ref 128279 // Domotifications
   classdiagramsettings member_max_width 0 end
-  xyz 536 546 2000
+  xyz 526 986 2000
 end
 classcanvas 128279 class_ref 128407 // Module
   classdiagramsettings member_max_width 0 end
-  xyz 22 834 3005
+  xyz 13.3 1275.5 3005
 end
 classcanvas 128298 class_ref 134698 // FenetreMachine
   classdiagramsettings member_max_width 0 end
-  xyz 1344 22 2000
+  color lightmediumblue
+  xyz 2106.7 465.5 2000
 end
-classcanvas 128426 class_ref 134826 // FenetrePoubelle
-  classdiagramsettings member_max_width 0 end
-  xyz 1822 22 2000
+classcanvas 128554 class_ref 134826 // FenetrePoubelle
+  classdiagramsettings show_members_full_definition yes show_members_visibility yes show_members_stereotype no show_members_context no show_members_multiplicity yes show_members_initialization no member_max_width 127 drawing_language java show_context_mode no end
+  color lightmediumblue
+  xyz 1070.3 462.5 2000
+end
+classcanvas 128682 class_ref 141354 // BaseDeDonnees
+  classdiagramsettings show_members_initialization no member_max_width 0 end
+  xyz 899.3 12 3005
 end
 classcanvas 128919 class_ref 128151 // Communication
   classdiagramsettings member_max_width 0 end
-  xyz 1067 539 2006
+  xyz 1149.8 979 2006
 end
 relationcanvas 128170 relation_ref 134954 // <unidirectional association>
   from ref 128023 z 2001 to ref 128151
-  role_a_pos 629 520 3000 no_role_b
+  role_a_pos 622 962 3000 no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 128407 relation_ref 128151 // <unidirectional association>
   decenter_begin 501
   decenter_end 500
-  from ref 128151 z 3006 stereotype "<<List>>" xyz 585.5 718.5 3006 to ref 128279
-  role_a_pos 629 808 3000 no_role_b
+  from ref 128151 z 3006 stereotype "<<List>>" xyz 575.5 1159 3006 to ref 128279
+  role_a_pos 622 1252 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 128810 relation_ref 141610 // <unidirectional association>
+  decenter_begin 161
+  decenter_end 87
+  from ref 128682 z 3006 to point 838.9 73.6
+  line 129578 z 3006 to point 838.6 45
+  line 129066 z 3006 to ref 128682
+  role_a_pos 745 20 3000 no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 129047 relation_ref 128663 // <unidirectional association>
   from ref 128151 z 2007 to ref 128919
-  role_a_pos 927 550 3000 no_role_b
+  role_a_pos 1006 990 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129194 relation_ref 141738 // <unidirectional association>
+  from ref 128554 z 3006 to ref 128682
+  role_a_pos 1275 399 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129322 relation_ref 141866 // <unidirectional association>
+  from ref 128023 z 3006 to ref 128682
+  role_a_pos 819 357 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129450 relation_ref 141994 // <dependency>
+  from ref 128023 z 2001 to ref 128554
+  no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 end

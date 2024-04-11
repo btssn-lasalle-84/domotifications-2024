@@ -1,0 +1,121 @@
+class BaseDeDonnees
+!!!141610.java!!!	BaseDeDonnees(inout context : Context)
+        super(context, DOMOTIFICATIONS_BDD, null, VERSION_DOMOTIFICATIONS_BDD);
+        Log.d(TAG, "BaseDeDonnees()");
+        if(sqlite == null)
+            sqlite = this.getWritableDatabase();
+!!!141738.java!!!	getInstance(inout context : Context) : BaseDeDonnees
+        if(baseDeDonnees == null)
+        {
+            baseDeDonnees = new BaseDeDonnees(context);
+        }
+        return baseDeDonnees;
+!!!141866.java!!!	getNomModules() : Vector<String>
+        Log.d(TAG, "getNomModules()");
+
+        Cursor curseur = sqlite.rawQuery("SELECT nom FROM modules ORDER BY nom ASC", null);
+
+        Vector<String> listeNomModules = new Vector<>();
+
+        while(curseur.moveToNext())
+        {
+            String nom = curseur.getString(curseur.getColumnIndexOrThrow("nom"));
+            listeNomModules.add(nom);
+        }
+        curseur.close();
+
+        return listeNomModules;
+!!!141994.java!!!	getNbMaxModulesPoubelles() : int
+        Log.d(TAG, "getNbMaxModulesPoubelles()");
+
+        Cursor curseur =
+          sqlite.rawQuery("SELECT domotifications.nbPoubelles FROM domotifications;", null);
+
+        int nbPoubelles = 0;
+        if(curseur.moveToFirst())
+        {
+            nbPoubelles = curseur.getInt(0);
+        }
+        curseur.close();
+
+        return nbPoubelles;
+!!!142122.java!!!	getNbModulesPoubelles() : int
+        Log.d(TAG, "getNbModulesPoubelles()");
+
+        Cursor curseur = sqlite.rawQuery(
+          "SELECT COUNT(*) AS NbPoubelles FROM modules WHERE modules.idTypesModules='2';",
+          null);
+
+        int nbPoubelles = 0;
+        if(curseur.moveToFirst())
+        {
+            nbPoubelles = curseur.getInt(0);
+        }
+        curseur.close();
+
+        return nbPoubelles;
+!!!142250.java!!!	inserer(in data : String) : void
+        try
+        {
+            Log.d(TAG, "inserer(" + data + ")");
+            sqlite.execSQL("INSERT INTO ... VALUES ('" + data + "')");
+        }
+        catch(SQLiteConstraintException e)
+        {
+            Log.e(TAG, "Erreur insertion !");
+        }
+!!!142378.java!!!	actualiser(in id : String, in data : String) : void
+        sqlite.execSQL("UPDATE ... SET data = '" + data + "' WHERE id = '" + id + "'");
+!!!142506.java!!!	supprimerJoueur(in nom : String) : void
+        sqlite.execSQL("DELETE FROM ... WHERE nom = ?", new String[] { nom });
+!!!142634.java!!!	onCreate(inout sqlite : SQLiteDatabase) : void
+        Log.d(TAG, "onCreate()");
+        sqlite.execSQL(
+          "CREATE TABLE IF NOT EXISTS domotifications (id INTEGER PRIMARY KEY AUTOINCREMENT, nom TEXT UNIQUE NOT NULL, urlServeurWeb varchar(255) NOT NULL, urlServeurWebsocket varchar(255) NOT NULL, nbBoitesAuxLettres INTEGER, nbPoubelles INTEGER, nbMachines INTEGER);");
+        sqlite.execSQL(
+          "CREATE TABLE IF NOT EXISTS typesModules (id INTEGER PRIMARY KEY AUTOINCREMENT, type TEXT NOT NULL CHECK(type IN ('BoiteAuxLettres','Poubelle','Machine')));");
+        sqlite.execSQL(
+          "CREATE TABLE IF NOT EXISTS modules (id INTEGER PRIMARY KEY AUTOINCREMENT, nom TEXT UNIQUE NOT NULL, idTypesModules INTEGER, actif BOOLEAN NOT NULL CHECK (actif IN (0, 1)) DEFAULT 0, idDomotifications INTEGER, FOREIGN KEY (idTypesModules) REFERENCES typesModules(id), FOREIGN KEY (idDomotifications) REFERENCES domotifications(id) ON DELETE CASCADE);");
+        sqlite.execSQL(
+          "CREATE TABLE IF NOT EXISTS notifications (id INTEGER PRIMARY KEY AUTOINCREMENT, idDomotifications INTEGER, idModules INTEGER, horodatage DATETIME NOT NULL, acquittement BOOLEAN NOT NULL CHECK (acquittement IN (0, 1)) DEFAULT 0, FOREIGN KEY (idDomotifications) REFERENCES domotifications(id) ON DELETE CASCADE, FOREIGN KEY (idModules) REFERENCES modules(id) ON DELETE CASCADE);");
+
+        initialiserBaseDeDonnees(sqlite);
+!!!142762.java!!!	initialiserBaseDeDonnees(inout sqlite : SQLiteDatabase) : void
+        Log.d(TAG, "initialiserBaseDeDonnees()");
+        sqlite.execSQL("INSERT INTO typesModules(type) VALUES ('BoiteAuxLettres');");
+        sqlite.execSQL("INSERT INTO typesModules(type) VALUES ('Poubelle');");
+        sqlite.execSQL("INSERT INTO typesModules(type) VALUES ('Machine');");
+
+        // pour les tests seulement
+        initialiserTestBaseDeDonnees(sqlite);
+!!!142890.java!!!	initialiserTestBaseDeDonnees(inout sqlite : SQLiteDatabase) : void
+        Log.d(TAG, "initialiserTestBaseDeDonnees()");
+        // Pour les tests
+        sqlite.execSQL(
+          "INSERT INTO domotifications(nom, urlServeurWeb, urlServeurWebsocket, nbBoitesAuxLettres, nbPoubelles, nbMachines) VALUES ('BTS', 'http://station-lumineuse.local:80/', 'ws://station-lumineuse.local:5000', 1, 5, 6);");
+        sqlite.execSQL(
+          "INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('boîte aux lettres', 1, 1, 1);");
+        sqlite.execSQL(
+          "INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('bleue', 2, 1, 1);");
+        sqlite.execSQL(
+          "INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('verte', 2, 0, 1);");
+        // sqlite.execSQL("INSERT INTO modules (nom, idTypesModules, actif, idDomotifications)
+        // VALUES ('jaune', 2, 0, 1);"); sqlite.execSQL("INSERT INTO modules (nom, idTypesModules,
+        // actif, idDomotifications) VALUES ('grise', 2, 0, 1);"); sqlite.execSQL("INSERT INTO
+        // modules (nom, idTypesModules, actif, idDomotifications) VALUES ('rouge', 2, 0, 1);");
+        sqlite.execSQL(
+          "INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('machine à laver', 3, 1, 1);");
+        sqlite.execSQL(
+          "INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('lave-vaiselle', 3, 1, 1);");
+!!!143018.java!!!	effacer() : void
+        Log.d(TAG, "effacer()");
+        onUpgrade(sqlite, sqlite.getVersion(), sqlite.getVersion() + 1);
+!!!143146.java!!!	onUpgrade(inout sqlite : SQLiteDatabase, in oldVersion : int, in newVersion : int) : void
+        Log.d(TAG, "onUpgrade()");
+        // sqlite.execSQL("DROP TABLE IF EXISTS ...");
+        sqlite.execSQL("DROP TABLE IF EXISTS notifications;");
+        sqlite.execSQL("DROP TABLE IF EXISTS modules;");
+        sqlite.execSQL("DROP TABLE IF EXISTS typesModules;");
+        sqlite.execSQL("DROP TABLE IF EXISTS domotifications;");
+        sqlite.setVersion(newVersion);
+        onCreate(sqlite);
