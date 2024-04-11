@@ -21,15 +21,18 @@
 
     <ImageView
         android:id="@+id/poubelle0"
-        android:src="@drawable/poubelle"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_margin="15dp"
         android:layout_gravity="center_horizontal"
+        android:layout_margin="15dp"
         android:background="@android:color/transparent"
         android:scaleType="fitXY"
+        android:src="@drawable/poubelle"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.027"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
