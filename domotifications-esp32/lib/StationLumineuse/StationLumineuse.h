@@ -12,8 +12,12 @@
 #include <Preferences.h>
 #include <Adafruit_NeoPixel.h>
 #include <vector>
+#include "BandeauLeds.h"
 
 // #define DEBUG_STATION_LUMINEUSE
+
+#define TEST_BANDEAU_LEDS
+#define TEST_TEMPORISATION 5000 // en ms
 
 class ServeurWeb;
 class Boite;
@@ -32,6 +36,7 @@ class StationLumineuse
     std::vector<Boite*>    boites;     //!< les boites de la station lumineuse
     std::vector<Machine*>  machines;   //!< les machines de la station lumineuse
     std::vector<Poubelle*> poubelles;  //!< les poubelles de la station lumineuse
+    uint32_t couleursPoubelles[NB_LEDS_NOTIFICATION_POUBELLES]; //!< les couleurs des poubelles
 
   public:
     StationLumineuse();
