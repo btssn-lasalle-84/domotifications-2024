@@ -189,12 +189,22 @@ $ curl --location http://station-lumineuse.local:80/poubelles
 
 ```bash
 $ curl --location 'http://station-lumineuse.local:80/poubelles/1' \
+--request PATCH \
 --header 'Content-Type: application/json' \
 --data '{
   "idPoubelle": "1",
   "etat": true
 }'
 [{"idPoubelle":1,"etat":true,"couleur":"bleue","actif":true}]
+
+$ curl --location 'http://station-lumineuse.local:80/poubelles/1' \
+--request PATCH \
+--header 'Content-Type: application/json' \
+--data '{
+  "idPoubelle": "1",
+  "etat": true,
+  "actif": true
+}'
 ```
 
 - Obtenir les informations sur une poubelle (`GET`) :
