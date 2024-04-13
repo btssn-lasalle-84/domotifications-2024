@@ -182,7 +182,7 @@ Exemples avec `curl` :
 
 ```bash
 $ curl --location http://station-lumineuse.local:80/poubelles
-[{"idPoubelle":1,"etat":false,"couleur":"bleu","actif":true},{"idPoubelle":2,"etat":true,"couleur":"verte","actif":true}]
+[{"idPoubelle":1,"etat":false,"couleur":"rouge","actif":false},{"idPoubelle":2,"etat":true,"couleur":"jaune","actif":false},{"idPoubelle":3,"etat":false,"couleur":"bleue","actif":false},{"idPoubelle":4,"etat":false,"couleur":"grise","actif":false},{"idPoubelle":5,"etat":false,"couleur":"verte","actif":false}]
 ```
 
 - Modifier une poubelle (`PATCH`) :
@@ -202,16 +202,20 @@ $ curl --location 'http://station-lumineuse.local:80/poubelles/1' \
 --header 'Content-Type: application/json' \
 --data '{
   "idPoubelle": "1",
-  "etat": true,
-  "actif": true
+  "etat": false,
+  "actif": false
 }'
+[{"idPoubelle":1,"etat":false,"couleur":"bleue","actif":false}]
 ```
 
 - Obtenir les informations sur une poubelle (`GET`) :
 
 ```bash
 $ curl --location http://station-lumineuse.local:80/poubelles/1
-[{"idPoubelle":1,"etat":true,"couleur":"bleue","actif":true}]
+[{"idPoubelle":1,"etat":false,"couleur":"bleue","actif":false}]
+
+$ curl --location http://station-lumineuse.local:80/poubelles/6
+404 Poubelle non trouvée
 ```
 
 ## Annexes
