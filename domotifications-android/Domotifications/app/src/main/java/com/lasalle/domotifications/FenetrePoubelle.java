@@ -40,11 +40,11 @@ public class FenetrePoubelle extends AppCompatActivity
     // pour les tests (cf. todo ci-dessous)
     public static final int NB_COULEURS_POUBELLE = 5; //!< Nombre de couleurs max pour les poubelles
     public static final int[] IMAGES_POUBELLES   = {
-          R.drawable.poubelle,
-          R.drawable.poubelle,
-          R.drawable.poubelle,
-          R.drawable.poubelle,
-          R.drawable.poubelle
+        R.drawable.poubelle,
+        R.drawable.poubelle,
+        R.drawable.poubelle,
+        R.drawable.poubelle,
+        R.drawable.poubelle
     }; //!< Id des images des poubelles dans les ressources Android
     // @todo jusqu'à 5 poubelles en couleurs
     /*
@@ -85,6 +85,8 @@ public class FenetrePoubelle extends AppCompatActivity
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        boutonAccueil = (ImageButton)findViewById(R.id.boutonAccueil);
 
         imagesPoubelles    = new ImageView[NB_COULEURS_POUBELLE];
         imagesPoubelles[0] = (ImageView)findViewById(R.id.poubelle0);
