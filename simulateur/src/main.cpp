@@ -1,7 +1,7 @@
 /**
  *
  * @file src/main.cpp
- * @brief Simulateur pour Station de notifications lumineuses (2024)
+ * @brief Simulateur de modules pour Station de notifications lumineuses (2024)
  * @author Thierry Vaira
  * @version 0.1
  */
@@ -22,7 +22,7 @@
 #define GPIO_SW2         14   //!< pour acquitter une notification
 #define GPIO_ENCODEUR_A  2    //!< pour sélectionner un module boite ou poubelle ou machine
 #define GPIO_ENCODEUR_B  4    //!< pour sélectionner un module boite ou poubelle ou machine
-#define GPIO_ENCODEUR_E  13   //!<
+#define GPIO_ENCODEUR_E  13   //!< non utilisé
 #define ADRESSE_I2C_OLED 0x3c //!< Adresse I2C de l'OLED
 #define BROCHE_I2C_SDA   21   //!< Broche SDA
 #define BROCHE_I2C_SCL   22   //!< Broche SCL
@@ -135,12 +135,12 @@ void reinitialiserAffichage()
 }
 
 void initialiser();
-int  envoyerRequetePOSTBoite(bool etat);
-int  envoyerRequetePOSTPoubelle(int id, bool etat);
-int  envoyerRequetePOSTMachine(int id, bool etat);
-int  envoyerRequeteGETBoite(bool etat);
-int  envoyerRequeteGETPoubelle(int id, bool etat);
-int  envoyerRequeteGETMachine(int id, bool etat);
+int  envoyerRequetePATCHBoite(int id, bool etat);
+int  envoyerRequetePATCHPoubelle(int id, bool etat);
+int  envoyerRequetePATCHMachine(int id, bool etat);
+int  envoyerRequeteGETBoite(int id);
+int  envoyerRequeteGETPoubelle(int id);
+int  envoyerRequeteGETMachine(int id);
 
 bool estIdValide(int id, String type);
 bool getEtatMachine(int numeroMachine);
@@ -225,7 +225,7 @@ void setup()
     wm.setTitle("Simulateur pour station de notifications lumineuses");
     // wm.setDarkMode(true);
     bool res = false;
-    // res = wm.autoConnect(); // auto generated AP name from chipid
+    res      = wm.autoConnect(); // auto generated AP name from chipid
 
     if(!res)
     {
@@ -391,23 +391,23 @@ void initialiser()
     }
 }
 
-// POST	/boite	{"etat": true|false, "id": 0}
-int envoyerRequetePOSTBoite(int id, bool etat)
+// PATCH /boites {"etat": true|false, "idBoite": 0}
+int envoyerRequetePATCHBoite(int id, bool etat)
 {
-    String urlBoite = url + String("/boite");
+    String urlBoite = url + String("/boites");
     httpClient.begin(client, urlBoite);
     httpClient.addHeader("Content-Type", "application/x-www-form-urlencoded");
     httpClient.addHeader("Content-Type", "application/json");
     String payload = "{}";
     if(etat)
     {
-        payload = String("{\"etat\":true,") + String("\"id\":") + String(id) + String("}");
+        payload = String("{\"etat\":true,") + String("\"idBoite\":") + String(id) + String("}");
     }
     else
     {
-        payload = String("{\"etat\":false,") + String("\"id\":") + String(id) + String("}");
+        payload = String("{\"etat\":false,") + String("\"idBoite\":") + String(id) + String("}");
     }
-    Serial.println("envoyerRequetePOSTBoite()");
+    Serial.println("envoyerRequetePATCHBoite()");
     Serial.print("   id   = ");
     Serial.println(id);
     Serial.print("   etat = ");
@@ -416,30 +416,30 @@ int envoyerRequetePOSTBoite(int id, bool etat)
     Serial.println(urlBoite);
     Serial.print("   json = ");
     Serial.println(payload);
-    int codeReponse = httpClient.POST(payload);
+    int codeReponse = httpClient.PATCH(payload);
     httpClient.end();
     Serial.print("   code reponse : ");
     Serial.println(codeReponse);
     return codeReponse;
 }
 
-// POST	/poubelle	{"etat": true|false, "id": 0|1|2|3|4}
-int envoyerRequetePOSTPoubelle(int id, bool etat)
+// PATCH /poubelles {"etat": true|false, "idPoubelle": 0|1|2|3|4}
+int envoyerRequetePATCHPoubelle(int id, bool etat)
 {
-    String urlPoubelle = url + String("/poubelle");
+    String urlPoubelle = url + String("/poubelles");
     httpClient.begin(client, urlPoubelle);
     httpClient.addHeader("Content-Type", "application/x-www-form-urlencoded");
     httpClient.addHeader("Content-Type", "application/json");
     String payload = "{}";
     if(etat)
     {
-        payload = String("{\"etat\":true,") + String("\"id\":") + String(id) + String("}");
+        payload = String("{\"etat\":true,") + String("\"idPoubelle\":") + String(id) + String("}");
     }
     else
     {
-        payload = String("{\"etat\":false,") + String("\"id\":") + String(id) + String("}");
+        payload = String("{\"etat\":false,") + String("\"idPoubelle\":") + String(id) + String("}");
     }
-    Serial.println("envoyerRequetePOSTPoubelle()");
+    Serial.println("envoyerRequetePATCHPoubelle()");
     Serial.print("   id   = ");
     Serial.println(id);
     Serial.print("   etat = ");
@@ -448,30 +448,30 @@ int envoyerRequetePOSTPoubelle(int id, bool etat)
     Serial.println(urlPoubelle);
     Serial.print("   json = ");
     Serial.println(payload);
-    int codeReponse = httpClient.POST(payload);
+    int codeReponse = httpClient.PATCH(payload);
     httpClient.end();
     Serial.print("   code reponse : ");
     Serial.println(codeReponse);
     return codeReponse;
 }
 
-// POST	/machine	{"etat": true|false, "id": 0|1|2|3|4|5}
-int envoyerRequetePOSTMachine(int id, bool etat)
+// PATCH /machines {"etat": true|false, "idMachine": 0|1|2|3|4|5}
+int envoyerRequetePATCHMachine(int id, bool etat)
 {
-    String urlMachine = url + String("/machine");
+    String urlMachine = url + String("/machines");
     httpClient.begin(client, urlMachine);
     httpClient.addHeader("Content-Type", "application/x-www-form-urlencoded");
     httpClient.addHeader("Content-Type", "application/json");
     String payload = "{}";
     if(etat)
     {
-        payload = String("{\"etat\":true,") + String("\"id\":") + String(id) + String("}");
+        payload = String("{\"etat\":true,") + String("\"idMachine\":") + String(id) + String("}");
     }
     else
     {
-        payload = String("{\"etat\":false,") + String("\"id\":") + String(id) + String("}");
+        payload = String("{\"etat\":false,") + String("\"idMachine\":") + String(id) + String("}");
     }
-    Serial.println("envoyerRequetePOSTMachine()");
+    Serial.println("envoyerRequetePATCHMachine()");
     Serial.print("   id   = ");
     Serial.println(id);
     Serial.print("   etat = ");
@@ -480,21 +480,19 @@ int envoyerRequetePOSTMachine(int id, bool etat)
     Serial.println(urlMachine);
     Serial.print("   json = ");
     Serial.println(payload);
-    int codeReponse = httpClient.POST(payload);
+    int codeReponse = httpClient.PATCH(payload);
     httpClient.end();
     Serial.print("   code reponse : ");
     Serial.println(codeReponse);
     return codeReponse;
 }
 
-int envoyerRequeteGETBoite(bool etat)
+int envoyerRequeteGETBoite(int id)
 {
-    String urlBoite = url + String("/boite?etat=") + String(etat);
+    String urlBoite = url + String("/boites/") + String(id);
     httpClient.begin(urlBoite.c_str());
 
     Serial.println("envoyerRequeteGETBoite()");
-    Serial.print("   etat = ");
-    Serial.println(etat);
     Serial.print("   url  = ");
     Serial.println(urlBoite);
     int codeReponse = httpClient.GET();
@@ -517,15 +515,12 @@ int envoyerRequeteGETBoite(bool etat)
     return codeReponse;
 }
 
-int envoyerRequeteGETPoubelle(int id, bool etat)
+int envoyerRequeteGETPoubelle(int id)
 {
-    String urlPoubelle =
-      url + String("/poubelle?id=") + String(id) + String("&etat=") + String(etat);
+    String urlPoubelle = url + String("/poubelles/") + String(id);
     httpClient.begin(urlPoubelle.c_str());
 
     Serial.println("envoyerRequeteGETPoubelle()");
-    Serial.print("   etat = ");
-    Serial.println(etat);
     Serial.print("   url  = ");
     Serial.println(urlPoubelle);
     int codeReponse = httpClient.GET();
@@ -548,14 +543,12 @@ int envoyerRequeteGETPoubelle(int id, bool etat)
     return codeReponse;
 }
 
-int envoyerRequeteGETMachine(int id, bool etat)
+int envoyerRequeteGETMachine(int id)
 {
-    String urlMachine = url + String("/machine?id=") + String(id) + String("&etat=") + String(etat);
+    String urlMachine = url + String("/machines/") + String(id);
     httpClient.begin(urlMachine.c_str());
 
     Serial.println("envoyerRequeteGETMachine()");
-    Serial.print("   etat = ");
-    Serial.println(etat);
     Serial.print("   url  = ");
     Serial.println(urlMachine);
     int codeReponse = httpClient.GET();
@@ -648,21 +641,19 @@ void resetEtatMachines()
 
 int allumerNotificationMachine(int numeroMachine)
 {
-    return envoyerRequeteGETMachine(numeroMachine, true);
-    // return envoyerRequetePOSTMachine(numeroMachine, true);
+    return envoyerRequetePATCHMachine(numeroMachine, true);
 }
 
 int eteindreNotificationMachine(int numeroMachine)
 {
-    return envoyerRequeteGETMachine(numeroMachine, false);
-    // return envoyerRequetePOSTMachine(numeroMachine, false);
+    return envoyerRequetePATCHMachine(numeroMachine, false);
 }
 
 void allumerNotificationMachines()
 {
     for(int i = 0; i < NB_NOTIFICATION_MACHINES; ++i)
     {
-        envoyerRequetePOSTMachine(i, true);
+        allumerNotificationMachine(i);
     }
 }
 
@@ -670,7 +661,7 @@ void eteindreNotificationMachines()
 {
     for(int i = 0; i < NB_NOTIFICATION_MACHINES; ++i)
     {
-        envoyerRequetePOSTMachine(i, false);
+        eteindreNotificationMachine(i);
     }
 }
 
@@ -734,19 +725,19 @@ void resetEtatPoubelles()
 
 int allumerNotificationPoubelle(int numeroPoubelle)
 {
-    return envoyerRequetePOSTPoubelle(numeroPoubelle, true);
+    return envoyerRequetePATCHPoubelle(numeroPoubelle, true);
 }
 
 int eteindreNotificationPoubelle(int numeroPoubelle)
 {
-    return envoyerRequetePOSTPoubelle(numeroPoubelle, false);
+    return envoyerRequetePATCHPoubelle(numeroPoubelle, false);
 }
 
 void allumerNotificationPoubelles()
 {
     for(int i = 0; i < NB_NOTIFICATION_POUBELLES; ++i)
     {
-        envoyerRequetePOSTPoubelle(i, true);
+        allumerNotificationPoubelle(i);
     }
 }
 
@@ -754,7 +745,7 @@ void eteindreNotificationPoubelles()
 {
     for(int i = 0; i < NB_NOTIFICATION_POUBELLES; ++i)
     {
-        envoyerRequetePOSTPoubelle(i, false);
+        eteindreNotificationPoubelle(i);
     }
 }
 
@@ -816,19 +807,19 @@ void resetEtatBoitesAuxLettres()
 
 int allumerNotificationBoiteAuxLettres(int numeroBoite)
 {
-    return envoyerRequetePOSTBoite(numeroBoite, true);
+    return envoyerRequetePATCHBoite(numeroBoite, true);
 }
 
 int eteindreNotificationBoiteAuxLettres(int numeroBoite)
 {
-    return envoyerRequetePOSTBoite(numeroBoite, false);
+    return envoyerRequetePATCHBoite(numeroBoite, false);
 }
 
 void allumerNotificationBoitesAuxLettres()
 {
     for(int i = 0; i < NB_NOTIFICATION_BOITES; ++i)
     {
-        envoyerRequetePOSTBoite(i, true);
+        allumerNotificationBoiteAuxLettres(i);
     }
 }
 
@@ -836,7 +827,7 @@ void eteindreNotificationBoitesAuxLettres()
 {
     for(int i = 0; i < NB_NOTIFICATION_BOITES; ++i)
     {
-        envoyerRequetePOSTBoite(i, false);
+        eteindreNotificationBoiteAuxLettres(i);
     }
 }
 
