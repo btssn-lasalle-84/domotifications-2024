@@ -41,8 +41,6 @@ La station de notifications lumineuses est composée d’un bandeau circulaire �
 | Dialoguer avec l'IHM                   |      |  X  |
 | Activer/Désactiver un module           |      |  X  |
 
-
-
 ## Documentation du code
 
 https://btssn-lasalle-84.github.io/domotifications-2024/
@@ -53,6 +51,7 @@ https://btssn-lasalle-84.github.io/domotifications-2024/
 
 ## Protocole
 
+ cf. [Spécification API HTTP REST](./specifications-openapi/README.md)
 
 ## Screenshots
 
