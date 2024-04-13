@@ -38,4 +38,4 @@ jobs:
         #if: runner.os == 'ubuntu'
         run: |
           echo sdk.dir=/usr/local/lib/android/sdk >> domotifications-android/local.properties
-          cd domotifications-android && ./gradlew --no-daemon build
+          cd domotifications-android/Domotifications && ./gradlew --no-daemon build
