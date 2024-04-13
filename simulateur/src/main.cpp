@@ -76,7 +76,7 @@ bool         demandeAcquittement = false; //!< une demande d'acquittement SW2
 bool         encodeurA           = false;
 bool         encodeurB           = false;
 int          choixNomModule      = 0;
-int          choixIdModule       = 0;
+int          choixIdModule       = 1;
 String       nomModule;
 int          idModule;
 bool         etatModule;
@@ -251,8 +251,8 @@ void setup()
 
     if(res)
     {
-        Serial.println(F("Initiaisation des modules"));
-        initialiser();
+        // Serial.println(F("Initialisation des modules"));
+        // initialiser();
     }
 }
 
@@ -276,6 +276,7 @@ void loop()
     // SW1
     if(demandeNotification)
     {
+        Serial.println("Notification");
         if(setEtatModuleSelectionne(true))
         {
             afficheur.setMessageLigne(Afficheur::Ligne3, String("Notification"));
@@ -296,6 +297,7 @@ void loop()
     // SW2
     if(demandeAcquittement)
     {
+        Serial.println("Acquittement");
         if(setEtatModuleSelectionne(false))
         {
             afficheur.setMessageLigne(Afficheur::Ligne3, String("Acquittement"));
@@ -394,7 +396,7 @@ void initialiser()
 // PATCH /boites {"etat": true|false, "idBoite": 0}
 int envoyerRequetePATCHBoite(int id, bool etat)
 {
-    String urlBoite = url + String("/boites");
+    String urlBoite = url + String("/boites/") + String(id);
     httpClient.begin(client, urlBoite);
     httpClient.addHeader("Content-Type", "application/x-www-form-urlencoded");
     httpClient.addHeader("Content-Type", "application/json");
@@ -426,7 +428,7 @@ int envoyerRequetePATCHBoite(int id, bool etat)
 // PATCH /poubelles {"etat": true|false, "idPoubelle": 0|1|2|3|4}
 int envoyerRequetePATCHPoubelle(int id, bool etat)
 {
-    String urlPoubelle = url + String("/poubelles");
+    String urlPoubelle = url + String("/poubelles/") + String(id);
     httpClient.begin(client, urlPoubelle);
     httpClient.addHeader("Content-Type", "application/x-www-form-urlencoded");
     httpClient.addHeader("Content-Type", "application/json");
@@ -458,7 +460,7 @@ int envoyerRequetePATCHPoubelle(int id, bool etat)
 // PATCH /machines {"etat": true|false, "idMachine": 0|1|2|3|4|5}
 int envoyerRequetePATCHMachine(int id, bool etat)
 {
-    String urlMachine = url + String("/machines");
+    String urlMachine = url + String("/machines/") + String(id);
     httpClient.begin(client, urlMachine);
     httpClient.addHeader("Content-Type", "application/x-www-form-urlencoded");
     httpClient.addHeader("Content-Type", "application/json");
@@ -602,6 +604,7 @@ bool setEtatMachine(int numeroMachine, bool etat)
                 etatMachines[numeroMachine] = etat;
                 sprintf((char*)cle, "%s%d", "machine", numeroMachine);
                 preferences.putBool(cle, etatMachines[numeroMachine]);
+                return true;
             }
             else
                 return false;
@@ -614,6 +617,7 @@ bool setEtatMachine(int numeroMachine, bool etat)
                 etatMachines[numeroMachine] = etat;
                 sprintf((char*)cle, "%s%d", "machine", numeroMachine);
                 preferences.putBool(cle, etatMachines[numeroMachine]);
+                return true;
             }
             else
                 return false;
@@ -641,12 +645,12 @@ void resetEtatMachines()
 
 int allumerNotificationMachine(int numeroMachine)
 {
-    return envoyerRequetePATCHMachine(numeroMachine, true);
+    return envoyerRequetePATCHMachine(numeroMachine + 1, true);
 }
 
 int eteindreNotificationMachine(int numeroMachine)
 {
-    return envoyerRequetePATCHMachine(numeroMachine, false);
+    return envoyerRequetePATCHMachine(numeroMachine + 1, false);
 }
 
 void allumerNotificationMachines()
@@ -686,6 +690,7 @@ bool setEtatPoubelle(int numeroPoubelle, bool etat)
                 etatPoubelles[numeroPoubelle] = etat;
                 sprintf((char*)cle, "%s%d", "poubelle", numeroPoubelle);
                 preferences.putBool(cle, etatPoubelles[numeroPoubelle]);
+                return true;
             }
             else
                 return false;
@@ -698,6 +703,7 @@ bool setEtatPoubelle(int numeroPoubelle, bool etat)
                 etatPoubelles[numeroPoubelle] = etat;
                 sprintf((char*)cle, "%s%d", "poubelle", numeroPoubelle);
                 preferences.putBool(cle, etatPoubelles[numeroPoubelle]);
+                return true;
             }
             else
                 return false;
@@ -725,12 +731,12 @@ void resetEtatPoubelles()
 
 int allumerNotificationPoubelle(int numeroPoubelle)
 {
-    return envoyerRequetePATCHPoubelle(numeroPoubelle, true);
+    return envoyerRequetePATCHPoubelle(numeroPoubelle + 1, true);
 }
 
 int eteindreNotificationPoubelle(int numeroPoubelle)
 {
-    return envoyerRequetePATCHPoubelle(numeroPoubelle, false);
+    return envoyerRequetePATCHPoubelle(numeroPoubelle + 1, false);
 }
 
 void allumerNotificationPoubelles()
@@ -768,6 +774,7 @@ bool setEtatBoiteAuxLettres(int numeroBoite, bool etat)
                 etatBoitesAuxLettres[numeroBoite] = etat;
                 sprintf((char*)cle, "%s%d", "boite", numeroBoite);
                 preferences.putBool(cle, etatBoitesAuxLettres[numeroBoite]);
+                return true;
             }
             else
                 return false;
@@ -780,6 +787,7 @@ bool setEtatBoiteAuxLettres(int numeroBoite, bool etat)
                 etatBoitesAuxLettres[numeroBoite] = etat;
                 sprintf((char*)cle, "%s%d", "boite", numeroBoite);
                 preferences.putBool(cle, etatBoitesAuxLettres[numeroBoite]);
+                return true;
             }
             else
                 return false;
@@ -807,12 +815,12 @@ void resetEtatBoitesAuxLettres()
 
 int allumerNotificationBoiteAuxLettres(int numeroBoite)
 {
-    return envoyerRequetePATCHBoite(numeroBoite, true);
+    return envoyerRequetePATCHBoite(numeroBoite + 1, true);
 }
 
 int eteindreNotificationBoiteAuxLettres(int numeroBoite)
 {
-    return envoyerRequetePATCHBoite(numeroBoite, false);
+    return envoyerRequetePATCHBoite(numeroBoite + 1, false);
 }
 
 void allumerNotificationBoitesAuxLettres()
@@ -881,18 +889,18 @@ bool setEtatModuleSelectionne(bool etat)
     if(choixIdModule < INDEX_NOTIFICATION_POUBELLES)
     {
         // "Machine"
-        return setEtatMachine(idModule, true);
+        return setEtatMachine(idModule, etat);
     }
     else if(choixIdModule >= INDEX_NOTIFICATION_POUBELLES &&
             choixIdModule < INDEX_NOTIFICATION_BOITE)
     {
         // "Poubelle"
-        return setEtatPoubelle(idModule, true);
+        return setEtatPoubelle(idModule, etat);
     }
     else
     {
         // "Boite"
-        return setEtatBoiteAuxLettres(idModule, true);
+        return setEtatBoiteAuxLettres(idModule, etat);
     }
     return false;
 }
