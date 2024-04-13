@@ -48,8 +48,15 @@ StationLumineuse::StationLumineuse() :
     {
         boites.push_back(new Boite(i + 1, i, leds.Color(255, 0, 0), leds));
     }
+}
 
-#ifdef TEST_BANDEAU_LEDS
+/**
+ * @brief Démarre la station lumineuse
+ * @fn StationLumineuse::demarrer
+ */
+void StationLumineuse::demarrer()
+{
+    #ifdef TEST_BANDEAU_LEDS
     // Signale les notifications sur le bandeau
     for(int i = 0; i < NB_LEDS_NOTIFICATION_MACHINES; ++i)
     {
@@ -79,14 +86,7 @@ StationLumineuse::StationLumineuse() :
         boites[i]->eteindreNotification();
     }
 #endif
-}
 
-/**
- * @brief Démarre la station lumineuse
- * @fn StationLumineuse::demarrer
- */
-void StationLumineuse::demarrer()
-{
     serveurWeb->demarrer();
 }
 
