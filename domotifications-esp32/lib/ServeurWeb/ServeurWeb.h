@@ -29,7 +29,13 @@
  * @def TAILLE_JSON
  * @brief Définit la taille en octets max pour un document JSON
  */
-#define TAILLE_JSON 256
+#define TAILLE_JSON 512
+
+/**
+ * @def ID_INVALIDE
+ * @brief Définit la valeur pour un id invalide
+ */
+#define ID_INVALIDE -1
 
 class StationLumineuse;
 
@@ -40,16 +46,28 @@ class StationLumineuse;
 class ServeurWeb : public WebServer
 {
   private:
-    StationLumineuse* stationLumineuse;
+    StationLumineuse*               stationLumineuse;
+    StaticJsonDocument<TAILLE_JSON> documentJSON;
 
     void installerGestionnairesRequetes();
     void afficherAccueil();
     void traiterRequeteNonTrouvee();
+    void testerBandeau();
 
   public:
-    ServeurWeb(StationLumineuse* stationLumineuse);
+    ServeurWeb(StationLumineuse* stationLumineuse = nullptr);
+
     void demarrer();
     void traiterRequetes();
+
+    // pour les modules Poubelle
+    void traiterRequeteGetPoubelles();
+    void traiterRequeteGetPoubelle();
+    void traiterRequeteUpdatePoubelle();
+
+    // @todo idem pour les modules Machine
+
+    // @todo idem pour les modules Boite
 };
 
 #endif // SERVEURWEB_H
