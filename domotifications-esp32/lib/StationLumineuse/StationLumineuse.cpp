@@ -56,8 +56,27 @@ StationLumineuse::StationLumineuse() :
  */
 void StationLumineuse::demarrer()
 {
-    #ifdef TEST_BANDEAU_LEDS
-    // Signale les notifications sur le bandeau
+    leds.begin();
+
+    serveurWeb->demarrer();
+}
+
+/**
+ * @brief Demande le traitement des requêtes web au serveur
+ * @fn StationLumineuse::traiterRequetes
+ */
+void StationLumineuse::traiterRequetes()
+{
+    serveurWeb->traiterRequetes();
+}
+
+/**
+ * @brief Assure un test des leds du bandeau
+ * @fn StationLumineuse::testerBandeau
+ */
+void StationLumineuse::testerBandeau()
+{
+    // Allume les leds de notification de tous les modules
     for(int i = 0; i < NB_LEDS_NOTIFICATION_MACHINES; ++i)
     {
         machines[i]->allumerNotification();
@@ -71,8 +90,10 @@ void StationLumineuse::demarrer()
         boites[i]->allumerNotification();
     }
 
+    // Attente
     delay(TEST_TEMPORISATION);
 
+    // Eteint les leds de notification de tous les modules
     for(int i = 0; i < NB_LEDS_NOTIFICATION_MACHINES; ++i)
     {
         machines[i]->eteindreNotification();
@@ -85,16 +106,4 @@ void StationLumineuse::demarrer()
     {
         boites[i]->eteindreNotification();
     }
-#endif
-
-    serveurWeb->demarrer();
-}
-
-/**
- * @brief Démarre la station lumineuse
- * @fn StationLumineuse::demarrer
- */
-void StationLumineuse::traiterRequetes()
-{
-    serveurWeb->traiterRequetes();
 }

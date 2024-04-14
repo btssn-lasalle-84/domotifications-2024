@@ -16,8 +16,7 @@
 
 // #define DEBUG_STATION_LUMINEUSE
 
-#define TEST_BANDEAU_LEDS
-#define TEST_TEMPORISATION 5000 // en ms
+#define TEST_TEMPORISATION 2000 // en ms
 
 class ServeurWeb;
 class Boite;
@@ -43,6 +42,7 @@ class StationLumineuse
 
     void demarrer();
     void traiterRequetes();
+    void testerBandeau();
 };
 
 #endif // STATIONLUMINEUSE_H

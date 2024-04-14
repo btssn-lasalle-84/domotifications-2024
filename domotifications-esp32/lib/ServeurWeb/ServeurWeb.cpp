@@ -66,6 +66,7 @@ void ServeurWeb::installerGestionnairesRequetes()
 {
     on("/", HTTP_GET, std::bind(&ServeurWeb::afficherAccueil, this));
     onNotFound(std::bind(&ServeurWeb::traiterRequeteNonTrouvee, this));
+    on("/test", HTTP_GET, std::bind(&ServeurWeb::testerBandeau, this));
 }
 
 /**
@@ -111,4 +112,17 @@ void ServeurWeb::traiterRequeteNonTrouvee()
         message += " " + argName(i) + ": " + arg(i) + "\n";
     }
     send(404, "text/plain", message);
+}
+
+/**
+ * @brief Traite La requête qui qui permet de tester les leds du bandeau
+ * @fn ServeurWeb::testerBandeau
+ */
+void ServeurWeb::testerBandeau()
+{
+    stationLumineuse->testerBandeau();
+    send(200, F("text/plain"), F("Ok"));
+#ifdef DEBUG_SERVEUR_WEB
+    Serial.println(F("REPONSE : 200 Ok"));
+#endif
 }
