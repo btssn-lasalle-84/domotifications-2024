@@ -46,7 +46,8 @@ class StationLumineuse;
 class ServeurWeb : public WebServer
 {
   private:
-    StationLumineuse* stationLumineuse;
+    StationLumineuse*               stationLumineuse;
+    StaticJsonDocument<TAILLE_JSON> documentJSON;
 
     void installerGestionnairesRequetes();
     void afficherAccueil();
@@ -54,10 +55,19 @@ class ServeurWeb : public WebServer
     void testerBandeau();
 
   public:
-    ServeurWeb(StationLumineuse* stationLumineuse);
+    ServeurWeb(StationLumineuse* stationLumineuse = nullptr);
 
     void demarrer();
     void traiterRequetes();
+
+    // pour les modules Poubelle
+    void traiterRequeteGetPoubelles();
+    void traiterRequeteGetPoubelle();
+    void traiterRequeteUpdatePoubelle();
+
+    // @todo idem pour les modules Machine
+
+    // @todo idem pour les modules Boite
 };
 
 #endif // SERVEURWEB_H

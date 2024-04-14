@@ -1,8 +1,8 @@
 #include "Boite.h"
 #include "BandeauLeds.h"
 
-Boite::Boite(int id, int numeroLed, uint32_t couleur, Adafruit_NeoPixel& leds) :
-    id(id), numeroLed(numeroLed), couleur(couleur), activation(false), notification(false),
+Boite::Boite(int id, int numeroLed, uint32_t couleurLed, Adafruit_NeoPixel& leds) :
+    id(id), numeroLed(numeroLed), couleurLed(couleurLed), activation(false), notification(false),
     leds(leds)
 {
 }
@@ -17,7 +17,6 @@ void Boite::setActivation(bool etat)
     if(etat != activation)
     {
         activation = etat;
-        // @todo Sauvegarder le nouvel état dans Preferences
     }
 }
 
@@ -31,7 +30,6 @@ void Boite::setEtatNotification(bool etat)
     if(etat != notification)
     {
         notification = etat;
-        // @todo Sauvegarder le nouvel état dans Preferences
         if(notification)
         {
             allumerNotification();
@@ -50,13 +48,15 @@ void Boite::resetEtatNotification()
 
 void Boite::allumerNotification()
 {
+    // @todo Seulement si le module est activé
     leds.setPixelColor(INDEX_LEDS_NOTIFICATION_BOITE + numeroLed,
-                       couleur); // Appliquer la couleur correspondante
+                       couleurLed); // Appliquer la couleur correspondante
     leds.show();
 }
 
 void Boite::eteindreNotification()
 {
+    // @todo Seulement si le module est activé
     leds.setPixelColor(INDEX_LEDS_NOTIFICATION_BOITE + numeroLed, leds.Color(0, 0, 0));
     leds.show();
 }
