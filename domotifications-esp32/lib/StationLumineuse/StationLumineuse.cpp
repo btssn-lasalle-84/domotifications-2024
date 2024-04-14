@@ -56,7 +56,28 @@ StationLumineuse::StationLumineuse() :
  */
 void StationLumineuse::demarrer()
 {
+#ifdef DEBUG_STATION_LUMINEUSE
+    Serial.println(F("StationLumineuse::demarrer()"));
+    Serial.println(F("  Modules"));
+    Serial.print(F("    Nb machines  : "));
+    Serial.println(machines.size());
+    Serial.print(F("    Nb poubelles : "));
+    Serial.println(poubelles.size());
+    Serial.print(F("    Nb boites    : "));
+    Serial.println(boites.size());
+#endif
+
     leds.begin();
+
+#ifdef DEBUG_STATION_LUMINEUSE
+    Serial.println(F("  Bandeau initialisé"));
+    Serial.print(F("    Broche        : "));
+    Serial.println(leds.getPin());
+    Serial.print(F("    Nb leds       : "));
+    Serial.println(leds.numPixels());
+    Serial.print(F("    Peut afficher : "));
+    Serial.println((leds.canShow() ? "oui" : "non"));
+#endif
 
     serveurWeb->demarrer();
 }

@@ -64,6 +64,9 @@ void ServeurWeb::traiterRequetes()
  */
 void ServeurWeb::installerGestionnairesRequetes()
 {
+#ifdef DEBUG_SERVEUR_WEB
+    Serial.println(F("ServeurWeb::installerGestionnairesRequetes()"));
+#endif
     on("/", HTTP_GET, std::bind(&ServeurWeb::afficherAccueil, this));
     onNotFound(std::bind(&ServeurWeb::traiterRequeteNonTrouvee, this));
     on("/test", HTTP_GET, std::bind(&ServeurWeb::testerBandeau, this));
@@ -76,14 +79,18 @@ void ServeurWeb::installerGestionnairesRequetes()
 void ServeurWeb::afficherAccueil()
 {
 #ifdef DEBUG_SERVEUR_WEB
-    Serial.print(F("ServeurWeb::afficherAccueil() : requête = "));
-    Serial.println((method() == HTTP_GET) ? "GET" : "POST");
-    Serial.print(F("URI : "));
+    Serial.println(F("ServeurWeb::afficherAccueil()"));
+    Serial.print(F("  REQUETE   : "));
+    Serial.println((method() == HTTP_GET) ? "GET" : "?");
+    Serial.print(F("  URI       : "));
     Serial.println(uri());
 #endif
     String message = "<h1>Bienvenue sur la station de notifications lumineuses</h1>\n";
     message += "<p>LaSalle Avignon v1.0</p>\n";
     send(200, F("text/html"), message);
+#ifdef DEBUG_SERVEUR_WEB
+    Serial.println(F("  REPONSE   : 200"));
+#endif
 }
 
 /**
@@ -93,25 +100,28 @@ void ServeurWeb::afficherAccueil()
 void ServeurWeb::traiterRequeteNonTrouvee()
 {
 #ifdef DEBUG_SERVEUR_WEB
-    Serial.print(F("ServeurWeb::traiterRequeteNonTrouvee() : requête = "));
-    Serial.println((method() == HTTP_GET) ? "GET" : "POST");
-    Serial.print(F("URI : "));
+    Serial.println(F("ServeurWeb::traiterRequeteNonTrouvee()"));
+    Serial.print(F("  REQUETE   : "));
+    Serial.print((method() == HTTP_GET) ? "GET" : "");
+    Serial.print((method() == HTTP_POST) ? "POST" : "");
+    Serial.print((method() == HTTP_PATCH) ? "PATCH" : "");
+    Serial.print((method() == HTTP_PUT) ? "PUT" : "");
+    Serial.print((method() == HTTP_DELETE) ? "DELETE" : "");
+    Serial.println();
+    Serial.print(F("  URI       : "));
     Serial.println(uri());
+    Serial.print(F("  {id}      : "));
+    Serial.println(uri().substring(uri().lastIndexOf('/') + 1).toInt());
+    Serial.print(F("  BODY      : "));
+    Serial.println(arg("plain"));
 #endif
 
-    String message = "404 File Not Found\n\n";
-    message += "URI: ";
-    message += uri();
-    message += "\nMethod: ";
-    message += (method() == HTTP_GET) ? "GET" : "POST";
-    message += "\nArguments: ";
-    message += args();
-    message += "\n";
-    for(uint8_t i = 0; i < args(); i++)
-    {
-        message += " " + argName(i) + ": " + arg(i) + "\n";
-    }
+    String message = "404 Module non trouvé\r\n";
     send(404, "text/plain", message);
+
+#ifdef DEBUG_SERVEUR_WEB
+    Serial.println(F("  REPONSE   : 404 Module non trouvé"));
+#endif
 }
 
 /**
@@ -120,9 +130,18 @@ void ServeurWeb::traiterRequeteNonTrouvee()
  */
 void ServeurWeb::testerBandeau()
 {
+#ifdef DEBUG_SERVEUR_WEB
+    Serial.println(F("ServeurWeb::testerBandeau()"));
+    Serial.print(F("  REQUETE   : "));
+    Serial.println((method() == HTTP_GET) ? "GET" : "?");
+    Serial.print(F("  URI       : "));
+    Serial.println(uri());
+#endif
+
     stationLumineuse->testerBandeau();
     send(200, F("text/plain"), F("Ok"));
+
 #ifdef DEBUG_SERVEUR_WEB
-    Serial.println(F("REPONSE : 200 Ok"));
+    Serial.println(F("  REPONSE   : 200 Ok"));
 #endif
 }

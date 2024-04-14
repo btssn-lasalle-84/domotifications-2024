@@ -14,7 +14,7 @@
 #include <vector>
 #include "BandeauLeds.h"
 
-// #define DEBUG_STATION_LUMINEUSE
+#define DEBUG_STATION_LUMINEUSE
 
 #define TEST_TEMPORISATION 2000 // en ms
 
