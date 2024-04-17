@@ -168,6 +168,66 @@ void StationLumineuse::sauvegarderEtatsPoubelle(int id)
     preferences.putBool(cle, poubelles[id - 1]->getActivation());
 }
 
+std::size_t StationLumineuse::getNbBoites() const
+{
+    return boites.size();
+}
+
+Boite* StationLumineuse::getBoite(int id)
+{
+    if(id < 1 || id > boites.size() || boites[id - 1] == nullptr)
+    {
+        return nullptr;
+    }
+    return boites[id - 1];
+}
+
+void StationLumineuse::sauvegarderEtatsBoite(int id)
+{
+    // id valide ?
+    if(id < 1 || id > boites.size() || boites[id - 1] == nullptr)
+    {
+        return;
+    }
+    char cle[64] = "";
+
+    // sauvegarde les deux états pour cet id
+    sprintf((char*)cle, "%s%d", "notif_b", id);
+    preferences.putBool(cle, poubelles[id - 1]->getEtatNotification());
+    sprintf((char*)cle, "%s%d", "actif_b", id);
+    preferences.putBool(cle, poubelles[id - 1]->getActivation());
+}
+
+std::size_t StationLumineuse::getNbMachines() const
+{
+    return machines.size();
+}
+
+Machine* StationLumineuse::getMachine(int id)
+{
+    if(id < 1 || id > machines.size() || machines[id - 1] == nullptr)
+    {
+        return nullptr;
+    }
+    return machines[id - 1];
+}
+
+void StationLumineuse::sauvegarderEtatsMachine(int id)
+{
+    // id valide ?
+    if(id < 1 || id > machines.size() || machines[id - 1] == nullptr)
+    {
+        return;
+    }
+    char cle[64] = "";
+
+    // sauvegarde les deux états pour cet id
+    sprintf((char*)cle, "%s%d", "notif_m", id);
+    preferences.putBool(cle, poubelles[id - 1]->getEtatNotification());
+    sprintf((char*)cle, "%s%d", "actif_m", id);
+    preferences.putBool(cle, poubelles[id - 1]->getActivation());
+}
+
 // Méthodes statiques
 uint32_t StationLumineuse::convertirCouleurRGB(uint8_t r, uint8_t g, uint8_t b)
 {
@@ -223,5 +283,35 @@ void StationLumineuse::restaurerEtats()
         poubelle->setActivation(preferences.getBool(cle, false));
     }
 
-    // @todo idem pour les autres modules
+    // pour les modules boites
+    Boite* boite = nullptr;
+    for(int i = 1; i <= getNbBoites(); i++)
+    {
+        boite = getBoite(i);
+        if(boite == nullptr)
+        {
+            continue;
+        }
+        // "b" pour boite
+        sprintf((char*)cle, "%s%d", "notif_b", i);
+        boite->setEtatNotification(preferences.getBool(cle, false));
+        sprintf((char*)cle, "%s%d", "actif_b", i);
+        boite->setActivation(preferences.getBool(cle, false));
+    }
+
+    // pour les modules machines
+    Machine* machine = nullptr;
+    for(int i = 1; i <= getNbMachines(); i++)
+    {
+        machine = getMachine(i);
+        if(machine == nullptr)
+        {
+            continue;
+        }
+        // "m" pour machine
+        sprintf((char*)cle, "%s%d", "notif_m", i);
+        boite->setEtatNotification(preferences.getBool(cle, false));
+        sprintf((char*)cle, "%s%d", "actif_m", i);
+        boite->setActivation(preferences.getBool(cle, false));
+    }
 }

@@ -58,9 +58,15 @@ class StationLumineuse
     Poubelle*   getPoubelle(int id);
     void        sauvegarderEtatsPoubelle(int id);
 
-    // @todo idem pour les modules Machine
-
     // @todo idem pour les modules Boite
+    std::size_t getNbBoites() const;
+    Boite*      getBoite(int id);
+    void        sauvegarderEtatsBoite(int id);
+
+    // @todo idem pour les modules Machine
+    std::size_t getNbMachines() const;
+    Machine*    getMachine(int id);
+    void        sauvegarderEtatsMachine(int id);
 };
 
 #endif // STATIONLUMINEUSE_H
