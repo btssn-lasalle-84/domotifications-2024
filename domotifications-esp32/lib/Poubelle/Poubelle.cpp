@@ -64,14 +64,20 @@ void Poubelle::resetEtatNotification()
 void Poubelle::allumerNotification()
 {
     // @todo Seulement si le module est activé
-    leds.setPixelColor(INDEX_LEDS_NOTIFICATION_POUBELLES + numeroLed,
-                       couleurLed); // Appliquer la couleur correspondante
-    leds.show();
+    if(activation)
+    {
+        leds.setPixelColor(INDEX_LEDS_NOTIFICATION_POUBELLES + numeroLed,
+                           couleurLed); // Appliquer la couleur correspondante
+        leds.show();
+    }
 }
 
 void Poubelle::eteindreNotification()
 {
     // @todo Seulement si le module est activé
-    leds.setPixelColor(INDEX_LEDS_NOTIFICATION_POUBELLES + numeroLed, leds.Color(0, 0, 0));
-    leds.show();
+    if(activation)
+    {
+        leds.setPixelColor(INDEX_LEDS_NOTIFICATION_POUBELLES + numeroLed, leds.Color(0, 0, 0));
+        leds.show();
+    }
 }

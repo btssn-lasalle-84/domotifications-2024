@@ -49,14 +49,20 @@ void Boite::resetEtatNotification()
 void Boite::allumerNotification()
 {
     // @todo Seulement si le module est activé
-    leds.setPixelColor(INDEX_LEDS_NOTIFICATION_BOITE + numeroLed,
-                       couleurLed); // Appliquer la couleur correspondante
-    leds.show();
+    if(activation)
+    {
+        leds.setPixelColor(INDEX_LEDS_NOTIFICATION_BOITE + numeroLed,
+                           couleurLed); // Appliquer la couleur correspondante
+        leds.show();
+    }
 }
 
 void Boite::eteindreNotification()
 {
     // @todo Seulement si le module est activé
-    leds.setPixelColor(INDEX_LEDS_NOTIFICATION_BOITE + numeroLed, leds.Color(0, 0, 0));
-    leds.show();
+    if(activation)
+    {
+        leds.setPixelColor(INDEX_LEDS_NOTIFICATION_BOITE + numeroLed, leds.Color(0, 0, 0));
+        leds.show();
+    }
 }
