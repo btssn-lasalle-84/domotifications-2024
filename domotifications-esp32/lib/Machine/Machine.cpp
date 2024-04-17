@@ -7,6 +7,16 @@ Machine::Machine(int id, int numeroLed, uint32_t couleurLed, Adafruit_NeoPixel& 
 {
 }
 
+int Machine::getId() const
+{
+    return id;
+}
+
+String Machine::getCouleur() const
+{
+    return couleur;
+}
+
 bool Machine::getActivation() const
 {
     return activation;
