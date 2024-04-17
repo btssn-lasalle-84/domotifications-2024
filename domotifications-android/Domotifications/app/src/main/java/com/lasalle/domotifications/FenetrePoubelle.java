@@ -132,7 +132,7 @@ public class FenetrePoubelle extends AppCompatActivity
     private void recupererEtats()
     {
         Log.d(TAG, "recupererEtats()");
-        communication = Communication.getInstance("192.168.1.37", this);
+        communication = Communication.getInstance("192.168.52.209", this);
         communication.emettreRequeteGET("/poubelles", handler);
     }
 
@@ -140,7 +140,7 @@ public class FenetrePoubelle extends AppCompatActivity
     {
         Log.d(TAG, "traiterReponseJSON() reponse = " + reponse);
         /*
-            Exemple de réponse : pour la requête GET /poubelles
+            Exemple de réponsee : pour la requête GET /poubelles
             body =
             [
                 {"idPoubelle":1,"couleur":"rouge","etat":false,"actif":true},

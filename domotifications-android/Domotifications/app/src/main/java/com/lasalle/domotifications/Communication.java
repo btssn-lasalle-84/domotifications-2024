@@ -26,10 +26,12 @@ public class Communication
     /**
      * Constantes
      */
-    private static final String TAG                      = "_Communication"; //!< TAG pour les logs
-    private static final String ADRESSE_STATION          = "station-lumineuse.local";
-    private static final int    PORT_HTTP                = 80;
-    public final static int CODE_HTTP_REPONSE_JSON = 0; //!< Code indicatif pour les message du Handler
+    private static final String TAG                = "_Communication"; //!< TAG pour les logs
+    private static final String ADRESSE_STATION    = "station-lumineuse.local";
+    public static final String  ADRESSE_IP_STATION = "192.168.52.209"; // Simulateur station
+    private static final int    PORT_HTTP          = 80;
+    public final static int     CODE_HTTP_REPONSE_JSON =
+      0; //!< Code indicatif pour les message du Handler
     /**
      * Attributs
      */
@@ -47,8 +49,7 @@ public class Communication
     {
         this.clientOkHttp = new OkHttpClient();
         restaurerPreferences(context);
-        // @todo Initialiser url sous la forme http://xxxx:80
-
+        url = "http://" + adresseStation + ":" + numeroPort;
         Log.d(TAG, "Communication() url = " + url);
     }
 
@@ -57,7 +58,7 @@ public class Communication
         this.clientOkHttp = new OkHttpClient();
         restaurerPreferences(context);
         setAdresseStation(adresseStation);
-        // @todo Initialiser url sous la forme http://xxxx:80/
+        url = "http://" + adresseStation + ":" + numeroPort;
         Log.d(TAG, "Communication() url = " + url);
     }
 
@@ -89,7 +90,7 @@ public class Communication
         if(adresseStation != this.adresseStation)
         {
             this.adresseStation = adresseStation;
-            // @todo sauvegarder la valeur dans SharedPreferences
+            // @todo sauvegarder la valeur dans SharedPreferences ou dans BaseDeDonnees
         }
     }
 
@@ -98,9 +99,9 @@ public class Communication
         if(clientOkHttp == null)
             return;
         // @todo si l'api ne contient pas le '/' l'ajouter au début
+        // Exemple : api = "poubelles" ou "/poubelles"
 
-        // @todo créer l'url contenant l'api
-
+        url += api;
         Log.d(TAG, "emettreRequeteGET() url = " + url);
 
         Request request =
@@ -112,7 +113,7 @@ public class Communication
             {
                 Log.d(TAG, "emettreRequeteGET() onFailure");
                 e.printStackTrace();
-                // @todo gérer une erreur de requête
+                // @todo Gérer une erreur de requête
             }
 
             @Override
@@ -133,9 +134,10 @@ public class Communication
                     @Override
                     public void run()
                     {
-                        // @todo créer un Message et ajouter le code indicatif dans what et la réponse dans obj
-
-                        // @todo envoyer le Message avec sendMessage() du handler
+                        Message message = Message.obtain();
+                        message.what = CODE_HTTP_REPONSE_JSON;
+                        message.obj = body;
+                        handler.sendMessage(message);
                     }
                 }.start();
             }
@@ -158,9 +160,12 @@ public class Communication
 
     private void restaurerPreferences(Context context)
     {
-        // @todo récupèrer le SharedPreferences à partir du contexte
+        return;
+        // @todo à remplacer par la BaseDeDonnees
+        // @todo récupérer le SharedPreferences à partir du contexte
 
         // @todo si l'élément existe ?
+        /*
         if(preferences.contains(PREFERENCES_ADRESSE_STATION))
         {
             // @todo récupèrer l'adresse sauvegardée de la station
@@ -170,5 +175,6 @@ public class Communication
         {
             setAdresseStation(ADRESSE_STATION);
         }
+        */
     }
 }
