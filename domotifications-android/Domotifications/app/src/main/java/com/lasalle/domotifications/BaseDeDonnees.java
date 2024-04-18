@@ -262,4 +262,18 @@ public class BaseDeDonnees extends SQLiteOpenHelper
         sqlite.setVersion(newVersion);
         onCreate(sqlite);
     }
+
+    public void sauvegarderURLServeurWeb(String urlServeurWeb)
+    {
+        Log.d(TAG, "sauvegarderURLServeurWeb()");
+
+        try {
+            sqlite.execSQL("UPDATE domotifications SET urlServeurWeb = ?;", new String[]{urlServeurWeb});
+        }
+
+        catch(SQLiteConstraintException e)
+        {
+            Log.e(TAG, "Erreur de mise à jour de l'URL du Serveur Web");
+        }
+    }
 }

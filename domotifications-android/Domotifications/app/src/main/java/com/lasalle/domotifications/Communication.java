@@ -86,7 +86,7 @@ public class Communication
         if(adresseStation != this.adresseStation)
         {
             this.adresseStation = adresseStation;
-            // @todo sauvegarder la nouvelle url dans BaseDeDonnees
+            baseDeDonnees.sauvegarderURLServeurWeb(adresseStation);
         }
         url = "http://" + adresseStation + ":" + numeroPort;
     }
@@ -95,8 +95,11 @@ public class Communication
     {
         if(clientOkHttp == null)
             return;
-        // @todo si l'api ne contient pas le '/' l'ajouter au début
-        // Exemple : api = "poubelles" ou "/poubelles"
+
+        if(!api.startsWith("/"))
+        {
+            api = "/" + api;
+        }
 
         url += api;
         Log.d(TAG, "emettreRequeteGET() url = " + url);
@@ -110,7 +113,11 @@ public class Communication
             {
                 Log.d(TAG, "emettreRequeteGET() onFailure");
                 e.printStackTrace();
-                // @todo Gérer une erreur de requête en envoyant un Message
+                Message message = Message.obtain();
+                message.what = CODE_HTTP_ERREUR;
+
+                handler.sendMessage(message);
+
             }
 
             @Override
