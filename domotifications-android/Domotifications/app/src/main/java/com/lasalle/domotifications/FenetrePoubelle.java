@@ -1,5 +1,7 @@
 package com.lasalle.domotifications;
 
+import static com.lasalle.domotifications.Communication.ADRESSE_IP_STATION;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -132,7 +134,7 @@ public class FenetrePoubelle extends AppCompatActivity
     private void recupererEtats()
     {
         Log.d(TAG, "recupererEtats()");
-        communication = Communication.getInstance("192.168.52.209", this);
+        communication = Communication.getInstance(ADRESSE_IP_STATION, this);
         communication.emettreRequeteGET("/poubelles", handler);
     }
 
