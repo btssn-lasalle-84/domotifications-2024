@@ -21,7 +21,7 @@
 
     <ImageView
         android:id="@+id/poubelle0"
-        android:src="@drawable/poubelle"
+        android:src="@drawable/poubelle_verte"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center_horizontal"
@@ -38,7 +38,7 @@
 
     <ImageView
         android:id="@+id/poubelle1"
-        android:src="@drawable/poubelle"
+        android:src="@drawable/poubelle_verte"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center_horizontal"
@@ -53,7 +53,7 @@
 
     <ImageView
         android:id="@+id/poubelle2"
-        android:src="@drawable/poubelle"
+        android:src="@drawable/poubelle_verte"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center_horizontal"
@@ -68,7 +68,7 @@
 
     <ImageView
         android:id="@+id/poubelle3"
-        android:src="@drawable/poubelle"
+        android:src="@drawable/poubelle_verte"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center_horizontal"
@@ -83,7 +83,7 @@
 
     <ImageView
         android:id="@+id/poubelle4"
-        android:src="@drawable/poubelle"
+        android:src="@drawable/poubelle_verte"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center_horizontal"

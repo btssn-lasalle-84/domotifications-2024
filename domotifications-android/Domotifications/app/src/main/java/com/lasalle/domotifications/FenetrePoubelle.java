@@ -1,7 +1,5 @@
 package com.lasalle.domotifications;
 
-import static com.lasalle.domotifications.Communication.ADRESSE_IP_STATION;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -48,22 +46,13 @@ public class FenetrePoubelle extends AppCompatActivity
     // pour les tests (cf. todo ci-dessous)
     public static final int NB_COULEURS_POUBELLE = 5; //!< Nombre de couleurs max pour les poubelles
     public static final int[] IMAGES_POUBELLES   = {
-          R.drawable.poubelle,
-          R.drawable.poubelle,
-          R.drawable.poubelle,
-          R.drawable.poubelle,
-          R.drawable.poubelle
-    }; //!< Id des images des poubelles dans les ressources Android
-    // @todo jusqu'à 5 poubelles en couleurs
-    /*
-    public static final int[] IMAGES_POUBELLES   = {
           R.drawable.poubelle_bleue,
           R.drawable.poubelle_verte,
           R.drawable.poubelle_jaune,
           R.drawable.poubelle_grise,
           R.drawable.poubelle_rouge
     }; //!< Id des images des poubelles dans les ressources Android
-    */
+
     private ImageView[] imagesPoubelles; //!< Images des poubelles de couleur
     private ImageButton boutonAccueil;
 

@@ -21,7 +21,7 @@
 
     <ImageButton
         android:id="@+id/boutonPoubelle"
-        android:src="@drawable/poubelle"
+        android:src="@drawable/poubelle_verte"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_margin="64dp"
