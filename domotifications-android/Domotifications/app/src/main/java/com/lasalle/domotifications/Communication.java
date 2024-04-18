@@ -7,11 +7,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-
-import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.CONNECTIVITY_SERVICE;
-
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
@@ -31,34 +27,34 @@ public class Communication
     public static final String  ADRESSE_IP_STATION = "192.168.52.209"; // Simulateur station
     private static final int    PORT_HTTP          = 80;
     public final static int     CODE_HTTP_REPONSE_JSON =
-      0; //!< Code indicatif pour les message du Handler
+      0; //!< Code indicatif de l'handler  pour les requêtes qui retournent des réponses au format
+         //!< JSON
+    public final static int CODE_HTTP_ERREUR =
+      1; //!< Code indicatif de l'handler pour signaler des requêtes qui ont échouées (onFailure)
     /**
      * Attributs
      */
     private static Communication communication =
       null; //!< Instance unique de Communication (singleton)
-    private OkHttpClient       clientOkHttp = null;
-    private String             adresseStation;
-    private int                numeroPort                  = PORT_HTTP;
-    private String             url                         = null;
-    public static final String PREFERENCES                 = "preferences";
-    public static final String PREFERENCES_ADRESSE_STATION = "adresseIPStation";
-    SharedPreferences          preferences;
+    private OkHttpClient  clientOkHttp = null;
+    private BaseDeDonnees baseDeDonnees; //!< Association avec la base de donnees
+    private String        adresseStation;
+    private int           numeroPort = PORT_HTTP;
+    private String        url        = null;
 
     private Communication(Context context)
     {
         this.clientOkHttp = new OkHttpClient();
-        restaurerPreferences(context);
-        url = "http://" + adresseStation + ":" + numeroPort;
+        baseDeDonnees     = BaseDeDonnees.getInstance(context);
+        url               = recupererURLStation();
         Log.d(TAG, "Communication() url = " + url);
     }
 
     private Communication(String adresseStation, Context context)
     {
         this.clientOkHttp = new OkHttpClient();
-        restaurerPreferences(context);
+        baseDeDonnees     = BaseDeDonnees.getInstance(context);
         setAdresseStation(adresseStation);
-        url = "http://" + adresseStation + ":" + numeroPort;
         Log.d(TAG, "Communication() url = " + url);
     }
 
@@ -90,8 +86,9 @@ public class Communication
         if(adresseStation != this.adresseStation)
         {
             this.adresseStation = adresseStation;
-            // @todo sauvegarder la valeur dans SharedPreferences ou dans BaseDeDonnees
+            // @todo sauvegarder la nouvelle url dans BaseDeDonnees
         }
+        url = "http://" + adresseStation + ":" + numeroPort;
     }
 
     public void emettreRequeteGET(String api, Handler handler)
@@ -113,7 +110,7 @@ public class Communication
             {
                 Log.d(TAG, "emettreRequeteGET() onFailure");
                 e.printStackTrace();
-                // @todo Gérer une erreur de requête
+                // @todo Gérer une erreur de requête en envoyant un Message
             }
 
             @Override
@@ -135,13 +132,20 @@ public class Communication
                     public void run()
                     {
                         Message message = Message.obtain();
-                        message.what = CODE_HTTP_REPONSE_JSON;
-                        message.obj = body;
+                        message.what    = CODE_HTTP_REPONSE_JSON;
+                        message.obj     = body;
                         handler.sendMessage(message);
                     }
                 }.start();
             }
         });
+    }
+
+    private String recupererURLStation()
+    {
+        String urlServeurWeb = baseDeDonnees.getURLServeurWeb();
+
+        return urlServeurWeb;
     }
 
     private boolean estConnecteReseau(Context context)
@@ -156,25 +160,5 @@ public class Communication
             return false;
         }
         return true;
-    }
-
-    private void restaurerPreferences(Context context)
-    {
-        return;
-        // @todo à remplacer par la BaseDeDonnees
-        // @todo récupérer le SharedPreferences à partir du contexte
-
-        // @todo si l'élément existe ?
-        /*
-        if(preferences.contains(PREFERENCES_ADRESSE_STATION))
-        {
-            // @todo récupèrer l'adresse sauvegardée de la station
-
-        }
-        else
-        {
-            setAdresseStation(ADRESSE_STATION);
-        }
-        */
     }
 }

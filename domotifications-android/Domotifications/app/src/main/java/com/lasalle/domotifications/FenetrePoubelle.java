@@ -25,7 +25,8 @@ public class FenetrePoubelle extends AppCompatActivity
     /**
      * Constantes
      */
-    private static final String TAG = "_FenetrePoubelle"; //!< TAG pour les logs
+    private static final String TAG               = "_FenetrePoubelle"; //!< TAG pour les logs
+    private static final String API_GET_POUBELLES = "/poubelles";       //!< TAG pour les logs
     /**
      * Attributs
      */
@@ -134,8 +135,12 @@ public class FenetrePoubelle extends AppCompatActivity
     private void recupererEtats()
     {
         Log.d(TAG, "recupererEtats()");
-        communication = Communication.getInstance(ADRESSE_IP_STATION, this);
-        communication.emettreRequeteGET("/poubelles", handler);
+        // On récupère l'URL de la station dans la base de données
+        //communication = Communication.getInstance(this);
+        // ou on indique l'adresse de la station :
+        communication = Communication.getInstance(Communication.ADRESSE_IP_STATION, this);
+
+        communication.emettreRequeteGET(API_GET_POUBELLES, handler);
     }
 
     public void traiterReponseJSON(String reponse)
