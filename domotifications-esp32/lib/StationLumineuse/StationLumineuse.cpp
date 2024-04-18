@@ -18,7 +18,7 @@ const char* nomCouleursPoubelles[NB_LEDS_NOTIFICATION_POUBELLES] = { "rouge",
                                                                      "grise",
                                                                      "verte" };
 
-const char* nomCouleursMachines[NB_LEDS_NOTIFICATION_MACHINES] = { "vert" };
+// const char* nomCouleurMachines[NB_LEDS_NOTIFICATION_MACHINES] = { "vert" };
 
 uint32_t StationLumineuse::couleursPoubelles[NB_LEDS_NOTIFICATION_POUBELLES] = {
     StationLumineuse::convertirCouleurRGB(255, 0, 0),     // Couleur poubelle 0 (rouge)
@@ -27,6 +27,10 @@ uint32_t StationLumineuse::couleursPoubelles[NB_LEDS_NOTIFICATION_POUBELLES] = {
     StationLumineuse::convertirCouleurRGB(240, 240, 242), // Couleur poubelle 3 (grise)
     StationLumineuse::convertirCouleurRGB(0, 255, 0)      // Couleur poubelle 4 (verte)
 };
+/*
+uint32_t StationLumineuse::couleurMachines[NB_LEDS_NOTIFICATION_MACHINES] = {
+    StationLumineuse::convertirCouleurRGB(0, 255, 0)
+};*/
 
 /**
  * @brief Constructeur de la classe StationLumineuse
@@ -258,6 +262,11 @@ String StationLumineuse::getNomCouleurPoubelle(uint32_t couleur)
         }
     }
     return "";
+}
+
+String StationLumineuse::getNomCouleur(uint32_t couleur)
+{
+    return ;
 }
 
 // Méthodes privées
