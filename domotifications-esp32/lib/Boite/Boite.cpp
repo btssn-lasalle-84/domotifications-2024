@@ -7,6 +7,16 @@ Boite::Boite(int id, int numeroLed, uint32_t couleurLed, Adafruit_NeoPixel& leds
 {
 }
 
+int Boite::getId() const
+{
+    return id;
+}
+
+String Boite::getCouleur() const
+{
+    return String(couleurLed);
+}
+
 bool Boite::getActivation() const
 {
     return activation;

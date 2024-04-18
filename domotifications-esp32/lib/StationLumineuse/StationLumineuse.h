@@ -53,6 +53,9 @@ class StationLumineuse
     static uint32_t getCouleurPoubelle(String nom);
     static String   getNomCouleurPoubelle(uint32_t couleur);
 
+    static uint32_t getCouleurMachine(String nom);
+    static String   getNomCouleurMachine(uint32_t couleur);
+
     // pour les modules Poubelle
     std::size_t getNbPoubelles() const;
     Poubelle*   getPoubelle(int id);

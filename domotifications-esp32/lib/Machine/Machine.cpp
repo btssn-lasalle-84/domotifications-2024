@@ -14,7 +14,7 @@ int Machine::getId() const
 
 String Machine::getCouleur() const
 {
-    return couleur;
+    return String(couleurLed);
 }
 
 bool Machine::getActivation() const

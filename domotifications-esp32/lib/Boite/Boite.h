@@ -17,14 +17,15 @@ class Boite
   public:
     Boite(int id, int numeroLed, uint32_t couleurLed, Adafruit_NeoPixel& leds);
 
-    // @todo accesseur getId()
-    bool getActivation() const;
-    void setActivation(bool etat);
-    bool getEtatNotification() const;
-    void setEtatNotification(bool etat);
-    void resetEtatNotification();
-    void allumerNotification();
-    void eteindreNotification();
+    int    getId() const;
+    String getCouleur() const;
+    bool   getActivation() const;
+    void   setActivation(bool etat);
+    bool   getEtatNotification() const;
+    void   setEtatNotification(bool etat);
+    void   resetEtatNotification();
+    void   allumerNotification();
+    void   eteindreNotification();
 };
 
 #endif // BOITE_H

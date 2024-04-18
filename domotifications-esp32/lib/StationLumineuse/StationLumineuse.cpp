@@ -18,6 +18,8 @@ const char* nomCouleursPoubelles[NB_LEDS_NOTIFICATION_POUBELLES] = { "rouge",
                                                                      "grise",
                                                                      "verte" };
 
+const char* nomCouleursMachines[NB_LEDS_NOTIFICATION_MACHINES] = { "vert" };
+
 uint32_t StationLumineuse::couleursPoubelles[NB_LEDS_NOTIFICATION_POUBELLES] = {
     StationLumineuse::convertirCouleurRGB(255, 0, 0),     // Couleur poubelle 0 (rouge)
     StationLumineuse::convertirCouleurRGB(255, 255, 0),   // Couleur poubelle 1 (jaune)
@@ -193,9 +195,9 @@ void StationLumineuse::sauvegarderEtatsBoite(int id)
 
     // sauvegarde les deux états pour cet id
     sprintf((char*)cle, "%s%d", "notif_b", id);
-    preferences.putBool(cle, poubelles[id - 1]->getEtatNotification());
+    preferences.putBool(cle, boites[id - 1]->getEtatNotification());
     sprintf((char*)cle, "%s%d", "actif_b", id);
-    preferences.putBool(cle, poubelles[id - 1]->getActivation());
+    preferences.putBool(cle, boites[id - 1]->getActivation());
 }
 
 std::size_t StationLumineuse::getNbMachines() const
@@ -223,9 +225,9 @@ void StationLumineuse::sauvegarderEtatsMachine(int id)
 
     // sauvegarde les deux états pour cet id
     sprintf((char*)cle, "%s%d", "notif_m", id);
-    preferences.putBool(cle, poubelles[id - 1]->getEtatNotification());
+    preferences.putBool(cle, machines[id - 1]->getEtatNotification());
     sprintf((char*)cle, "%s%d", "actif_m", id);
-    preferences.putBool(cle, poubelles[id - 1]->getActivation());
+    preferences.putBool(cle, machines[id - 1]->getActivation());
 }
 
 // Méthodes statiques

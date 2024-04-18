@@ -8,7 +8,6 @@ class Machine
 {
   private:
     int                id;
-    String             couleur;
     int                numeroLed;
     uint32_t           couleurLed;
     bool               activation;
