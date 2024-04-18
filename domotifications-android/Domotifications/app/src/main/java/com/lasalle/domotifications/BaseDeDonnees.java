@@ -65,6 +65,25 @@ public class BaseDeDonnees extends SQLiteOpenHelper
     }
 
     // Exemples de requêtes SQL
+    /**
+     * @brief Renvoie l'url du serveur web
+     */
+    public String getURLServeurWeb()
+    {
+        Log.d(TAG, "getURLServeurWeb()");
+
+        Cursor curseur =
+          sqlite.rawQuery("SELECT domotifications.urlServeurWeb FROM domotifications;", null);
+
+        String urlServeurWeb = null;
+        if(curseur.moveToFirst())
+        {
+            urlServeurWeb = curseur.getString(0);
+        }
+        curseur.close();
+
+        return urlServeurWeb;
+    }
 
     /**
      * @brief Renvoie un vecteur de string contenant le noms des participants enregistrés
@@ -201,7 +220,7 @@ public class BaseDeDonnees extends SQLiteOpenHelper
         Log.d(TAG, "initialiserTestBaseDeDonnees()");
         // Pour les tests
         sqlite.execSQL(
-          "INSERT INTO domotifications(nom, urlServeurWeb, urlServeurWebsocket, nbBoitesAuxLettres, nbPoubelles, nbMachines) VALUES ('BTS', 'http://station-lumineuse.local:80/', 'ws://station-lumineuse.local:5000', 1, 5, 6);");
+          "INSERT INTO domotifications(nom, urlServeurWeb, urlServeurWebsocket, nbBoitesAuxLettres, nbPoubelles, nbMachines) VALUES ('BTS', 'http://station-lumineuse.local:80', 'ws://station-lumineuse.local:5000', 1, 5, 6);");
         sqlite.execSQL(
           "INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('boîte aux lettres', 1, 1, 1);");
         sqlite.execSQL(
@@ -242,5 +261,19 @@ public class BaseDeDonnees extends SQLiteOpenHelper
         sqlite.execSQL("DROP TABLE IF EXISTS domotifications;");
         sqlite.setVersion(newVersion);
         onCreate(sqlite);
+    }
+
+    public void sauvegarderURLServeurWeb(String urlServeurWeb)
+    {
+        Log.d(TAG, "sauvegarderURLServeurWeb()");
+
+        try {
+            sqlite.execSQL("UPDATE domotifications SET urlServeurWeb = ?;", new String[]{urlServeurWeb});
+        }
+
+        catch(SQLiteConstraintException e)
+        {
+            Log.e(TAG, "Erreur de mise à jour de l'URL du Serveur Web");
+        }
     }
 }

@@ -1,7 +1,10 @@
 package com.lasalle.domotifications;
 
-import android.content.Intent;
+import static com.lasalle.domotifications.Communication.ADRESSE_IP_STATION;
+
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -13,22 +16,27 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.lasalle.domotifications.R;
-
-import java.util.Vector;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class FenetrePoubelle extends AppCompatActivity
 {
     /**
      * Constantes
      */
-    private static final String TAG = "_FenetrePoubelle"; //!< TAG pour les logs
+    private static final String TAG               = "_FenetrePoubelle"; //!< TAG pour les logs
+    private static final String API_GET_POUBELLES = "/poubelles";       //!< TAG pour les logs
     /**
      * Attributs
      */
     // Exemple d'accès à la base de données
     private BaseDeDonnees baseDeDonnees;      //!< Association avec la base de donnees
     private int           nbModulesPoubelles; //!< le nombre de poubelles gérées
+    // Exemple d'accès à la base de données
+    private Communication communication; //!< Association avec la classe Communication
+    private Handler       handler =
+      null; //!< Handler permettant la communication entre la classe Communication et l'activité
     /**
      * GUI
      */
@@ -40,11 +48,11 @@ public class FenetrePoubelle extends AppCompatActivity
     // pour les tests (cf. todo ci-dessous)
     public static final int NB_COULEURS_POUBELLE = 5; //!< Nombre de couleurs max pour les poubelles
     public static final int[] IMAGES_POUBELLES   = {
-        R.drawable.poubelle,
-        R.drawable.poubelle,
-        R.drawable.poubelle,
-        R.drawable.poubelle,
-        R.drawable.poubelle
+          R.drawable.poubelle,
+          R.drawable.poubelle,
+          R.drawable.poubelle,
+          R.drawable.poubelle,
+          R.drawable.poubelle
     }; //!< Id des images des poubelles dans les ressources Android
     // @todo jusqu'à 5 poubelles en couleurs
     /*
@@ -68,6 +76,10 @@ public class FenetrePoubelle extends AppCompatActivity
         baseDeDonnees      = BaseDeDonnees.getInstance(this);
         nbModulesPoubelles = baseDeDonnees.getNbModulesPoubelles();
         Log.d(TAG, "nbModulesPoubelles = " + nbModulesPoubelles);
+
+        initialiserHandler();
+
+        recupererEtats();
 
         initialiserGUI();
     }
@@ -118,5 +130,74 @@ public class FenetrePoubelle extends AppCompatActivity
                 finish();
             }
         });
+    }
+
+    private void recupererEtats()
+    {
+        Log.d(TAG, "recupererEtats()");
+        // On récupère l'URL de la station dans la base de données
+        //communication = Communication.getInstance(this);
+        // ou on indique l'adresse de la station :
+        communication = Communication.getInstance(Communication.ADRESSE_IP_STATION, this);
+
+        communication.emettreRequeteGET(API_GET_POUBELLES, handler);
+    }
+
+    public void traiterReponseJSON(String reponse)
+    {
+        Log.d(TAG, "traiterReponseJSON() reponse = " + reponse);
+        /*
+            Exemple de réponsee : pour la requête GET /poubelles
+            body =
+            [
+                {"idPoubelle":1,"couleur":"rouge","etat":false,"actif":true},
+                {"idPoubelle":2,"couleur":"jaune","etat":false,"actif":true},
+                {"idPoubelle":3,"couleur":"bleu","etat":false,"actif":true},
+                {"idPoubelle":4,"couleur":"gris","etat":false,"actif":true},
+                {"idPoubelle":5,"couleur":"vert","etat":false,"actif":true}
+            ]
+        */
+        JSONArray json = null;
+
+        try
+        {
+            json = new JSONArray(reponse);
+            for(int i = 0; i < json.length(); ++i)
+            {
+                JSONObject poubelle   = json.getJSONObject(i);
+                int        idPoubelle = poubelle.getInt("idPoubelle");
+                String     couleur    = poubelle.getString("couleur");
+                Boolean    etat       = poubelle.getBoolean("etat");
+                Boolean    actif      = poubelle.getBoolean("actif");
+                Log.d(TAG,
+                      "traiterReponseJSON() idPoubelle = " + idPoubelle + " couleur = " + couleur +
+                        " etat = " + etat + " actif = " + actif);
+                // @todo Mettre à jour l'IHM
+            }
+        }
+        catch(JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void initialiserHandler()
+    {
+        this.handler = new Handler(this.getMainLooper()) {
+            @Override
+            public void handleMessage(Message message)
+            {
+                // Log.d(TAG, "[Handler] message what = " + message.what);
+                // Log.d(TAG, "[Handler] message obj = " + message.obj.toString());
+
+                switch(message.what)
+                {
+                    case Communication.CODE_HTTP_REPONSE_JSON:
+                        Log.d(TAG, "[Handler] REPONSE JSON");
+                        traiterReponseJSON(message.obj.toString());
+                        break;
+                }
+            }
+        };
     }
 }
