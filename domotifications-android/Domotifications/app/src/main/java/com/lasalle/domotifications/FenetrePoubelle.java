@@ -1,10 +1,12 @@
 package com.lasalle.domotifications;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
@@ -17,6 +19,9 @@ import androidx.core.view.WindowInsetsCompat;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FenetrePoubelle extends AppCompatActivity
 {
@@ -56,6 +61,9 @@ public class FenetrePoubelle extends AppCompatActivity
     private ImageView[] imagesPoubelles; //!< Images des poubelles de couleur
     private ImageButton boutonAccueil;
 
+    private Button[] boutonsActiver;
+    private Module[] modulesPoubelles;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -66,11 +74,14 @@ public class FenetrePoubelle extends AppCompatActivity
         nbModulesPoubelles = baseDeDonnees.getNbModulesPoubelles();
         Log.d(TAG, "nbModulesPoubelles = " + nbModulesPoubelles);
 
+        System.out.println("nbModulesPoubelles : " + nbModulesPoubelles);
+
         initialiserHandler();
 
         recupererEtats();
 
         initialiserGUI();
+
     }
 
     /**
@@ -109,6 +120,19 @@ public class FenetrePoubelle extends AppCompatActivity
         for(int i = 0; i < nbModulesPoubelles; ++i)
         {
             imagesPoubelles[i].setVisibility(View.VISIBLE);
+        }
+
+        if(modulesPoubelles !=null) {
+            for (int i = 0; i < modulesPoubelles.length; i++) {
+                final int index = i;
+                Button boutonActiver = boutonsActiver[i];
+                boutonActiver.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        gererClicSurBouton(index);
+                    }
+                });
+            }
         }
 
         boutonAccueil = (ImageButton)findViewById(R.id.boutonAccueil);
@@ -162,12 +186,14 @@ public class FenetrePoubelle extends AppCompatActivity
                       "traiterReponseJSON() idPoubelle = " + idPoubelle + " couleur = " + couleur +
                         " etat = " + etat + " actif = " + actif);
                 // @todo Mettre à jour l'IHM
+
             }
         }
         catch(JSONException e)
         {
             e.printStackTrace();
         }
+
     }
 
     private void initialiserHandler()
@@ -189,4 +215,31 @@ public class FenetrePoubelle extends AppCompatActivity
             }
         };
     }
+
+    private void gererClicSurBouton(int i) {
+        if (modulesPoubelles[i] == null) {
+            Log.e(TAG, "Module à l'index " + i + " est null");
+            return;
+        }
+
+        modulesPoubelles[i].setActif(!modulesPoubelles[i].estActif());
+
+        Button boutonActiver = boutonsActiver[i];
+
+        if (boutonActiver == null) {
+            Log.e(TAG, "Bouton à l'index " + i + " est null");
+            return;
+        }
+
+        if (modulesPoubelles[i].estActif()) {
+            boutonActiver.setText("Désactiver");
+            baseDeDonnees.mettreAJourEtatActivationModule(modulesPoubelles[i].getIdModule(), true);
+        } else {
+            boutonActiver.setText("Activer");
+            baseDeDonnees.mettreAJourEtatActivationModule(modulesPoubelles[i].getIdModule(), false);
+        }
+    }
+
+
 }
+

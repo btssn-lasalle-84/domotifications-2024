@@ -110,4 +110,15 @@
         app:layout_constraintRight_toRightOf="parent"
         tools:ignore="MissingConstraints" />
 
+    <Button
+        android:id="@+id/boutonActiver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.038"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.699" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

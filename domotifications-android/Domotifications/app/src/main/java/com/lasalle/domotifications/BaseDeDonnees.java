@@ -9,11 +9,16 @@ package com.lasalle.domotifications;
 
 import static android.provider.MediaStore.getVersion;
 
+import static com.lasalle.domotifications.FenetrePoubelle.NB_COULEURS_POUBELLE;
+
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -134,8 +139,8 @@ public class BaseDeDonnees extends SQLiteOpenHelper
         Log.d(TAG, "getNbModulesPoubelles()");
 
         Cursor curseur = sqlite.rawQuery(
-          "SELECT COUNT(*) AS NbPoubelles FROM modules WHERE modules.idTypesModules='2';",
-          null);
+                "SELECT COUNT(*) AS NbPoubelles FROM modules WHERE modules.idTypesModules='2';",
+                null);
 
         int nbPoubelles = 0;
         if(curseur.moveToFirst())
@@ -227,10 +232,12 @@ public class BaseDeDonnees extends SQLiteOpenHelper
           "INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('bleue', 2, 1, 1);");
         sqlite.execSQL(
           "INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('verte', 2, 0, 1);");
-        // sqlite.execSQL("INSERT INTO modules (nom, idTypesModules, actif, idDomotifications)
-        // VALUES ('jaune', 2, 0, 1);"); sqlite.execSQL("INSERT INTO modules (nom, idTypesModules,
-        // actif, idDomotifications) VALUES ('grise', 2, 0, 1);"); sqlite.execSQL("INSERT INTO
-        // modules (nom, idTypesModules, actif, idDomotifications) VALUES ('rouge', 2, 0, 1);");
+        sqlite.execSQL(
+                "INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('jaune', 2, 0, 1);");
+        sqlite.execSQL(
+                "INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('grise', 2, 0, 1);");
+        sqlite.execSQL(
+                "INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('rouge', 2, 0, 1);");
         sqlite.execSQL(
           "INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('machine à laver', 3, 1, 1);");
         sqlite.execSQL(
@@ -263,6 +270,7 @@ public class BaseDeDonnees extends SQLiteOpenHelper
         onCreate(sqlite);
     }
 
+
     public void sauvegarderURLServeurWeb(String urlServeurWeb)
     {
         Log.d(TAG, "sauvegarderURLServeurWeb()");
@@ -276,4 +284,22 @@ public class BaseDeDonnees extends SQLiteOpenHelper
             Log.e(TAG, "Erreur de mise à jour de l'URL du Serveur Web");
         }
     }
+
+    /**
+     * @brief Met à jour l'état d'activation du module dans la base de données
+     */
+    public void mettreAJourEtatActivationModule(int idModule, boolean actif) {
+        Log.d(TAG, "mettreAJourEtatActivationModule(): idModule=" + idModule + ", actif=" + actif);
+
+        try {
+            String query = "UPDATE modules SET actif = ? WHERE id = ?";
+            SQLiteStatement statement = sqlite.compileStatement(query);
+            statement.bindLong(1, actif ? 1 : 0);
+            statement.bindLong(2, idModule);
+            statement.executeUpdateDelete();
+        } catch (SQLiteException e) {
+            Log.e(TAG, "Erreur de mise à jour de l'état d'activation du module: " + e.getMessage());
+        }
+    }
+
 }
