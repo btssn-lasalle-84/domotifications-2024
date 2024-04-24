@@ -14,6 +14,7 @@ import static com.lasalle.domotifications.FenetrePoubelle.NB_COULEURS_POUBELLE;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -91,7 +92,7 @@ public class BaseDeDonnees extends SQLiteOpenHelper
     }
 
     /**
-     * @brief Renvoie un vecteur de string contenant le noms des participants enregistrés
+     * @brief Renvoie un vecteur de string contenant le noms des modules
      */
     public Vector<String> getNomModules()
     {
@@ -109,6 +110,33 @@ public class BaseDeDonnees extends SQLiteOpenHelper
         curseur.close();
 
         return listeNomModules;
+    }
+
+    /**
+     * @brief Renvoie un vecteur de Module contenant le poubelles
+     */
+    public Vector<Module> getPoubelles()
+    {
+        Log.d(TAG, "getPoubelles()");
+
+        Cursor curseur =
+          sqlite.rawQuery("SELECT * FROM modules WHERE modules.idTypesModules='2';", null);
+        Vector<Module> listeModules = new Vector<Module>();
+        while(curseur.moveToNext())
+        {
+            String id     = curseur.getString(curseur.getColumnIndexOrThrow("id"));
+            String nom    = curseur.getString(curseur.getColumnIndexOrThrow("nom"));
+            String actif  = curseur.getString(curseur.getColumnIndexOrThrow("actif"));
+            Module module = new Module(Integer.parseInt(id),
+                                       nom,
+                                       Module.TypeModule.Poubelle,
+                                       (Integer.parseInt(actif) == 1 ? true : false),
+                                       false);
+            listeModules.add(module);
+        }
+        curseur.close();
+
+        return listeModules;
     }
 
     /**
@@ -139,8 +167,8 @@ public class BaseDeDonnees extends SQLiteOpenHelper
         Log.d(TAG, "getNbModulesPoubelles()");
 
         Cursor curseur = sqlite.rawQuery(
-                "SELECT COUNT(*) AS NbPoubelles FROM modules WHERE modules.idTypesModules='2';",
-                null);
+          "SELECT COUNT(*) AS NbPoubelles FROM modules WHERE modules.idTypesModules='2';",
+          null);
 
         int nbPoubelles = 0;
         if(curseur.moveToFirst())
@@ -233,11 +261,11 @@ public class BaseDeDonnees extends SQLiteOpenHelper
         sqlite.execSQL(
           "INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('verte', 2, 0, 1);");
         sqlite.execSQL(
-                "INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('jaune', 2, 0, 1);");
+          "INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('jaune', 2, 0, 1);");
         sqlite.execSQL(
-                "INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('grise', 2, 0, 1);");
+          "INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('grise', 2, 0, 1);");
         sqlite.execSQL(
-                "INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('rouge', 2, 0, 1);");
+          "INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('rouge', 2, 0, 1);");
         sqlite.execSQL(
           "INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('machine à laver', 3, 1, 1);");
         sqlite.execSQL(
@@ -270,15 +298,15 @@ public class BaseDeDonnees extends SQLiteOpenHelper
         onCreate(sqlite);
     }
 
-
     public void sauvegarderURLServeurWeb(String urlServeurWeb)
     {
         Log.d(TAG, "sauvegarderURLServeurWeb()");
 
-        try {
-            sqlite.execSQL("UPDATE domotifications SET urlServeurWeb = ?;", new String[]{urlServeurWeb});
+        try
+        {
+            sqlite.execSQL("UPDATE domotifications SET urlServeurWeb = ?;",
+                           new String[] { urlServeurWeb });
         }
-
         catch(SQLiteConstraintException e)
         {
             Log.e(TAG, "Erreur de mise à jour de l'URL du Serveur Web");
@@ -288,18 +316,21 @@ public class BaseDeDonnees extends SQLiteOpenHelper
     /**
      * @brief Met à jour l'état d'activation du module dans la base de données
      */
-    public void mettreAJourEtatActivationModule(int idModule, boolean actif) {
-        Log.d(TAG, "mettreAJourEtatActivationModule(): idModule=" + idModule + ", actif=" + actif);
+    public void mettreAJourEtatActivationModule(int idModule, boolean actif)
+    {
+        Log.d(TAG,
+              "mettreAJourEtatActivationModule() idModule = " + idModule + " actif = " + actif);
 
-        try {
-            String query = "UPDATE modules SET actif = ? WHERE id = ?";
-            SQLiteStatement statement = sqlite.compileStatement(query);
-            statement.bindLong(1, actif ? 1 : 0);
-            statement.bindLong(2, idModule);
-            statement.executeUpdateDelete();
-        } catch (SQLiteException e) {
-            Log.e(TAG, "Erreur de mise à jour de l'état d'activation du module: " + e.getMessage());
+        try
+        {
+            String requete =
+              "UPDATE modules SET actif = '" + (actif ? 1 : 0) + "' WHERE id = '" + idModule + "'";
+            Log.d(TAG, "mettreAJourEtatActivationModule() requete = " + requete);
+            sqlite.execSQL(requete);
+        }
+        catch(SQLiteConstraintException e)
+        {
+            Log.e(TAG, "Erreur de mise à jour de l'état d'activation du module");
         }
     }
-
 }

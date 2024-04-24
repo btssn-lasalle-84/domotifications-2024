@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +23,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class FenetrePoubelle extends AppCompatActivity
 {
@@ -60,9 +62,8 @@ public class FenetrePoubelle extends AppCompatActivity
 
     private ImageView[] imagesPoubelles; //!< Images des poubelles de couleur
     private ImageButton boutonAccueil;
-
-    private Button[] boutonsActiver;
-    private Module[] modulesPoubelles;
+    private Switch[] boutonsActivation;
+    private Vector<Module> modulesPoubelles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -71,17 +72,15 @@ public class FenetrePoubelle extends AppCompatActivity
         Log.d(TAG, "onCreate()");
 
         baseDeDonnees      = BaseDeDonnees.getInstance(this);
+        modulesPoubelles   = baseDeDonnees.getPoubelles();
         nbModulesPoubelles = baseDeDonnees.getNbModulesPoubelles();
         Log.d(TAG, "nbModulesPoubelles = " + nbModulesPoubelles);
 
-        System.out.println("nbModulesPoubelles : " + nbModulesPoubelles);
+        initialiserGUI();
 
         initialiserHandler();
 
         recupererEtats();
-
-        initialiserGUI();
-
     }
 
     /**
@@ -97,6 +96,7 @@ public class FenetrePoubelle extends AppCompatActivity
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        Log.d(TAG, "initialiserGUI()");
 
         boutonAccueil = (ImageButton)findViewById(R.id.boutonAccueil);
 
@@ -107,6 +107,13 @@ public class FenetrePoubelle extends AppCompatActivity
         imagesPoubelles[3] = (ImageView)findViewById(R.id.poubelle3);
         imagesPoubelles[4] = (ImageView)findViewById(R.id.poubelle4);
 
+        boutonsActivation    = new Switch[NB_COULEURS_POUBELLE];
+        boutonsActivation[0] = (Switch)findViewById(R.id.activationPoubelle0);
+        boutonsActivation[1] = (Switch)findViewById(R.id.activationPoubelle1);
+        boutonsActivation[2] = (Switch)findViewById(R.id.activationPoubelle2);
+        boutonsActivation[3] = (Switch)findViewById(R.id.activationPoubelle3);
+        boutonsActivation[4] = (Switch)findViewById(R.id.activationPoubelle4);
+
         for(int i = 0; i < NB_COULEURS_POUBELLE; ++i)
         {
             imagesPoubelles[i].setImageResource(IMAGES_POUBELLES[i]);
@@ -115,24 +122,36 @@ public class FenetrePoubelle extends AppCompatActivity
         for(int i = 0; i < NB_COULEURS_POUBELLE; ++i)
         {
             imagesPoubelles[i].setVisibility(View.INVISIBLE);
+            boutonsActivation[i].setVisibility(View.INVISIBLE);
         }
 
         for(int i = 0; i < nbModulesPoubelles; ++i)
         {
             imagesPoubelles[i].setVisibility(View.VISIBLE);
+            boutonsActivation[i].setVisibility(View.VISIBLE);
         }
 
-        if(modulesPoubelles !=null) {
-            for (int i = 0; i < modulesPoubelles.length; i++) {
-                final int index = i;
-                Button boutonActiver = boutonsActiver[i];
-                boutonActiver.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gererClicSurBouton(index);
-                    }
-                });
+        for(int i = 0; i < nbModulesPoubelles; i++)
+        {
+            final int numeroPoubelle = i;
+            // initialise la GUI en fonction de l'état d'activation
+            if(modulesPoubelles.get(i).estActif())
+            {
+                boutonsActivation[i].setChecked(true);
+                imagesPoubelles[i].setEnabled(true);
             }
+            else
+            {
+                boutonsActivation[i].setChecked(false);
+                imagesPoubelles[i].setEnabled(false);
+            }
+            boutonsActivation[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    gererClicBoutonActivation(numeroPoubelle);
+                }
+            });
         }
 
         boutonAccueil = (ImageButton)findViewById(R.id.boutonAccueil);
@@ -149,10 +168,9 @@ public class FenetrePoubelle extends AppCompatActivity
     {
         Log.d(TAG, "recupererEtats()");
         // On récupère l'URL de la station dans la base de données
-        //communication = Communication.getInstance(this);
+        // communication = Communication.getInstance(this);
         // ou on indique l'adresse de la station :
         communication = Communication.getInstance(Communication.ADRESSE_IP_STATION, this);
-
         communication.emettreRequeteGET(API_GET_POUBELLES, handler);
     }
 
@@ -185,15 +203,14 @@ public class FenetrePoubelle extends AppCompatActivity
                 Log.d(TAG,
                       "traiterReponseJSON() idPoubelle = " + idPoubelle + " couleur = " + couleur +
                         " etat = " + etat + " actif = " + actif);
+                // @todo Mettre à jour le Vector modulesPoubelles
                 // @todo Mettre à jour l'IHM
-
             }
         }
         catch(JSONException e)
         {
             e.printStackTrace();
         }
-
     }
 
     private void initialiserHandler()
@@ -216,30 +233,33 @@ public class FenetrePoubelle extends AppCompatActivity
         };
     }
 
-    private void gererClicSurBouton(int i) {
-        if (modulesPoubelles[i] == null) {
-            Log.e(TAG, "Module à l'index " + i + " est null");
+    private void gererClicBoutonActivation(int numeroPoubelle)
+    {
+        Log.d(TAG,
+              "gererClicBoutonActivation() numeroPoubelle = " + numeroPoubelle +
+                " activation = " + boutonsActivation[numeroPoubelle].isChecked());
+        if(modulesPoubelles.get(numeroPoubelle) == null)
+        {
+            Log.e(TAG, "Aucune poubelle !");
             return;
         }
 
-        modulesPoubelles[i].setActif(!modulesPoubelles[i].estActif());
+        modulesPoubelles.get(numeroPoubelle)
+          .setActif(boutonsActivation[numeroPoubelle].isChecked());
 
-        Button boutonActiver = boutonsActiver[i];
-
-        if (boutonActiver == null) {
-            Log.e(TAG, "Bouton à l'index " + i + " est null");
-            return;
+        if(modulesPoubelles.get(numeroPoubelle).estActif())
+        {
+            baseDeDonnees.mettreAJourEtatActivationModule(
+              modulesPoubelles.get(numeroPoubelle).getIdModule(),
+              true);
+            imagesPoubelles[numeroPoubelle].setEnabled(true);
         }
-
-        if (modulesPoubelles[i].estActif()) {
-            boutonActiver.setText("Désactiver");
-            baseDeDonnees.mettreAJourEtatActivationModule(modulesPoubelles[i].getIdModule(), true);
-        } else {
-            boutonActiver.setText("Activer");
-            baseDeDonnees.mettreAJourEtatActivationModule(modulesPoubelles[i].getIdModule(), false);
+        else
+        {
+            baseDeDonnees.mettreAJourEtatActivationModule(
+              modulesPoubelles.get(numeroPoubelle).getIdModule(),
+              false);
+            imagesPoubelles[numeroPoubelle].setEnabled(false);
         }
     }
-
-
 }
-

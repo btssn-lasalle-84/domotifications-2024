@@ -1,14 +1,15 @@
 package com.lasalle.domotifications;
 
+import android.util.Log;
+
 public class Module
 {
-    private int        idModule;
-    private String     nomModule;
-    private TypeModule typeModule;
-    private boolean    etatActivation;
-    private boolean    etatModification;
-
-    private boolean actif; // Représenter l'état d'activation du module
+    private static final String TAG = "_Module"; //!< TAG pour les logs
+    private int                 idModule;
+    private String              nomModule;
+    private TypeModule          typeModule;
+    private boolean             etatActivation;
+    private boolean             etatNotification;
 
     public enum TypeModule
     {
@@ -22,15 +23,16 @@ public class Module
                   String     nomModule,
                   TypeModule typeModule,
                   boolean    etatActivation,
-                  boolean    etatModification,
-                  boolean    actif)
+                  boolean    etatNotification)
     {
+        Log.d(TAG,
+              "Module(" + idModule + "," + nomModule + "," + typeModule + "," + etatActivation +
+                "," + etatNotification + ")");
         this.idModule         = idModule;
         this.nomModule        = nomModule;
         this.typeModule       = typeModule;
         this.etatActivation   = etatActivation;
-        this.etatModification = etatModification;
-        this.actif            = actif;
+        this.etatNotification = etatNotification;
     }
 
     // Destructeur
@@ -38,21 +40,23 @@ public class Module
     {
     }
 
-
-    public boolean estActif() {
+    public boolean estActif()
+    {
         return this.etatActivation;
     }
 
-    public int getIdModule() {
+    public int getIdModule()
+    {
         return this.idModule;
     }
 
-    public void setEtatActivation(boolean etat) {
+    public void setEtatActivation(boolean etat)
+    {
         this.etatActivation = etat;
     }
 
-    public void setActif(boolean actif) {
+    public void setActif(boolean actif)
+    {
         this.setEtatActivation(actif);
     }
-
 }
