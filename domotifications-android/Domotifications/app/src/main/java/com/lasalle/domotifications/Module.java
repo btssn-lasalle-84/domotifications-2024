@@ -2,6 +2,8 @@ package com.lasalle.domotifications;
 
 import android.util.Log;
 
+import java.lang.reflect.Type;
+
 public class Module
 {
     private static final String TAG = "_Module"; //!< TAG pour les logs
@@ -10,6 +12,7 @@ public class Module
     private TypeModule          typeModule;
     private boolean             etatActivation;
     private boolean             etatNotification;
+    private String              couleur;
 
     public enum TypeModule
     {
@@ -24,6 +27,7 @@ public class Module
                   TypeModule typeModule,
                   boolean    etatActivation,
                   boolean    etatNotification)
+
     {
         Log.d(TAG,
               "Module(" + idModule + "," + nomModule + "," + typeModule + "," + etatActivation +
@@ -59,4 +63,9 @@ public class Module
     {
         this.setEtatActivation(actif);
     }
+
+    public void setCouleur(String couleur){ this.couleur = couleur; }
+
+    public void setTypeModule(TypeModule typeModule) { this.typeModule = typeModule; }
+
 }
