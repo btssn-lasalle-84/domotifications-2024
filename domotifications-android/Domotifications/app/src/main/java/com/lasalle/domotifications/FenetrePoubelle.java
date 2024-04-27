@@ -203,7 +203,16 @@ public class FenetrePoubelle extends AppCompatActivity
                 Log.d(TAG,
                       "traiterReponseJSON() idPoubelle = " + idPoubelle + " couleur = " + couleur +
                         " etat = " + etat + " actif = " + actif);
-                // @todo Mettre à jour le Vector modulesPoubelles
+
+                Module module = new Module(idPoubelle, couleur, Module.TypeModule.Poubelle, actif, false);
+                if(i < modulesPoubelles.size())
+                {
+                    modulesPoubelles.set(i, module);
+                }
+                else
+                {
+                    modulesPoubelles.add(module);
+                }
                 // @todo Mettre à jour l'IHM
             }
         }
