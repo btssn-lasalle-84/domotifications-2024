@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,26 +28,25 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
-public class FenetrePoubelle extends AppCompatActivity
-{
+public class FenetrePoubelle extends AppCompatActivity {
     /**
      * Constantes
      */
-    private static final String TAG                 = "_FenetrePoubelle"; //!< TAG pour les logs
-    private static final String API_GET_POUBELLES   = "/poubelles";       //!< Pour une requête GET
+    private static final String TAG = "_FenetrePoubelle"; //!< TAG pour les logs
+    private static final String API_GET_POUBELLES = "/poubelles";       //!< Pour une requête GET
     private static final String API_PATCH_POUBELLES = "/poubelles"; //!< Pour une requête PATCH
-    private static final int    INTERVALLE          = 1000;         //!< en ms
+    private static final int INTERVALLE = 1000;         //!< en ms
     /**
      * Attributs
      */
-    private BaseDeDonnees  baseDeDonnees; //!< Association avec la base de donnees
+    private BaseDeDonnees baseDeDonnees; //!< Association avec la base de donnees
     private Vector<Module> modulesPoubelles;
-    private int            nbModulesPoubelles; //!< le nombre de poubelles gérées
+    private int nbModulesPoubelles; //!< le nombre de poubelles gérées
     // Exemple d'accès à la base de données
     private Communication communication; //!< Association avec la classe Communication
-    private Handler       handler =
-      null; //!< Handler permettant la communication entre la classe Communication et l'activité
-    private Timer     minuteur               = null;
+    private Handler handler =
+            null; //!< Handler permettant la communication entre la classe Communication et l'activité
+    private Timer minuteur = null;
     private TimerTask tacheRecuperationEtats = null;
     /**
      * GUI
@@ -58,12 +58,12 @@ public class FenetrePoubelle extends AppCompatActivity
     public static final int ROUGE = 4; //!< Poubelle rouge
     // pour les tests (cf. todo ci-dessous)
     public static final int NB_COULEURS_POUBELLE = 5; //!< Nombre de couleurs max pour les poubelles
-    public static final int[] IMAGES_POUBELLES   = {
-          R.drawable.poubelle_bleue,
-          R.drawable.poubelle_verte,
-          R.drawable.poubelle_jaune,
-          R.drawable.poubelle_grise,
-          R.drawable.poubelle_rouge
+    public static final int[] IMAGES_POUBELLES = {
+            R.drawable.poubelle_bleue,
+            R.drawable.poubelle_verte,
+            R.drawable.poubelle_jaune,
+            R.drawable.poubelle_grise,
+            R.drawable.poubelle_rouge
     }; //!< Id des images des poubelles dans les ressources Android
     private ImageView[] imagesPoubelles; //!< Images des poubelles de couleur
     private ImageButton boutonAccueil;
@@ -71,8 +71,7 @@ public class FenetrePoubelle extends AppCompatActivity
     private Switch[] boutonsActivation;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()");
 
@@ -85,16 +84,14 @@ public class FenetrePoubelle extends AppCompatActivity
         recupererEtats();
     }
 
-    private void initialiserBaseDeDonnees()
-    {
+    private void initialiserBaseDeDonnees() {
         Log.d(TAG, "initialiserBaseDeDonnees()");
         baseDeDonnees = BaseDeDonnees.getInstance(this);
     }
 
-    private void initialiserModulesPoubelles()
-    {
+    private void initialiserModulesPoubelles() {
         Log.d(TAG, "initialiserModulesPoubelles()");
-        modulesPoubelles   = baseDeDonnees.getPoubelles();
+        modulesPoubelles = baseDeDonnees.getPoubelles();
         nbModulesPoubelles = baseDeDonnees.getNbModulesPoubelles();
         Log.d(TAG, "nbModulesPoubelles = " + nbModulesPoubelles);
     }
@@ -102,8 +99,7 @@ public class FenetrePoubelle extends AppCompatActivity
     /**
      * @brief Initialise les ressources graphiques de l'activité
      */
-    private void initialiserGUI()
-    {
+    private void initialiserGUI() {
         // contenu bord à bord
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_menu_poubelle);
@@ -114,182 +110,160 @@ public class FenetrePoubelle extends AppCompatActivity
         });
         Log.d(TAG, "initialiserGUI()");
 
-        boutonAccueil = (ImageButton)findViewById(R.id.boutonAccueil);
+        boutonAccueil = (ImageButton) findViewById(R.id.boutonAccueil);
 
-        imagesPoubelles    = new ImageView[NB_COULEURS_POUBELLE];
-        imagesPoubelles[0] = (ImageView)findViewById(R.id.poubelle0);
-        imagesPoubelles[1] = (ImageView)findViewById(R.id.poubelle1);
-        imagesPoubelles[2] = (ImageView)findViewById(R.id.poubelle2);
-        imagesPoubelles[3] = (ImageView)findViewById(R.id.poubelle3);
-        imagesPoubelles[4] = (ImageView)findViewById(R.id.poubelle4);
+        imagesPoubelles = new ImageView[NB_COULEURS_POUBELLE];
+        imagesPoubelles[0] = (ImageView) findViewById(R.id.poubelle0);
+        imagesPoubelles[1] = (ImageView) findViewById(R.id.poubelle1);
+        imagesPoubelles[2] = (ImageView) findViewById(R.id.poubelle2);
+        imagesPoubelles[3] = (ImageView) findViewById(R.id.poubelle3);
+        imagesPoubelles[4] = (ImageView) findViewById(R.id.poubelle4);
 
-        imagesNotificationPoubelles    = new ImageView[NB_COULEURS_POUBELLE];
-        imagesNotificationPoubelles[0] = (ImageView)findViewById(R.id.notificationPoubelle0);
-        imagesNotificationPoubelles[1] = (ImageView)findViewById(R.id.notificationPoubelle1);
-        imagesNotificationPoubelles[2] = (ImageView)findViewById(R.id.notificationPoubelle2);
-        imagesNotificationPoubelles[3] = (ImageView)findViewById(R.id.notificationPoubelle3);
-        imagesNotificationPoubelles[4] = (ImageView)findViewById(R.id.notificationPoubelle4);
+        imagesNotificationPoubelles = new ImageView[NB_COULEURS_POUBELLE];
+        imagesNotificationPoubelles[0] = (ImageView) findViewById(R.id.notificationPoubelle0);
+        imagesNotificationPoubelles[1] = (ImageView) findViewById(R.id.notificationPoubelle1);
+        imagesNotificationPoubelles[2] = (ImageView) findViewById(R.id.notificationPoubelle2);
+        imagesNotificationPoubelles[3] = (ImageView) findViewById(R.id.notificationPoubelle3);
+        imagesNotificationPoubelles[4] = (ImageView) findViewById(R.id.notificationPoubelle4);
 
-        boutonsActivation    = new Switch[NB_COULEURS_POUBELLE];
-        boutonsActivation[0] = (Switch)findViewById(R.id.activationPoubelle0);
-        boutonsActivation[1] = (Switch)findViewById(R.id.activationPoubelle1);
-        boutonsActivation[2] = (Switch)findViewById(R.id.activationPoubelle2);
-        boutonsActivation[3] = (Switch)findViewById(R.id.activationPoubelle3);
-        boutonsActivation[4] = (Switch)findViewById(R.id.activationPoubelle4);
+        boutonsActivation = new Switch[NB_COULEURS_POUBELLE];
+        boutonsActivation[0] = (Switch) findViewById(R.id.activationPoubelle0);
+        boutonsActivation[1] = (Switch) findViewById(R.id.activationPoubelle1);
+        boutonsActivation[2] = (Switch) findViewById(R.id.activationPoubelle2);
+        boutonsActivation[3] = (Switch) findViewById(R.id.activationPoubelle3);
+        boutonsActivation[4] = (Switch) findViewById(R.id.activationPoubelle4);
 
-        for(int i = 0; i < NB_COULEURS_POUBELLE; ++i)
-        {
+        for (int i = 0; i < NB_COULEURS_POUBELLE; ++i) {
             imagesPoubelles[i].setImageResource(IMAGES_POUBELLES[i]);
             final int numeroPoubelle = i;
             imagesNotificationPoubelles[i].setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     gererClicBoutonNotification(numeroPoubelle);
                 }
             });
             imagesPoubelles[i].setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     gererClicBoutonNotification(numeroPoubelle);
                 }
             });
         }
 
-        for(int i = 0; i < NB_COULEURS_POUBELLE; ++i)
-        {
+        for (int i = 0; i < NB_COULEURS_POUBELLE; ++i) {
             imagesPoubelles[i].setVisibility(View.INVISIBLE);
             boutonsActivation[i].setVisibility(View.INVISIBLE);
         }
 
-        for(int i = 0; i < nbModulesPoubelles; ++i)
-        {
+        for (int i = 0; i < nbModulesPoubelles; ++i) {
             imagesPoubelles[i].setVisibility(View.VISIBLE);
             boutonsActivation[i].setVisibility(View.VISIBLE);
         }
 
-        for(int i = 0; i < nbModulesPoubelles; i++)
-        {
+        for (int i = 0; i < nbModulesPoubelles; i++) {
             final int numeroPoubelle = i;
             // initialise la GUI en fonction de l'état de notification
-            if(modulesPoubelles.get(i).estNotifie())
-            {
+            if (modulesPoubelles.get(i).estNotifie()) {
                 imagesNotificationPoubelles[i].setVisibility(View.VISIBLE);
-            }
-            else
-            {
+            } else {
                 imagesNotificationPoubelles[i].setVisibility(View.INVISIBLE);
             }
             // initialise la GUI en fonction de l'état d'activation
-            if(modulesPoubelles.get(i).estActif())
-            {
+            if (modulesPoubelles.get(i).estActif()) {
                 boutonsActivation[i].setChecked(true);
                 imagesNotificationPoubelles[i].setEnabled(true);
                 imagesPoubelles[i].setEnabled(true);
-            }
-            else
-            {
+            } else {
                 boutonsActivation[i].setChecked(false);
                 imagesNotificationPoubelles[i].setEnabled(false);
                 imagesPoubelles[i].setEnabled(false);
             }
             boutonsActivation[i].setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     gererClicBoutonActivation(numeroPoubelle);
                 }
             });
         }
 
-        boutonAccueil = (ImageButton)findViewById(R.id.boutonAccueil);
+        boutonAccueil = (ImageButton) findViewById(R.id.boutonAccueil);
         boutonAccueil.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 Log.d(TAG, "clic boutonAccueil");
-                if(minuteur != null)
+                if (minuteur != null)
                     minuteur.cancel();
                 finish();
             }
         });
     }
 
-    private void initialiserHandler()
-    {
+    private void initialiserHandler() {
         this.handler = new Handler(this.getMainLooper()) {
             @Override
-            public void handleMessage(Message message)
-            {
+            public void handleMessage(Message message) {
                 // Log.d(TAG, "[Handler] message what = " + message.what);
                 // Log.d(TAG, "[Handler] message obj = " + message.obj.toString());
 
-                switch(message.what)
-                {
+                switch (message.what) {
                     case Communication.CODE_HTTP_REPONSE_JSON:
                         Log.d(TAG, "[Handler] REPONSE JSON");
                         traiterReponseJSON(message.obj.toString());
                         break;
                     case Communication.CODE_HTTP_ERREUR:
                         Log.d(TAG, "[Handler] ERREUR HTTP");
-                        // @todo gérer l'erreur (au moins afficher un Toast)
+                        afficherErreur("Erreur lors de la requête HTTP");
                         break;
                 }
             }
         };
     }
 
-    private void initialiserMinuteur()
-    {
+    private void afficherErreur(String message) {
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void initialiserMinuteur() {
         minuteur = new Timer();
     }
 
-    private void initialiserCommunication()
-    {
+    private void initialiserCommunication() {
         // On récupère l'URL de la station dans la base de données
         // communication = Communication.getInstance(this);
         // ou on indique l'adresse de la station :
         communication = Communication.getInstance(Communication.ADRESSE_IP_STATION, this);
     }
 
-    private void gererClicBoutonActivation(int numeroPoubelle)
-    {
-        if(modulesPoubelles.get(numeroPoubelle) == null)
-        {
+    private void gererClicBoutonActivation(int numeroPoubelle) {
+        if (modulesPoubelles.get(numeroPoubelle) == null) {
             Log.e(TAG, "Aucune poubelle !");
             return;
         }
         Log.d(TAG,
-              "gererClicBoutonActivation() numeroPoubelle = " + numeroPoubelle +
-                " activation = " + boutonsActivation[numeroPoubelle].isChecked());
+                "gererClicBoutonActivation() numeroPoubelle = " + numeroPoubelle +
+                        " activation = " + boutonsActivation[numeroPoubelle].isChecked());
 
         modulesPoubelles.get(numeroPoubelle)
-          .setActif(boutonsActivation[numeroPoubelle].isChecked());
+                .setActif(boutonsActivation[numeroPoubelle].isChecked());
 
-        if(modulesPoubelles.get(numeroPoubelle).estActif())
-        {
+        if (modulesPoubelles.get(numeroPoubelle).estActif()) {
             imagesPoubelles[numeroPoubelle].setEnabled(true);
-            // @todo rendre la cloche active
-        }
-        else
-        {
+            imagesNotificationPoubelles[numeroPoubelle].setEnabled(true);
+        } else {
             imagesPoubelles[numeroPoubelle].setEnabled(false);
-            // @todo rendre la cloche inactive
+            imagesNotificationPoubelles[numeroPoubelle].setEnabled(false);
         }
     }
 
-    private void gererClicBoutonNotification(int numeroPoubelle)
-    {
-        if(modulesPoubelles.get(numeroPoubelle) == null)
-        {
+    private void gererClicBoutonNotification(int numeroPoubelle) {
+        if (modulesPoubelles.get(numeroPoubelle) == null) {
             Log.e(TAG, "Aucune poubelle !");
             return;
         }
         Log.d(TAG,
-              "gererClicBoutonNotification() numeroPoubelle = " + numeroPoubelle +
-                " idPoubelle = " + modulesPoubelles.get(numeroPoubelle).getIdModule() +
-                " notification = " + modulesPoubelles.get(numeroPoubelle).estNotifie() +
-                " activation = " + modulesPoubelles.get(numeroPoubelle).estActif());
+                "gererClicBoutonNotification() numeroPoubelle = " + numeroPoubelle +
+                        " idPoubelle = " + modulesPoubelles.get(numeroPoubelle).getIdModule() +
+                        " notification = " + modulesPoubelles.get(numeroPoubelle).estNotifie() +
+                        " activation = " + modulesPoubelles.get(numeroPoubelle).estActif());
 
         // @todo si le module est activé
         // @todo alors si le module est noitifié
@@ -302,12 +276,10 @@ public class FenetrePoubelle extends AppCompatActivity
         // @todo et enregistrer l'acquittement de la notification dans la base de données
     }
 
-    private void recupererEtats()
-    {
+    private void recupererEtats() {
         Log.d(TAG, "recupererEtats()");
         tacheRecuperationEtats = new TimerTask() {
-            public void run()
-            {
+            public void run() {
                 communication.emettreRequeteGET(API_GET_POUBELLES, handler);
             }
         };
@@ -316,8 +288,7 @@ public class FenetrePoubelle extends AppCompatActivity
         minuteur.schedule(tacheRecuperationEtats, INTERVALLE, INTERVALLE);
     }
 
-    public void traiterReponseJSON(String reponse)
-    {
+    public void traiterReponseJSON(String reponse) {
         Log.d(TAG, "traiterReponseJSON() reponse = " + reponse);
         /*
             Exemple de réponsee : pour la requête GET /poubelles
@@ -332,25 +303,21 @@ public class FenetrePoubelle extends AppCompatActivity
         */
         JSONArray json = null;
 
-        try
-        {
+        try {
             json = new JSONArray(reponse);
-            for(int i = 0; i < json.length(); ++i)
-            {
-                JSONObject poubelle   = json.getJSONObject(i);
-                int        idPoubelle = poubelle.getInt("idPoubelle");
-                String     couleur    = poubelle.getString("couleur");
-                Boolean    etat       = poubelle.getBoolean("etat");
-                Boolean    actif      = poubelle.getBoolean("actif");
+            for (int i = 0; i < json.length(); ++i) {
+                JSONObject poubelle = json.getJSONObject(i);
+                int idPoubelle = poubelle.getInt("idPoubelle");
+                String couleur = poubelle.getString("couleur");
+                Boolean etat = poubelle.getBoolean("etat");
+                Boolean actif = poubelle.getBoolean("actif");
                 Log.d(TAG,
-                      "traiterReponseJSON() idPoubelle = " + idPoubelle + " couleur = " + couleur +
-                        " etat = " + etat + " actif = " + actif);
-                for(int j = 0; j < modulesPoubelles.size(); ++j)
-                {
+                        "traiterReponseJSON() idPoubelle = " + idPoubelle + " couleur = " + couleur +
+                                " etat = " + etat + " actif = " + actif);
+                for (int j = 0; j < modulesPoubelles.size(); ++j) {
                     Module module = modulesPoubelles.get(j);
-                    if(module.getIdModule() == idPoubelle &&
-                       module.getTypeModule() == Module.TypeModule.Poubelle)
-                    {
+                    if (module.getIdModule() == idPoubelle &&
+                            module.getTypeModule() == Module.TypeModule.Poubelle) {
                         module.setCouleur(couleur);
                         module.setActif(actif);
                         module.setEtatNotification(etat);
@@ -359,19 +326,36 @@ public class FenetrePoubelle extends AppCompatActivity
                     }
                 }
             }
-        }
-        catch(JSONException e)
-        {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private void mettreAJourModule(int numeroPoubelle)
-    {
-        // @todo si le module est activé
-        // @todo si le module est notifié
-        // @todo alors rendre visible la cloche correspondante
-        // @todo et rendre les boutons actifs et signaler l'activation
-        // @todo sinon rendre les boutons inactifs et signaler l'inactivation
+    private void mettreAJourModule(int numeroPoubelle) {
+        if (modulesPoubelles.get(numeroPoubelle) == null) {
+            Log.e(TAG, "Aucune poubelle");
+            return;
+        }
+
+        Module module = modulesPoubelles.get(numeroPoubelle);
+
+        if (module.estActif()) {
+            if (module.estNotifie()) {
+                imagesNotificationPoubelles[numeroPoubelle].setVisibility(View.VISIBLE);
+            } else {
+                imagesNotificationPoubelles[numeroPoubelle].setVisibility(View.INVISIBLE);
+            }
+
+            boutonsActivation[numeroPoubelle].setEnabled(true);
+            imagesPoubelles[numeroPoubelle].setEnabled(true);
+
+            Toast.makeText(getApplicationContext(), "Module activé", Toast.LENGTH_SHORT).show();
+        } else {
+            boutonsActivation[numeroPoubelle].setEnabled(false);
+            imagesPoubelles[numeroPoubelle].setEnabled(false);
+            imagesNotificationPoubelles[numeroPoubelle].setVisibility(View.INVISIBLE);
+            Toast.makeText(getApplicationContext(), "Module désactivé", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }
