@@ -19,6 +19,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.047" />
 
+    <TextView
+        android:id="@+id/notificationPoubelle"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="@drawable/rond"
+        android:gravity="center"
+        android:text="0"
+        android:textSize="32sp"
+        android:visibility="invisible"
+        app:layout_constraintVertical_bias="0.9"
+        app:layout_constraintBottom_toTopOf="@+id/boutonPoubelle"
+        app:layout_constraintLeft_toLeftOf="@+id/boutonPoubelle"
+        app:layout_constraintRight_toRightOf="@+id/boutonPoubelle"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageButton
         android:id="@+id/boutonPoubelle"
         android:src="@drawable/poubelle_verte"
@@ -32,6 +47,21 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/notificationMachine"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="@drawable/rond"
+        android:gravity="center"
+        android:text="0"
+        android:textSize="32sp"
+        android:visibility="invisible"
+        app:layout_constraintVertical_bias="0.9"
+        app:layout_constraintBottom_toTopOf="@+id/boutonMachine"
+        app:layout_constraintLeft_toLeftOf="@+id/boutonMachine"
+        app:layout_constraintRight_toRightOf="@+id/boutonMachine"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/boutonMachine"
@@ -47,6 +77,21 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/notificationBoiteAuxLettres"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="@drawable/rond"
+        android:gravity="center"
+        android:text="0"
+        android:textSize="32sp"
+        android:visibility="invisible"
+        app:layout_constraintVertical_bias="0.9"
+        app:layout_constraintBottom_toTopOf="@+id/boutonBoiteAuxLettres"
+        app:layout_constraintLeft_toLeftOf="@+id/boutonBoiteAuxLettres"
+        app:layout_constraintRight_toRightOf="@+id/boutonBoiteAuxLettres"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/boutonBoiteAuxLettres"
