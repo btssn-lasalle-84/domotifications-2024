@@ -1,5 +1,6 @@
 package com.lasalle.domotifications;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.lang.reflect.Type;
@@ -13,6 +14,7 @@ public class Module
     private boolean             etatActivation;
     private boolean             etatNotification;
     private String              couleur;
+    private BaseDeDonnees       baseDeDonnees; //!< Association avec la base de donnees
 
     public enum TypeModule
     {
@@ -22,11 +24,12 @@ public class Module
     }
 
     // Constructeur
-    public Module(int        idModule,
-                  String     nomModule,
-                  TypeModule typeModule,
-                  boolean    etatActivation,
-                  boolean    etatNotification)
+    public Module(int           idModule,
+                  String        nomModule,
+                  TypeModule    typeModule,
+                  boolean       etatActivation,
+                  boolean       etatNotification,
+                  BaseDeDonnees baseDeDonnees)
 
     {
         Log.d(TAG,
@@ -37,16 +40,7 @@ public class Module
         this.typeModule       = typeModule;
         this.etatActivation   = etatActivation;
         this.etatNotification = etatNotification;
-    }
-
-    // Destructeur
-    protected void finalize() throws Throwable
-    {
-    }
-
-    public boolean estActif()
-    {
-        return this.etatActivation;
+        this.baseDeDonnees    = baseDeDonnees;
     }
 
     public int getIdModule()
@@ -54,9 +48,48 @@ public class Module
         return this.idModule;
     }
 
+    public String getNomModule()
+    {
+        return this.nomModule;
+    }
+
+    public TypeModule getTypeModule()
+    {
+        return this.typeModule;
+    }
+
+    public boolean estActif()
+    {
+        return this.etatActivation;
+    }
+
+    public boolean estNotifie()
+    {
+        return this.etatNotification;
+    }
+
+    private String getCouleur()
+    {
+        return this.couleur;
+    }
+
+    public void setNomModule(String nomModule)
+    {
+        this.nomModule = nomModule;
+    }
+
+    public void setTypeModule(TypeModule typeModule)
+    {
+        this.typeModule = typeModule;
+    }
+
     public void setEtatActivation(boolean etat)
     {
-        this.etatActivation = etat;
+        // @todo si l'état a changé
+
+        // @todo alors conserver le nouvel état
+
+        // @todo et mettre à jour l'état d'activation dans la base de données
     }
 
     public void setActif(boolean actif)
@@ -64,8 +97,17 @@ public class Module
         this.setEtatActivation(actif);
     }
 
-    public void setCouleur(String couleur){ this.couleur = couleur; }
+    public void setEtatNotification(boolean etat)
+    {
+        // @todo si l'état a changé
 
-    public void setTypeModule(TypeModule typeModule) { this.typeModule = typeModule; }
+        // @todo alors conserver le nouvel état
 
+        // @todo et mettre à jour l'état de notification dans la base de données
+    }
+
+    public void setCouleur(String couleur)
+    {
+        this.couleur = couleur;
+    }
 }
