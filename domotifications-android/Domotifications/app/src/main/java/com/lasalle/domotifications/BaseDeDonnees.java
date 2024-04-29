@@ -369,8 +369,7 @@ public class BaseDeDonnees extends SQLiteOpenHelper
         try
         {
             String requete =
-                    "UPDATE notifications SET acquittement = '" + (acquittement ? 1 : 0) +
-                            "' WHERE idModules = '" + idModule + "'";
+                    "INSERT INTO notifications (idModules, acquittement) VALUES ('" + idModule + "', '" + (acquittement ? 1 : 0) + "')";
             Log.d(TAG, "enregistrerAcquittementNotification() requete = " + requete);
             sqlite.execSQL(requete);
         }

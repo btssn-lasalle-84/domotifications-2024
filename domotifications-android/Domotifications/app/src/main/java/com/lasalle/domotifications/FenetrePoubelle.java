@@ -304,7 +304,7 @@ public class FenetrePoubelle extends AppCompatActivity
         {
             if(modulesPoubelles.get(numeroPoubelle).estNotifie())
             {
-                String api = "/poubelles/" + modulesPoubelles.get(numeroPoubelle).getIdModule();
+                String api = API_PATCH_POUBELLES + "/" + modulesPoubelles.get(numeroPoubelle).getIdModule();
                 String json = "{\"idPoubelle\": \"" + modulesPoubelles.get(numeroPoubelle).getIdModule()
                         + "\",\"etat\": false}";
                 communication.emettreRequetePATCH(api, json, handler);
@@ -400,7 +400,7 @@ public class FenetrePoubelle extends AppCompatActivity
                 imagesNotificationPoubelles[numeroPoubelle].setVisibility(View.VISIBLE);
 
                 // On signale une notification sur la tablette Android
-                creerNotification("Le module " + numeroPoubelle + " a une notification.");
+                creerNotification("Le module " + module.getIdModule() + " a une notification.");
             }
             else
             {

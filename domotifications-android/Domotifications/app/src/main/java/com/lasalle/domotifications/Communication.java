@@ -176,9 +176,9 @@ public class Communication
             {
                 Log.d(TAG, "emettreRequetePATCH() onFailure");
                 e.printStackTrace();
-                handler.post(() -> {
-                    Log.d(TAG, "Erreur lors de l'émission de la requête PATCH : " + e.getMessage());
-                });
+                Message message = Message.obtain();
+                message.what = CODE_HTTP_ERREUR;
+                handler.sendMessage(message);
             }
 
             @Override
@@ -186,13 +186,18 @@ public class Communication
             {
                 Log.d(TAG, "emettreRequetePATCH() onResponse - message = " + response.message());
                 Log.d(TAG, "emettreRequetePATCH() onResponse - code    = " + response.code());
-                handler.post(() -> {
-                    if(response.isSuccessful()) {
-                        Log.d(TAG, "La requête PATCH a été émise.");
-                    } else {
-                        Log.d(TAG, "La requête PATCH a échoué. Code d'erreur : " + response.code());
-                    }
-                });
+                Message message = Message.obtain();
+                if (response.isSuccessful())
+                {
+                    Log.d(TAG, "La requête PATCH a été émise");
+                    message.what = CODE_HTTP_REPONSE_JSON;
+                    message.obj = response.body().string();
+                }
+                else {
+                    Log.d(TAG, "La requête PATCH a échoué. Code d'erreur : " + response.code());
+                    message.what = CODE_HTTP_ERREUR;
+                }
+                handler.sendMessage(message);
             }
         });
     }
