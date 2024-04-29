@@ -362,14 +362,19 @@ public class BaseDeDonnees extends SQLiteOpenHelper
     /**
      * @brief Enregistre l'acquittement de la notification dans la base de données
      */
-    public void enregistrerAcquittementNotification(int idModule, boolean acquittement)
+    public void enregistrerAcquittementNotification(int idModule, int idTypesModules, boolean acquittement)
     {
         Log.d(TAG, "enregistrerAcquittementNotification() idModule = " + idModule + " acquittement = " + acquittement);
 
         try
         {
             String requete =
-                    "INSERT INTO notifications (idModules, acquittement) VALUES ('" + idModule + "', '" + (acquittement ? 1 : 0) + "')";
+                    "INSERT INTO notifications (idDomotifications, idModules, idTypesModules, horodatage, acquittement) VALUES ("
+                            + ID_DOMOTIFICATIONS + ", '"
+                            + idModule + "', '"
+                            + idTypesModules + "', "
+                            + "datetime('now'), '"
+                            + (acquittement ? 1 : 0) + "')";
             Log.d(TAG, "enregistrerAcquittementNotification() requete = " + requete);
             sqlite.execSQL(requete);
         }

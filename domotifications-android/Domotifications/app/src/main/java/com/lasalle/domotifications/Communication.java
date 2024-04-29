@@ -189,7 +189,8 @@ public class Communication
                 Message message = Message.obtain();
                 if (response.isSuccessful())
                 {
-                    Log.d(TAG, "La requête PATCH a été émise");
+                    Log.d(TAG, "La requête PATCH a été émise" + request.url() +
+                    ", Réponse : " + response.body().string());
                     message.what = CODE_HTTP_REPONSE_JSON;
                     message.obj = response.body().string();
                 }

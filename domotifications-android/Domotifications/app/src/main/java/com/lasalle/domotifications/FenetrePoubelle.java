@@ -316,7 +316,8 @@ public class FenetrePoubelle extends AppCompatActivity
            --header 'Content-Type: application/json' --data '{"idPoubelle": "1","etat": false}'
          */
         int idModule = modulesPoubelles.get(numeroPoubelle).getIdModule();
-        baseDeDonnees.enregistrerAcquittementNotification(idModule, true);
+        int idTypesModules = modulesPoubelles.get(numeroPoubelle).getTypeModule().ordinal();
+        baseDeDonnees.enregistrerAcquittementNotification(idModule, idTypesModules,true);
     }
 
     private void recupererEtats()
@@ -400,7 +401,7 @@ public class FenetrePoubelle extends AppCompatActivity
                 imagesNotificationPoubelles[numeroPoubelle].setVisibility(View.VISIBLE);
 
                 // On signale une notification sur la tablette Android
-                creerNotification("Le module " + module.getIdModule() + " a une notification.");
+                creerNotification("Le module " + module.getNomModule() + " a une notification.");
             }
             else
             {
