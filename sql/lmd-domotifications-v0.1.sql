@@ -14,17 +14,11 @@ INSERT INTO typesModules(type) VALUES ('Machine');
 
 --- Table modules
 
-INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('boîte aux lettres', 1, 1, 1);
-INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('bleue', 2, 1, 1);
-INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('verte', 2, 1, 1);
-INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('jaune', 2, 0, 1);
-INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('grise', 2, 0, 1);
-INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('rouge', 2, 0, 1);
-INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('machine à laver', 3, 1, 1);
-INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('lave-vaiselle', 3, 1, 1);
-
---- Table notifications
-
-INSERT INTO notifications (idDomotifications, idModules, horodatage, acquittement) VALUES (1, 1, DATETIME('now'), 0);
-INSERT INTO notifications (idDomotifications, idModules, horodatage, acquittement) VALUES (1, 2, DATETIME('now'), 0);
-INSERT INTO notifications (idDomotifications, idModules, horodatage, acquittement) VALUES (1, 3, DATETIME('now'), 1);
+INSERT INTO modules (id, nom, idTypesModules, actif, idDomotifications) VALUES (1, 'boîte aux lettres', 1, 1, 1);
+INSERT INTO modules (id, nom, idTypesModules, actif, idDomotifications) VALUES (1, 'bleue', 2, 1, 1);
+INSERT INTO modules (id, nom, idTypesModules, actif, idDomotifications) VALUES (2, 'verte', 2, 1, 1);
+INSERT INTO modules (id, nom, idTypesModules, actif, idDomotifications) VALUES (3, 'jaune', 2, 0, 1);
+INSERT INTO modules (id, nom, idTypesModules, actif, idDomotifications) VALUES (4, 'grise', 2, 0, 1);
+INSERT INTO modules (id, nom, idTypesModules, actif, idDomotifications) VALUES (5, 'rouge', 2, 0, 1);
+INSERT INTO modules (id, nom, idTypesModules, actif, idDomotifications) VALUES (1, 'machine à laver', 3, 1, 1);
+INSERT INTO modules (id, nom, idTypesModules, actif, idDomotifications) VALUES (2, 'lave-vaiselle', 3, 1, 1);
