@@ -1,8 +1,14 @@
 package com.lasalle.domotifications;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -43,6 +50,7 @@ public class FenetrePoubelle extends AppCompatActivity
     private BaseDeDonnees  baseDeDonnees;      //!< Association avec la base de donnees
     private Vector<Module> modulesPoubelles;   //!< Conteneur des modules poubelles
     private int            nbModulesPoubelles; //!< le nombre de poubelles gérées
+    private int            idNotification = 0; //!< Identifiant unique pour chaque notification
     private Communication  communication;      //!< Association avec la classe Communication
     private Handler        handler =
       null; //!< Handler permettant la communication entre la classe Communication et l'activité
@@ -292,15 +300,23 @@ public class FenetrePoubelle extends AppCompatActivity
                 " notification = " + modulesPoubelles.get(numeroPoubelle).estNotifie() +
                 " activation = " + modulesPoubelles.get(numeroPoubelle).estActif());
 
-        // @todo si le module est activé
-        // @todo alors si le module est noitifié
-        // @todo alors envoyer l'acquittement de la notification avec une requête PATCH
+        if(modulesPoubelles.get(numeroPoubelle).estActif())
+        {
+            if(modulesPoubelles.get(numeroPoubelle).estNotifie())
+            {
+                String api = "/poubelles/" + modulesPoubelles.get(numeroPoubelle).getIdModule();
+                String json = "{\"idPoubelle\": \"" + modulesPoubelles.get(numeroPoubelle).getIdModule()
+                        + "\",\"etat\": false}";
+                communication.emettreRequetePATCH(api, json, handler);
+            }
+        }
         /*
             Exemple :
             $ curl --location 'http://station-lumineuse.local:80/poubelles/1' --request PATCH
            --header 'Content-Type: application/json' --data '{"idPoubelle": "1","etat": false}'
          */
-        // @todo et enregistrer l'acquittement de la notification dans la base de données
+        int idModule = modulesPoubelles.get(numeroPoubelle).getIdModule();
+        baseDeDonnees.enregistrerAcquittementNotification(idModule, true);
     }
 
     private void recupererEtats()
@@ -382,8 +398,9 @@ public class FenetrePoubelle extends AppCompatActivity
             if(module.estNotifie())
             {
                 imagesNotificationPoubelles[numeroPoubelle].setVisibility(View.VISIBLE);
-                // @todo Signaler une notification sur la tablette Android (cf.
-                // http://tvaira.free.fr/projets/activites/activite-notifications.html#android)
+
+                // On signale une notification sur la tablette Android
+                creerNotification("Le module " + numeroPoubelle + " a une notification.");
             }
             else
             {
@@ -405,6 +422,36 @@ public class FenetrePoubelle extends AppCompatActivity
             // Toast.makeText(getApplicationContext(), "Module désactivé",
             // Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void creerNotification(String message)
+    {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        String titreNotification = getNomApplication(getApplicationContext());
+        String texteNotification = message;
+
+        NotificationCompat.Builder notification = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(titreNotification)
+                .setContentText(texteNotification);
+
+        // On pourrait ici crée une autre activité
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(), PendingIntent.FLAG_UPDATE_CURRENT);
+
+        notification.setContentIntent(pendingIntent);
+
+        notification.setAutoCancel(true);
+
+        notification.setVibrate(new long[] {0,200,100,200,100,200});
+
+        notificationManager.notify(idNotification++, notification.build());
+    }
+
+    public static String getNomApplication(Context context)
+    {
+        int stringId = context.getApplicationInfo().labelRes;
+        return context.getString(stringId);
     }
 
     private void afficherErreur(String message)

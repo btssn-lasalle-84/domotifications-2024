@@ -176,7 +176,9 @@ public class Communication
             {
                 Log.d(TAG, "emettreRequetePATCH() onFailure");
                 e.printStackTrace();
-                // @todo gérer l'erreur
+                handler.post(() -> {
+                    Log.d(TAG, "Erreur lors de l'émission de la requête PATCH : " + e.getMessage());
+                });
             }
 
             @Override
@@ -184,7 +186,13 @@ public class Communication
             {
                 Log.d(TAG, "emettreRequetePATCH() onResponse - message = " + response.message());
                 Log.d(TAG, "emettreRequetePATCH() onResponse - code    = " + response.code());
-                // @todo gérer la réponse
+                handler.post(() -> {
+                    if(response.isSuccessful()) {
+                        Log.d(TAG, "La requête PATCH a été émise.");
+                    } else {
+                        Log.d(TAG, "La requête PATCH a échoué. Code d'erreur : " + response.code());
+                    }
+                });
             }
         });
     }

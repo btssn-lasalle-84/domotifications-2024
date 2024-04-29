@@ -346,6 +346,37 @@ public class BaseDeDonnees extends SQLiteOpenHelper
         Log.d(TAG,
               "mettreAJourEtatNotificationModule() idModule = " + idModule + " etat = " + etat);
 
-        // @todo mettre à jour l'état de notification du module dans la base de données
+        try
+        {
+            String requete =
+                    "UPDATE modules SET etat = '" + (etat ? 1 : 0) + "' WHERE id = '" + idModule + "'";
+            Log.d(TAG, "mettreAJourEtatNotificationModule() requete = " + requete);
+            sqlite.execSQL(requete);
+        }
+        catch(SQLiteConstraintException e)
+        {
+            Log.e(TAG, "Erreur de mise à jour de l'état de notification du module");
+        }
+    }
+
+    /**
+     * @brief Enregistre l'acquittement de la notification dans la base de données
+     */
+    public void enregistrerAcquittementNotification(int idModule, boolean acquittement)
+    {
+        Log.d(TAG, "enregistrerAcquittementNotification() idModule = " + idModule + " acquittement = " + acquittement);
+
+        try
+        {
+            String requete =
+                    "UPDATE notifications SET acquittement = '" + (acquittement ? 1 : 0) +
+                            "' WHERE idModules = '" + idModule + "'";
+            Log.d(TAG, "enregistrerAcquittementNotification() requete = " + requete);
+            sqlite.execSQL(requete);
+        }
+        catch(SQLiteConstraintException e)
+        {
+            Log.e(TAG, "Erreur d'enregistrement de l'acquittement de la notification");
+        }
     }
 }

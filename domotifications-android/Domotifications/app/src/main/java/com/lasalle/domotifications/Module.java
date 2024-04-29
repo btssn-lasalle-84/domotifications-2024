@@ -85,11 +85,11 @@ public class Module
 
     public void setEtatActivation(boolean etat)
     {
-        // @todo si l'état a changé
-
-        // @todo alors conserver le nouvel état
-
-        // @todo et mettre à jour l'état d'activation dans la base de données
+        if (this.etatActivation == !etat)
+        {
+            this.etatActivation = etat;
+        }
+        baseDeDonnees.mettreAJourEtatActivationModule(idModule, etat);
     }
 
     public void setActif(boolean actif)
@@ -99,11 +99,11 @@ public class Module
 
     public void setEtatNotification(boolean etat)
     {
-        // @todo si l'état a changé
-
-        // @todo alors conserver le nouvel état
-
-        // @todo et mettre à jour l'état de notification dans la base de données
+        if (this.etatNotification == !etat)
+        {
+            this.etatNotification = etat;
+        }
+        baseDeDonnees.mettreAJourEtatNotificationModule(idModule, etat);
     }
 
     public void setCouleur(String couleur)
