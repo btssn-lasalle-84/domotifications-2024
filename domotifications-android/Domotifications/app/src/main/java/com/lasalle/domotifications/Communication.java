@@ -29,10 +29,12 @@ public class Communication
     public static final String  ADRESSE_IP_STATION = "192.168.52.209"; // Simulateur station
     private static final int    PORT_HTTP          = 80;
     public final static int     CODE_HTTP_REPONSE_JSON =
-      0; //!< Code indicatif de l'handler  pour les requêtes qui retournent des réponses au format
+      0; //!< Code indicatif de l'handler pour les requêtes qui retournent des réponses au format
          //!< JSON
+    public final static int CODE_HTTP_REPONSE_PATCH =
+      1; //!< Code indicatif de l'handler pour les retours des requêtes PATCH
     public final static int CODE_HTTP_ERREUR =
-      1; //!< Code indicatif de l'handler pour signaler des requêtes qui ont échouées (onFailure)
+      2; //!< Code indicatif de l'handler pour signaler des requêtes qui ont échouées (onFailure)
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     /**
      * Attributs
@@ -177,7 +179,7 @@ public class Communication
                 Log.d(TAG, "emettreRequetePATCH() onFailure");
                 e.printStackTrace();
                 Message message = Message.obtain();
-                message.what = CODE_HTTP_ERREUR;
+                message.what    = CODE_HTTP_ERREUR;
                 handler.sendMessage(message);
             }
 
@@ -186,19 +188,25 @@ public class Communication
             {
                 Log.d(TAG, "emettreRequetePATCH() onResponse - message = " + response.message());
                 Log.d(TAG, "emettreRequetePATCH() onResponse - code    = " + response.code());
-                Message message = Message.obtain();
-                if (response.isSuccessful())
+
+                if(!response.isSuccessful())
                 {
-                    Log.d(TAG, "La requête PATCH a été émise" + request.url() +
-                    ", Réponse : " + response.body().string());
-                    message.what = CODE_HTTP_REPONSE_JSON;
-                    message.obj = response.body().string();
+                    throw new IOException(response.toString());
                 }
-                else {
-                    Log.d(TAG, "La requête PATCH a échoué. Code d'erreur : " + response.code());
-                    message.what = CODE_HTTP_ERREUR;
-                }
-                handler.sendMessage(message);
+
+                // la réponse à transmettre à l'emetteur de la requête
+                final String body = response.body().string();
+                Log.d(TAG, "emettreRequetePATCH() onResponse - body = " + body);
+                new Thread() {
+                    @Override
+                    public void run()
+                    {
+                        Message message = Message.obtain();
+                        message.what    = CODE_HTTP_REPONSE_PATCH;
+                        message.obj     = body;
+                        handler.sendMessage(message);
+                    }
+                }.start();
             }
         });
     }

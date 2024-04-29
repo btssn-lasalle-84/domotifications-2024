@@ -57,6 +57,7 @@ public class FenetrePoubelle extends AppCompatActivity
     private Timer minuteur = null; //!< Pour gérer la récupération des états des modules poubelles
     private TimerTask tacheRecuperationEtats =
       null; //!< Pour effectuer la récupération des états des modules poubelles
+    private boolean erreurCommunication = false;
     /**
      * GUI
      */
@@ -226,6 +227,7 @@ public class FenetrePoubelle extends AppCompatActivity
 
     private void initialiserHandler()
     {
+        Log.d(TAG, "initialiserHandler()");
         this.handler = new Handler(this.getMainLooper()) {
             @Override
             public void handleMessage(Message message)
@@ -238,10 +240,21 @@ public class FenetrePoubelle extends AppCompatActivity
                     case Communication.CODE_HTTP_REPONSE_JSON:
                         Log.d(TAG, "[Handler] REPONSE JSON");
                         traiterReponseJSON(message.obj.toString());
+                        erreurCommunication = false;
+                        break;
+                    case Communication.CODE_HTTP_REPONSE_PATCH:
+                        Log.d(TAG, "[Handler] REPONSE PATCH");
+                        traiterReponseJSON(message.obj.toString());
+                        enregistrerAcquittementNotification(message.obj.toString());
+                        erreurCommunication = false;
                         break;
                     case Communication.CODE_HTTP_ERREUR:
                         Log.d(TAG, "[Handler] ERREUR HTTP");
-                        afficherErreur("Impossible de communiquer avec la station !");
+                        if(erreurCommunication == false)
+                        {
+                            afficherErreur("Impossible de communiquer avec la station !");
+                            erreurCommunication = true;
+                        }
                         break;
                 }
             }
@@ -250,11 +263,13 @@ public class FenetrePoubelle extends AppCompatActivity
 
     private void initialiserMinuteur()
     {
+        Log.d(TAG, "initialiserMinuteur()");
         minuteur = new Timer();
     }
 
     private void initialiserCommunication()
     {
+        Log.d(TAG, "initialiserCommunication()");
         // On récupère l'URL de la station dans la base de données
         // communication = Communication.getInstance(this);
         // ou on indique l'adresse de la station :
@@ -304,20 +319,19 @@ public class FenetrePoubelle extends AppCompatActivity
         {
             if(modulesPoubelles.get(numeroPoubelle).estNotifie())
             {
-                String api = API_PATCH_POUBELLES + "/" + modulesPoubelles.get(numeroPoubelle).getIdModule();
-                String json = "{\"idPoubelle\": \"" + modulesPoubelles.get(numeroPoubelle).getIdModule()
-                        + "\",\"etat\": false}";
+                /*
+                Exemple :
+                $ curl --location 'http://station-lumineuse.local:80/poubelles/1' --request PATCH
+                --header 'Content-Type: application/json' --data '{"idPoubelle": "1","etat": false}'
+                */
+                String api =
+                  API_PATCH_POUBELLES + "/" + modulesPoubelles.get(numeroPoubelle).getIdModule();
+                String json = "{\"idPoubelle\": \"" +
+                              modulesPoubelles.get(numeroPoubelle).getIdModule() +
+                              "\",\"etat\": false}";
                 communication.emettreRequetePATCH(api, json, handler);
             }
         }
-        /*
-            Exemple :
-            $ curl --location 'http://station-lumineuse.local:80/poubelles/1' --request PATCH
-           --header 'Content-Type: application/json' --data '{"idPoubelle": "1","etat": false}'
-         */
-        int idModule = modulesPoubelles.get(numeroPoubelle).getIdModule();
-        int idTypesModules = modulesPoubelles.get(numeroPoubelle).getTypeModule().ordinal();
-        baseDeDonnees.enregistrerAcquittementNotification(idModule, idTypesModules,true);
     }
 
     private void recupererEtats()
@@ -384,6 +398,51 @@ public class FenetrePoubelle extends AppCompatActivity
         }
     }
 
+    public void enregistrerAcquittementNotification(String reponse)
+    {
+        Log.d(TAG, "enregistrerAcquittementNotification() reponse = " + reponse);
+        /*
+            Exemple de réponsee : pour la requête PATCH /poubelles/1
+            body =
+            [
+                {"idPoubelle":1,"couleur":"rouge","etat":false,"actif":true}
+            ]
+        */
+        JSONArray json = null;
+
+        try
+        {
+            json = new JSONArray(reponse);
+            if(json.length() > 0)
+            {
+                JSONObject poubelle   = json.getJSONObject(0);
+                int        idPoubelle = poubelle.getInt("idPoubelle");
+                String     couleur    = poubelle.getString("couleur");
+                Boolean    etat       = poubelle.getBoolean("etat");
+                Boolean    actif      = poubelle.getBoolean("actif");
+                Log.d(TAG,
+                      "enregistrerAcquittementNotification() idPoubelle = " + idPoubelle +
+                        " couleur = " + couleur + " etat = " + etat + " actif = " + actif);
+                for(int i = 0; i < modulesPoubelles.size(); ++i)
+                {
+                    Module module = modulesPoubelles.get(i);
+                    if(module.getIdModule() == idPoubelle &&
+                       module.getTypeModule() == Module.TypeModule.Poubelle)
+                    {
+                        baseDeDonnees.enregistrerAcquittementNotification(module.getIdModule(),
+                                                                          module.getTypeModule().ordinal(),
+                                                                          true);
+                        break;
+                    }
+                }
+            }
+        }
+        catch(JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     private void mettreAJourModule(int numeroPoubelle)
     {
         if(modulesPoubelles.get(numeroPoubelle) == null)
@@ -427,24 +486,26 @@ public class FenetrePoubelle extends AppCompatActivity
 
     private void creerNotification(String message)
     {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager =
+          (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 
         String titreNotification = getNomApplication(getApplicationContext());
         String texteNotification = message;
 
         NotificationCompat.Builder notification = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(titreNotification)
-                .setContentText(texteNotification);
+                                                    .setSmallIcon(R.mipmap.ic_launcher)
+                                                    .setContentTitle(titreNotification)
+                                                    .setContentText(texteNotification);
 
         // On pourrait ici crée une autre activité
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(), PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent =
+          PendingIntent.getActivity(this, 0, new Intent(), PendingIntent.FLAG_UPDATE_CURRENT);
 
         notification.setContentIntent(pendingIntent);
 
         notification.setAutoCancel(true);
 
-        notification.setVibrate(new long[] {0,200,100,200,100,200});
+        notification.setVibrate(new long[] { 0, 200, 100, 200, 100, 200 });
 
         notificationManager.notify(idNotification++, notification.build());
     }

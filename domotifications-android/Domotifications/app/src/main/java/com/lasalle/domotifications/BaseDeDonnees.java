@@ -349,7 +349,7 @@ public class BaseDeDonnees extends SQLiteOpenHelper
         try
         {
             String requete =
-                    "UPDATE modules SET etat = '" + (etat ? 1 : 0) + "' WHERE id = '" + idModule + "'";
+              "UPDATE modules SET etat = '" + (etat ? 1 : 0) + "' WHERE id = '" + idModule + "'";
             Log.d(TAG, "mettreAJourEtatNotificationModule() requete = " + requete);
             sqlite.execSQL(requete);
         }
@@ -362,19 +362,20 @@ public class BaseDeDonnees extends SQLiteOpenHelper
     /**
      * @brief Enregistre l'acquittement de la notification dans la base de données
      */
-    public void enregistrerAcquittementNotification(int idModule, int idTypesModules, boolean acquittement)
+    public void enregistrerAcquittementNotification(int     idModule,
+                                                    int     idTypesModules,
+                                                    boolean acquittement)
     {
-        Log.d(TAG, "enregistrerAcquittementNotification() idModule = " + idModule + " acquittement = " + acquittement);
+        Log.d(TAG,
+              "enregistrerAcquittementNotification() idModule = " + idModule +
+                " idTypesModules = " + idTypesModules + " acquittement = " + acquittement);
 
         try
         {
             String requete =
-                    "INSERT INTO notifications (idDomotifications, idModules, idTypesModules, horodatage, acquittement) VALUES ("
-                            + ID_DOMOTIFICATIONS + ", '"
-                            + idModule + "', '"
-                            + idTypesModules + "', "
-                            + "datetime('now'), '"
-                            + (acquittement ? 1 : 0) + "')";
+              "INSERT INTO notifications (idDomotifications, idModules, idTypesModules, horodatage, acquittement) VALUES (" +
+              ID_DOMOTIFICATIONS + ", " + idModule + ", " + idTypesModules + ", "
+              + "datetime('now'), " + (acquittement ? 1 : 0) + ");";
             Log.d(TAG, "enregistrerAcquittementNotification() requete = " + requete);
             sqlite.execSQL(requete);
         }
