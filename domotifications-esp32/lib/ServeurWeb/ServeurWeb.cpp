@@ -12,6 +12,7 @@
 #include "Poubelle.h"
 #include <ESPmDNS.h>
 #include <uri/UriRegex.h>
+#include <sstream>
 
 /**
  * @brief Constructeur de la classe ServeurWeb
@@ -94,9 +95,7 @@ void ServeurWeb::installerGestionnairesRequetes()
        std::bind(&ServeurWeb::traiterRequeteUpdateMachine, this));
 
     // pour les modules Boite
-    on("/boites", HTTP_GET, std::bind(&ServeurWeb::traiterRequeteGetBoites, this));
-    on(UriRegex("/boites/([1-" + String(NB_LEDS_NOTIFICATION_BOITE) + "]+)$"),
-       HTTP_GET,
+    on("/boites", HTTP_GET, std::bind(&Serveur#include <sstream>
        std::bind(&ServeurWeb::traiterRequeteGetBoite, this));
     on(UriRegex("/boites/([1-" + String(NB_LEDS_NOTIFICATION_BOITE) + "]+)$"),
        HTTP_PATCH,
@@ -393,9 +392,11 @@ void ServeurWeb::traiterRequeteGetMachines()
     {
         machine = stationLumineuse->getMachine(i);
         if(machine == nullptr)
-        {
-            continue;
-        }
+            sudo apt install net - tools
+
+            {
+                continue;
+            }
         JsonObject objetMachine   = documentJSON.createNestedObject();
         objetMachine["idMachine"] = machine->getId();
         objetMachine["couleur"]   = machine->getCouleur();

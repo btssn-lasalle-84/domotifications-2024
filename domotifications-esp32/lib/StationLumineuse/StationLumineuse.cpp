@@ -139,6 +139,27 @@ void StationLumineuse::testerBandeau()
     }
 }
 
+String StationLumineuse::getCouleurToString(uint32_t couleur)
+{
+    std::stringstream couleurStream;
+
+    couleurStream << std::hex << couleur;
+
+    return String("#") + String(couleurStream.str().c_str());
+}
+
+uint32_t StationLumineuse::getCouleurToRGB(String couleur)
+{
+    if(couleur[0] == '#' && couleur.length() == 7)
+    {
+        uint32_t c;
+        couleur.remove(0, 1);
+        std::stringstream(couleur.c_str()) >> std::hex >> c;
+        return c;
+    }
+    return 0;
+}
+
 std::size_t StationLumineuse::getNbPoubelles() const
 {
     return poubelles.size();

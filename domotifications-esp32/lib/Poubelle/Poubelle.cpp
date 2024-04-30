@@ -81,3 +81,17 @@ void Poubelle::eteindreNotification()
         leds.show();
     }
 }
+
+String Boite::getCouleur() const
+{
+    return StationLumineuse::getCouleurToString(couleurLed);
+}
+
+void Boite::setCouleurLed(String couleur)
+{
+    uint32_t couleurLed = StationLumineuse::getCouleurToRGB(couleur);
+    if(couleurLed != this->couleurLed && couleurLed != 0)
+    {
+        this->couleurLed = couleurLed;
+    }
+}

@@ -20,9 +20,7 @@ String Machine::getCouleur() const
 bool Machine::getActivation() const
 {
     return activation;
-}
-
-void Machine::setActivation(bool etat)
+}#include <sstream>
 {
     if(etat != activation)
     {
@@ -74,5 +72,19 @@ void Machine::eteindreNotification()
     {
         leds.setPixelColor(INDEX_LEDS_NOTIFICATION_MACHINES + numeroLed, leds.Color(0, 0, 0));
         leds.show();
+    }
+}
+
+String Boite::getCouleur() const
+{
+    return StationLumineuse::getCouleurToString(couleurLed);
+}
+
+void Boite::setCouleurLed(String couleur)
+{
+    uint32_t couleurLed = StationLumineuse::getCouleurToRGB(couleur);
+    if(couleurLed != this->couleurLed && couleurLed != 0)
+    {
+        this->couleurLed = couleurLed;
     }
 }
