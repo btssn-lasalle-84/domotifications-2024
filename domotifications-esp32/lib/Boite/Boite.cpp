@@ -1,92 +1,91 @@
 #include "Boite.h"
 #include "BandeauLeds.h"
+#include "StationLumineuse.h"
 
 Boite::Boite(int id, int numeroLed, uint32_t couleurLed, Adafruit_NeoPixel& leds) :
     id(id), numeroLed(numeroLed), couleurLed(couleurLed), activation(false), notification(false),
     leds(leds)
 {
-#include <sstream>
+}
 
 int Boite::getId() const
-    {
-        return id;
-    }
+{
+    return id;
+}
 
-    String Boite::getCouleur() const
-    {
-        return String(couleurLed);
-    }
+uint32_t Boite::getCouleurLed() const
+{
+    return couleurLed;
+}
 
-    bool Boite::getActivation() const
-    {
-        return activation;
-    }
+bool Boite::getActivation() const
+{
+    return activation;
+}
 
-    void Boite::setActivation(bool etat)
+void Boite::setActivation(bool etat)
+{
+    if(etat != activation)
     {
-        if(etat != activation)
+        activation = etat;
+    }
+}
+
+bool Boite::getEtatNotification() const
+{
+    return notification;
+}
+
+void Boite::setEtatNotification(bool etat)
+{
+    if(etat != notification)
+    {
+        notification = etat;
+        if(notification)
         {
-            activation = etat;
+            allumerNotification();
+        }
+        else
+        {
+            eteindreNotification();
         }
     }
+}
 
-    bool Boite::getEtatNotification() const
-    {
-        return notification;
-    }
+void Boite::resetEtatNotification()
+{
+    setEtatNotification(false);
+}
 
-    void Boite::setEtatNotification(bool etat)
+void Boite::allumerNotification()
+{
+    if(activation)
     {
-        if(etat != notification)
-        {
-            notification = etat;
-            if(notification)
-            {
-                allumerNotification();
-            }
-            else
-            {
-                eteindreNotification();
-            }
-        }
+        leds.setPixelColor(INDEX_LEDS_NOTIFICATION_BOITE + numeroLed,
+                           couleurLed); // Appliquer la couleur correspondante
+        leds.show();
     }
+}
 
-    void Boite::resetEtatNotification()
+void Boite::eteindreNotification()
+{
+    if(activation)
     {
-        setEtatNotification(false);
+        leds.setPixelColor(INDEX_LEDS_NOTIFICATION_BOITE + numeroLed, leds.Color(0, 0, 0));
+        leds.show();
     }
+}
 
-    void Boite::allumerNotification()
-    {
-        // @todo Seulement si le module est activé
-        if(activation)
-        {
-            leds.setPixelColor(INDEX_LEDS_NOTIFICATION_BOITE + numeroLed,
-                               couleurLed); // Appliquer la couleur correspondante
-            leds.show();
-        }
-    }
+String Boite::getCouleur() const
+{
+    return StationLumineuse::getCouleurToString(couleurLed);
+}
 
-    void Boite::eteindreNotification()
+void Boite::setCouleurLed(String couleur)
+{
+    uint32_t couleurLed = StationLumineuse::getCouleurToRGB(couleur);
+    if(couleurLed != this->couleurLed && couleurLed != 0)
     {
-        // @todo Seulement si le module est activé
-        if(activation)
-        {
-            leds.setPixelColor(INDEX_LEDS_NOTIFICATION_BOITE + numeroLed, leds.Color(0, 0, 0));
-            leds.show();
-        }
+        this->couleurLed = couleurLed;
     }
-
-    String Boite::getCouleur() const
-    {
-        return StationLumineuse::getCouleurToString(couleurLed);
-    }
-
-    void Boite::setCouleurLed(String couleur)
-    {
-        uint32_t couleurLed = StationLumineuse::getCouleurToRGB(couleur);
-        if(couleurLed != this->couleurLed && couleurLed != 0)
-        {
-            this->couleurLed = couleurLed;
-        }
-    }
+}

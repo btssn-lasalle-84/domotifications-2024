@@ -1,5 +1,6 @@
 #include "Machine.h"
 #include "BandeauLeds.h"
+#include "StationLumineuse.h"
 
 Machine::Machine(int id, int numeroLed, uint32_t couleurLed, Adafruit_NeoPixel& leds) :
     id(id), numeroLed(numeroLed), couleurLed(couleurLed), activation(false), notification(false),
@@ -12,15 +13,17 @@ int Machine::getId() const
     return id;
 }
 
-String Machine::getCouleur() const
+uint32_t Machine::getCouleurLed() const
 {
-    return String(couleurLed);
+    return couleurLed;
 }
 
 bool Machine::getActivation() const
 {
     return activation;
-}#include <sstream>
+}
+
+void Machine::setActivation(bool etat)
 {
     if(etat != activation)
     {
@@ -56,7 +59,6 @@ void Machine::resetEtatNotification()
 
 void Machine::allumerNotification()
 {
-    // @todo Seulement si le module est activé
     if(activation)
     {
         leds.setPixelColor(INDEX_LEDS_NOTIFICATION_MACHINES + numeroLed,
@@ -67,7 +69,6 @@ void Machine::allumerNotification()
 
 void Machine::eteindreNotification()
 {
-    // @todo Seulement si le module est activé
     if(activation)
     {
         leds.setPixelColor(INDEX_LEDS_NOTIFICATION_MACHINES + numeroLed, leds.Color(0, 0, 0));
@@ -75,12 +76,12 @@ void Machine::eteindreNotification()
     }
 }
 
-String Boite::getCouleur() const
+String Machine::getCouleur() const
 {
     return StationLumineuse::getCouleurToString(couleurLed);
 }
 
-void Boite::setCouleurLed(String couleur)
+void Machine::setCouleurLed(String couleur)
 {
     uint32_t couleurLed = StationLumineuse::getCouleurToRGB(couleur);
     if(couleurLed != this->couleurLed && couleurLed != 0)

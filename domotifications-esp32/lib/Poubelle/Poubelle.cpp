@@ -1,14 +1,10 @@
 #include "Poubelle.h"
 #include "BandeauLeds.h"
+#include "StationLumineuse.h"
 
-Poubelle::Poubelle(int                id,
-                   String             couleur,
-                   int                numeroLed,
-                   uint32_t           couleurLed,
-                   Adafruit_NeoPixel& leds) :
-    id(id),
-    couleur(couleur), numeroLed(numeroLed), couleurLed(couleurLed), activation(false),
-    notification(false), leds(leds)
+Poubelle::Poubelle(int id, int numeroLed, uint32_t couleurLed, Adafruit_NeoPixel& leds) :
+    id(id), numeroLed(numeroLed), couleurLed(couleurLed), activation(false), notification(false),
+    leds(leds)
 {
 }
 
@@ -17,9 +13,9 @@ int Poubelle::getId() const
     return id;
 }
 
-String Poubelle::getCouleur() const
+uint32_t Poubelle::getCouleurLed() const
 {
-    return couleur;
+    return couleurLed;
 }
 
 bool Poubelle::getActivation() const
@@ -63,7 +59,6 @@ void Poubelle::resetEtatNotification()
 
 void Poubelle::allumerNotification()
 {
-    // @todo Seulement si le module est activé
     if(activation)
     {
         leds.setPixelColor(INDEX_LEDS_NOTIFICATION_POUBELLES + numeroLed,
@@ -74,7 +69,6 @@ void Poubelle::allumerNotification()
 
 void Poubelle::eteindreNotification()
 {
-    // @todo Seulement si le module est activé
     if(activation)
     {
         leds.setPixelColor(INDEX_LEDS_NOTIFICATION_POUBELLES + numeroLed, leds.Color(0, 0, 0));
@@ -82,12 +76,12 @@ void Poubelle::eteindreNotification()
     }
 }
 
-String Boite::getCouleur() const
+String Poubelle::getCouleur() const
 {
     return StationLumineuse::getCouleurToString(couleurLed);
 }
 
-void Boite::setCouleurLed(String couleur)
+void Poubelle::setCouleurLed(String couleur)
 {
     uint32_t couleurLed = StationLumineuse::getCouleurToRGB(couleur);
     if(couleurLed != this->couleurLed && couleurLed != 0)

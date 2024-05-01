@@ -10,15 +10,7 @@
 #include "Boite.h"
 #include "Machine.h"
 #include "Poubelle.h"
-
-// définition globale des couleurs des poubelles
-const char* nomCouleursPoubelles[NB_LEDS_NOTIFICATION_POUBELLES] = { "rouge",
-                                                                     "jaune",
-                                                                     "bleue",
-                                                                     "grise",
-                                                                     "verte" };
-
-const char* nomCouleursMachines[NB_LEDS_NOTIFICATION_MACHINES] = { "vert" };
+#include <sstream>
 
 uint32_t StationLumineuse::couleursPoubelles[NB_LEDS_NOTIFICATION_POUBELLES] = {
     StationLumineuse::convertirCouleurRGB(255, 0, 0),     // Couleur poubelle 0 (rouge)
@@ -44,8 +36,7 @@ StationLumineuse::StationLumineuse() :
     // les poubelles
     for(int i = 0; i < NB_LEDS_NOTIFICATION_POUBELLES; ++i)
     {
-        poubelles.push_back(
-          new Poubelle(i + 1, nomCouleursPoubelles[i], i, couleursPoubelles[i], leds));
+        poubelles.push_back(new Poubelle(i + 1, i, couleursPoubelles[i], leds));
     }
 
     // les boîtes aux lettres
@@ -255,30 +246,6 @@ void StationLumineuse::sauvegarderEtatsMachine(int id)
 uint32_t StationLumineuse::convertirCouleurRGB(uint8_t r, uint8_t g, uint8_t b)
 {
     return ((uint32_t)r << 16) | ((uint32_t)g << 8) | b;
-}
-
-uint32_t StationLumineuse::getCouleurPoubelle(String nom)
-{
-    for(int i = 0; i < NB_LEDS_NOTIFICATION_POUBELLES; ++i)
-    {
-        if(nom == nomCouleursPoubelles[i])
-        {
-            return couleursPoubelles[i];
-        }
-    }
-    return 0;
-}
-
-String StationLumineuse::getNomCouleurPoubelle(uint32_t couleur)
-{
-    for(int i = 0; i < NB_LEDS_NOTIFICATION_POUBELLES; ++i)
-    {
-        if(couleur == couleursPoubelles[i])
-        {
-            return nomCouleursPoubelles[i];
-        }
-    }
-    return "";
 }
 
 // Méthodes privées

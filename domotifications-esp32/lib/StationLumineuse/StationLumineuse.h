@@ -50,12 +50,6 @@ class StationLumineuse
 
     // Méthodes statiques
     static uint32_t convertirCouleurRGB(uint8_t r, uint8_t g, uint8_t b);
-    static uint32_t getCouleurPoubelle(String nom);
-    static String   getNomCouleurPoubelle(uint32_t couleur);
-
-    static uint32_t getCouleurMachine(String nom);
-    static String   getNomCouleurMachine(uint32_t couleur);
-
     static String   getCouleurToString(uint32_t couleur);
     static uint32_t getCouleurToRGB(String couleur);
 

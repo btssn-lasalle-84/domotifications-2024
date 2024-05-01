@@ -64,16 +64,16 @@ class ServeurWeb : public WebServer
     void traiterRequeteGetPoubelles();
     void traiterRequeteGetPoubelle();
     void traiterRequeteUpdatePoubelle();
+
+    // pour les modules Machine
     void traiterRequeteGetMachines();
     void traiterRequeteGetMachine();
     void traiterRequeteUpdateMachine();
+
+    // pour les modules Boite
     void traiterRequeteGetBoites();
     void traiterRequeteGetBoite();
     void traiterRequeteUpdateBoite();
-
-    // @todo idem pour les modules Machine
-
-    // @todo idem pour les modules Boite
 };
 
 #endif // SERVEURWEB_H
