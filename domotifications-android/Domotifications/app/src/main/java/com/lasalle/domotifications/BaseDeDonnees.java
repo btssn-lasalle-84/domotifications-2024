@@ -7,10 +7,6 @@
 
 package com.lasalle.domotifications;
 
-import static android.provider.MediaStore.getVersion;
-
-import static com.lasalle.domotifications.FenetrePoubelle.NB_COULEURS_POUBELLE;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -22,7 +18,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -149,6 +144,36 @@ public class BaseDeDonnees extends SQLiteOpenHelper
     }
 
     /**
+     * @brief Renvoie un vecteur de Module contenant les boîtes
+     */
+    public Vector<Module> getBoites()
+    {
+        String requete =
+          "SELECT * FROM modules WHERE modules.idTypesModules='1' AND idDomotifications=" +
+          ID_DOMOTIFICATIONS + ";";
+        Log.d(TAG, "getBoites() requete = " + requete);
+        Cursor         curseur      = sqlite.rawQuery(requete, null);
+        Vector<Module> listeModules = new Vector<Module>();
+        while(curseur.moveToNext())
+        {
+            String id     = curseur.getString(curseur.getColumnIndexOrThrow("id"));
+            String nom    = curseur.getString(curseur.getColumnIndexOrThrow("nom"));
+            String actif  = curseur.getString(curseur.getColumnIndexOrThrow("actif"));
+            String etat   = curseur.getString(curseur.getColumnIndexOrThrow("etat"));
+            Module module = new Module(Integer.parseInt(id),
+                                       nom,
+                                       Module.TypeModule.BoiteAuxLettres,
+                                       (Integer.parseInt(actif) == 1 ? true : false),
+                                       (Integer.parseInt(etat) == 1 ? true : false),
+                                       baseDeDonnees);
+            listeModules.add(module);
+        }
+        curseur.close();
+
+        return listeModules;
+    }
+
+    /**
      * @brief Renvoie le nombre max de modules de type Poubelle
      */
     public int getNbMaxModulesPoubelles()
@@ -171,6 +196,28 @@ public class BaseDeDonnees extends SQLiteOpenHelper
     }
 
     /**
+     * @brief Renvoie le nombre max de modules de type Boîte
+     */
+    public int getNbMaxModulesBoites()
+    {
+        Log.d(TAG, "getNbMaxModulesBoites()");
+
+        Cursor curseur = sqlite.rawQuery(
+          "SELECT domotifications.nbBoitesAuxLettres FROM domotifications WHERE id=" +
+            ID_DOMOTIFICATIONS + ";",
+          null);
+
+        int nbBoitesAuxLettres = 0;
+        if(curseur.moveToFirst())
+        {
+            nbBoitesAuxLettres = curseur.getInt(0);
+        }
+        curseur.close();
+
+        return nbBoitesAuxLettres;
+    }
+
+    /**
      * @brief Renvoie le nombre de modules installés de type Poubelle
      */
     public int getNbModulesPoubelles()
@@ -190,6 +237,28 @@ public class BaseDeDonnees extends SQLiteOpenHelper
         curseur.close();
 
         return nbPoubelles;
+    }
+
+    /**
+     * @brief Renvoie le nombre de modules installés de type Boîtes
+     */
+    public int getNbModulesBoites()
+    {
+        Log.d(TAG, "getNbModulesBoites()");
+
+        Cursor curseur = sqlite.rawQuery(
+          "SELECT COUNT(*) AS NbBoites FROM modules WHERE modules.idTypesModules='1' AND idDomotifications=" +
+            ID_DOMOTIFICATIONS + ";",
+          null);
+
+        int nbBoitesAuxLettres = 0;
+        if(curseur.moveToFirst())
+        {
+            nbBoitesAuxLettres = curseur.getInt(0);
+        }
+        curseur.close();
+
+        return nbBoitesAuxLettres;
     }
 
     /**
@@ -320,15 +389,15 @@ public class BaseDeDonnees extends SQLiteOpenHelper
     /**
      * @brief Met à jour l'état d'activation du module dans la base de données
      */
-    public void mettreAJourEtatActivationModule(int idModule, boolean actif)
+    public void mettreAJourEtatActivationModule(int idModule, int idTypesModules, boolean actif)
     {
         Log.d(TAG,
               "mettreAJourEtatActivationModule() idModule = " + idModule + " actif = " + actif);
 
         try
         {
-            String requete =
-              "UPDATE modules SET actif = '" + (actif ? 1 : 0) + "' WHERE id = '" + idModule + "'";
+            String requete = "UPDATE modules SET actif = '" + (actif ? 1 : 0) + "' WHERE id = '" +
+                             idModule + "' AND idTypesModules = '" + (idTypesModules + 1)  + "'";
             Log.d(TAG, "mettreAJourEtatActivationModule() requete = " + requete);
             sqlite.execSQL(requete);
         }
@@ -341,15 +410,15 @@ public class BaseDeDonnees extends SQLiteOpenHelper
     /**
      * @brief Met à jour l'état de notification du module dans la base de données
      */
-    public void mettreAJourEtatNotificationModule(int idModule, boolean etat)
+    public void mettreAJourEtatNotificationModule(int idModule, int idTypesModules, boolean etat)
     {
         Log.d(TAG,
               "mettreAJourEtatNotificationModule() idModule = " + idModule + " etat = " + etat);
 
         try
         {
-            String requete =
-              "UPDATE modules SET etat = '" + (etat ? 1 : 0) + "' WHERE id = '" + idModule + "'";
+            String requete = "UPDATE modules SET etat = '" + (etat ? 1 : 0) + "' WHERE id = '" +
+                             idModule + "' AND idTypesModules = '" + (idTypesModules + 1) + "'";
             Log.d(TAG, "mettreAJourEtatNotificationModule() requete = " + requete);
             sqlite.execSQL(requete);
         }
@@ -374,7 +443,7 @@ public class BaseDeDonnees extends SQLiteOpenHelper
         {
             String requete =
               "INSERT INTO notifications (idDomotifications, idModules, idTypesModules, horodatage, acquittement) VALUES (" +
-              ID_DOMOTIFICATIONS + ", " + idModule + ", " + idTypesModules + ", "
+              ID_DOMOTIFICATIONS + ", " + idModule + ", " + (idTypesModules + 1) + ", "
               + "datetime('now'), " + (acquittement ? 1 : 0) + ");";
             Log.d(TAG, "enregistrerAcquittementNotification() requete = " + requete);
             sqlite.execSQL(requete);

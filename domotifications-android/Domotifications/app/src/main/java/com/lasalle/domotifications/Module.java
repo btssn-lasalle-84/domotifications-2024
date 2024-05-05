@@ -19,8 +19,9 @@ public class Module
     public enum TypeModule
     {
         BoiteAuxLettres,
+        Poubelle,
         Machine,
-        Poubelle
+        NbTypes
     }
 
     // Constructeur
@@ -88,7 +89,7 @@ public class Module
         if (this.etatActivation != etat)
         {
             this.etatActivation = etat;
-            baseDeDonnees.mettreAJourEtatActivationModule(idModule, etat);
+            baseDeDonnees.mettreAJourEtatActivationModule(idModule, getTypeModule().ordinal(), etat);
         }
     }
 
@@ -102,7 +103,7 @@ public class Module
         if (this.etatNotification != etat)
         {
             this.etatNotification = etat;
-            baseDeDonnees.mettreAJourEtatNotificationModule(idModule, etat);
+            baseDeDonnees.mettreAJourEtatNotificationModule(idModule, getTypeModule().ordinal(), etat);
         }
     }
 

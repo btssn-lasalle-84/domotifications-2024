@@ -26,16 +26,15 @@ public class IHM extends AppCompatActivity
     /**
      * Constantes
      */
-    private static final String TAG = "_IHM"; //!< TAG pour les logs (cf. Logcat)
+    private static final String TAG        = "_IHM"; //!< TAG pour les logs (cf. Logcat)
+    private static final int    INTERVALLE = 1000;   //!< Intervalle d'interrogation en ms
     /**
      * Attributs
      */
-    private Domotifications domotifications;
-    private String nomInterface;
-    private String adresseIP;
-    // Exemple d'accès à la base de données
-    private BaseDeDonnees  baseDeDonnees;    //!< Association avec la base de donnees
-    private Vector<String> nomsModules; // test
+    private int     nbNotificationsPoubelles;
+    private int     nbNotificationsMachines;
+    private int     nbNotificationsBoites;
+    private boolean erreurCommunication = false;
     /**
      * GUI
      */
@@ -54,10 +53,10 @@ public class IHM extends AppCompatActivity
 
         initialiserGUI();
 
-        // Test BDD
-        baseDeDonnees    = BaseDeDonnees.getInstance(this);
-        nomsModules = baseDeDonnees.getNomModules();
-        Log.d(TAG, "nomsModules = " + nomsModules);
+        initialiserHandler();
+        initialiserMinuteur();
+        initialiserCommunication();
+        recupererNotifications();
     }
 
     /**
@@ -127,11 +126,10 @@ public class IHM extends AppCompatActivity
         initialiserBouton(boutonPoubelle, FenetrePoubelle.class);
         initialiserBouton(boutonMachine, FenetreMachine.class);
         initialiserBouton(boutonBoiteAuxLettres, FenetreBoiteAuxLettres.class);
-
-
     }
 
-    public void initialiserBouton(ImageButton bouton, Class<?> typeDeClasse) {
+    public void initialiserBouton(ImageButton bouton, Class<?> typeDeClasse)
+    {
         bouton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)
             {
@@ -140,5 +138,47 @@ public class IHM extends AppCompatActivity
                 startActivity(fenetre);
             }
         });
+    }
+
+    private void initialiserHandler()
+    {
+        Log.d(TAG, "initialiserHandler()");
+        // @todo Initialiser un handler pour la récupération des notifications
+    }
+
+    private void initialiserMinuteur()
+    {
+        Log.d(TAG, "initialiserMinuteur()");
+        // @todo Initialiser un minuteur pour la récupération des notifications
+    }
+
+    private void initialiserCommunication()
+    {
+        Log.d(TAG, "initialiserCommunication()");
+        // @todo Initialiser une communication pour la récupération des notifications
+    }
+
+    private void recupererNotifications()
+    {
+        Log.d(TAG, "recupererNotifications()");
+        nbNotificationsPoubelles = 0;
+        nbNotificationsMachines  = 0;
+        nbNotificationsBoites    = 0;
+        // @todo Effectuer les requêtes pour récupérer les notifications de tous les modules
+    }
+
+    private void mettreAJourNotificationsPoubelles()
+    {
+        // @todo Afficher, si nécessaire, le nombre de notifications des modules Poubelle
+    }
+
+    private void mettreAJourNotificationsMachines()
+    {
+        // @todo Afficher, si nécessaire, le nombre de notifications des modules Machine
+    }
+
+    private void mettreAJourNotificationsBoites()
+    {
+        // @todo Afficher, si nécessaire, le nombre de notifications des modules Boite
     }
 }

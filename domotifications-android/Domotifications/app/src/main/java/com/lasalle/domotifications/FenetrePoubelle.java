@@ -12,7 +12,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -29,8 +28,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -57,7 +54,8 @@ public class FenetrePoubelle extends AppCompatActivity
     private Timer minuteur = null; //!< Pour gérer la récupération des états des modules poubelles
     private TimerTask tacheRecuperationEtats =
       null; //!< Pour effectuer la récupération des états des modules poubelles
-    private boolean erreurCommunication = false;
+    private boolean erreurCommunication        = false;
+    int             numeroPoubelleAcquittement = -1;
     /**
      * GUI
      */
@@ -147,7 +145,7 @@ public class FenetrePoubelle extends AppCompatActivity
         boutonsActivation[3] = (Switch)findViewById(R.id.activationPoubelle3);
         boutonsActivation[4] = (Switch)findViewById(R.id.activationPoubelle4);
 
-        for(int i = 0; i < NB_COULEURS_POUBELLE; ++i)
+        for(int i = 0; i < nbModulesPoubelles; ++i)
         {
             imagesPoubelles[i].setImageResource(IMAGES_POUBELLES[i]);
             final int numeroPoubelle = i;
@@ -250,7 +248,7 @@ public class FenetrePoubelle extends AppCompatActivity
                         break;
                     case Communication.CODE_HTTP_ERREUR:
                         Log.d(TAG, "[Handler] ERREUR HTTP");
-                        if(erreurCommunication == false)
+                        if(!erreurCommunication)
                         {
                             afficherErreur("Impossible de communiquer avec la station !");
                             erreurCommunication = true;
@@ -286,6 +284,8 @@ public class FenetrePoubelle extends AppCompatActivity
         Log.d(TAG,
               "gererClicBoutonActivation() numeroPoubelle = " + numeroPoubelle +
                 " activation = " + boutonsActivation[numeroPoubelle].isChecked());
+
+        // @todo Emettre une requête PATCH pour changer l'état d'activation du module
 
         modulesPoubelles.get(numeroPoubelle)
           .setActif(boutonsActivation[numeroPoubelle].isChecked());
@@ -324,6 +324,7 @@ public class FenetrePoubelle extends AppCompatActivity
                 $ curl --location 'http://station-lumineuse.local:80/poubelles/1' --request PATCH
                 --header 'Content-Type: application/json' --data '{"idPoubelle": "1","etat": false}'
                 */
+                numeroPoubelleAcquittement = numeroPoubelle;
                 String api =
                   API_PATCH_POUBELLES + "/" + modulesPoubelles.get(numeroPoubelle).getIdModule();
                 String json = "{\"idPoubelle\": \"" +
@@ -400,6 +401,11 @@ public class FenetrePoubelle extends AppCompatActivity
 
     public void enregistrerAcquittementNotification(String reponse)
     {
+        if(modulesPoubelles.get(numeroPoubelleAcquittement) == null)
+        {
+            Log.e(TAG, "enregistrerAcquittementNotification() Aucune poubelle !");
+            return;
+        }
         Log.d(TAG, "enregistrerAcquittementNotification() reponse = " + reponse);
         /*
             Exemple de réponsee : pour la requête PATCH /poubelles/1
@@ -423,17 +429,16 @@ public class FenetrePoubelle extends AppCompatActivity
                 Log.d(TAG,
                       "enregistrerAcquittementNotification() idPoubelle = " + idPoubelle +
                         " couleur = " + couleur + " etat = " + etat + " actif = " + actif);
-                for(int i = 0; i < modulesPoubelles.size(); ++i)
+
+                Module module = modulesPoubelles.get(numeroPoubelleAcquittement);
+                if(module.getIdModule() == idPoubelle &&
+                   module.getTypeModule() == Module.TypeModule.Poubelle && !etat)
                 {
-                    Module module = modulesPoubelles.get(i);
-                    if(module.getIdModule() == idPoubelle &&
-                       module.getTypeModule() == Module.TypeModule.Poubelle)
-                    {
-                        baseDeDonnees.enregistrerAcquittementNotification(module.getIdModule(),
-                                                                          module.getTypeModule().ordinal(),
-                                                                          true);
-                        break;
-                    }
+                    baseDeDonnees.enregistrerAcquittementNotification(
+                      module.getIdModule(),
+                      module.getTypeModule().ordinal(),
+                      true);
+                    numeroPoubelleAcquittement = -1;
                 }
             }
         }
