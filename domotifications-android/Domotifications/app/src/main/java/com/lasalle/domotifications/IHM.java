@@ -30,12 +30,7 @@ public class IHM extends AppCompatActivity
     /**
      * Attributs
      */
-    private Domotifications domotifications;
-    private String nomInterface;
-    private String adresseIP;
-    // Exemple d'accès à la base de données
-    private BaseDeDonnees  baseDeDonnees;    //!< Association avec la base de donnees
-    private Vector<String> nomsModules; // test
+
     /**
      * GUI
      */
@@ -53,11 +48,6 @@ public class IHM extends AppCompatActivity
         Log.d(TAG, "onCreate()");
 
         initialiserGUI();
-
-        // Test BDD
-        baseDeDonnees    = BaseDeDonnees.getInstance(this);
-        nomsModules = baseDeDonnees.getNomModules();
-        Log.d(TAG, "nomsModules = " + nomsModules);
     }
 
     /**
@@ -127,11 +117,10 @@ public class IHM extends AppCompatActivity
         initialiserBouton(boutonPoubelle, FenetrePoubelle.class);
         initialiserBouton(boutonMachine, FenetreMachine.class);
         initialiserBouton(boutonBoiteAuxLettres, FenetreBoiteAuxLettres.class);
-
-
     }
 
-    public void initialiserBouton(ImageButton bouton, Class<?> typeDeClasse) {
+    public void initialiserBouton(ImageButton bouton, Class<?> typeDeClasse)
+    {
         bouton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)
             {

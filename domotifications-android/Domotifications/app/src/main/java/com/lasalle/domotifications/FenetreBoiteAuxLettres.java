@@ -21,8 +21,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.lasalle.domotifications.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,51 +29,51 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
-public class FenetreBoiteAuxLettres extends AppCompatActivity {
+public class FenetreBoiteAuxLettres extends AppCompatActivity
+{
     /**
      * Constantes
      */
-    private static final String TAG = "_FenetreBoiteAuxLettres"; //!< TAG pour les logs
-    private static final String API_GET_BOITES = "/boites"; //!< Pour une requête GET
-    private static final String API_PATCH_BOITES = "/boites"; //!< Pour une requête GET
-    private static final int INTERVALLE = 1000; //!< Intervalle d'interrogation en ms
+    private static final String TAG              = "_FenetreBoiteAuxLettres"; //!< TAG pour les logs
+    private static final String API_GET_BOITES   = "/boites"; //!< Pour une requête GET
+    private static final String API_PATCH_BOITES = "/boites"; //!< Pour une requête PATCH
+    private static final int    INTERVALLE       = 1000;      //!< Intervalle d'interrogation en ms
 
     /**
      * Attributs
      */
-    private BaseDeDonnees baseDeDonnees;      //!< Association avec la base de donnees
+    private BaseDeDonnees  baseDeDonnees;             //!< Association avec la base de donnees
     private Vector<Module> modulesBoitesAuxLettres;   //!< Conteneur des modules boites aux Lettres
-    private int nbModulesBoitesAuxLettres; //!< le nombre de boites gérées
-    private int idNotification = 0; //!< Identifiant unique pour chaque notification
-    private Communication communication;      //!< Association avec la classe Communication
-    private Handler handler =
-            null; //!< Handler permettant la communication entre la classe Communication et l'activité
-    private Timer minuteur = null; //!< Pour gérer la récupération des états des modules boites aux lettres
+    private int            nbModulesBoitesAuxLettres; //!< le nombre de boites gérées
+    private int            idNotification = 0; //!< Identifiant unique pour chaque notification
+    private Communication  communication;      //!< Association avec la classe Communication
+    private Handler        handler =
+      null; //!< Handler permettant la communication entre la classe Communication et l'activité
+    private Timer minuteur =
+      null; //!< Pour gérer la récupération des états des modules boites aux lettres
     private TimerTask tacheRecuperationEtats =
-            null; //!< Pour effectuer la récupération des états des modules boites aux lettres
+      null; //!< Pour effectuer la récupération des états des modules boites aux lettres
     private boolean erreurCommunication = false;
-
+    private int numeroBoiteAcquittement = -1;
     /**
      * GUI
      */
 
     public static final int[] IMAGE_BOITES = {
-            R.drawable.boite_aux_lettres,
+        R.drawable.boite_aux_lettres,
     }; //!< Id de l'image de la boîte au lettre dans les ressources Android
-
-    private ImageView[] imagesBoites; //!< Images des boites aux lettres
-    private ImageView[] imagesNotificationBoites; //!< Images des notifications des boites aux lettres
-
+    private ImageView[] imagesBoites;             //!< Images des boites aux lettres
+    private ImageView[] imagesNotificationBoites; //!< Images des notifications des boites aux
+                                                  //!< lettres
     private Switch[] boutonsActivation; //!< Boutons d'activation/désactivation des modules
     //!< boitesAuxLettres
-
     private ImageButton boutonAccueil;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()");
-
 
         initialiserBaseDeDonnees();
         initialiserModulesBoites();
@@ -97,13 +95,14 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity {
         Log.d(TAG, "initialiserModulesBoites()");
         modulesBoitesAuxLettres   = baseDeDonnees.getBoites();
         nbModulesBoitesAuxLettres = baseDeDonnees.getNbModulesBoites();
-        Log.d(TAG, "nbModulesPoubelles = " + nbModulesBoitesAuxLettres);
+        Log.d(TAG, "nbModulesBoitesAuxLettres = " + nbModulesBoitesAuxLettres);
     }
 
     /**
      * @brief Initialise les ressources graphiques de l'activité
      */
-    private void initialiserGUI() {
+    private void initialiserGUI()
+    {
         // contenu bord à bord
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_menu_boite_aux_lettres);
@@ -113,17 +112,16 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity {
             return insets;
         });
 
-        boutonAccueil = (ImageButton) findViewById(R.id.boutonAccueil);
+        boutonAccueil = (ImageButton)findViewById(R.id.boutonAccueil);
 
-        imagesBoites = new ImageView[nbModulesBoitesAuxLettres];
-        imagesBoites[0] = (ImageView) findViewById(R.id.boiteAuxLettres0);
+        imagesBoites    = new ImageView[nbModulesBoitesAuxLettres];
+        imagesBoites[0] = (ImageView)findViewById(R.id.boiteAuxLettres0);
 
-        imagesNotificationBoites = new ImageView[nbModulesBoitesAuxLettres];
-        imagesNotificationBoites[0] = (ImageView) findViewById(R.id.notificationBoite0);
+        imagesNotificationBoites    = new ImageView[nbModulesBoitesAuxLettres];
+        imagesNotificationBoites[0] = (ImageView)findViewById(R.id.notificationBoite0);
 
-        boutonsActivation = new Switch[nbModulesBoitesAuxLettres];
-        boutonsActivation[0] = (Switch) findViewById(R.id.activationBoite0);
-
+        boutonsActivation    = new Switch[nbModulesBoitesAuxLettres];
+        boutonsActivation[0] = (Switch)findViewById(R.id.activationBoite0);
 
         for(int i = 0; i < nbModulesBoitesAuxLettres; ++i)
         {
@@ -179,30 +177,35 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity {
 
             boutonsActivation[i].setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View v)
+                {
                     gererClicBoutonActivation(numeroBoite);
                 }
             });
             boutonAccueil.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
+                public void onClick(View v)
+                {
                     Log.d(TAG, "clic boutonAccueil");
+                    if(minuteur != null)
+                        minuteur.cancel();
                     finish();
                 }
             });
         }
     }
 
-
-    private void initialiserHandler ()
+    private void initialiserHandler()
     {
         Log.d(TAG, "initialiserHandler()");
         this.handler = new Handler(this.getMainLooper()) {
             @Override
-            public void handleMessage(Message message) {
+            public void handleMessage(Message message)
+            {
                 // Log.d(TAG, "[Handler] message what = " + message.what);
                 // Log.d(TAG, "[Handler] message obj = " + message.obj.toString());
 
-                switch (message.what) {
+                switch(message.what)
+                {
                     case Communication.CODE_HTTP_REPONSE_JSON:
                         Log.d(TAG, "[Handler] REPONSE JSON");
                         traiterReponseJSON(message.obj.toString());
@@ -216,7 +219,8 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity {
                         break;
                     case Communication.CODE_HTTP_ERREUR:
                         Log.d(TAG, "[Handler] ERREUR HTTP");
-                        if (erreurCommunication == false) {
+                        if(!erreurCommunication)
+                        {
                             afficherErreur("Impossible de communiquer avec la station !");
                             erreurCommunication = true;
                         }
@@ -243,60 +247,71 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity {
 
     private void gererClicBoutonNotification(int numeroBoite)
     {
-        if (modulesBoitesAuxLettres.get(numeroBoite) == null) {
-            Log.e(TAG, "Aucune boîte aux lettres !");
+        if(modulesBoitesAuxLettres.get(numeroBoite) == null)
+        {
+            Log.e(TAG, "gererClicBoutonNotification() Aucune boîte aux lettres !");
             return;
         }
         Log.d(TAG,
-                "gererClicBoutonNotification() numeroBoite = " + numeroBoite +
-                        " idBoite = " + modulesBoitesAuxLettres.get(numeroBoite).getIdModule() +
-                        " notification = " + modulesBoitesAuxLettres.get(numeroBoite).estNotifie() +
-                        " activation = " + modulesBoitesAuxLettres.get(numeroBoite).estActif());
+              "gererClicBoutonNotification() numeroBoite = " + numeroBoite +
+                " idBoite = " + modulesBoitesAuxLettres.get(numeroBoite).getIdModule() +
+                " notification = " + modulesBoitesAuxLettres.get(numeroBoite).estNotifie() +
+                " activation = " + modulesBoitesAuxLettres.get(numeroBoite).estActif());
 
-        if (modulesBoitesAuxLettres.get(numeroBoite).estActif()) {
-            if (modulesBoitesAuxLettres.get(numeroBoite).estNotifie()) {
+        if(modulesBoitesAuxLettres.get(numeroBoite).estActif())
+        {
+            if(modulesBoitesAuxLettres.get(numeroBoite).estNotifie())
+            {
                 /*
                 Exemple :
                 $ curl --location 'http://station-lumineuse.local:80/boites/1' --request PATCH
                 --header 'Content-Type: application/json' --data '{"idBoite": "1","etat": false}'
                 */
+                numeroBoiteAcquittement = numeroBoite;
                 String api =
-                        API_PATCH_BOITES + "/" + modulesBoitesAuxLettres.get(numeroBoite).getIdModule();
+                  API_PATCH_BOITES + "/" + modulesBoitesAuxLettres.get(numeroBoite).getIdModule();
                 String json = "{\"idBoite\": \"" +
-                        modulesBoitesAuxLettres.get(numeroBoite).getIdModule() +
-                        "\",\"etat\": false}";
+                              modulesBoitesAuxLettres.get(numeroBoite).getIdModule() +
+                              "\",\"etat\": false}";
                 communication.emettreRequetePATCH(api, json, handler);
             }
         }
     }
 
-    private void gererClicBoutonActivation (int numeroBoite)
+    private void gererClicBoutonActivation(int numeroBoite)
     {
-        if (modulesBoitesAuxLettres.get(numeroBoite) == null) {
-            Log.e(TAG, "Aucune boîte aux lettres !");
+        if(modulesBoitesAuxLettres.get(numeroBoite) == null)
+        {
+            Log.e(TAG, "gererClicBoutonActivation() Aucune boîte aux lettres !");
             return;
         }
         Log.d(TAG,
-                "gererClicBoutonActivation() numeroBoite = " + numeroBoite +
-                        " activation = " + boutonsActivation[numeroBoite].isChecked());
+              "gererClicBoutonActivation() numeroBoite = " + numeroBoite +
+                " activation = " + boutonsActivation[numeroBoite].isChecked());
+
+        // @todo Emettre une requête PATCH pour changer l'état d'activation du module
 
         modulesBoitesAuxLettres.get(numeroBoite)
-                .setActif(boutonsActivation[numeroBoite].isChecked());
+          .setActif(boutonsActivation[numeroBoite].isChecked());
 
-        if (modulesBoitesAuxLettres.get(numeroBoite).estActif()) {
+        if(modulesBoitesAuxLettres.get(numeroBoite).estActif())
+        {
             imagesBoites[numeroBoite].setEnabled(true);
             imagesNotificationBoites[numeroBoite].setEnabled(true);
-        } else {
+        }
+        else
+        {
             imagesBoites[numeroBoite].setEnabled(false);
             imagesNotificationBoites[numeroBoite].setEnabled(false);
         }
     }
 
-    private void recupererEtats ()
+    private void recupererEtats()
     {
         Log.d(TAG, "recupererEtats()");
         tacheRecuperationEtats = new TimerTask() {
-            public void run() {
+            public void run()
+            {
                 communication.emettreRequeteGET(API_GET_BOITES, handler);
             }
         };
@@ -305,9 +320,9 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity {
         minuteur.schedule(tacheRecuperationEtats, INTERVALLE, INTERVALLE);
     }
 
-    public void traiterReponseJSON (String reponse)
+    public void traiterReponseJSON(String reponse)
     {
-        Log.d(TAG, "traiterReponseJSON() reponse = " + reponse);
+        //Log.d(TAG, "traiterReponseJSON() reponse = " + reponse);
         /*
             Exemple de réponsee : pour la requête GET /boites
             body =
@@ -320,21 +335,25 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity {
         */
         JSONArray json = null;
 
-        try {
+        try
+        {
             json = new JSONArray(reponse);
-            for (int i = 0; i < json.length(); ++i) {
+            for(int i = 0; i < json.length(); ++i)
+            {
                 JSONObject boiteAuxLettres = json.getJSONObject(i);
-                int idBoite = boiteAuxLettres.getInt("idBoite");
-                String couleur = boiteAuxLettres.getString("couleur");
-                Boolean etat = boiteAuxLettres.getBoolean("etat");
-                Boolean actif = boiteAuxLettres.getBoolean("actif");
-                Log.d(TAG,
-                        "traiterReponseJSON() idBoite = " + idBoite + " couleur = " + couleur +
-                                " etat = " + etat + " actif = " + actif);
-                for (int j = 0; j < modulesBoitesAuxLettres.size(); ++j) {
+                int        idBoite         = boiteAuxLettres.getInt("idBoite");
+                String     couleur         = boiteAuxLettres.getString("couleur");
+                Boolean    etat            = boiteAuxLettres.getBoolean("etat");
+                Boolean    actif           = boiteAuxLettres.getBoolean("actif");
+                /*Log.d(TAG,
+                      "traiterReponseJSON() idBoite = " + idBoite + " couleur = " + couleur +
+                        " etat = " + etat + " actif = " + actif);*/
+                for(int j = 0; j < modulesBoitesAuxLettres.size(); ++j)
+                {
                     Module module = modulesBoitesAuxLettres.get(j);
-                    if (module.getIdModule() == idBoite &&
-                            module.getTypeModule() == Module.TypeModule.BoiteAuxLettres) {
+                    if(module.getIdModule() == idBoite &&
+                       module.getTypeModule() == Module.TypeModule.BoiteAuxLettres)
+                    {
                         module.setCouleur(couleur);
                         module.setActif(actif);
                         module.setEtatNotification(etat);
@@ -343,13 +362,20 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity {
                     }
                 }
             }
-        } catch (JSONException e) {
+        }
+        catch(JSONException e)
+        {
             e.printStackTrace();
         }
     }
 
-    public void enregistrerAcquittementNotification (String reponse)
+    public void enregistrerAcquittementNotification(String reponse)
     {
+        if(modulesBoitesAuxLettres.get(numeroBoiteAcquittement) == null)
+        {
+            Log.e(TAG, "enregistrerAcquittementNotification() Aucune boîte aux lettres !");
+            return;
+        }
         Log.d(TAG, "enregistrerAcquittementNotification() reponse = " + reponse);
         /*
             Exemple de réponsee : pour la requête PATCH /boites/1
@@ -360,49 +386,60 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity {
         */
         JSONArray json = null;
 
-        try {
+        try
+        {
             json = new JSONArray(reponse);
-            if (json.length() > 0) {
+            if(json.length() > 0)
+            {
                 JSONObject boitesAuxLettres = json.getJSONObject(0);
-                int idBoite = boitesAuxLettres.getInt("idBoite");
-                String couleur = boitesAuxLettres.getString("couleur");
-                Boolean etat = boitesAuxLettres.getBoolean("etat");
-                Boolean actif = boitesAuxLettres.getBoolean("actif");
+                int        idBoite          = boitesAuxLettres.getInt("idBoite");
+                String     couleur          = boitesAuxLettres.getString("couleur");
+                Boolean    etat             = boitesAuxLettres.getBoolean("etat");
+                Boolean    actif            = boitesAuxLettres.getBoolean("actif");
                 Log.d(TAG,
-                        "enregistrerAcquittementNotification() idBoitesAuxLettres = " + idBoite +
-                                " couleur = " + couleur + " etat = " + etat + " actif = " + actif);
-                for (int i = 0; i < modulesBoitesAuxLettres.size(); ++i) {
-                    Module module = modulesBoitesAuxLettres.get(i);
-                    if (module.getIdModule() == idBoite &&
-                            module.getTypeModule() == Module.TypeModule.BoiteAuxLettres) {
-                        baseDeDonnees.enregistrerAcquittementNotification(module.getIdModule(),
-                                module.getTypeModule().ordinal(),
-                                true);
-                        break;
+                      "enregistrerAcquittementNotification() idBoitesAuxLettres = " + idBoite +
+                        " couleur = " + couleur + " etat = " + etat + " actif = " + actif);
+
+                    Module module = modulesBoitesAuxLettres.get(numeroBoiteAcquittement);
+                    if(module.getIdModule() == idBoite &&
+                       module.getTypeModule() == Module.TypeModule.BoiteAuxLettres && !etat)
+                    {
+                        baseDeDonnees.enregistrerAcquittementNotification(
+                          module.getIdModule(),
+                          module.getTypeModule().ordinal(),
+                          true);
+                        numeroBoiteAcquittement = -1;
                     }
-                }
+
             }
-        } catch (JSONException e) {
+        }
+        catch(JSONException e)
+        {
             e.printStackTrace();
         }
     }
 
-    private void mettreAJourModule ( int numeroBoite)
+    private void mettreAJourModule(int numeroBoite)
     {
-        if (modulesBoitesAuxLettres.get(numeroBoite) == null) {
+        if(modulesBoitesAuxLettres.get(numeroBoite) == null)
+        {
             Log.e(TAG, "Aucune boite");
             return;
         }
 
         Module module = modulesBoitesAuxLettres.get(numeroBoite);
 
-        if (module.estActif()) {
-            if (module.estNotifie()) {
+        if(module.estActif())
+        {
+            if(module.estNotifie())
+            {
                 imagesNotificationBoites[numeroBoite].setVisibility(View.VISIBLE);
 
                 // On signale une notification sur la tablette Android
                 creerNotification("Le module " + module.getNomModule() + " a une notification.");
-            } else {
+            }
+            else
+            {
                 imagesNotificationBoites[numeroBoite].setVisibility(View.INVISIBLE);
             }
 
@@ -411,7 +448,9 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity {
             imagesBoites[numeroBoite].setEnabled(true);
 
             // Toast.makeText(getApplicationContext(), "Module activé", Toast.LENGTH_SHORT).show();
-        } else {
+        }
+        else
+        {
             boutonsActivation[numeroBoite].setChecked(false);
             imagesNotificationBoites[numeroBoite].setEnabled(false);
             imagesBoites[numeroBoite].setEnabled(false);
@@ -421,39 +460,39 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity {
         }
     }
 
-    private void creerNotification (String message)
+    private void creerNotification(String message)
     {
         NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+          (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 
         String titreNotification = getNomApplication(getApplicationContext());
         String texteNotification = message;
 
         NotificationCompat.Builder notification = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(titreNotification)
-                .setContentText(texteNotification);
+                                                    .setSmallIcon(R.mipmap.ic_launcher)
+                                                    .setContentTitle(titreNotification)
+                                                    .setContentText(texteNotification);
 
         // On pourrait ici crée une autre activité
         PendingIntent pendingIntent =
-                PendingIntent.getActivity(this, 0, new Intent(), PendingIntent.FLAG_UPDATE_CURRENT);
+          PendingIntent.getActivity(this, 0, new Intent(), PendingIntent.FLAG_UPDATE_CURRENT);
 
         notification.setContentIntent(pendingIntent);
 
         notification.setAutoCancel(true);
 
-        notification.setVibrate(new long[]{0, 200, 100, 200, 100, 200});
+        notification.setVibrate(new long[] { 0, 200, 100, 200, 100, 200 });
 
         notificationManager.notify(idNotification++, notification.build());
     }
 
-    public static String getNomApplication (Context context)
+    public static String getNomApplication(Context context)
     {
         int stringId = context.getApplicationInfo().labelRes;
         return context.getString(stringId);
     }
 
-    private void afficherErreur (String message)
+    private void afficherErreur(String message)
     {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
