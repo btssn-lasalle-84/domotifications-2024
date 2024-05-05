@@ -149,6 +149,36 @@ public class BaseDeDonnees extends SQLiteOpenHelper
     }
 
     /**
+     * @brief Renvoie un vecteur de Module contenant les boîtes
+     */
+    public Vector<Module> getBoites()
+    {
+        String requete =
+                "SELECT * FROM modules WHERE modules.idTypesModules='1' AND idDomotifications=" +
+                        ID_DOMOTIFICATIONS + ";";
+        Log.d(TAG, "getBoites() requete = " + requete);
+        Cursor         curseur      = sqlite.rawQuery(requete, null);
+        Vector<Module> listeModules = new Vector<Module>();
+        while(curseur.moveToNext())
+        {
+            String id     = curseur.getString(curseur.getColumnIndexOrThrow("id"));
+            String nom    = curseur.getString(curseur.getColumnIndexOrThrow("nom"));
+            String actif  = curseur.getString(curseur.getColumnIndexOrThrow("actif"));
+            String etat   = curseur.getString(curseur.getColumnIndexOrThrow("etat"));
+            Module module = new Module(Integer.parseInt(id),
+                    nom,
+                    Module.TypeModule.BoiteAuxLettres,
+                    (Integer.parseInt(actif) == 1 ? true : false),
+                    (Integer.parseInt(etat) == 1 ? true : false),
+                    baseDeDonnees);
+            listeModules.add(module);
+        }
+        curseur.close();
+
+        return listeModules;
+    }
+
+    /**
      * @brief Renvoie le nombre max de modules de type Poubelle
      */
     public int getNbMaxModulesPoubelles()
@@ -171,6 +201,29 @@ public class BaseDeDonnees extends SQLiteOpenHelper
     }
 
     /**
+     * @brief Renvoie le nombre max de modules de type Boîte
+     */
+    public int getNbMaxModulesBoites()
+    {
+        Log.d(TAG, "getNbMaxModulesBoites()");
+
+        Cursor curseur = sqlite.rawQuery(
+                "SELECT domotifications.nbBoitesAuxLettres FROM domotifications WHERE id=" + ID_DOMOTIFICATIONS +
+                        ";",
+                null);
+
+        int nbBoitesAuxLettres = 0;
+        if(curseur.moveToFirst())
+        {
+            nbBoitesAuxLettres = curseur.getInt(0);
+        }
+        curseur.close();
+
+        return nbBoitesAuxLettres;
+    }
+
+
+    /**
      * @brief Renvoie le nombre de modules installés de type Poubelle
      */
     public int getNbModulesPoubelles()
@@ -190,6 +243,28 @@ public class BaseDeDonnees extends SQLiteOpenHelper
         curseur.close();
 
         return nbPoubelles;
+    }
+
+    /**
+     * @brief Renvoie le nombre de modules installés de type Boîtes
+     */
+    public int getNbModulesBoites()
+    {
+        Log.d(TAG, "getNbModulesBoites()");
+
+        Cursor curseur = sqlite.rawQuery(
+                "SELECT COUNT(*) AS NbBoites FROM modules WHERE modules.idTypesModules='1' AND idDomotifications=" +
+                        ID_DOMOTIFICATIONS + ";",
+                null);
+
+        int nbBoitesAuxLettres = 0;
+        if(curseur.moveToFirst())
+        {
+            nbBoitesAuxLettres = curseur.getInt(0);
+        }
+        curseur.close();
+
+        return nbBoitesAuxLettres;
     }
 
     /**

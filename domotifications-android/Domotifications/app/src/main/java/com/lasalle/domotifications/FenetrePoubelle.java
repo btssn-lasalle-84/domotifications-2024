@@ -147,7 +147,7 @@ public class FenetrePoubelle extends AppCompatActivity
         boutonsActivation[3] = (Switch)findViewById(R.id.activationPoubelle3);
         boutonsActivation[4] = (Switch)findViewById(R.id.activationPoubelle4);
 
-        for(int i = 0; i < NB_COULEURS_POUBELLE; ++i)
+        for(int i = 0; i < nbModulesPoubelles; ++i)
         {
             imagesPoubelles[i].setImageResource(IMAGES_POUBELLES[i]);
             final int numeroPoubelle = i;
