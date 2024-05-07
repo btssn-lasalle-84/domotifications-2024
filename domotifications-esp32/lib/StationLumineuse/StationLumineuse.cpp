@@ -12,15 +12,7 @@
 #include "Poubelle.h"
 #include <sstream>
 
-// définition globale des couleurs des poubelles
-const char* nomCouleursPoubelles[NB_LEDS_NOTIFICATION_POUBELLES] = { "rouge",
-                                                                     "jaune",
-                                                                     "bleue",
-                                                                     "grise",
-                                                                     "verte" };
-
-// const char* nomCouleurMachines[NB_LEDS_NOTIFICATION_MACHINES] = { "vert" };
-
+// les couleurs par défaut des poubelles
 uint32_t StationLumineuse::couleursPoubelles[NB_LEDS_NOTIFICATION_POUBELLES] = {
     StationLumineuse::convertirCouleurRGB(255, 0, 0),     // Couleur poubelle 0 (rouge)
     StationLumineuse::convertirCouleurRGB(255, 255, 0),   // Couleur poubelle 1 (jaune)
@@ -28,10 +20,6 @@ uint32_t StationLumineuse::couleursPoubelles[NB_LEDS_NOTIFICATION_POUBELLES] = {
     StationLumineuse::convertirCouleurRGB(240, 240, 242), // Couleur poubelle 3 (grise)
     StationLumineuse::convertirCouleurRGB(0, 255, 0)      // Couleur poubelle 4 (verte)
 };
-/*
-uint32_t StationLumineuse::couleurMachines[NB_LEDS_NOTIFICATION_MACHINES] = {
-    StationLumineuse::convertirCouleurRGB(0, 255, 0)
-};*/
 
 /**
  * @brief Constructeur de la classe StationLumineuse
@@ -43,6 +31,7 @@ StationLumineuse::StationLumineuse() :
     // les machines
     for(int i = 0; i < NB_LEDS_NOTIFICATION_MACHINES; ++i)
     {
+        // couleur par défaut verte
         machines.push_back(new Machine(i + 1, i, leds.Color(0, 255, 0), leds));
     }
 
@@ -55,6 +44,7 @@ StationLumineuse::StationLumineuse() :
     // les boîtes aux lettres
     for(int i = 0; i < NB_LEDS_NOTIFICATION_BOITE; ++i)
     {
+        // couleur par défaut rouge
         boites.push_back(new Boite(i + 1, i, leds.Color(255, 0, 0), leds));
     }
 }
@@ -259,30 +249,6 @@ void StationLumineuse::sauvegarderEtatsMachine(int id)
 uint32_t StationLumineuse::convertirCouleurRGB(uint8_t r, uint8_t g, uint8_t b)
 {
     return ((uint32_t)r << 16) | ((uint32_t)g << 8) | b;
-}
-
-uint32_t StationLumineuse::getCouleurPoubelle(String nom)
-{
-    for(int i = 0; i < NB_LEDS_NOTIFICATION_POUBELLES; ++i)
-    {
-        if(nom == nomCouleursPoubelles[i])
-        {
-            return couleursPoubelles[i];
-        }
-    }
-    return 0;
-}
-
-String StationLumineuse::getNomCouleurPoubelle(uint32_t couleur)
-{
-    for(int i = 0; i < NB_LEDS_NOTIFICATION_POUBELLES; ++i)
-    {
-        if(couleur == couleursPoubelles[i])
-        {
-            return nomCouleursPoubelles[i];
-        }
-    }
-    return "";
 }
 
 // Méthodes privées

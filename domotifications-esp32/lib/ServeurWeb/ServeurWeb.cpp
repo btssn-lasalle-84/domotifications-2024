@@ -96,7 +96,7 @@ void ServeurWeb::installerGestionnairesRequetes()
 
     // pour les modules Boite
     on("/boites", HTTP_GET, std::bind(&ServeurWeb::traiterRequeteGetBoites, this));
-    on(UriRegex("/machines/([1-" + String(NB_LEDS_NOTIFICATION_BOITE) + "]+)$"),
+    on(UriRegex("/boites/([1-" + String(NB_LEDS_NOTIFICATION_BOITE) + "]+)$"),
        HTTP_GET,
        std::bind(&ServeurWeb::traiterRequeteGetBoite, this));
     on(UriRegex("/boites/([1-" + String(NB_LEDS_NOTIFICATION_BOITE) + "]+)$"),
