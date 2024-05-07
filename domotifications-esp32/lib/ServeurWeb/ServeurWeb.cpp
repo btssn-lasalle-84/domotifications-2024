@@ -12,6 +12,7 @@
 #include "Poubelle.h"
 #include <ESPmDNS.h>
 #include <uri/UriRegex.h>
+#include <sstream>
 
 /**
  * @brief Constructeur de la classe ServeurWeb
@@ -95,7 +96,7 @@ void ServeurWeb::installerGestionnairesRequetes()
 
     // pour les modules Boite
     on("/boites", HTTP_GET, std::bind(&ServeurWeb::traiterRequeteGetBoites, this));
-    on(UriRegex("/boites/([1-" + String(NB_LEDS_NOTIFICATION_BOITE) + "]+)$"),
+    on(UriRegex("/machines/([1-" + String(NB_LEDS_NOTIFICATION_BOITE) + "]+)$"),
        HTTP_GET,
        std::bind(&ServeurWeb::traiterRequeteGetBoite, this));
     on(UriRegex("/boites/([1-" + String(NB_LEDS_NOTIFICATION_BOITE) + "]+)$"),
@@ -196,7 +197,7 @@ void ServeurWeb::traiterRequeteGetPoubelles()
 #endif
 
     /*  Exemple de réponse :
-        [{"idPoubelle":1,"etat":false,"couleur":"bleu","actif":true},{"idPoubelle":2,"etat":true,"couleur":"verte","actif":true}]
+        [{"idPoubelle":1,"etat":false,"couleur":"#0000ff","actif":true},{"idPoubelle":2,"etat":true,"couleur":"#00ff00","actif":true}]
     */
     documentJSON.clear();
     Poubelle* poubelle = nullptr;
@@ -242,7 +243,7 @@ void ServeurWeb::traiterRequeteGetPoubelle()
 #endif
 
     /*  Exemple de réponse :
-        [{"idPoubelle":1,"etat":false,"couleur":"bleu","actif":true}]
+        [{"idPoubelle":1,"etat":false,"couleur":"#0000ff","actif":true}]
     */
 
     // Récupère l'id dans l'URI
@@ -348,6 +349,7 @@ void ServeurWeb::traiterRequeteUpdatePoubelle()
         bool etatPoubelle = documentJSON["etat"].as<bool>();
         poubelle->setEtatNotification(etatPoubelle);
     }
+    // @todo mettre à jour la couleur de la led
 
     // Sauvegarde les états de ce module
     stationLumineuse->sauvegarderEtatsPoubelle(idPoubelle);
@@ -385,7 +387,7 @@ void ServeurWeb::traiterRequeteGetMachines()
 #endif
 
     /*  Exemple de réponse :
-        [{"idMachine":1,"etat":false,"couleur":"bleu","actif":true},{"idMachine":2,"etat":true,"couleur":"verte","actif":true}]
+        [{"idMachine":1,"etat":false,"couleur":"#0000ff","actif":true},{"idMachine":2,"etat":true,"couleur":"#00ff00","actif":true}]
     */
     documentJSON.clear();
     Machine* machine = nullptr;
@@ -431,7 +433,7 @@ void ServeurWeb::traiterRequeteGetMachine()
 #endif
 
     /*  Exemple de réponse :
-        [{"idMachine":1,"etat":false,"couleur":"bleu","actif":true}]
+        [{"idMachine":1,"etat":false,"couleur":"#0000ff","actif":true}]
     */
 
     // Récupère l'id dans l'URI
@@ -537,6 +539,7 @@ void ServeurWeb::traiterRequeteUpdateMachine()
         bool etatMachine = documentJSON["etat"].as<bool>();
         machine->setEtatNotification(etatMachine);
     }
+    // @todo mettre à jour la couleur de la led
 
     // Sauvegarde les états de ce module
     stationLumineuse->sauvegarderEtatsMachine(idMachine);
@@ -574,7 +577,7 @@ void ServeurWeb::traiterRequeteGetBoites()
 #endif
 
     /*  Exemple de réponse :
-        [{"idBoite":1,"etat":false,"couleur":"bleu","actif":true},{"idBoite":2,"etat":true,"couleur":"verte","actif":true}]
+        [{"idBoite":1,"etat":false,"couleur":"#0000ff","actif":true},{"idBoite":2,"etat":true,"couleur":"#00ff00","actif":true}]
     */
     documentJSON.clear();
     Boite* boite = nullptr;
@@ -620,7 +623,7 @@ void ServeurWeb::traiterRequeteGetBoite()
 #endif
 
     /*  Exemple de réponse :
-        [{"idBoite":1,"etat":false,"couleur":"bleu","actif":true}]
+        [{"idBoite":1,"etat":false,"couleur":"#0000ff","actif":true}]
     */
 
     // Récupère l'id dans l'URI
@@ -726,6 +729,7 @@ void ServeurWeb::traiterRequeteUpdateBoite()
         bool etatBoite = documentJSON["etat"].as<bool>();
         boite->setEtatNotification(etatBoite);
     }
+    // @todo mettre à jour la couleur de la led
 
     // Sauvegarde les états de ce module
     stationLumineuse->sauvegarderEtatsBoite(idBoite);

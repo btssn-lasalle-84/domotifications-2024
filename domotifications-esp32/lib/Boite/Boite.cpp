@@ -1,5 +1,6 @@
 #include "Boite.h"
 #include "BandeauLeds.h"
+#include "StationLumineuse.h"
 
 Boite::Boite(int id, int numeroLed, uint32_t couleurLed, Adafruit_NeoPixel& leds) :
     id(id), numeroLed(numeroLed), couleurLed(couleurLed), activation(false), notification(false),
@@ -12,9 +13,9 @@ int Boite::getId() const
     return id;
 }
 
-String Boite::getCouleur() const
+uint32_t Boite::getCouleurLed() const
 {
-    return String(couleurLed);
+    return couleurLed;
 }
 
 bool Boite::getActivation() const
@@ -58,7 +59,6 @@ void Boite::resetEtatNotification()
 
 void Boite::allumerNotification()
 {
-    // @todo Seulement si le module est activé
     if(activation)
     {
         leds.setPixelColor(INDEX_LEDS_NOTIFICATION_BOITE + numeroLed,
@@ -69,10 +69,23 @@ void Boite::allumerNotification()
 
 void Boite::eteindreNotification()
 {
-    // @todo Seulement si le module est activé
     if(activation)
     {
         leds.setPixelColor(INDEX_LEDS_NOTIFICATION_BOITE + numeroLed, leds.Color(0, 0, 0));
         leds.show();
+    }
+}
+
+String Boite::getCouleur() const
+{
+    return StationLumineuse::getCouleurToString(couleurLed);
+}
+
+void Boite::setCouleurLed(String couleur)
+{
+    uint32_t couleurLed = StationLumineuse::getCouleurToRGB(couleur);
+    if(couleurLed != this->couleurLed && couleurLed != 0)
+    {
+        this->couleurLed = couleurLed;
     }
 }

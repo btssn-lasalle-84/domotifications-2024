@@ -10,6 +10,7 @@
 #include "Boite.h"
 #include "Machine.h"
 #include "Poubelle.h"
+#include <sstream>
 
 // définition globale des couleurs des poubelles
 const char* nomCouleursPoubelles[NB_LEDS_NOTIFICATION_POUBELLES] = { "rouge",
@@ -48,8 +49,7 @@ StationLumineuse::StationLumineuse() :
     // les poubelles
     for(int i = 0; i < NB_LEDS_NOTIFICATION_POUBELLES; ++i)
     {
-        poubelles.push_back(
-          new Poubelle(i + 1, nomCouleursPoubelles[i], i, couleursPoubelles[i], leds));
+        poubelles.push_back(new Poubelle(i + 1, i, couleursPoubelles[i], leds));
     }
 
     // les boîtes aux lettres
@@ -141,6 +141,27 @@ void StationLumineuse::testerBandeau()
     {
         boites[i]->eteindreNotification();
     }
+}
+
+String StationLumineuse::getCouleurToString(uint32_t couleur)
+{
+    std::stringstream couleurStream;
+
+    couleurStream << std::hex << couleur;
+
+    return String("#") + String(couleurStream.str().c_str());
+}
+
+uint32_t StationLumineuse::getCouleurToRGB(String couleur)
+{
+    if(couleur[0] == '#' && couleur.length() == 7)
+    {
+        uint32_t c;
+        couleur.remove(0, 1);
+        std::stringstream(couleur.c_str()) >> std::hex >> c;
+        return c;
+    }
+    return 0;
 }
 
 std::size_t StationLumineuse::getNbPoubelles() const
@@ -262,11 +283,6 @@ String StationLumineuse::getNomCouleurPoubelle(uint32_t couleur)
         }
     }
     return "";
-}
-
-String StationLumineuse::getNomCouleur(uint32_t couleur)
-{
-    return ;
 }
 
 // Méthodes privées
