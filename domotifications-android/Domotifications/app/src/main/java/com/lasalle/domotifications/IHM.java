@@ -9,12 +9,17 @@ package com.lasalle.domotifications;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import java.util.List;
+import java.util.Timer;
 import java.util.Vector;
 
 /**
@@ -28,6 +33,14 @@ public class IHM extends AppCompatActivity
      */
     private static final String TAG        = "_IHM"; //!< TAG pour les logs (cf. Logcat)
     private static final int    INTERVALLE = 1000;   //!< Intervalle d'interrogation en ms
+    private Handler handler =
+            null; //!< Handler permettant la communication entre la classe Communication et les activités
+    private Timer minuteur = null; //!< Pour gérer la récupération des états des différents modules
+    private Communication communication; //!< Association avec la classe Communication
+    private BaseDeDonnees baseDeDonnees; //!< Association avec la classe BaseDeDonnee
+    private FenetrePoubelle fenetrePoubelle; //!< Association avec la classe FenetrePoubelle
+
+
     /**
      * Attributs
      */
@@ -143,19 +156,28 @@ public class IHM extends AppCompatActivity
     private void initialiserHandler()
     {
         Log.d(TAG, "initialiserHandler()");
-        // @todo Initialiser un handler pour la récupération des notifications
+        handler = new Handler(Looper.getMainLooper())
+        {
+            @Override
+            public void handleMessage(Message msg)
+            {
+                super.handleMessage(msg);
+                recupererNotifications();
+            }
+        };
     }
 
     private void initialiserMinuteur()
     {
         Log.d(TAG, "initialiserMinuteur()");
-        // @todo Initialiser un minuteur pour la récupération des notifications
+        minuteur = new Timer();
+
     }
 
     private void initialiserCommunication()
     {
         Log.d(TAG, "initialiserCommunication()");
-        // @todo Initialiser une communication pour la récupération des notifications
+        communication = Communication.getInstance(Communication.ADRESSE_IP_STATION, this);
     }
 
     private void recupererNotifications()
@@ -164,21 +186,60 @@ public class IHM extends AppCompatActivity
         nbNotificationsPoubelles = 0;
         nbNotificationsMachines  = 0;
         nbNotificationsBoites    = 0;
-        // @todo Effectuer les requêtes pour récupérer les notifications de tous les modules
+
+        Vector<Module> modules = new Vector<>();
+        modules.addAll(baseDeDonnees.getPoubelles());
+        modules.addAll(baseDeDonnees.getBoites());
+        modules.addAll(baseDeDonnees.getMachines());
+
+        for (Module module : modules)
+        {
+            if (module.estNotifie())
+            {
+                switch (module.getTypeModule())
+                {
+                    case Poubelle:
+                        nbNotificationsPoubelles++;
+                        break;
+                    case BoiteAuxLettres:
+                        nbNotificationsBoites++;
+                    case Machine:
+                        nbNotificationsMachines++;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+
+        mettreAJourNotificationsPoubelles();
+        mettreAJourNotificationsBoites();
+        mettreAJourNotificationsMachines();
+
     }
 
     private void mettreAJourNotificationsPoubelles()
     {
-        // @todo Afficher, si nécessaire, le nombre de notifications des modules Poubelle
+        if(nbNotificationsPoubelles > 0)
+        {
+            Log.d(TAG, "Nombre de notifications poubelles : " + nbNotificationsPoubelles);
+        }
     }
 
     private void mettreAJourNotificationsMachines()
     {
-        // @todo Afficher, si nécessaire, le nombre de notifications des modules Machine
+        if(nbNotificationsMachines > 0)
+        {
+            Log.d(TAG, "Nombre de notifications machines : " + nbNotificationsMachines);
+        }
     }
 
     private void mettreAJourNotificationsBoites()
     {
-        // @todo Afficher, si nécessaire, le nombre de notifications des modules Boite
+        if (nbNotificationsBoites > 0)
+        {
+            Log.d(TAG, "Nombre de notifications boites : " + nbNotificationsBoites);
+        }
     }
 }

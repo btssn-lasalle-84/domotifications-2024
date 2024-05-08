@@ -1,14 +1,11 @@
 package com.lasalle.domotifications;
 
-import android.annotation.SuppressLint;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
@@ -115,7 +112,7 @@ public class FenetrePoubelle extends AppCompatActivity
         // contenu bord à bord
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_menu_poubelle);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.machine1), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -285,7 +282,13 @@ public class FenetrePoubelle extends AppCompatActivity
               "gererClicBoutonActivation() numeroPoubelle = " + numeroPoubelle +
                 " activation = " + boutonsActivation[numeroPoubelle].isChecked());
 
-        // @todo Emettre une requête PATCH pour changer l'état d'activation du module
+        String api = API_PATCH_POUBELLES + "/" + modulesPoubelles.get(numeroPoubelle).getIdModule();
+
+        String json = "{\"idPoubelle\": \"" +
+                        modulesPoubelles.get(numeroPoubelle).getIdModule() +
+                      "\",\"etat\": " + boutonsActivation[numeroPoubelle].isChecked() + "}";
+
+        communication.emettreRequetePATCH(api, json, handler);
 
         modulesPoubelles.get(numeroPoubelle)
           .setActif(boutonsActivation[numeroPoubelle].isChecked());
