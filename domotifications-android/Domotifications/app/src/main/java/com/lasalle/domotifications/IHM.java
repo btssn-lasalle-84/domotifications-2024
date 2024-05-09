@@ -66,6 +66,7 @@ public class IHM extends AppCompatActivity
 
         initialiserGUI();
 
+        initialiserBaseDeDonnees();
         initialiserHandler();
         initialiserMinuteur();
         initialiserCommunication();
@@ -153,6 +154,12 @@ public class IHM extends AppCompatActivity
         });
     }
 
+    private void initialiserBaseDeDonnees()
+    {
+        Log.d(TAG, "initialiserBaseDeDonnees()");
+        baseDeDonnees = BaseDeDonnees.getInstance(this);
+    }
+
     private void initialiserHandler()
     {
         Log.d(TAG, "initialiserHandler()");
@@ -186,6 +193,7 @@ public class IHM extends AppCompatActivity
         nbNotificationsPoubelles = 0;
         nbNotificationsMachines  = 0;
         nbNotificationsBoites    = 0;
+        // @todo Effectuer les requêtes HTTP pour récupérer les notifications de tous les modules
 
         Vector<Module> modules = new Vector<>();
         modules.addAll(baseDeDonnees.getPoubelles());
@@ -224,6 +232,11 @@ public class IHM extends AppCompatActivity
         if(nbNotificationsPoubelles > 0)
         {
             Log.d(TAG, "Nombre de notifications poubelles : " + nbNotificationsPoubelles);
+            // @todo Afficher le nombre dans notificationPoubelle et le rendre visible
+        }
+        else
+        {
+            // @todo Rendre notificationPoubelle invisible
         }
     }
 
@@ -232,6 +245,11 @@ public class IHM extends AppCompatActivity
         if(nbNotificationsMachines > 0)
         {
             Log.d(TAG, "Nombre de notifications machines : " + nbNotificationsMachines);
+            // @todo Afficher le nombre dans notificationMachine et le rendre visible
+        }
+        else
+        {
+            // @todo Rendre notificationMachine invisible
         }
     }
 
@@ -240,6 +258,11 @@ public class IHM extends AppCompatActivity
         if (nbNotificationsBoites > 0)
         {
             Log.d(TAG, "Nombre de notifications boites : " + nbNotificationsBoites);
+            // @todo Afficher le nombre dans notificationBoiteAuxLettres et le rendre visible
+        }
+        else
+        {
+            // @todo Rendre notificationBoiteAuxLettres invisible
         }
     }
 }
