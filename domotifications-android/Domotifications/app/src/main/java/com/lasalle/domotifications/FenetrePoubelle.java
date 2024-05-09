@@ -112,7 +112,7 @@ public class FenetrePoubelle extends AppCompatActivity
         // contenu bord à bord
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_menu_poubelle);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.machine1), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.fenetrePoubelle), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -165,12 +165,14 @@ public class FenetrePoubelle extends AppCompatActivity
         for(int i = 0; i < NB_COULEURS_POUBELLE; ++i)
         {
             imagesPoubelles[i].setVisibility(View.INVISIBLE);
+            imagesNotificationPoubelles[i].setVisibility(View.INVISIBLE);
             boutonsActivation[i].setVisibility(View.INVISIBLE);
         }
 
         for(int i = 0; i < nbModulesPoubelles; ++i)
         {
             imagesPoubelles[i].setVisibility(View.VISIBLE);
+            imagesNotificationPoubelles[i].setVisibility(View.VISIBLE);
             boutonsActivation[i].setVisibility(View.VISIBLE);
         }
 

@@ -2,13 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/machine1"
+    android:id="@+id/fenetreMachine"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FenetreMachine">
 
     <TextView
-        android:id="@+id/titre"
+        android:id="@+id/titreFenetreMachine"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Notifications Machines"
@@ -19,17 +19,194 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.047" />
 
-    <ImageView
-        android:id="@+id/machine0"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/machine"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.415"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.48" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="horizontal"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="vertical"
+            tools:ignore="MissingConstraints">
+
+            <ImageView
+                android:id="@+id/notificationMachine0"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/cloche"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/machine0"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="25dp"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/machine"
+                tools:ignore="MissingConstraints" />
+
+            <Switch
+                android:id="@+id/activationMachine0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:scaleType="fitXY"
+                tools:ignore="MissingConstraints" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="vertical"
+            tools:ignore="MissingConstraints">
+
+            <ImageView
+                android:id="@+id/notificationMachine1"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/cloche"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/machine1"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="25dp"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/lavevaisselle"
+                tools:ignore="MissingConstraints" />
+
+            <Switch
+                android:id="@+id/activationMachine1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:scaleType="fitXY"
+                tools:ignore="MissingConstraints" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="vertical"
+            tools:ignore="MissingConstraints">
+
+            <ImageView
+                android:id="@+id/notificationMachine2"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/cloche"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/machine2"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="25dp"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/machine"
+                tools:ignore="MissingConstraints" />
+
+            <Switch
+                android:id="@+id/activationMachine2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:scaleType="fitXY"
+                tools:ignore="MissingConstraints" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="vertical"
+            tools:ignore="MissingConstraints">
+
+            <ImageView
+                android:id="@+id/notificationMachine3"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/cloche"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/machine3"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="25dp"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/machine"
+                tools:ignore="MissingConstraints" />
+
+            <Switch
+                android:id="@+id/activationMachine3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:scaleType="fitXY"
+                tools:ignore="MissingConstraints" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="vertical"
+            tools:ignore="MissingConstraints">
+
+            <ImageView
+                android:id="@+id/notificationMachine4"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/cloche"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/machine4"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="25dp"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/machine"
+                tools:ignore="MissingConstraints" />
+
+            <Switch
+                android:id="@+id/activationMachine4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:scaleType="fitXY"
+                tools:ignore="MissingConstraints" />
+        </LinearLayout>
+
+    </LinearLayout>
 
     <ImageButton
         android:id="@+id/boutonAccueil"
@@ -44,43 +221,4 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:ignore="MissingConstraints" />
-
-    <ImageView
-        android:id="@+id/notificationMachine0"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        app:srcCompat="@drawable/cloche"
-        tools:layout_editor_absoluteX="527dp"
-        tools:layout_editor_absoluteY="258dp" />
-
-    <ImageView
-        android:id="@+id/notificationMachine1"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        app:srcCompat="@drawable/cloche"
-        tools:layout_editor_absoluteX="719dp"
-        tools:layout_editor_absoluteY="258dp" />
-
-    <Switch
-        android:id="@+id/activationMachine0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="515dp"
-        tools:layout_editor_absoluteY="466dp" />
-
-    <Switch
-        android:id="@+id/activationMachine1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="719dp"
-        tools:layout_editor_absoluteY="466dp" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:srcCompat="@drawable/lavevaisselle"
-        tools:layout_editor_absoluteX="690dp"
-        tools:layout_editor_absoluteY="336dp" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -29,31 +29,32 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
-public class FenetreMachine extends AppCompatActivity {
+public class FenetreMachine extends AppCompatActivity
+{
     /**
      * Constantes
      */
-    private static final String TAG = "_FenetreMachine"; //!< TAG pour les logs
-    private static final String API_GET_MACHINES = "/machines"; //!< Pour une requête GET
-    private static final String API_PATCH_MACHINES = "/machines"; //!< Pour une requête PATCH
-    private static final int INTERVALLE = 1000;      //!< Intervalle d'interrogation en ms
+    private static final String TAG                = "_FenetreMachine"; //!< TAG pour les logs
+    private static final String API_GET_MACHINES   = "/machines";       //!< Pour une requête GET
+    private static final String API_PATCH_MACHINES = "/machines";       //!< Pour une requête PATCH
+    private static final int    INTERVALLE         = 1000; //!< Intervalle d'interrogation en ms
+    public static final int     NB_MACHINES_MAX    = 5;    //!< Nombre max de machines
 
     /**
      * Attributs
      */
-    private BaseDeDonnees baseDeDonnees;             //!< Association avec la base de donnees
-    private Vector<Module> modulesMachines;   //!< Conteneur des modules machines
-    private int nbModulesMachines; //!< le nombre de machines gérées
-    private int idNotification = 0; //!< Identifiant unique pour chaque notification
-    private Communication communication;      //!< Association avec la classe Communication
-    private Handler handler =
-            null; //!< Handler permettant la communication entre la classe Communication et l'activité
-    private Timer minuteur =
-            null; //!< Pour gérer la récupération des états des modules machines
+    private BaseDeDonnees  baseDeDonnees;      //!< Association avec la base de donnees
+    private Vector<Module> modulesMachines;    //!< Conteneur des modules machines
+    private int            nbModulesMachines;  //!< le nombre de machines gérées
+    private int            idNotification = 0; //!< Identifiant unique pour chaque notification
+    private Communication  communication;      //!< Association avec la classe Communication
+    private Handler        handler =
+      null; //!< Handler permettant la communication entre la classe Communication et l'activité
+    private Timer minuteur = null; //!< Pour gérer la récupération des états des modules machines
     private TimerTask tacheRecuperationEtats =
-            null; //!< Pour effectuer la récupération des états des modules machines
-    private boolean erreurCommunication = false;
-    private int numeroMachineAcquittement = -1;
+      null; //!< Pour effectuer la récupération des états des modules machines
+    private boolean erreurCommunication       = false;
+    private int     numeroMachineAcquittement = -1;
 
     /**
      * GUI
@@ -61,16 +62,20 @@ public class FenetreMachine extends AppCompatActivity {
     private ImageButton boutonAccueil;
 
     public static final int[] IMAGE_MACHINES = {
-            R.drawable.machine,
-            R.drawable.lavevaisselle
-    }; //!< Id de l'image de la machine dans les ressources Android
-    private ImageView[] imagesMachines;             //!< Images des machines
+        R.drawable.machine,
+        R.drawable.lavevaisselle,
+        R.drawable.machine,
+        R.drawable.machine,
+        R.drawable.machine
+    };                                  //!< Id de l'image de la machine dans les ressources Android
+    private ImageView[] imagesMachines; //!< Images des machines
     private ImageView[] imagesNotificationMachines; //!< Images des notifications des machines
     private Switch[] boutonsActivation; //!< Boutons d'activation/désactivation des modules
     //!< machines
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()");
 
@@ -83,79 +88,111 @@ public class FenetreMachine extends AppCompatActivity {
         recupererEtats();
     }
 
-    private void initialiserBaseDeDonnees() {
+    private void initialiserBaseDeDonnees()
+    {
         Log.d(TAG, "initialiserBaseDeDonnees()");
         baseDeDonnees = BaseDeDonnees.getInstance(this);
     }
 
-    private void initialiserModulesMachines() {
+    private void initialiserModulesMachines()
+    {
         Log.d(TAG, "initialiserModulesMachines()");
-        modulesMachines = baseDeDonnees.getMachines();
+        modulesMachines   = baseDeDonnees.getMachines();
         nbModulesMachines = baseDeDonnees.getNbModulesMachines();
         Log.d(TAG, "nbModulesMachines = " + nbModulesMachines);
     }
 
-    private void initialiserGUI() {
-
+    private void initialiserGUI()
+    {
         // contenu bord à bord
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_menu_machine);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.machine1), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        ViewCompat.setOnApplyWindowInsetsListener(
+          findViewById(R.id.fenetreMachine),
+          (v, insets) -> {
+              Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+              v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+              return insets;
+          });
 
-        boutonAccueil = (ImageButton) findViewById(R.id.boutonAccueil);
+        boutonAccueil = (ImageButton)findViewById(R.id.boutonAccueil);
 
-        imagesMachines = new ImageView[nbModulesMachines];
-        imagesMachines[0] = (ImageView) findViewById(R.id.machine0);
-        imagesMachines[1] = (ImageView) findViewById(R.id.machine1);
+        imagesMachines    = new ImageView[NB_MACHINES_MAX];
+        imagesMachines[0] = (ImageView)findViewById(R.id.machine0);
+        imagesMachines[1] = (ImageView)findViewById(R.id.machine1);
+        imagesMachines[2] = (ImageView)findViewById(R.id.machine2);
+        imagesMachines[3] = (ImageView)findViewById(R.id.machine3);
+        imagesMachines[4] = (ImageView)findViewById(R.id.machine4);
 
-        imagesNotificationMachines = new ImageView[nbModulesMachines];
-        imagesNotificationMachines[0] = (ImageView) findViewById(R.id.notificationMachine0);
-        imagesNotificationMachines[0] = (ImageView) findViewById(R.id.notificationMachine1);
+        imagesNotificationMachines    = new ImageView[NB_MACHINES_MAX];
+        imagesNotificationMachines[0] = (ImageView)findViewById(R.id.notificationMachine0);
+        imagesNotificationMachines[1] = (ImageView)findViewById(R.id.notificationMachine1);
+        imagesNotificationMachines[2] = (ImageView)findViewById(R.id.notificationMachine2);
+        imagesNotificationMachines[3] = (ImageView)findViewById(R.id.notificationMachine3);
+        imagesNotificationMachines[4] = (ImageView)findViewById(R.id.notificationMachine4);
 
-        boutonsActivation = new Switch[nbModulesMachines];
-        boutonsActivation[0] = (Switch) findViewById(R.id.activationMachine0);
-        boutonsActivation[1] = (Switch) findViewById(R.id.activationMachine1);
+        boutonsActivation    = new Switch[NB_MACHINES_MAX];
+        boutonsActivation[0] = (Switch)findViewById(R.id.activationMachine0);
+        boutonsActivation[1] = (Switch)findViewById(R.id.activationMachine1);
+        boutonsActivation[2] = (Switch)findViewById(R.id.activationMachine2);
+        boutonsActivation[3] = (Switch)findViewById(R.id.activationMachine3);
+        boutonsActivation[4] = (Switch)findViewById(R.id.activationMachine4);
 
-        for (int i = 0; i < nbModulesMachines; ++i) {
+        for(int i = 0; i < nbModulesMachines; ++i)
+        {
             imagesMachines[i].setImageResource(IMAGE_MACHINES[i]);
             final int numeroMachine = i;
             imagesNotificationMachines[i].setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View v)
+                {
                     gererClicBoutonNotification(numeroMachine);
                 }
             });
             imagesMachines[i].setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View v)
+                {
                     gererClicBoutonNotification(numeroMachine);
                 }
             });
         }
 
-        for (int i = 0; i < nbModulesMachines; ++i) {
+        for(int i = 0; i < NB_MACHINES_MAX; ++i)
+        {
+            imagesMachines[i].setVisibility(View.INVISIBLE);
+            imagesNotificationMachines[i].setVisibility(View.INVISIBLE);
+            boutonsActivation[i].setVisibility(View.INVISIBLE);
+        }
+
+        for(int i = 0; i < nbModulesMachines; ++i)
+        {
             imagesMachines[i].setVisibility(View.VISIBLE);
+            imagesNotificationMachines[i].setVisibility(View.VISIBLE);
             boutonsActivation[i].setVisibility(View.VISIBLE);
         }
 
-        for (int i = 0; i < nbModulesMachines; i++) {
+        for(int i = 0; i < nbModulesMachines; i++)
+        {
             final int numeroMachine = i;
             // initialise la GUI en fonction de l'état de notification
-            if (modulesMachines.get(i).estNotifie()) {
+            if(modulesMachines.get(i).estNotifie())
+            {
                 imagesNotificationMachines[i].setVisibility(View.VISIBLE);
-            } else {
+            }
+            else
+            {
                 imagesNotificationMachines[i].setVisibility(View.INVISIBLE);
             }
             // initialise la GUI en fonction de l'état d'activation
-            if (modulesMachines.get(i).estActif()) {
+            if(modulesMachines.get(i).estActif())
+            {
                 boutonsActivation[i].setChecked(true);
                 imagesNotificationMachines[i].setEnabled(true);
                 imagesMachines[i].setEnabled(true);
-            } else {
+            }
+            else
+            {
                 boutonsActivation[i].setChecked(false);
                 imagesNotificationMachines[i].setEnabled(false);
                 imagesMachines[i].setEnabled(false);
@@ -169,7 +206,8 @@ public class FenetreMachine extends AppCompatActivity {
                 }
             });
             boutonAccueil.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
+                public void onClick(View v)
+                {
                     Log.d(TAG, "clic boutonAccueil");
                     finish();
                 }
@@ -201,9 +239,9 @@ public class FenetreMachine extends AppCompatActivity {
                         erreurCommunication = false;
                         break;
                     case Communication.CODE_HTTP_ERREUR:
-                        Log.d(TAG, "[Handler] ERREUR HTTP");
                         if(!erreurCommunication)
                         {
+                            Log.d(TAG, "[Handler] ERREUR HTTP");
                             afficherErreur("Impossible de communiquer avec la station !");
                             erreurCommunication = true;
                         }
@@ -236,10 +274,10 @@ public class FenetreMachine extends AppCompatActivity {
             return;
         }
         Log.d(TAG,
-                "gererClicBoutonNotification() numeroMachine = " + numeroMachine +
-                        " idMachine = " + modulesMachines.get(numeroMachine).getIdModule() +
-                        " notification = " + modulesMachines.get(numeroMachine).estNotifie() +
-                        " activation = " + modulesMachines.get(numeroMachine).estActif());
+              "gererClicBoutonNotification() numeroMachine = " + numeroMachine +
+                " idMachine = " + modulesMachines.get(numeroMachine).getIdModule() +
+                " notification = " + modulesMachines.get(numeroMachine).estNotifie() +
+                " activation = " + modulesMachines.get(numeroMachine).estActif());
 
         if(modulesMachines.get(numeroMachine).estActif())
         {
@@ -252,10 +290,10 @@ public class FenetreMachine extends AppCompatActivity {
                 */
                 numeroMachineAcquittement = numeroMachine;
                 String api =
-                        API_PATCH_MACHINES + "/" + modulesMachines.get(numeroMachine).getIdModule();
+                  API_PATCH_MACHINES + "/" + modulesMachines.get(numeroMachine).getIdModule();
                 String json = "{\"idMachine\": \"" +
-                        modulesMachines.get(numeroMachine).getIdModule() +
-                        "\",\"etat\": false}";
+                              modulesMachines.get(numeroMachine).getIdModule() +
+                              "\",\"etat\": false}";
                 communication.emettreRequetePATCH(api, json, handler);
             }
         }
@@ -269,19 +307,17 @@ public class FenetreMachine extends AppCompatActivity {
             return;
         }
         Log.d(TAG,
-                "gererClicBoutonActivation() numeroMachine = " + numeroMachine +
-                        " activation = " + boutonsActivation[numeroMachine].isChecked());
+              "gererClicBoutonActivation() numeroMachine = " + numeroMachine +
+                " activation = " + boutonsActivation[numeroMachine].isChecked());
 
         String api = API_PATCH_MACHINES + "/" + modulesMachines.get(numeroMachine).getIdModule();
 
-        String json = "{\"idMachine\": \"" +
-                modulesMachines.get(numeroMachine).getIdModule() +
-                "\",\"etat\": " + boutonsActivation[numeroMachine].isChecked() + "}";
+        String json = "{\"idMachine\": \"" + modulesMachines.get(numeroMachine).getIdModule() +
+                      "\",\"etat\": " + boutonsActivation[numeroMachine].isChecked() + "}";
 
         communication.emettreRequetePATCH(api, json, handler);
 
-        modulesMachines.get(numeroMachine)
-                .setActif(boutonsActivation[numeroMachine].isChecked());
+        modulesMachines.get(numeroMachine).setActif(boutonsActivation[numeroMachine].isChecked());
 
         if(modulesMachines.get(numeroMachine).estActif())
         {
@@ -311,7 +347,7 @@ public class FenetreMachine extends AppCompatActivity {
 
     public void traiterReponseJSON(String reponse)
     {
-        //Log.d(TAG, "traiterReponseJSON() reponse = " + reponse);
+        // Log.d(TAG, "traiterReponseJSON() reponse = " + reponse);
         /*
             Exemple de réponsee : pour la requête GET /machines
             body =
@@ -329,11 +365,11 @@ public class FenetreMachine extends AppCompatActivity {
             json = new JSONArray(reponse);
             for(int i = 0; i < json.length(); ++i)
             {
-                JSONObject machines = json.getJSONObject(i);
-                int        idMachine         = machines.getInt("idMachine");
-                String     couleur         = machines.getString("couleur");
-                Boolean    etat            = machines.getBoolean("etat");
-                Boolean    actif           = machines.getBoolean("actif");
+                JSONObject machines  = json.getJSONObject(i);
+                int        idMachine = machines.getInt("idMachine");
+                String     couleur   = machines.getString("couleur");
+                Boolean    etat      = machines.getBoolean("etat");
+                Boolean    actif     = machines.getBoolean("actif");
                 /*Log.d(TAG,
                       "traiterReponseJSON() idMachine = " + idMachine + " couleur = " + couleur +
                         " etat = " + etat + " actif = " + actif);*/
@@ -341,7 +377,7 @@ public class FenetreMachine extends AppCompatActivity {
                 {
                     Module module = modulesMachines.get(j);
                     if(module.getIdModule() == idMachine &&
-                            module.getTypeModule() == Module.TypeModule.Machine)
+                       module.getTypeModule() == Module.TypeModule.Machine)
                     {
                         module.setCouleur(couleur);
                         module.setActif(actif);
@@ -380,26 +416,25 @@ public class FenetreMachine extends AppCompatActivity {
             json = new JSONArray(reponse);
             if(json.length() > 0)
             {
-                JSONObject machines = json.getJSONObject(0);
-                int        idMachine          = machines.getInt("idMachine");
-                String     couleur          = machines.getString("couleur");
-                Boolean    etat             = machines.getBoolean("etat");
-                Boolean    actif            = machines.getBoolean("actif");
+                JSONObject machines  = json.getJSONObject(0);
+                int        idMachine = machines.getInt("idMachine");
+                String     couleur   = machines.getString("couleur");
+                Boolean    etat      = machines.getBoolean("etat");
+                Boolean    actif     = machines.getBoolean("actif");
                 Log.d(TAG,
-                        "enregistrerAcquittementNotification() idMachine = " + idMachine +
-                                " couleur = " + couleur + " etat = " + etat + " actif = " + actif);
+                      "enregistrerAcquittementNotification() idMachine = " + idMachine +
+                        " couleur = " + couleur + " etat = " + etat + " actif = " + actif);
 
                 Module module = modulesMachines.get(numeroMachineAcquittement);
                 if(module.getIdModule() == idMachine &&
-                        module.getTypeModule() == Module.TypeModule.Machine && !etat)
+                   module.getTypeModule() == Module.TypeModule.Machine && !etat)
                 {
                     baseDeDonnees.enregistrerAcquittementNotification(
-                            module.getIdModule(),
-                            module.getTypeModule().ordinal(),
-                            true);
+                      module.getIdModule(),
+                      module.getTypeModule().ordinal(),
+                      true);
                     numeroMachineAcquittement = -1;
                 }
-
             }
         }
         catch(JSONException e)
@@ -452,19 +487,19 @@ public class FenetreMachine extends AppCompatActivity {
     private void creerNotification(String message)
     {
         NotificationManager notificationManager =
-                (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+          (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 
         String titreNotification = getNomApplication(getApplicationContext());
         String texteNotification = message;
 
         NotificationCompat.Builder notification = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(titreNotification)
-                .setContentText(texteNotification);
+                                                    .setSmallIcon(R.mipmap.ic_launcher)
+                                                    .setContentTitle(titreNotification)
+                                                    .setContentText(texteNotification);
 
         // On pourrait ici crée une autre activité
         PendingIntent pendingIntent =
-                PendingIntent.getActivity(this, 0, new Intent(), PendingIntent.FLAG_UPDATE_CURRENT);
+          PendingIntent.getActivity(this, 0, new Intent(), PendingIntent.FLAG_UPDATE_CURRENT);
 
         notification.setContentIntent(pendingIntent);
 
