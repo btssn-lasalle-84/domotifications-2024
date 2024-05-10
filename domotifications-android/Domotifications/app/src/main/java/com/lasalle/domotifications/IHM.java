@@ -7,6 +7,8 @@
 package com.lasalle.domotifications;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.media.Image;
 import android.os.Bundle;
 import android.content.Intent;
 import android.os.Handler;
@@ -17,6 +19,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 import java.util.Timer;
@@ -195,6 +200,7 @@ public class IHM extends AppCompatActivity
         nbNotificationsBoites    = 0;
         // @todo Effectuer les requêtes HTTP pour récupérer les notifications de tous les modules
 
+
         Vector<Module> modules = new Vector<>();
         modules.addAll(baseDeDonnees.getPoubelles());
         modules.addAll(baseDeDonnees.getBoites());
@@ -258,11 +264,14 @@ public class IHM extends AppCompatActivity
         if (nbNotificationsBoites > 0)
         {
             Log.d(TAG, "Nombre de notifications boites : " + nbNotificationsBoites);
-            // @todo Afficher le nombre dans notificationBoiteAuxLettres et le rendre visible
+            TextView notificationBoiteAuxLettres = findViewById(R.id.nbNotificationBoite0);
+            notificationBoiteAuxLettres.setText(String.valueOf(nbNotificationsBoites));
+            notificationBoiteAuxLettres.setVisibility(View.VISIBLE);
         }
         else
         {
-            // @todo Rendre notificationBoiteAuxLettres invisible
+            TextView notificationBoiteAuxLettres = findViewById(R.id.nbNotificationBoite0);
+            notificationBoiteAuxLettres.setVisibility(View.INVISIBLE);
         }
     }
 }
