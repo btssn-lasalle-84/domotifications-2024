@@ -53,6 +53,7 @@ class ServeurWeb : public WebServer
     void afficherAccueil();
     void traiterRequeteNonTrouvee();
     void testerBandeau();
+    void envoyerReponseJSON();
 
   public:
     ServeurWeb(StationLumineuse* stationLumineuse = nullptr);

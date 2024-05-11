@@ -180,6 +180,25 @@ void ServeurWeb::testerBandeau()
 }
 
 /**
+ * @brief Envoie une réponse HTTP 200 avec le contenu JSON
+ * @fn ServeurWeb::envoyerReponseJSON
+ */
+void ServeurWeb::envoyerReponseJSON()
+{
+    char buffer[TAILLE_JSON];
+    // Convertit les données JSON en chaîne de caractères
+    serializeJson(documentJSON, buffer);
+    // Renvoie les données JSON avec un code HTTP 200 (succès)
+    send(200, "application/json", buffer);
+
+#ifdef DEBUG_SERVEUR_WEB
+    Serial.println(F("  REPONSE   : 200"));
+    serializeJson(documentJSON, Serial);
+    Serial.println();
+#endif
+}
+
+/**
  * @brief Traite la requête GET pour obtenir la liste des poubelles
  * @fn ServeurWeb::traiterRequeteGetPoubelles
  */
@@ -215,15 +234,7 @@ void ServeurWeb::traiterRequeteGetPoubelles()
         objetPoubelle["actif"]      = poubelle->getActivation();
     }
 
-    char buffer[TAILLE_JSON];
-    serializeJson(documentJSON, buffer);
-    send(200, "application/json", buffer);
-
-#ifdef DEBUG_SERVEUR_WEB
-    Serial.println(F("  REPONSE   : 200"));
-    serializeJson(documentJSON, Serial);
-    Serial.println();
-#endif
+    envoyerReponseJSON();
 }
 
 void ServeurWeb::traiterRequeteGetPoubelle()
@@ -273,17 +284,7 @@ void ServeurWeb::traiterRequeteGetPoubelle()
     objetPoubelle["etat"]       = poubelle->getEtatNotification();
     objetPoubelle["actif"]      = poubelle->getActivation();
 
-    char buffer[TAILLE_JSON];
-    // Convertit les données JSON en chaîne de caractères
-    serializeJson(documentJSON, buffer);
-    // Renvoie les données JSON avec un code HTTP 200 (succès)
-    send(200, "application/json", buffer);
-
-#ifdef DEBUG_SERVEUR_WEB
-    Serial.println(F("  REPONSE   : 200"));
-    serializeJson(documentJSON, Serial);
-    Serial.println();
-#endif
+    envoyerReponseJSON();
 }
 
 void ServeurWeb::traiterRequeteUpdatePoubelle()
@@ -362,15 +363,7 @@ void ServeurWeb::traiterRequeteUpdatePoubelle()
     objetPoubelle["etat"]       = poubelle->getEtatNotification();
     objetPoubelle["actif"]      = poubelle->getActivation();
 
-    char buffer[TAILLE_JSON];
-    serializeJson(documentJSON, buffer);
-    send(200, "application/json", buffer);
-
-#ifdef DEBUG_SERVEUR_WEB
-    Serial.println(F("  REPONSE   : 200"));
-    serializeJson(documentJSON, Serial);
-    Serial.println();
-#endif
+    envoyerReponseJSON();
 }
 
 void ServeurWeb::traiterRequeteGetMachines()
@@ -405,15 +398,7 @@ void ServeurWeb::traiterRequeteGetMachines()
         objetMachine["actif"]     = machine->getActivation();
     }
 
-    char buffer[TAILLE_JSON];
-    serializeJson(documentJSON, buffer);
-    send(200, "application/json", buffer);
-
-#ifdef DEBUG_SERVEUR_WEB
-    Serial.println(F("  REPONSE   : 200"));
-    serializeJson(documentJSON, Serial);
-    Serial.println();
-#endif
+    envoyerReponseJSON();
 }
 
 void ServeurWeb::traiterRequeteGetMachine()
@@ -463,17 +448,7 @@ void ServeurWeb::traiterRequeteGetMachine()
     objetMachine["etat"]      = machine->getEtatNotification();
     objetMachine["actif"]     = machine->getActivation();
 
-    char buffer[TAILLE_JSON];
-    // Convertit les données JSON en chaîne de caractères
-    serializeJson(documentJSON, buffer);
-    // Renvoie les données JSON avec un code HTTP 200 (succès)
-    send(200, "application/json", buffer);
-
-#ifdef DEBUG_SERVEUR_WEB
-    Serial.println(F("  REPONSE   : 200"));
-    serializeJson(documentJSON, Serial);
-    Serial.println();
-#endif
+    envoyerReponseJSON();
 }
 
 void ServeurWeb::traiterRequeteUpdateMachine()
@@ -552,15 +527,7 @@ void ServeurWeb::traiterRequeteUpdateMachine()
     objetMachine["etat"]      = machine->getEtatNotification();
     objetMachine["actif"]     = machine->getActivation();
 
-    char buffer[TAILLE_JSON];
-    serializeJson(documentJSON, buffer);
-    send(200, "application/json", buffer);
-
-#ifdef DEBUG_SERVEUR_WEB
-    Serial.println(F("  REPONSE   : 200"));
-    serializeJson(documentJSON, Serial);
-    Serial.println();
-#endif
+    envoyerReponseJSON();
 }
 
 void ServeurWeb::traiterRequeteGetBoites()
@@ -595,15 +562,7 @@ void ServeurWeb::traiterRequeteGetBoites()
         objetBoite["actif"]   = boite->getActivation();
     }
 
-    char buffer[TAILLE_JSON];
-    serializeJson(documentJSON, buffer);
-    send(200, "application/json", buffer);
-
-#ifdef DEBUG_SERVEUR_WEB
-    Serial.println(F("  REPONSE   : 200"));
-    serializeJson(documentJSON, Serial);
-    Serial.println();
-#endif
+    envoyerReponseJSON();
 }
 
 void ServeurWeb::traiterRequeteGetBoite()
@@ -653,17 +612,7 @@ void ServeurWeb::traiterRequeteGetBoite()
     objetBoite["etat"]    = boite->getEtatNotification();
     objetBoite["actif"]   = boite->getActivation();
 
-    char buffer[TAILLE_JSON];
-    // Convertit les données JSON en chaîne de caractères
-    serializeJson(documentJSON, buffer);
-    // Renvoie les données JSON avec un code HTTP 200 (succès)
-    send(200, "application/json", buffer);
-
-#ifdef DEBUG_SERVEUR_WEB
-    Serial.println(F("  REPONSE   : 200"));
-    serializeJson(documentJSON, Serial);
-    Serial.println();
-#endif
+    envoyerReponseJSON();
 }
 
 void ServeurWeb::traiterRequeteUpdateBoite()
@@ -742,13 +691,5 @@ void ServeurWeb::traiterRequeteUpdateBoite()
     objetBoite["etat"]    = boite->getEtatNotification();
     objetBoite["actif"]   = boite->getActivation();
 
-    char buffer[TAILLE_JSON];
-    serializeJson(documentJSON, buffer);
-    send(200, "application/json", buffer);
-
-#ifdef DEBUG_SERVEUR_WEB
-    Serial.println(F("  REPONSE   : 200"));
-    serializeJson(documentJSON, Serial);
-    Serial.println();
-#endif
+    envoyerReponseJSON();
 }
