@@ -267,14 +267,51 @@ public class IHM extends AppCompatActivity
                 {"idBoite":4,"couleur":"gris","etat":false,"actif":true},
             ]
         */
-        // @todo Compter le nombre de notifications Poubelle, Machine ou Boite
+
+        try
+        {
+            JSONArray jsonArray = new JSONArray(reponse);
+            for (int i = 0; i < jsonArray.length(); i++)
+            {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                if (jsonObject.has("etat") && jsonObject.getBoolean("etat"))
+                {
+                    if (jsonObject.has("idPoubelle"))
+                    {
+                        nbNotificationsPoubelles++;
+                    }
+                    else if (jsonObject.has("idMachine"))
+                    {
+                        nbNotificationsMachines++;
+                    }
+                    else if (jsonObject.has("idBoite"))
+                    {
+                        nbNotificationsBoites++;
+                    }
+                }
+            }
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+        Log.d(TAG,
+                "traiterReponseJSON() nbNotificationsPoubelles = " + nbNotificationsPoubelles +
+                        " nbNotificationsMachines = " + nbNotificationsMachines +
+                        " nbNotificationsBoites = " + nbNotificationsBoites);
 
         Log.d(TAG,
               "traiterReponseJSON() nbNotificationsPoubelles = " + nbNotificationsPoubelles +
                 " nbNotificationsMachines = " + nbNotificationsMachines +
                 " nbNotificationsBoites = " + nbNotificationsBoites);
 
-        // @todo Si le nombre de notifications Poubelle, Machine ou Boite alots mettre à jour l'IHM
+        if (nbNotificationsPoubelles > 0 || nbNotificationsMachines > 0 || nbNotificationsBoites > 0)
+        {
+            mettreAJourNotificationsPoubelles();
+            mettreAJourNotificationsMachines();
+            mettreAJourNotificationsBoites();
+        }
     }
 
     private void mettreAJourNotificationsPoubelles()
