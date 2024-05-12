@@ -243,6 +243,11 @@ public class IHM extends AppCompatActivity
     public void traiterReponseJSON(String reponse)
     {
         Log.d(TAG, "traiterReponseJSON() reponse = " + reponse);
+
+        int nouvellesNotificationsPoubelles = 0;
+        int nouvellesNotificationsMachines = 0;
+        int nouvellesNotificationsBoites = 0;
+
         /*
             Exemple de réponsee : pour la requête GET /poubelles
             [
@@ -278,15 +283,15 @@ public class IHM extends AppCompatActivity
                 {
                     if (jsonObject.has("idPoubelle"))
                     {
-                        nbNotificationsPoubelles++;
+                        nouvellesNotificationsPoubelles++;
                     }
                     else if (jsonObject.has("idMachine"))
                     {
-                        nbNotificationsMachines++;
+                        nouvellesNotificationsMachines++;
                     }
                     else if (jsonObject.has("idBoite"))
                     {
-                        nbNotificationsBoites++;
+                        nouvellesNotificationsBoites++;
                     }
                 }
             }
@@ -296,20 +301,25 @@ public class IHM extends AppCompatActivity
             e.printStackTrace();
         }
 
-        Log.d(TAG,
-                "traiterReponseJSON() nbNotificationsPoubelles = " + nbNotificationsPoubelles +
-                        " nbNotificationsMachines = " + nbNotificationsMachines +
-                        " nbNotificationsBoites = " + nbNotificationsBoites);
 
         Log.d(TAG,
-              "traiterReponseJSON() nbNotificationsPoubelles = " + nbNotificationsPoubelles +
-                " nbNotificationsMachines = " + nbNotificationsMachines +
-                " nbNotificationsBoites = " + nbNotificationsBoites);
+                "traiterReponseJSON() nouvellesNotificationsPoubelles = " + nouvellesNotificationsPoubelles +
+                        " nouvellesNotificationsMachines = " + nouvellesNotificationsMachines +
+                        " nouvellesNotificationsBoites = " + nouvellesNotificationsBoites);
 
-        if (nbNotificationsPoubelles > 0 || nbNotificationsMachines > 0 || nbNotificationsBoites > 0)
+        if (nouvellesNotificationsPoubelles != nbNotificationsPoubelles)
         {
+            nbNotificationsPoubelles = nouvellesNotificationsPoubelles;
             mettreAJourNotificationsPoubelles();
+        }
+        if (nouvellesNotificationsMachines != nbNotificationsMachines)
+        {
+            nbNotificationsMachines = nouvellesNotificationsMachines;
             mettreAJourNotificationsMachines();
+        }
+        if (nouvellesNotificationsBoites != nbNotificationsBoites)
+        {
+            nbNotificationsBoites = nouvellesNotificationsBoites;
             mettreAJourNotificationsBoites();
         }
     }
