@@ -41,7 +41,7 @@ public class Communication
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     public static final String API_GET_POUBELLES   = "/poubelles";       //!< Pour une requête GET
     public static final String API_GET_BOITES   = "/boites"; //!< Pour une requête GET
-    protected static final String API_GET_MACHINES   = "/machines";       //!< Pour une requête GET
+    public static final String API_GET_MACHINES   = "/machines";       //!< Pour une requête GET
 
 
     /**
