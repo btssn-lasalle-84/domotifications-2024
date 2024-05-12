@@ -6,6 +6,10 @@
 
 package com.lasalle.domotifications;
 
+import static com.lasalle.domotifications.FenetreBoiteAuxLettres.API_GET_BOITES;
+import static com.lasalle.domotifications.FenetreMachine.API_GET_MACHINES;
+import static com.lasalle.domotifications.FenetrePoubelle.API_GET_POUBELLES;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.media.Image;
@@ -25,6 +29,7 @@ import org.w3c.dom.Text;
 
 import java.util.List;
 import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 
 /**
@@ -43,7 +48,6 @@ public class IHM extends AppCompatActivity
     private Timer minuteur = null; //!< Pour gérer la récupération des états des différents modules
     private Communication communication; //!< Association avec la classe Communication
     private BaseDeDonnees baseDeDonnees; //!< Association avec la classe BaseDeDonnee
-    private FenetrePoubelle fenetrePoubelle; //!< Association avec la classe FenetrePoubelle
 
 
     /**
@@ -53,6 +57,10 @@ public class IHM extends AppCompatActivity
     private int     nbNotificationsMachines;
     private int     nbNotificationsBoites;
     private boolean erreurCommunication = false;
+    private TextView notificationPoubelle;
+    private TextView notificationMachine;
+    private TextView notificationBoiteAuxLettres;
+
     /**
      * GUI
      */
@@ -199,13 +207,30 @@ public class IHM extends AppCompatActivity
         nbNotificationsMachines  = 0;
         nbNotificationsBoites    = 0;
 
-        String apiPoubelles = "/poubelles";
-        String apiMachines = "/machines";
-        String apiBoites = "/boites";
+        TimerTask tacheRecuperationEtatsPoubelles = new TimerTask() {
+            public void run()
+            {
+                communication.emettreRequeteGET(API_GET_POUBELLES, handler);
+            }
+        };
 
-        communication.emettreRequeteGETPeriodique(apiPoubelles, handler, INTERVALLE);
-        communication.emettreRequeteGETPeriodique(apiMachines, handler, INTERVALLE);
-        communication.emettreRequeteGETPeriodique(apiBoites, handler, INTERVALLE);
+        TimerTask tacheRecuperationEtatsMachines = new TimerTask() {
+            public void run()
+            {
+                communication.emettreRequeteGET(API_GET_MACHINES, handler);
+            }
+        };
+
+        TimerTask tacheRecuperationEtatsBoites = new TimerTask() {
+            public void run()
+            {
+                communication.emettreRequeteGET(API_GET_BOITES, handler);
+            }
+        };
+
+        minuteur.schedule(tacheRecuperationEtatsPoubelles, INTERVALLE, INTERVALLE);
+        minuteur.schedule(tacheRecuperationEtatsMachines, INTERVALLE, INTERVALLE);
+        minuteur.schedule(tacheRecuperationEtatsBoites, INTERVALLE, INTERVALLE);
 
         Vector<Module> modules = new Vector<>();
         modules.addAll(baseDeDonnees.getPoubelles());

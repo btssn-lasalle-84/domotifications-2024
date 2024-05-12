@@ -35,7 +35,7 @@ public class FenetrePoubelle extends AppCompatActivity
      * Constantes
      */
     private static final String TAG                 = "_FenetrePoubelle"; //!< TAG pour les logs
-    private static final String API_GET_POUBELLES   = "/poubelles";       //!< Pour une requête GET
+    protected static final String API_GET_POUBELLES   = "/poubelles";       //!< Pour une requête GET
     private static final String API_PATCH_POUBELLES = "/poubelles"; //!< Pour une requête PATCH
     private static final int    INTERVALLE          = 1000; //!< Intervalle d'interrogation en ms
     /**
