@@ -8,24 +8,19 @@ package com.lasalle.domotifications;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.media.Image;
 import android.os.Bundle;
 import android.content.Intent;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -41,12 +36,11 @@ public class IHM extends AppCompatActivity
      */
     private static final String TAG        = "_IHM"; //!< TAG pour les logs (cf. Logcat)
     private static final int    INTERVALLE = 1000;   //!< Intervalle d'interrogation en ms
-    private Handler handler =
-            null; //!< Handler permettant la communication entre la classe Communication et les activités
+    private Handler             handler =
+      null; //!< Handler permettant la communication entre la classe Communication et les activités
     private Timer minuteur = null; //!< Pour gérer la récupération des états des différents modules
     private Communication communication; //!< Association avec la classe Communication
     private BaseDeDonnees baseDeDonnees; //!< Association avec la classe BaseDeDonnee
-
 
     /**
      * Attributs
@@ -62,6 +56,9 @@ public class IHM extends AppCompatActivity
     private ImageButton boutonPoubelle;
     private ImageButton boutonMachine;
     private ImageButton boutonBoiteAuxLettres;
+    private TextView    notificationPoubelle;
+    private TextView    notificationMachine;
+    private TextView    notificationBoiteAuxLettres;
 
     /**
      * @brief Méthode appelée à la création de l'activité
@@ -145,9 +142,9 @@ public class IHM extends AppCompatActivity
         boutonMachine         = (ImageButton)findViewById(R.id.boutonMachine);
         boutonBoiteAuxLettres = (ImageButton)findViewById(R.id.boutonBoiteAuxLettres);
 
-        TextView notificationPoubelles;
-        TextView notificationMachines;
-        TextView notificationBoiteAuxLettres;
+        notificationPoubelle        = (TextView)findViewById(R.id.notificationPoubelle);
+        notificationMachine         = (TextView)findViewById(R.id.notificationMachine);
+        notificationBoiteAuxLettres = (TextView)findViewById(R.id.notificationBoiteAuxLettres);
 
         initialiserBouton(boutonPoubelle, FenetrePoubelle.class);
         initialiserBouton(boutonMachine, FenetreMachine.class);
@@ -183,36 +180,7 @@ public class IHM extends AppCompatActivity
                 {
                     case Communication.CODE_HTTP_REPONSE_JSON:
                         Log.d(TAG, "[Handler] REPONSE JSON");
-                        String reponse = message.obj.toString();
-                        try
-                        {
-                            JSONObject jsonObject = new JSONObject(reponse);
-
-                            if (jsonObject.has("notification"))
-                            {
-                                String notification = jsonObject.getString("notification");
-
-                                if (notification.equals("poubelles"))
-                                {
-                                    TextView notificationPoubelles = findViewById(R.id.notificationPoubelle);
-                                    notificationPoubelles.setText(String.valueOf(nbNotificationsPoubelles));
-                                }
-                                if (notification.equals("machines"))
-                                {
-                                    TextView notificationMachines = findViewById(R.id.notificationMachine);
-                                    notificationMachines.setText(String.valueOf(nbNotificationsMachines));
-                                }
-                                if (notification.equals("boites"))
-                                {
-                                    TextView notificationBoites = findViewById(R.id.notificationBoiteAuxLettres);
-                                    notificationBoites.setText(String.valueOf(nbNotificationsBoites));
-                                }
-                            }
-                        }
-                        catch (JSONException e)
-                        {
-                            e.printStackTrace();
-                        }
+                        traiterReponseJSON(message.obj.toString());
                         erreurCommunication = false;
                         break;
                     case Communication.CODE_HTTP_ERREUR:
@@ -223,18 +191,14 @@ public class IHM extends AppCompatActivity
                         }
                         break;
                 }
-                recupererNotifications();
             }
         };
     }
-
-
 
     private void initialiserMinuteur()
     {
         Log.d(TAG, "initialiserMinuteur()");
         minuteur = new Timer();
-
     }
 
     private void initialiserCommunication()
@@ -274,51 +238,57 @@ public class IHM extends AppCompatActivity
         minuteur.schedule(tacheRecuperationEtatsPoubelles, INTERVALLE, INTERVALLE);
         minuteur.schedule(tacheRecuperationEtatsMachines, INTERVALLE, INTERVALLE);
         minuteur.schedule(tacheRecuperationEtatsBoites, INTERVALLE, INTERVALLE);
+    }
 
-        Vector<Module> modules = new Vector<>();
-        modules.addAll(baseDeDonnees.getPoubelles());
-        modules.addAll(baseDeDonnees.getBoites());
-        modules.addAll(baseDeDonnees.getMachines());
+    public void traiterReponseJSON(String reponse)
+    {
+        Log.d(TAG, "traiterReponseJSON() reponse = " + reponse);
+        /*
+            Exemple de réponsee : pour la requête GET /poubelles
+            [
+                {"idPoubelle":1,"couleur":"rouge","etat":false,"actif":true},
+                {"idPoubelle":2,"couleur":"jaune","etat":false,"actif":true},
+                {"idPoubelle":3,"couleur":"bleu","etat":false,"actif":true},
+                {"idPoubelle":4,"couleur":"gris","etat":false,"actif":true},
+                {"idPoubelle":5,"couleur":"vert","etat":false,"actif":true}
+            ]
+            Exemple de réponsee : pour la requête GET /machines
+            [
+                {"idMachine":1,"couleur":"rouge","etat":false,"actif":true},
+                {"idMachine":2,"couleur":"jaune","etat":false,"actif":true},
+                {"idMachine":3,"couleur":"bleu","etat":false,"actif":true},
+                {"idMachine":4,"couleur":"gris","etat":false,"actif":true},
+            ]
+            Exemple de réponsee : pour la requête GET /boites
+            [
+                {"idBoite":1,"couleur":"rouge","etat":false,"actif":true},
+                {"idBoite":2,"couleur":"jaune","etat":false,"actif":true},
+                {"idBoite":3,"couleur":"bleu","etat":false,"actif":true},
+                {"idBoite":4,"couleur":"gris","etat":false,"actif":true},
+            ]
+        */
+        // @todo Compter le nombre de notifications Poubelle, Machine ou Boite
 
-        for (Module module : modules)
-        {
-            if (module.estNotifie())
-            {
-                switch (module.getTypeModule())
-                {
-                    case Poubelle:
-                        nbNotificationsPoubelles++;
-                        break;
-                    case BoiteAuxLettres:
-                        nbNotificationsBoites++;
-                    case Machine:
-                        nbNotificationsMachines++;
-                        break;
+        Log.d(TAG,
+              "traiterReponseJSON() nbNotificationsPoubelles = " + nbNotificationsPoubelles +
+                " nbNotificationsMachines = " + nbNotificationsMachines +
+                " nbNotificationsBoites = " + nbNotificationsBoites);
 
-                    default:
-                        break;
-                }
-            }
-        }
-
-        mettreAJourNotificationsPoubelles();
-        mettreAJourNotificationsBoites();
-        mettreAJourNotificationsMachines();
-
+        // @todo Si le nombre de notifications Poubelle, Machine ou Boite alots mettre à jour l'IHM
     }
 
     private void mettreAJourNotificationsPoubelles()
     {
         if(nbNotificationsPoubelles > 0)
         {
-            Log.d(TAG, "Nombre de notifications poubelles : " + nbNotificationsPoubelles);
-            TextView notificationPoubelle = findViewById(R.id.notificationPoubelle);
+            Log.d(TAG,
+                  "mettreAJourNotificationsPoubelles() nbNotificationsPoubelles = " +
+                    nbNotificationsPoubelles);
             notificationPoubelle.setVisibility(View.VISIBLE);
             notificationPoubelle.setText(String.valueOf(nbNotificationsPoubelles));
         }
         else
         {
-            TextView notificationMachine = findViewById(R.id.notificationMachine);
             notificationMachine.setVisibility(View.INVISIBLE);
         }
     }
@@ -327,30 +297,30 @@ public class IHM extends AppCompatActivity
     {
         if(nbNotificationsMachines > 0)
         {
-            Log.d(TAG, "Nombre de notifications machines : " + nbNotificationsMachines);
-            TextView notificationMachine = findViewById(R.id.notificationMachine);
+            Log.d(TAG,
+                  "mettreAJourNotificationsMachines() nbNotificationsMachines = " +
+                    nbNotificationsMachines);
             notificationMachine.setVisibility(View.VISIBLE);
             notificationMachine.setText(String.valueOf(nbNotificationsMachines));
         }
         else
         {
-            TextView notificationMachine = findViewById(R.id.notificationMachine);
             notificationMachine.setVisibility(View.INVISIBLE);
         }
     }
 
     private void mettreAJourNotificationsBoites()
     {
-        if (nbNotificationsBoites > 0)
+        if(nbNotificationsBoites > 0)
         {
-            Log.d(TAG, "Nombre de notifications boites : " + nbNotificationsBoites);
-            TextView notificationBoiteAuxLettres = findViewById(R.id.notificationBoiteAuxLettres);
+            Log.d(TAG,
+                  "mettreAJourNotificationsBoites nbNotificationsBoites = " +
+                    nbNotificationsBoites);
             notificationBoiteAuxLettres.setVisibility(View.VISIBLE);
             notificationBoiteAuxLettres.setText(String.valueOf(nbNotificationsBoites));
         }
         else
         {
-            TextView notificationBoiteAuxLettres = findViewById(R.id.notificationBoiteAuxLettres);
             notificationBoiteAuxLettres.setVisibility(View.INVISIBLE);
         }
     }
