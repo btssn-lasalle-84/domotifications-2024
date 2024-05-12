@@ -198,8 +198,14 @@ public class IHM extends AppCompatActivity
         nbNotificationsPoubelles = 0;
         nbNotificationsMachines  = 0;
         nbNotificationsBoites    = 0;
-        // @todo Effectuer les requêtes HTTP pour récupérer les notifications de tous les modules
 
+        String apiPoubelles = "/poubelles";
+        String apiMachines = "/machines";
+        String apiBoites = "/boites";
+
+        communication.emettreRequeteGETPeriodique(apiPoubelles, handler, INTERVALLE);
+        communication.emettreRequeteGETPeriodique(apiMachines, handler, INTERVALLE);
+        communication.emettreRequeteGETPeriodique(apiBoites, handler, INTERVALLE);
 
         Vector<Module> modules = new Vector<>();
         modules.addAll(baseDeDonnees.getPoubelles());
@@ -238,11 +244,14 @@ public class IHM extends AppCompatActivity
         if(nbNotificationsPoubelles > 0)
         {
             Log.d(TAG, "Nombre de notifications poubelles : " + nbNotificationsPoubelles);
-            // @todo Afficher le nombre dans notificationPoubelle et le rendre visible
+            TextView notificationPoubelle = findViewById(R.id.notificationPoubelle);
+            notificationPoubelle.setVisibility(View.VISIBLE);
+            notificationPoubelle.setText(String.valueOf(nbNotificationsPoubelles));
         }
         else
         {
-            // @todo Rendre notificationPoubelle invisible
+            TextView notificationMachine = findViewById(R.id.notificationMachine);
+            notificationMachine.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -251,11 +260,14 @@ public class IHM extends AppCompatActivity
         if(nbNotificationsMachines > 0)
         {
             Log.d(TAG, "Nombre de notifications machines : " + nbNotificationsMachines);
-            // @todo Afficher le nombre dans notificationMachine et le rendre visible
+            TextView notificationMachine = findViewById(R.id.notificationMachine);
+            notificationMachine.setVisibility(View.VISIBLE);
+            notificationMachine.setText(String.valueOf(nbNotificationsMachines));
         }
         else
         {
-            // @todo Rendre notificationMachine invisible
+            TextView notificationMachine = findViewById(R.id.notificationMachine);
+            notificationMachine.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -264,13 +276,13 @@ public class IHM extends AppCompatActivity
         if (nbNotificationsBoites > 0)
         {
             Log.d(TAG, "Nombre de notifications boites : " + nbNotificationsBoites);
-            TextView notificationBoiteAuxLettres = findViewById(R.id.nbNotificationBoite0);
-            notificationBoiteAuxLettres.setText(String.valueOf(nbNotificationsBoites));
+            TextView notificationBoiteAuxLettres = findViewById(R.id.notificationBoiteAuxLettres);
             notificationBoiteAuxLettres.setVisibility(View.VISIBLE);
+            notificationBoiteAuxLettres.setText(String.valueOf(nbNotificationsBoites));
         }
         else
         {
-            TextView notificationBoiteAuxLettres = findViewById(R.id.nbNotificationBoite0);
+            TextView notificationBoiteAuxLettres = findViewById(R.id.notificationBoiteAuxLettres);
             notificationBoiteAuxLettres.setVisibility(View.INVISIBLE);
         }
     }

@@ -18,6 +18,9 @@ import android.os.Message;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class Communication
 {
@@ -154,6 +157,20 @@ public class Communication
             }
         });
     }
+
+    public void emettreRequeteGETPeriodique(String api, Handler handler, long intervalle)
+    {
+        TimerTask task = new TimerTask()
+        {
+            @Override
+            public void run() {
+                emettreRequeteGET(api, handler);
+            }
+        };
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(task, 0, intervalle);
+    }
+
 
     public void emettreRequetePATCH(String api, String json, Handler handler)
     {
