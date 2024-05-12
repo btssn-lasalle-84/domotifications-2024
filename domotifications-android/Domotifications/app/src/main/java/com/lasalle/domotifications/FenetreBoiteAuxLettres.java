@@ -35,7 +35,6 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
      * Constantes
      */
     private static final String TAG              = "_FenetreBoiteAuxLettres"; //!< TAG pour les logs
-    protected static final String API_GET_BOITES   = "/boites"; //!< Pour une requête GET
     private static final String API_PATCH_BOITES = "/boites"; //!< Pour une requête PATCH
     private static final int    INTERVALLE       = 1000;      //!< Intervalle d'interrogation en ms
 
@@ -318,7 +317,7 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
         tacheRecuperationEtats = new TimerTask() {
             public void run()
             {
-                communication.emettreRequeteGET(API_GET_BOITES, handler);
+                communication.emettreRequeteGET(Communication.API_GET_BOITES, handler);
             }
         };
 

@@ -6,10 +6,6 @@
 
 package com.lasalle.domotifications;
 
-import static com.lasalle.domotifications.FenetreBoiteAuxLettres.API_GET_BOITES;
-import static com.lasalle.domotifications.FenetreMachine.API_GET_MACHINES;
-import static com.lasalle.domotifications.FenetrePoubelle.API_GET_POUBELLES;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.media.Image;
@@ -25,6 +21,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.util.List;
@@ -57,9 +55,6 @@ public class IHM extends AppCompatActivity
     private int     nbNotificationsMachines;
     private int     nbNotificationsBoites;
     private boolean erreurCommunication = false;
-    private TextView notificationPoubelle;
-    private TextView notificationMachine;
-    private TextView notificationBoiteAuxLettres;
 
     /**
      * GUI
@@ -150,6 +145,10 @@ public class IHM extends AppCompatActivity
         boutonMachine         = (ImageButton)findViewById(R.id.boutonMachine);
         boutonBoiteAuxLettres = (ImageButton)findViewById(R.id.boutonBoiteAuxLettres);
 
+        TextView notificationPoubelles;
+        TextView notificationMachines;
+        TextView notificationBoiteAuxLettres;
+
         initialiserBouton(boutonPoubelle, FenetrePoubelle.class);
         initialiserBouton(boutonMachine, FenetreMachine.class);
         initialiserBouton(boutonBoiteAuxLettres, FenetreBoiteAuxLettres.class);
@@ -176,16 +175,60 @@ public class IHM extends AppCompatActivity
     private void initialiserHandler()
     {
         Log.d(TAG, "initialiserHandler()");
-        handler = new Handler(Looper.getMainLooper())
-        {
+        this.handler = new Handler(this.getMainLooper()) {
             @Override
-            public void handleMessage(Message msg)
+            public void handleMessage(Message message)
             {
-                super.handleMessage(msg);
+                switch(message.what)
+                {
+                    case Communication.CODE_HTTP_REPONSE_JSON:
+                        Log.d(TAG, "[Handler] REPONSE JSON");
+                        String reponse = message.obj.toString();
+                        try
+                        {
+                            JSONObject jsonObject = new JSONObject(reponse);
+
+                            if (jsonObject.has("notification"))
+                            {
+                                String notification = jsonObject.getString("notification");
+
+                                if (notification.equals("poubelles"))
+                                {
+                                    TextView notificationPoubelles = findViewById(R.id.notificationPoubelle);
+                                    notificationPoubelles.setText(String.valueOf(nbNotificationsPoubelles));
+                                }
+                                if (notification.equals("machines"))
+                                {
+                                    TextView notificationMachines = findViewById(R.id.notificationMachine);
+                                    notificationMachines.setText(String.valueOf(nbNotificationsMachines));
+                                }
+                                if (notification.equals("boites"))
+                                {
+                                    TextView notificationBoites = findViewById(R.id.notificationBoiteAuxLettres);
+                                    notificationBoites.setText(String.valueOf(nbNotificationsBoites));
+                                }
+                            }
+                        }
+                        catch (JSONException e)
+                        {
+                            e.printStackTrace();
+                        }
+                        erreurCommunication = false;
+                        break;
+                    case Communication.CODE_HTTP_ERREUR:
+                        if(!erreurCommunication)
+                        {
+                            Log.d(TAG, "[Handler] ERREUR HTTP");
+                            erreurCommunication = true;
+                        }
+                        break;
+                }
                 recupererNotifications();
             }
         };
     }
+
+
 
     private void initialiserMinuteur()
     {
@@ -210,21 +253,21 @@ public class IHM extends AppCompatActivity
         TimerTask tacheRecuperationEtatsPoubelles = new TimerTask() {
             public void run()
             {
-                communication.emettreRequeteGET(API_GET_POUBELLES, handler);
+                communication.emettreRequeteGET(Communication.API_GET_POUBELLES, handler);
             }
         };
 
         TimerTask tacheRecuperationEtatsMachines = new TimerTask() {
             public void run()
             {
-                communication.emettreRequeteGET(API_GET_MACHINES, handler);
+                communication.emettreRequeteGET(Communication.API_GET_MACHINES, handler);
             }
         };
 
         TimerTask tacheRecuperationEtatsBoites = new TimerTask() {
             public void run()
             {
-                communication.emettreRequeteGET(API_GET_BOITES, handler);
+                communication.emettreRequeteGET(Communication.API_GET_BOITES, handler);
             }
         };
 

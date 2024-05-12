@@ -39,6 +39,11 @@ public class Communication
     public final static int CODE_HTTP_ERREUR =
       2; //!< Code indicatif de l'handler pour signaler des requêtes qui ont échouées (onFailure)
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+    public static final String API_GET_POUBELLES   = "/poubelles";       //!< Pour une requête GET
+    public static final String API_GET_BOITES   = "/boites"; //!< Pour une requête GET
+    protected static final String API_GET_MACHINES   = "/machines";       //!< Pour une requête GET
+
+
     /**
      * Attributs
      */
@@ -157,20 +162,6 @@ public class Communication
             }
         });
     }
-
-    public void emettreRequeteGETPeriodique(String api, Handler handler, long intervalle)
-    {
-        TimerTask task = new TimerTask()
-        {
-            @Override
-            public void run() {
-                emettreRequeteGET(api, handler);
-            }
-        };
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(task, 0, intervalle);
-    }
-
 
     public void emettreRequetePATCH(String api, String json, Handler handler)
     {

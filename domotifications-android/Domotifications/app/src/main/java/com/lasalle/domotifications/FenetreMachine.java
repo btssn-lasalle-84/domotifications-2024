@@ -35,7 +35,6 @@ public class FenetreMachine extends AppCompatActivity
      * Constantes
      */
     private static final String TAG                = "_FenetreMachine"; //!< TAG pour les logs
-    protected static final String API_GET_MACHINES   = "/machines";       //!< Pour une requête GET
     private static final String API_PATCH_MACHINES = "/machines";       //!< Pour une requête PATCH
     private static final int    INTERVALLE         = 1000; //!< Intervalle d'interrogation en ms
     public static final int     NB_MACHINES_MAX    = 5;    //!< Nombre max de machines
@@ -337,7 +336,7 @@ public class FenetreMachine extends AppCompatActivity
         tacheRecuperationEtats = new TimerTask() {
             public void run()
             {
-                communication.emettreRequeteGET(API_GET_MACHINES, handler);
+                communication.emettreRequeteGET(Communication.API_GET_MACHINES, handler);
             }
         };
 
