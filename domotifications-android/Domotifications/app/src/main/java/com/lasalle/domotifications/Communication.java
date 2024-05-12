@@ -18,6 +18,9 @@ import android.os.Message;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class Communication
 {
@@ -36,6 +39,11 @@ public class Communication
     public final static int CODE_HTTP_ERREUR =
       2; //!< Code indicatif de l'handler pour signaler des requêtes qui ont échouées (onFailure)
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+    public static final String API_GET_POUBELLES   = "/poubelles";       //!< Pour une requête GET
+    public static final String API_GET_BOITES   = "/boites"; //!< Pour une requête GET
+    public static final String API_GET_MACHINES   = "/machines";       //!< Pour une requête GET
+
+
     /**
      * Attributs
      */

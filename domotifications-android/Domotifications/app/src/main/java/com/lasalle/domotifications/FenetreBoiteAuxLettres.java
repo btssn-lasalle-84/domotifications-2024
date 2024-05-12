@@ -35,7 +35,6 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
      * Constantes
      */
     private static final String TAG              = "_FenetreBoiteAuxLettres"; //!< TAG pour les logs
-    private static final String API_GET_BOITES   = "/boites"; //!< Pour une requête GET
     private static final String API_PATCH_BOITES = "/boites"; //!< Pour une requête PATCH
     private static final int    INTERVALLE       = 1000;      //!< Intervalle d'interrogation en ms
 
@@ -106,7 +105,7 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
         // contenu bord à bord
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_menu_boite_aux_lettres);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.machine1), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -289,7 +288,13 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
               "gererClicBoutonActivation() numeroBoite = " + numeroBoite +
                 " activation = " + boutonsActivation[numeroBoite].isChecked());
 
-        // @todo Emettre une requête PATCH pour changer l'état d'activation du module
+        String api = API_PATCH_BOITES + "/" + modulesBoitesAuxLettres.get(numeroBoite).getIdModule();
+
+        String json = "{\"idBoite\": \"" +
+                modulesBoitesAuxLettres.get(numeroBoite).getIdModule() +
+                "\",\"etat\": " + boutonsActivation[numeroBoite].isChecked() + "}";
+
+        communication.emettreRequetePATCH(api, json, handler);
 
         modulesBoitesAuxLettres.get(numeroBoite)
           .setActif(boutonsActivation[numeroBoite].isChecked());
@@ -312,7 +317,7 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
         tacheRecuperationEtats = new TimerTask() {
             public void run()
             {
-                communication.emettreRequeteGET(API_GET_BOITES, handler);
+                communication.emettreRequeteGET(Communication.API_GET_BOITES, handler);
             }
         };
 

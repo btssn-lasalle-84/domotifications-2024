@@ -1,14 +1,11 @@
 package com.lasalle.domotifications;
 
-import android.annotation.SuppressLint;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
@@ -38,7 +35,6 @@ public class FenetrePoubelle extends AppCompatActivity
      * Constantes
      */
     private static final String TAG                 = "_FenetrePoubelle"; //!< TAG pour les logs
-    private static final String API_GET_POUBELLES   = "/poubelles";       //!< Pour une requête GET
     private static final String API_PATCH_POUBELLES = "/poubelles"; //!< Pour une requête PATCH
     private static final int    INTERVALLE          = 1000; //!< Intervalle d'interrogation en ms
     /**
@@ -115,7 +111,7 @@ public class FenetrePoubelle extends AppCompatActivity
         // contenu bord à bord
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_menu_poubelle);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.fenetrePoubelle), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -168,12 +164,14 @@ public class FenetrePoubelle extends AppCompatActivity
         for(int i = 0; i < NB_COULEURS_POUBELLE; ++i)
         {
             imagesPoubelles[i].setVisibility(View.INVISIBLE);
+            imagesNotificationPoubelles[i].setVisibility(View.INVISIBLE);
             boutonsActivation[i].setVisibility(View.INVISIBLE);
         }
 
         for(int i = 0; i < nbModulesPoubelles; ++i)
         {
             imagesPoubelles[i].setVisibility(View.VISIBLE);
+            imagesNotificationPoubelles[i].setVisibility(View.VISIBLE);
             boutonsActivation[i].setVisibility(View.VISIBLE);
         }
 
@@ -285,7 +283,13 @@ public class FenetrePoubelle extends AppCompatActivity
               "gererClicBoutonActivation() numeroPoubelle = " + numeroPoubelle +
                 " activation = " + boutonsActivation[numeroPoubelle].isChecked());
 
-        // @todo Emettre une requête PATCH pour changer l'état d'activation du module
+        String api = API_PATCH_POUBELLES + "/" + modulesPoubelles.get(numeroPoubelle).getIdModule();
+
+        String json = "{\"idPoubelle\": \"" +
+                        modulesPoubelles.get(numeroPoubelle).getIdModule() +
+                      "\",\"etat\": " + boutonsActivation[numeroPoubelle].isChecked() + "}";
+
+        communication.emettreRequetePATCH(api, json, handler);
 
         modulesPoubelles.get(numeroPoubelle)
           .setActif(boutonsActivation[numeroPoubelle].isChecked());
@@ -341,7 +345,7 @@ public class FenetrePoubelle extends AppCompatActivity
         tacheRecuperationEtats = new TimerTask() {
             public void run()
             {
-                communication.emettreRequeteGET(API_GET_POUBELLES, handler);
+                communication.emettreRequeteGET(Communication.API_GET_POUBELLES, handler);
             }
         };
 
