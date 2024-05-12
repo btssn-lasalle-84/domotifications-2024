@@ -244,9 +244,12 @@ public class IHM extends AppCompatActivity
     {
         Log.d(TAG, "traiterReponseJSON() reponse = " + reponse);
 
-        int nouvellesNotificationsPoubelles = 0;
-        int nouvellesNotificationsMachines = 0;
-        int nouvellesNotificationsBoites = 0;
+        int     nouvellesNotificationsPoubelles = 0;
+        boolean estModulesPoubelles             = false;
+        int     nouvellesNotificationsMachines  = 0;
+        boolean estModulesMachines              = false;
+        int     nouvellesNotificationsBoites    = 0;
+        boolean estModulesBoites                = false;
 
         /*
             Exemple de réponsee : pour la requête GET /poubelles
@@ -276,48 +279,59 @@ public class IHM extends AppCompatActivity
         try
         {
             JSONArray jsonArray = new JSONArray(reponse);
-            for (int i = 0; i < jsonArray.length(); i++)
+            for(int i = 0; i < jsonArray.length(); i++)
             {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                if (jsonObject.has("etat") && jsonObject.getBoolean("etat"))
+                Boolean    etat       = jsonObject.getBoolean("etat");
+                Boolean    actif      = jsonObject.getBoolean("actif");
+                if(jsonObject.has("idPoubelle"))
                 {
-                    if (jsonObject.has("idPoubelle"))
+                    if(actif && etat)
                     {
                         nouvellesNotificationsPoubelles++;
                     }
-                    else if (jsonObject.has("idMachine"))
+                    estModulesPoubelles = true;
+                }
+                else if(jsonObject.has("idMachine"))
+                {
+                    if(actif && etat)
                     {
                         nouvellesNotificationsMachines++;
                     }
-                    else if (jsonObject.has("idBoite"))
+                    estModulesMachines = true;
+                }
+                else if(jsonObject.has("idBoite"))
+                {
+                    if(actif && etat)
                     {
                         nouvellesNotificationsBoites++;
                     }
+                    estModulesBoites = true;
                 }
             }
         }
-        catch (JSONException e)
+        catch(JSONException e)
         {
             e.printStackTrace();
         }
 
-
         Log.d(TAG,
-                "traiterReponseJSON() nouvellesNotificationsPoubelles = " + nouvellesNotificationsPoubelles +
-                        " nouvellesNotificationsMachines = " + nouvellesNotificationsMachines +
-                        " nouvellesNotificationsBoites = " + nouvellesNotificationsBoites);
+              "traiterReponseJSON() nouvellesNotificationsPoubelles = " +
+                nouvellesNotificationsPoubelles +
+                " nouvellesNotificationsMachines = " + nouvellesNotificationsMachines +
+                " nouvellesNotificationsBoites = " + nouvellesNotificationsBoites);
 
-        if (nouvellesNotificationsPoubelles != nbNotificationsPoubelles)
+        if(estModulesPoubelles && nouvellesNotificationsPoubelles != nbNotificationsPoubelles)
         {
             nbNotificationsPoubelles = nouvellesNotificationsPoubelles;
             mettreAJourNotificationsPoubelles();
         }
-        if (nouvellesNotificationsMachines != nbNotificationsMachines)
+        if(estModulesMachines && nouvellesNotificationsMachines != nbNotificationsMachines)
         {
             nbNotificationsMachines = nouvellesNotificationsMachines;
             mettreAJourNotificationsMachines();
         }
-        if (nouvellesNotificationsBoites != nbNotificationsBoites)
+        if(estModulesBoites && nouvellesNotificationsBoites != nbNotificationsBoites)
         {
             nbNotificationsBoites = nouvellesNotificationsBoites;
             mettreAJourNotificationsBoites();
