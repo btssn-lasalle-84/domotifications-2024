@@ -49,4 +49,7 @@
 #define INDEX_LEDS_NOTIFICATION_BOITE                                                              \
     (INDEX_LEDS_NOTIFICATION_POUBELLES + NB_LEDS_NOTIFICATION_POUBELLES)
 
+extern const char*
+  nomCouleursPoubelles[NB_LEDS_NOTIFICATION_POUBELLES]; //!< les nom des couleurs des poubelles
+
 #endif // BANDEAULEDS_H
