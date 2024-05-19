@@ -53,6 +53,7 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
     private TimerTask tacheRecuperationEtats =
       null; //!< Pour effectuer la récupération des états des modules boites aux lettres
     private boolean erreurCommunication = false;
+    private boolean notificationEnvoyee = false;  //!< Pour la signalisation de la notification
     private int numeroBoiteAcquittement = -1;
     /**
      * GUI
@@ -292,7 +293,7 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
 
         String json = "{\"idBoite\": \"" +
                 modulesBoitesAuxLettres.get(numeroBoite).getIdModule() +
-                "\",\"etat\": " + boutonsActivation[numeroBoite].isChecked() + "}";
+                "\",\"actif\": " + boutonsActivation[numeroBoite].isChecked() + "}";
 
         communication.emettreRequetePATCH(api, json, handler);
 
@@ -376,6 +377,10 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
 
     public void enregistrerAcquittementNotification(String reponse)
     {
+        if(numeroBoiteAcquittement == -1)
+        {
+            return;
+        }
         if(modulesBoitesAuxLettres.get(numeroBoiteAcquittement) == null)
         {
             Log.e(TAG, "enregistrerAcquittementNotification() Aucune boîte aux lettres !");
@@ -436,16 +441,18 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
 
         if(module.estActif())
         {
-            if(module.estNotifie())
+            if(module.estNotifie() && !notificationEnvoyee)
             {
                 imagesNotificationBoites[numeroBoite].setVisibility(View.VISIBLE);
 
                 // On signale une notification sur la tablette Android
                 creerNotification("Le module " + module.getNomModule() + " a une notification.");
+                notificationEnvoyee = true;
             }
             else
             {
                 imagesNotificationBoites[numeroBoite].setVisibility(View.INVISIBLE);
+                notificationEnvoyee = false;
             }
 
             boutonsActivation[numeroBoite].setChecked(true);

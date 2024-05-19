@@ -51,6 +51,7 @@ public class FenetrePoubelle extends AppCompatActivity
     private TimerTask tacheRecuperationEtats =
       null; //!< Pour effectuer la récupération des états des modules poubelles
     private boolean erreurCommunication        = false;
+    private boolean notificationEnvoyee = false;  //!< Pour la signalisation de la notification
     int             numeroPoubelleAcquittement = -1;
     /**
      * GUI
@@ -287,7 +288,7 @@ public class FenetrePoubelle extends AppCompatActivity
 
         String json = "{\"idPoubelle\": \"" +
                         modulesPoubelles.get(numeroPoubelle).getIdModule() +
-                      "\",\"etat\": " + boutonsActivation[numeroPoubelle].isChecked() + "}";
+                      "\",\"actif\": " + boutonsActivation[numeroPoubelle].isChecked() + "}";
 
         communication.emettreRequetePATCH(api, json, handler);
 
@@ -405,6 +406,10 @@ public class FenetrePoubelle extends AppCompatActivity
 
     public void enregistrerAcquittementNotification(String reponse)
     {
+        if(numeroPoubelleAcquittement == -1)
+        {
+            return;
+        }
         if(modulesPoubelles.get(numeroPoubelleAcquittement) == null)
         {
             Log.e(TAG, "enregistrerAcquittementNotification() Aucune poubelle !");
@@ -464,16 +469,18 @@ public class FenetrePoubelle extends AppCompatActivity
 
         if(module.estActif())
         {
-            if(module.estNotifie())
+            if(module.estNotifie() && !notificationEnvoyee)
             {
                 imagesNotificationPoubelles[numeroPoubelle].setVisibility(View.VISIBLE);
 
                 // On signale une notification sur la tablette Android
                 creerNotification("Le module " + module.getNomModule() + " a une notification.");
+                notificationEnvoyee = true;
             }
             else
             {
                 imagesNotificationPoubelles[numeroPoubelle].setVisibility(View.INVISIBLE);
+                notificationEnvoyee = false;
             }
 
             boutonsActivation[numeroPoubelle].setChecked(true);

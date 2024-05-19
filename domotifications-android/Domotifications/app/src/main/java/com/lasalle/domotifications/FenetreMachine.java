@@ -53,6 +53,8 @@ public class FenetreMachine extends AppCompatActivity
     private TimerTask tacheRecuperationEtats =
       null; //!< Pour effectuer la récupération des états des modules machines
     private boolean erreurCommunication       = false;
+    private boolean notificationEnvoyee = false; //!< Pour la signalisation de la notification
+
     private int     numeroMachineAcquittement = -1;
 
     /**
@@ -312,7 +314,7 @@ public class FenetreMachine extends AppCompatActivity
         String api = API_PATCH_MACHINES + "/" + modulesMachines.get(numeroMachine).getIdModule();
 
         String json = "{\"idMachine\": \"" + modulesMachines.get(numeroMachine).getIdModule() +
-                      "\",\"etat\": " + boutonsActivation[numeroMachine].isChecked() + "}";
+                      "\",\"actif\": " + boutonsActivation[numeroMachine].isChecked() + "}";
 
         communication.emettreRequetePATCH(api, json, handler);
 
@@ -395,6 +397,10 @@ public class FenetreMachine extends AppCompatActivity
 
     public void enregistrerAcquittementNotification(String reponse)
     {
+        if(numeroMachineAcquittement == -1)
+        {
+            return;
+        }
         if(modulesMachines.get(numeroMachineAcquittement) == null)
         {
             Log.e(TAG, "enregistrerAcquittementNotification() : Aucune machine !");
@@ -454,16 +460,18 @@ public class FenetreMachine extends AppCompatActivity
 
         if(module.estActif())
         {
-            if(module.estNotifie())
+            if(module.estNotifie() && !notificationEnvoyee)
             {
                 imagesNotificationMachines[numeroMachine].setVisibility(View.VISIBLE);
 
                 // On signale une notification sur la tablette Android
                 creerNotification("Le module " + module.getNomModule() + " a une notification.");
+                notificationEnvoyee = true;
             }
             else
             {
                 imagesNotificationMachines[numeroMachine].setVisibility(View.INVISIBLE);
+                notificationEnvoyee = false;
             }
 
             boutonsActivation[numeroMachine].setChecked(true);
