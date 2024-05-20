@@ -25,6 +25,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -53,6 +55,8 @@ public class FenetreMachine extends AppCompatActivity
     private TimerTask tacheRecuperationEtats =
       null; //!< Pour effectuer la récupération des états des modules machines
     private boolean erreurCommunication       = false;
+    private Map<Integer, Boolean> notificationsEnvoyees =
+            new HashMap<>(); //<! Pour la signalisation des notifications
     private int     numeroMachineAcquittement = -1;
 
     /**
@@ -312,7 +316,7 @@ public class FenetreMachine extends AppCompatActivity
         String api = API_PATCH_MACHINES + "/" + modulesMachines.get(numeroMachine).getIdModule();
 
         String json = "{\"idMachine\": \"" + modulesMachines.get(numeroMachine).getIdModule() +
-                      "\",\"etat\": " + boutonsActivation[numeroMachine].isChecked() + "}";
+                      "\",\"actif\": " + boutonsActivation[numeroMachine].isChecked() + "}";
 
         communication.emettreRequetePATCH(api, json, handler);
 
@@ -395,6 +399,10 @@ public class FenetreMachine extends AppCompatActivity
 
     public void enregistrerAcquittementNotification(String reponse)
     {
+        if(numeroMachineAcquittement == -1)
+        {
+            return;
+        }
         if(modulesMachines.get(numeroMachineAcquittement) == null)
         {
             Log.e(TAG, "enregistrerAcquittementNotification() : Aucune machine !");
@@ -451,19 +459,25 @@ public class FenetreMachine extends AppCompatActivity
         }
 
         Module module = modulesMachines.get(numeroMachine);
+        int idMachine = module.getIdModule();
 
         if(module.estActif())
         {
             if(module.estNotifie())
             {
                 imagesNotificationMachines[numeroMachine].setVisibility(View.VISIBLE);
-
-                // On signale une notification sur la tablette Android
-                creerNotification("Le module " + module.getNomModule() + " a une notification.");
+                Boolean notificationEnvoyee = notificationsEnvoyees.get(idMachine);
+                if(notificationEnvoyee == null || !notificationEnvoyee)
+                {
+                    // On signale une notification sur la tablette Android
+                    creerNotification("Le module " + module.getNomModule() + " a une notification.");
+                    notificationsEnvoyees.put(idMachine, true);
+                }
             }
             else
             {
                 imagesNotificationMachines[numeroMachine].setVisibility(View.INVISIBLE);
+                notificationsEnvoyees.put(idMachine, false);
             }
 
             boutonsActivation[numeroMachine].setChecked(true);

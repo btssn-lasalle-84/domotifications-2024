@@ -25,6 +25,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -51,6 +53,8 @@ public class FenetrePoubelle extends AppCompatActivity
     private TimerTask tacheRecuperationEtats =
       null; //!< Pour effectuer la récupération des états des modules poubelles
     private boolean erreurCommunication        = false;
+    private Map<Integer, Boolean> notificationsEnvoyees =
+            new HashMap<>(); //<! Pour la signalisation des notifications
     int             numeroPoubelleAcquittement = -1;
     /**
      * GUI
@@ -287,7 +291,7 @@ public class FenetrePoubelle extends AppCompatActivity
 
         String json = "{\"idPoubelle\": \"" +
                         modulesPoubelles.get(numeroPoubelle).getIdModule() +
-                      "\",\"etat\": " + boutonsActivation[numeroPoubelle].isChecked() + "}";
+                      "\",\"actif\": " + boutonsActivation[numeroPoubelle].isChecked() + "}";
 
         communication.emettreRequetePATCH(api, json, handler);
 
@@ -405,6 +409,10 @@ public class FenetrePoubelle extends AppCompatActivity
 
     public void enregistrerAcquittementNotification(String reponse)
     {
+        if(numeroPoubelleAcquittement == -1)
+        {
+            return;
+        }
         if(modulesPoubelles.get(numeroPoubelleAcquittement) == null)
         {
             Log.e(TAG, "enregistrerAcquittementNotification() Aucune poubelle !");
@@ -461,19 +469,25 @@ public class FenetrePoubelle extends AppCompatActivity
         }
 
         Module module = modulesPoubelles.get(numeroPoubelle);
+        int idPoubelle = module.getIdModule();
 
         if(module.estActif())
         {
             if(module.estNotifie())
             {
                 imagesNotificationPoubelles[numeroPoubelle].setVisibility(View.VISIBLE);
-
-                // On signale une notification sur la tablette Android
-                creerNotification("Le module " + module.getNomModule() + " a une notification.");
+                Boolean notificationEnvoyee = notificationsEnvoyees.get(idPoubelle);
+                if(notificationEnvoyee == null || !notificationEnvoyee)
+                {
+                    // On signale une notification sur la tablette Android
+                    creerNotification("Le module " + module.getNomModule() + " a une notification.");
+                    notificationsEnvoyees.put(idPoubelle, true);
+                }
             }
             else
             {
                 imagesNotificationPoubelles[numeroPoubelle].setVisibility(View.INVISIBLE);
+                notificationsEnvoyees.put(idPoubelle, false);
             }
 
             boutonsActivation[numeroPoubelle].setChecked(true);

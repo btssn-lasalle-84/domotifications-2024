@@ -25,6 +25,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -53,6 +55,8 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
     private TimerTask tacheRecuperationEtats =
       null; //!< Pour effectuer la récupération des états des modules boites aux lettres
     private boolean erreurCommunication = false;
+    private Map<Integer, Boolean> notificationsEnvoyees =
+            new HashMap<>(); //<! Pour la signalisation des notifications
     private int numeroBoiteAcquittement = -1;
     /**
      * GUI
@@ -292,7 +296,7 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
 
         String json = "{\"idBoite\": \"" +
                 modulesBoitesAuxLettres.get(numeroBoite).getIdModule() +
-                "\",\"etat\": " + boutonsActivation[numeroBoite].isChecked() + "}";
+                "\",\"actif\": " + boutonsActivation[numeroBoite].isChecked() + "}";
 
         communication.emettreRequetePATCH(api, json, handler);
 
@@ -376,6 +380,10 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
 
     public void enregistrerAcquittementNotification(String reponse)
     {
+        if(numeroBoiteAcquittement == -1)
+        {
+            return;
+        }
         if(modulesBoitesAuxLettres.get(numeroBoiteAcquittement) == null)
         {
             Log.e(TAG, "enregistrerAcquittementNotification() Aucune boîte aux lettres !");
@@ -433,19 +441,25 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
         }
 
         Module module = modulesBoitesAuxLettres.get(numeroBoite);
+        int idBoite = module.getIdModule();
 
         if(module.estActif())
         {
             if(module.estNotifie())
             {
                 imagesNotificationBoites[numeroBoite].setVisibility(View.VISIBLE);
-
-                // On signale une notification sur la tablette Android
-                creerNotification("Le module " + module.getNomModule() + " a une notification.");
+                Boolean notificationEnvoyee = notificationsEnvoyees.get(idBoite);
+                if(notificationEnvoyee == null || !notificationEnvoyee)
+                {
+                    // On signale une notification sur la tablette Android
+                    creerNotification("Le module " + module.getNomModule() + " a une notification.");
+                    notificationsEnvoyees.put(idBoite, true);
+                }
             }
             else
             {
                 imagesNotificationBoites[numeroBoite].setVisibility(View.INVISIBLE);
+                notificationsEnvoyees.put(idBoite, false);
             }
 
             boutonsActivation[numeroBoite].setChecked(true);
