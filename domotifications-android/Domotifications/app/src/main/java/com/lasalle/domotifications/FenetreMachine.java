@@ -25,6 +25,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -53,8 +55,8 @@ public class FenetreMachine extends AppCompatActivity
     private TimerTask tacheRecuperationEtats =
       null; //!< Pour effectuer la récupération des états des modules machines
     private boolean erreurCommunication       = false;
-    private boolean notificationEnvoyee = false; //!< Pour la signalisation de la notification
-
+    private Map<Integer, Boolean> notificationsEnvoyees =
+            new HashMap<>(); //<! Pour la signalisation des notifications
     private int     numeroMachineAcquittement = -1;
 
     /**
@@ -457,21 +459,25 @@ public class FenetreMachine extends AppCompatActivity
         }
 
         Module module = modulesMachines.get(numeroMachine);
+        int idMachine = module.getIdModule();
 
         if(module.estActif())
         {
-            if(module.estNotifie() && !notificationEnvoyee)
+            if(module.estNotifie())
             {
                 imagesNotificationMachines[numeroMachine].setVisibility(View.VISIBLE);
-
-                // On signale une notification sur la tablette Android
-                creerNotification("Le module " + module.getNomModule() + " a une notification.");
-                notificationEnvoyee = true;
+                Boolean notificationEnvoyee = notificationsEnvoyees.get(idMachine);
+                if(notificationEnvoyee == null || !notificationEnvoyee)
+                {
+                    // On signale une notification sur la tablette Android
+                    creerNotification("Le module " + module.getNomModule() + " a une notification.");
+                    notificationsEnvoyees.put(idMachine, true);
+                }
             }
             else
             {
                 imagesNotificationMachines[numeroMachine].setVisibility(View.INVISIBLE);
-                notificationEnvoyee = false;
+                notificationsEnvoyees.put(idMachine, false);
             }
 
             boutonsActivation[numeroMachine].setChecked(true);
