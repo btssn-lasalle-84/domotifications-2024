@@ -350,7 +350,12 @@ void ServeurWeb::traiterRequeteUpdatePoubelle()
         bool etatPoubelle = documentJSON["etat"].as<bool>();
         poubelle->setEtatNotification(etatPoubelle);
     }
-    // @todo mettre à jour la couleur de la led
+    if(objetJSON.containsKey("couleur"))
+    {
+        // @todo extraire la couleur de la poubelle du JSON (String)
+
+        // @todo mettre à jour la couleur de la led pour cette poubelle avec setCouleurLed()
+    }
 
     // Sauvegarde les états de ce module
     stationLumineuse->sauvegarderEtatsPoubelle(idPoubelle);
@@ -514,7 +519,12 @@ void ServeurWeb::traiterRequeteUpdateMachine()
         bool etatMachine = documentJSON["etat"].as<bool>();
         machine->setEtatNotification(etatMachine);
     }
-    // @todo mettre à jour la couleur de la led
+    if(objetJSON.containsKey("couleur"))
+    {
+        // @todo extraire la couleur du JSON (String)
+
+        // @todo mettre à jour la couleur de la led pour cette machine avec setCouleurLed()
+    }
 
     // Sauvegarde les états de ce module
     stationLumineuse->sauvegarderEtatsMachine(idMachine);
@@ -678,7 +688,12 @@ void ServeurWeb::traiterRequeteUpdateBoite()
         bool etatBoite = documentJSON["etat"].as<bool>();
         boite->setEtatNotification(etatBoite);
     }
-    // @todo mettre à jour la couleur de la led
+    if(objetJSON.containsKey("couleur"))
+    {
+        // @todo extraire la couleur du JSON (String)
+
+        // @todo mettre à jour la couleur de la led pour cette boite avec setCouleurLed()
+    }
 
     // Sauvegarde les états de ce module
     stationLumineuse->sauvegarderEtatsBoite(idBoite);

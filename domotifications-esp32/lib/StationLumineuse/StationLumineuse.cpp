@@ -11,21 +11,17 @@
 #include "Machine.h"
 #include "Poubelle.h"
 #include <sstream>
+#include <iomanip>
 
-const char* nomCouleursPoubelles[NB_LEDS_NOTIFICATION_POUBELLES] = { "rouge",
-                                                                     "jaune",
-                                                                     "bleue",
-                                                                     "grise",
-                                                                     "verte" };
-
-const char* nomCouleurMachines[NB_LEDS_NOTIFICATION_MACHINES] = { "vert" };
-
-uint32_t StationLumineuse::couleursMachines[NB_LEDS_NOTIFICATION_MACHINES] = {
-    StationLumineuse::convertirCouleurRGB(0, 255, 0)
-};
+// les couleurs par défaut des poubelles
 uint32_t StationLumineuse::couleursPoubelles[NB_LEDS_NOTIFICATION_POUBELLES] = {
-    StationLumineuse::convertirCouleurRGB(0, 255, 0)
+    StationLumineuse::convertirCouleurRGB(255, 0, 0),     // Couleur poubelle 0 (rouge)
+    StationLumineuse::convertirCouleurRGB(255, 255, 0),   // Couleur poubelle 1 (jaune)
+    StationLumineuse::convertirCouleurRGB(0, 0, 255),     // Couleur poubelle 2 (bleue)
+    StationLumineuse::convertirCouleurRGB(240, 240, 242), // Couleur poubelle 3 (grise)
+    StationLumineuse::convertirCouleurRGB(0, 255, 0)      // Couleur poubelle 4 (verte)
 };
+
 /**
  * @brief Constructeur de la classe StationLumineuse
  * @fn StationLumineuse::StationLumineuse
@@ -142,7 +138,10 @@ String StationLumineuse::getCouleurToString(uint32_t couleur)
 {
     std::stringstream couleurStream;
 
-    couleurStream << std::hex << couleur;
+    // #RRGGBB
+    couleurStream << std::setfill('0') << std::setw(2) << std::hex << ((couleur >> 16) & 0xff);
+    couleurStream << std::setfill('0') << std::setw(2) << std::hex << ((couleur >> 8) & 0xff);
+    couleurStream << std::setfill('0') << std::setw(2) << std::hex << (couleur & 0xff);
 
     return String("#") + String(couleurStream.str().c_str());
 }
@@ -254,30 +253,6 @@ void StationLumineuse::sauvegarderEtatsMachine(int id)
 uint32_t StationLumineuse::convertirCouleurRGB(uint8_t r, uint8_t g, uint8_t b)
 {
     return ((uint32_t)r << 16) | ((uint32_t)g << 8) | b;
-}
-
-uint32_t StationLumineuse::getCouleurPoubelle(String nom)
-{
-    for(int i = 0; i < NB_LEDS_NOTIFICATION_POUBELLES; ++i)
-    {
-        if(nom == nomCouleursPoubelles[i])
-        {
-            return couleursPoubelles[i];
-        }
-    }
-    return 0;
-}
-
-String StationLumineuse::getNomCouleurPoubelle(uint32_t couleur)
-{
-    for(int i = 0; i < NB_LEDS_NOTIFICATION_POUBELLES; ++i)
-    {
-        if(couleur == couleursPoubelles[i])
-        {
-            return nomCouleursPoubelles[i];
-        }
-    }
-    return "";
 }
 
 // Méthodes privées
