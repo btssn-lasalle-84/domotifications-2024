@@ -1,0 +1,212 @@
+format 224
+"StationLumineuse" // domotifications-esp32::lib::StationLumineuse
+  revision 1
+  modified_by 23 "tvaira"
+  // class settings
+  
+  classdiagramsettings member_max_width 0 end
+  
+  classcompositediagramsettings end
+  
+  usecasediagramsettings end
+  
+  sequencediagramsettings end
+  
+  collaborationdiagramsettings end
+  
+  objectdiagramsettings end
+  
+  objectcompositediagramsettings end
+  
+  componentdiagramsettings
+   end
+  
+  deploymentdiagramsettings
+   end
+  
+  statediagramsettings
+   end
+  
+  activitydiagramsettings
+   end
+  
+  cpp_h_dir "/home/tvaira/Documents/git/projets/domotifications-2024/domotifications-esp32/lib/StationLumineuse/"
+  cpp_src_dir "/home/tvaira/Documents/git/projets/domotifications-2024/domotifications-esp32/lib/StationLumineuse/"
+  classview 128663 "StationLumineuse"
+    
+    classdiagramsettings member_max_width 0 end
+    
+    classcompositediagramsettings end
+    
+    collaborationdiagramsettings end
+    
+    objectdiagramsettings end
+    
+    objectcompositediagramsettings end
+    
+    sequencediagramsettings end
+    
+    statediagramsettings
+     end
+    
+    
+    activitydiagramsettings
+     end
+    class 128791 "StationLumineuse"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment "@class StationLumineuse
+@brief Déclaration de la classe StationLumineuse
+"
+      classrelation 128407 // serveurWeb (<unidirectional association>)
+	relation 128407 --->
+	  a role_name "serveurWeb" private
+	    comment "!< le serveur web (HTTP API REST)"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 128407 // serveurWeb (<unidirectional association>)
+	  b parent class_ref 128535 // ServeurWeb
+      end
+
+      attribute 130455 "leds"
+	private explicit_type "Adafruit_NeoPixel"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< le bandeau à leds multi-couleurs"
+      end
+
+      classrelation 128535 // boites (<unidirectional association>)
+	relation 128535 --->
+	  stereotype "std::vector"
+	  a role_name "boites" private
+	    comment "!< les boites de la station lumineuse"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}*> ${name}${value};
+"
+	    classrelation_ref 128535 // boites (<unidirectional association>)
+	  b parent class_ref 128151 // Boite
+      end
+
+      classrelation 128663 // machines (<unidirectional association>)
+	relation 128663 --->
+	  stereotype "std::vector"
+	  a role_name "machines" private
+	    comment "!< les machines de la station lumineuse"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}*> ${name}${value};
+"
+	    classrelation_ref 128663 // machines (<unidirectional association>)
+	  b parent class_ref 128279 // Machine
+      end
+
+      classrelation 128791 // poubelles (<unidirectional association>)
+	relation 128791 --->
+	  stereotype "std::vector"
+	  a role_name "poubelles" private
+	    comment "!< les poubelles de la station lumineuse"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}*> ${name}${value};
+"
+	    classrelation_ref 128791 // poubelles (<unidirectional association>)
+	  b parent class_ref 128407 // Poubelle
+      end
+
+      operation 130199 "StationLumineuse"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}${name}${(}${)}${volatile}${throw}${abstract};
+"
+	cpp_def "//@brief Constructeur de la classe StationLumineuse
+//@fn StationLumineuse::StationLumineuse
+//
+
+${inline}${typeprefix}${class}::${name}${(}${)} :
+    serveurWeb(new ServeurWeb(this)), leds(NB_LEDS, PIN_BANDEAU, NEO_GRB + NEO_KHZ800)
+${throw}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 130327 "demarrer"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "//@brief Démarre la station lumineuse
+//@fn StationLumineuse::demarrer
+//
+
+${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 130455 "traiterRequetes"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "//@brief Démarre la station lumineuse
+//@fn StationLumineuse::demarrer
+//
+
+${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+${body}}
+"
+	
+	
+	
+	
+      end
+    end
+  end
+
+  deploymentview 128663 "StationLumineuse"
+    //deployment diagram settings
+    deploymentdiagramsettings
+     end
+    artifact 128663 "StationLumineuse"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 128791 // StationLumineuse
+      end
+    end
+  end
+end

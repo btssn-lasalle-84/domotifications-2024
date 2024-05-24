@@ -1,0 +1,3 @@
+class Domotifications
+!!!128279.java!!!	Domotifications()
+        communication = new Communication();

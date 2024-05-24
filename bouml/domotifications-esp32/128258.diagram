@@ -1,0 +1,38 @@
+format 224
+
+classcanvas 128002 class_ref 128898 // Utilisateur
+  simpleclassdiagramsettings end
+  xyz 27 196 2000
+end
+usecasecanvas 128130 usecase_ref 128130 // Acquitter une notification
+  xyzwh 216 67 3005 64 32 label_xy 168 99
+end
+usecasecanvas 128258 usecase_ref 128258 // Assurer les notifications lumineuses
+  xyzwh 217 307 3005 64 32 label_xy 133 339
+end
+usecasecanvas 128386 usecase_ref 128386 // Sauvegarder l'état de la notification
+  xyzwh 411 177 3005 64 32 label_xy 335 209
+end
+usecasecanvas 128514 usecase_ref 128514 // Dialoguer avec les modules
+  xyzwh 576 308 3005 64 32 label_xy 518 340
+end
+classcanvas 128642 class_ref 129026 // Module
+  simpleclassdiagramsettings end
+  xyz 742 158 3010
+end
+line 128770 ----
+  from ref 128002 z 3006 to ref 128130
+line 128898 ----
+  from ref 128002 z 3006 to ref 128258
+simplerelationcanvas 129026 simplerelation_ref 128130
+  from ref 128130 z 3006 to ref 128386
+end
+simplerelationcanvas 129154 simplerelation_ref 128258
+  from ref 128258 z 3006 to ref 128386
+end
+simplerelationcanvas 129282 simplerelation_ref 128386
+  from ref 128514 z 3006 to ref 128258
+end
+line 129410 ----
+  from ref 128514 z 3011 to ref 128642
+end

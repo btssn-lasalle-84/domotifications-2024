@@ -1,0 +1,566 @@
+openapi: 3.0.3
+info:
+  title: Domotifications 2024
+  version: "0.1"
+  description: Système de notifications visuelles des évènements domotiques
+  contact:
+    name: Thierry VAIRA
+    email: tvaira@free.fr
+    url: http://tvaira.free.fr
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: http://{adresseIPESP32}
+    description: La station de notifications lumineuses
+    variables:
+      adresseIPESP32:
+        default: 192.168.0.1
+        description: |
+          Aller sur http://station-lumineuse.local:80/
+tags:
+  - name: poubelles
+    description: Les modules Poubelle
+  - name: machines
+    description: Les modules Machine
+  - name: boites
+    description: Les modules Boite aux lettres
+paths:
+  /poubelles:
+    get:
+      summary: Lister les modules Poubelle
+      description: Lister toutes modules Poubelle disponibles
+      operationId: getPoubelles
+      tags:
+        - poubelles
+      responses:
+        "200":
+          description: Succès de l'opération
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getPoubelles"
+    post:
+      tags:
+        - poubelles
+      summary: Ajouter un module Poubelle
+      description: Ajouter un nouveau module Poubelle
+      operationId: addPoubelle
+      requestBody:
+        description: Ajout d'un module Poubelle
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewPoubelle"
+        required: true
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Poubelle"
+        "400":
+          description: Opération invalide
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+              examples:
+                DemandeIncomplete:
+                  value:
+                    code: 1
+                    message: "La demande est incomplète"
+                DemandeInvalide:
+                  value:
+                    code: 2
+                    message: "La demande est invalide"
+  /poubelles/{idPoubelle}:
+    parameters:
+      - name: idPoubelle
+        in: path
+        description: ID du module Poubelle
+        required: true
+        schema:
+          type: integer
+          format: int32
+    get:
+      summary: Obtenir les détails d'un module Poubelle `{idPoubelle}`
+      description: Obtenir les détails d'un module Poubelle `{idPoubelle}`
+      operationId: getPoubelle
+      tags:
+        - poubelles
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Poubelle"
+              examples:
+                PoubelleBleue:
+                  value:
+                    idPoubelle: 1
+                    etat: false
+                    actif: true
+                    couleur: "bleue"
+                PoubelleVerte:
+                  value:
+                    idPoubelle: 2
+                    etat: true
+                    actif: true
+                    couleur: "verte"
+        "404":
+          description: Module Poubelle non trouvé
+    patch:
+      summary: Mettre à jour un module Poubelle
+      description: Mettre à jour les informations d'un module Poubelle `{idPoubelle}`
+      operationId: updatePoubelle
+      tags:
+        - poubelles
+      requestBody:
+        description: Met à jour les informations d'un module Poubelle
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Poubelle"
+        required: true
+      responses:
+        "200":
+          description: Succès de l'opération
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Poubelle"
+        "400":
+          description: Opération invalide
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+              examples:
+                DemandeIncomplete:
+                  value:
+                    code: 1
+                    message: "La demande est incomplète"
+                DemandeInvalide:
+                  value:
+                    code: 2
+                    message: "La demande est invalide"
+    delete:
+      summary: Supprimer un module Poubelle
+      description: Supprimer un module Poubelle `{idPoubelle}`
+      operationId: deletePoubelle
+      tags:
+        - poubelles
+      responses:
+        "400":
+          description: Opération invalide
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+              examples:
+                DemandeIncomplete:
+                  value:
+                    code: 1
+                    message: "La demande est incomplète"
+                DemandeInvalide:
+                  value:
+                    code: 2
+                    message: "La demande est invalide"
+  /machines:
+    get:
+      summary: Lister les modules Machine
+      description: Lister toutes modules Machine disponibles
+      operationId: getMachines
+      tags:
+        - machines
+      responses:
+        "200":
+          description: Succès de l'opération
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getMachines"
+    post:
+      tags:
+        - machines
+      summary: Ajouter un module Machine
+      description: Ajouter un nouveau module Machine
+      operationId: addMachine
+      requestBody:
+        description: Ajout d'un module Machine
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewMachine"
+        required: true
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Machine"
+        "400":
+          description: Opération invalide
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+              examples:
+                DemandeIncomplete:
+                  value:
+                    code: 1
+                    message: "La demande est incomplète"
+                DemandeInvalide:
+                  value:
+                    code: 2
+                    message: "La demande est invalide"
+  /machines/{idMachine}:
+    parameters:
+      - name: idMachine
+        in: path
+        description: ID du module Machine
+        required: true
+        schema:
+          type: integer
+          format: int32
+    get:
+      summary: Obtenir les détails d'un module Machine `{idMachine}`
+      description: Obtenir les détails d'un module Machine `{idMachine}`
+      operationId: getMachine
+      tags:
+        - machines
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Machine"
+              examples:
+                MachineALaver:
+                  value:
+                    idMachine: 1
+                    etat: false
+                    actif: true
+                MachineLaveVaisselle:
+                  value:
+                    idMachine: 2
+                    etat: true
+                    actif: true
+        "404":
+          description: Module Machine non trouvé
+    patch:
+      summary: Mettre à jour un module Machine
+      description: Mettre à jour les informations d'un module Machine `{idMachine}`
+      operationId: updateMachine
+      tags:
+        - machines
+      requestBody:
+        description: Met à jour les informations d'un module Machine
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Machine"
+        required: true
+      responses:
+        "200":
+          description: Succès de l'opération
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Machine"
+        "400":
+          description: Opération invalide
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+              examples:
+                DemandeIncomplete:
+                  value:
+                    code: 1
+                    message: "La demande est incomplète"
+                DemandeInvalide:
+                  value:
+                    code: 2
+                    message: "La demande est invalide"
+    delete:
+      summary: Supprimer un module Machine
+      description: Supprimer un module Machine `{idMachine}`
+      operationId: deleteMachine
+      tags:
+        - machines
+      responses:
+        "400":
+          description: Opération invalide
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+              examples:
+                DemandeIncomplete:
+                  value:
+                    code: 1
+                    message: "La demande est incomplète"
+                DemandeInvalide:
+                  value:
+                    code: 2
+                    message: "La demande est invalide"
+  /boites:
+    get:
+      summary: Lister les modules Boite
+      description: Lister toutes modules Boite disponibles
+      operationId: getBoites
+      tags:
+        - boites
+      responses:
+        "200":
+          description: Succès de l'opération
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getBoites"
+    post:
+      tags:
+        - boites
+      summary: Ajouter un module Boite
+      description: Ajouter un nouveau module Boite
+      operationId: addBoite
+      requestBody:
+        description: Ajout d'un module Boite
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewBoite"
+        required: true
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Boite"
+        "400":
+          description: Opération invalide
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+              examples:
+                DemandeIncomplete:
+                  value:
+                    code: 1
+                    message: "La demande est incomplète"
+                DemandeInvalide:
+                  value:
+                    code: 2
+                    message: "La demande est invalide"
+  /boites/{idBoite}:
+    parameters:
+      - name: idBoite
+        in: path
+        description: ID du module Boite
+        required: true
+        schema:
+          type: integer
+          format: int32
+    get:
+      summary: Obtenir les détails d'un module Boite `{idBoite}`
+      description: Obtenir les détails d'un module Boite `{idBoite}`
+      operationId: getBoite
+      tags:
+        - boites
+      responses:
+        "200":
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Boite"
+              examples:
+                MaBoite:
+                  value:
+                    idBoite: 1
+                    etat: false
+                    actif: true
+        "404":
+          description: Module Boite non trouvé
+    patch:
+      summary: Mettre à jour un module Boite
+      description: Mettre à jour les informations d'un module Boite `{idBoite}`
+      operationId: updateBoite
+      tags:
+        - boites
+      requestBody:
+        description: Met à jour les informations d'un module Boite
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Boite"
+        required: true
+      responses:
+        "200":
+          description: Succès de l'opération
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Boite"
+        "400":
+          description: Opération invalide
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+              examples:
+                DemandeIncomplete:
+                  value:
+                    code: 1
+                    message: "La demande est incomplète"
+                DemandeInvalide:
+                  value:
+                    code: 2
+                    message: "La demande est invalide"
+    delete:
+      summary: Supprimer un module Boite
+      description: Supprimer un module Boite `{idBoite}`
+      operationId: deleteBoite
+      tags:
+        - boites
+      responses:
+        "400":
+          description: Opération invalide
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+              examples:
+                DemandeIncomplete:
+                  value:
+                    code: 1
+                    message: "La demande est incomplète"
+                DemandeInvalide:
+                  value:
+                    code: 2
+                    message: "La demande est invalide"
+components:
+  schemas:
+    getPoubelles:
+      type: array
+      items:
+        $ref: "#/components/schemas/Poubelle"
+      example:
+        [
+          { "idPoubelle": 1, "etat": false, "actif": true, "couleur": "bleue" },
+          { "idPoubelle": 2, "etat": true, "actif": true, "couleur": "verte" },
+        ]
+    getMachines:
+      type: array
+      items:
+        $ref: "#/components/schemas/Machine"
+      example:
+        [
+          { "idMachine": 1, "etat": false, "actif": true },
+          { "idMachine": 2, "etat": true, "actif": true },
+        ]
+    getBoites:
+      type: array
+      items:
+        $ref: "#/components/schemas/Boite"
+      example: [{ "idBoite": 1, "etat": false, "actif": true }]
+    Poubelle:
+      type: object
+      description: Un module Poubelle
+      required:
+        - idPoubelle
+        - etat
+      properties:
+        idPoubelle:
+          type: integer
+          format: int32
+        etat:
+          type: boolean
+          description: |
+            `true` si une notification sur le module Poubelle sinon `false`
+        actif:
+          type: boolean
+          description: |
+            `true` si le module est activé sinon `false`
+        couleur:
+          type: string
+          enum:
+            - bleue
+            - verte
+            - jaune
+            - grise
+            - rouge
+    Machine:
+      type: object
+      description: Un module Machine
+      required:
+        - idMachine
+        - etat
+      properties:
+        idMachine:
+          type: integer
+          format: int32
+        etat:
+          type: boolean
+          description: |
+            `true` si une notification sur le module Machine sinon `false`
+        actif:
+          type: boolean
+          description: |
+            `true` si le module est activé sinon `false`
+    Boite:
+      type: object
+      description: Un module Boite aux lettres
+      required:
+        - idBoite
+        - etat
+      properties:
+        idBoite:
+          type: integer
+          format: int32
+        etat:
+          type: boolean
+          description: |
+            `true` si une notification sur le module Boite sinon `false`
+        actif:
+          type: boolean
+          description: |
+            `true` si le module est activé sinon `false`
+    NewPoubelle:
+      type: object
+      description: Un nouveau module Poubelle
+      required:
+        - couleur
+      properties:
+        couleur:
+          type: string
+          enum:
+            - bleue
+            - verte
+            - jaune
+            - grise
+            - rouge
+    NewMachine:
+      type: object
+      description: Un nouveau module Machine
+    NewBoite:
+      type: object
+      description: Un nouveau module Boite aux lettres
+    Erreur:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
