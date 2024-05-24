@@ -10,14 +10,10 @@
 #include "Boite.h"
 #include "Machine.h"
 #include "Poubelle.h"
+#include <sstream>
+#include <iomanip>
 
-// définition globale des couleurs des poubelles
-const char* nomCouleursPoubelles[NB_LEDS_NOTIFICATION_POUBELLES] = { "rouge",
-                                                                     "jaune",
-                                                                     "bleue",
-                                                                     "grise",
-                                                                     "verte" };
-
+// les couleurs par défaut des poubelles
 uint32_t StationLumineuse::couleursPoubelles[NB_LEDS_NOTIFICATION_POUBELLES] = {
     StationLumineuse::convertirCouleurRGB(255, 0, 0),     // Couleur poubelle 0 (rouge)
     StationLumineuse::convertirCouleurRGB(255, 255, 0),   // Couleur poubelle 1 (jaune)
@@ -36,19 +32,20 @@ StationLumineuse::StationLumineuse() :
     // les machines
     for(int i = 0; i < NB_LEDS_NOTIFICATION_MACHINES; ++i)
     {
+        // couleur par défaut verte
         machines.push_back(new Machine(i + 1, i, leds.Color(0, 255, 0), leds));
     }
 
     // les poubelles
     for(int i = 0; i < NB_LEDS_NOTIFICATION_POUBELLES; ++i)
     {
-        poubelles.push_back(
-          new Poubelle(i + 1, nomCouleursPoubelles[i], i, couleursPoubelles[i], leds));
+        poubelles.push_back(new Poubelle(i + 1, i, couleursPoubelles[i], leds));
     }
 
     // les boîtes aux lettres
     for(int i = 0; i < NB_LEDS_NOTIFICATION_BOITE; ++i)
     {
+        // couleur par défaut rouge
         boites.push_back(new Boite(i + 1, i, leds.Color(255, 0, 0), leds));
     }
 }
@@ -137,6 +134,30 @@ void StationLumineuse::testerBandeau()
     }
 }
 
+String StationLumineuse::getCouleurToString(uint32_t couleur)
+{
+    std::stringstream couleurStream;
+
+    // #RRGGBB
+    couleurStream << std::setfill('0') << std::setw(2) << std::hex << ((couleur >> 16) & 0xff);
+    couleurStream << std::setfill('0') << std::setw(2) << std::hex << ((couleur >> 8) & 0xff);
+    couleurStream << std::setfill('0') << std::setw(2) << std::hex << (couleur & 0xff);
+
+    return String("#") + String(couleurStream.str().c_str());
+}
+
+uint32_t StationLumineuse::getCouleurToRGB(String couleur)
+{
+    if(couleur[0] == '#' && couleur.length() == 7)
+    {
+        uint32_t c;
+        couleur.remove(0, 1);
+        std::stringstream(couleur.c_str()) >> std::hex >> c;
+        return c;
+    }
+    return 0;
+}
+
 std::size_t StationLumineuse::getNbPoubelles() const
 {
     return poubelles.size();
@@ -168,34 +189,70 @@ void StationLumineuse::sauvegarderEtatsPoubelle(int id)
     preferences.putBool(cle, poubelles[id - 1]->getActivation());
 }
 
+std::size_t StationLumineuse::getNbBoites() const
+{
+    return boites.size();
+}
+
+Boite* StationLumineuse::getBoite(int id)
+{
+    if(id < 1 || id > boites.size() || boites[id - 1] == nullptr)
+    {
+        return nullptr;
+    }
+    return boites[id - 1];
+}
+
+void StationLumineuse::sauvegarderEtatsBoite(int id)
+{
+    // id valide ?
+    if(id < 1 || id > boites.size() || boites[id - 1] == nullptr)
+    {
+        return;
+    }
+    char cle[64] = "";
+
+    // sauvegarde les deux états pour cet id
+    sprintf((char*)cle, "%s%d", "notif_b", id);
+    preferences.putBool(cle, boites[id - 1]->getEtatNotification());
+    sprintf((char*)cle, "%s%d", "actif_b", id);
+    preferences.putBool(cle, boites[id - 1]->getActivation());
+}
+
+std::size_t StationLumineuse::getNbMachines() const
+{
+    return machines.size();
+}
+
+Machine* StationLumineuse::getMachine(int id)
+{
+    if(id < 1 || id > machines.size() || machines[id - 1] == nullptr)
+    {
+        return nullptr;
+    }
+    return machines[id - 1];
+}
+
+void StationLumineuse::sauvegarderEtatsMachine(int id)
+{
+    // id valide ?
+    if(id < 1 || id > machines.size() || machines[id - 1] == nullptr)
+    {
+        return;
+    }
+    char cle[64] = "";
+
+    // sauvegarde les deux états pour cet id
+    sprintf((char*)cle, "%s%d", "notif_m", id);
+    preferences.putBool(cle, machines[id - 1]->getEtatNotification());
+    sprintf((char*)cle, "%s%d", "actif_m", id);
+    preferences.putBool(cle, machines[id - 1]->getActivation());
+}
+
 // Méthodes statiques
 uint32_t StationLumineuse::convertirCouleurRGB(uint8_t r, uint8_t g, uint8_t b)
 {
     return ((uint32_t)r << 16) | ((uint32_t)g << 8) | b;
-}
-
-uint32_t StationLumineuse::getCouleurPoubelle(String nom)
-{
-    for(int i = 0; i < NB_LEDS_NOTIFICATION_POUBELLES; ++i)
-    {
-        if(nom == nomCouleursPoubelles[i])
-        {
-            return couleursPoubelles[i];
-        }
-    }
-    return 0;
-}
-
-String StationLumineuse::getNomCouleurPoubelle(uint32_t couleur)
-{
-    for(int i = 0; i < NB_LEDS_NOTIFICATION_POUBELLES; ++i)
-    {
-        if(couleur == couleursPoubelles[i])
-        {
-            return nomCouleursPoubelles[i];
-        }
-    }
-    return "";
 }
 
 // Méthodes privées
@@ -223,5 +280,35 @@ void StationLumineuse::restaurerEtats()
         poubelle->setActivation(preferences.getBool(cle, false));
     }
 
-    // @todo idem pour les autres modules
+    // pour les modules boites
+    Boite* boite = nullptr;
+    for(int i = 1; i <= getNbBoites(); i++)
+    {
+        boite = getBoite(i);
+        if(boite == nullptr)
+        {
+            continue;
+        }
+        // "b" pour boite
+        sprintf((char*)cle, "%s%d", "notif_b", i);
+        boite->setEtatNotification(preferences.getBool(cle, false));
+        sprintf((char*)cle, "%s%d", "actif_b", i);
+        boite->setActivation(preferences.getBool(cle, false));
+    }
+
+    // pour les modules machines
+    Machine* machine = nullptr;
+    for(int i = 1; i <= getNbMachines(); i++)
+    {
+        machine = getMachine(i);
+        if(machine == nullptr)
+        {
+            continue;
+        }
+        // "m" pour machine
+        sprintf((char*)cle, "%s%d", "notif_m", i);
+        boite->setEtatNotification(preferences.getBool(cle, false));
+        sprintf((char*)cle, "%s%d", "actif_m", i);
+        boite->setActivation(preferences.getBool(cle, false));
+    }
 }

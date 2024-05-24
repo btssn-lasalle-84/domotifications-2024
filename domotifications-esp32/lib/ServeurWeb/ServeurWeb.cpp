@@ -12,6 +12,7 @@
 #include "Poubelle.h"
 #include <ESPmDNS.h>
 #include <uri/UriRegex.h>
+#include <sstream>
 
 /**
  * @brief Constructeur de la classe ServeurWeb
@@ -84,9 +85,23 @@ void ServeurWeb::installerGestionnairesRequetes()
        HTTP_PATCH,
        std::bind(&ServeurWeb::traiterRequeteUpdatePoubelle, this));
 
-    // @todo idem pour les modules Machine
+    // pour les modules Machine
+    on("/machines", HTTP_GET, std::bind(&ServeurWeb::traiterRequeteGetMachines, this));
+    on(UriRegex("/machines/([1-" + String(NB_LEDS_NOTIFICATION_MACHINES) + "]+)$"),
+       HTTP_GET,
+       std::bind(&ServeurWeb::traiterRequeteGetMachine, this));
+    on(UriRegex("/machines/([1-" + String(NB_LEDS_NOTIFICATION_MACHINES) + "]+)$"),
+       HTTP_PATCH,
+       std::bind(&ServeurWeb::traiterRequeteUpdateMachine, this));
 
-    // @todo idem pour les modules Boite
+    // pour les modules Boite
+    on("/boites", HTTP_GET, std::bind(&ServeurWeb::traiterRequeteGetBoites, this));
+    on(UriRegex("/boites/([1-" + String(NB_LEDS_NOTIFICATION_BOITE) + "]+)$"),
+       HTTP_GET,
+       std::bind(&ServeurWeb::traiterRequeteGetBoite, this));
+    on(UriRegex("/boites/([1-" + String(NB_LEDS_NOTIFICATION_BOITE) + "]+)$"),
+       HTTP_PATCH,
+       std::bind(&ServeurWeb::traiterRequeteUpdateBoite, this));
 }
 
 /**
@@ -165,6 +180,25 @@ void ServeurWeb::testerBandeau()
 }
 
 /**
+ * @brief Envoie une réponse HTTP 200 avec le contenu JSON
+ * @fn ServeurWeb::envoyerReponseJSON
+ */
+void ServeurWeb::envoyerReponseJSON()
+{
+    char buffer[TAILLE_JSON];
+    // Convertit les données JSON en chaîne de caractères
+    serializeJson(documentJSON, buffer);
+    // Renvoie les données JSON avec un code HTTP 200 (succès)
+    send(200, "application/json", buffer);
+
+#ifdef DEBUG_SERVEUR_WEB
+    Serial.println(F("  REPONSE   : 200"));
+    serializeJson(documentJSON, Serial);
+    Serial.println();
+#endif
+}
+
+/**
  * @brief Traite la requête GET pour obtenir la liste des poubelles
  * @fn ServeurWeb::traiterRequeteGetPoubelles
  */
@@ -182,7 +216,7 @@ void ServeurWeb::traiterRequeteGetPoubelles()
 #endif
 
     /*  Exemple de réponse :
-        [{"idPoubelle":1,"etat":false,"couleur":"bleu","actif":true},{"idPoubelle":2,"etat":true,"couleur":"verte","actif":true}]
+        [{"idPoubelle":1,"etat":false,"couleur":"#0000ff","actif":true},{"idPoubelle":2,"etat":true,"couleur":"#00ff00","actif":true}]
     */
     documentJSON.clear();
     Poubelle* poubelle = nullptr;
@@ -200,15 +234,7 @@ void ServeurWeb::traiterRequeteGetPoubelles()
         objetPoubelle["actif"]      = poubelle->getActivation();
     }
 
-    char buffer[TAILLE_JSON];
-    serializeJson(documentJSON, buffer);
-    send(200, "application/json", buffer);
-
-#ifdef DEBUG_SERVEUR_WEB
-    Serial.println(F("  REPONSE   : 200"));
-    serializeJson(documentJSON, Serial);
-    Serial.println();
-#endif
+    envoyerReponseJSON();
 }
 
 void ServeurWeb::traiterRequeteGetPoubelle()
@@ -228,7 +254,7 @@ void ServeurWeb::traiterRequeteGetPoubelle()
 #endif
 
     /*  Exemple de réponse :
-        [{"idPoubelle":1,"etat":false,"couleur":"bleu","actif":true}]
+        [{"idPoubelle":1,"etat":false,"couleur":"#0000ff","actif":true}]
     */
 
     // Récupère l'id dans l'URI
@@ -258,17 +284,7 @@ void ServeurWeb::traiterRequeteGetPoubelle()
     objetPoubelle["etat"]       = poubelle->getEtatNotification();
     objetPoubelle["actif"]      = poubelle->getActivation();
 
-    char buffer[TAILLE_JSON];
-    // Convertit les données JSON en chaîne de caractères
-    serializeJson(documentJSON, buffer);
-    // Renvoie les données JSON avec un code HTTP 200 (succès)
-    send(200, "application/json", buffer);
-
-#ifdef DEBUG_SERVEUR_WEB
-    Serial.println(F("  REPONSE   : 200"));
-    serializeJson(documentJSON, Serial);
-    Serial.println();
-#endif
+    envoyerReponseJSON();
 }
 
 void ServeurWeb::traiterRequeteUpdatePoubelle()
@@ -334,6 +350,12 @@ void ServeurWeb::traiterRequeteUpdatePoubelle()
         bool etatPoubelle = documentJSON["etat"].as<bool>();
         poubelle->setEtatNotification(etatPoubelle);
     }
+    if(objetJSON.containsKey("couleur"))
+    {
+        // @todo extraire la couleur de la poubelle du JSON (String)
+
+        // @todo mettre à jour la couleur de la led pour cette poubelle avec setCouleurLed()
+    }
 
     // Sauvegarde les états de ce module
     stationLumineuse->sauvegarderEtatsPoubelle(idPoubelle);
@@ -346,13 +368,343 @@ void ServeurWeb::traiterRequeteUpdatePoubelle()
     objetPoubelle["etat"]       = poubelle->getEtatNotification();
     objetPoubelle["actif"]      = poubelle->getActivation();
 
-    char buffer[TAILLE_JSON];
-    serializeJson(documentJSON, buffer);
-    send(200, "application/json", buffer);
+    envoyerReponseJSON();
+}
 
+void ServeurWeb::traiterRequeteGetMachines()
+{
+    /*  Test :
+        $ curl --location http://station-lumineuse.local:80/machines
+    */
 #ifdef DEBUG_SERVEUR_WEB
-    Serial.println(F("  REPONSE   : 200"));
-    serializeJson(documentJSON, Serial);
-    Serial.println();
+    Serial.println(F("ServeurWeb::traiterRequeteGetMachines()"));
+    Serial.print(F("  REQUETE   : "));
+    Serial.println((method() == HTTP_GET) ? "GET" : "?");
+    Serial.print(F("  URI       : "));
+    Serial.println(uri());
 #endif
+
+    /*  Exemple de réponse :
+        [{"idMachine":1,"etat":false,"couleur":"#0000ff","actif":true},{"idMachine":2,"etat":true,"couleur":"#00ff00","actif":true}]
+    */
+    documentJSON.clear();
+    Machine* machine = nullptr;
+    for(int i = 1; i <= stationLumineuse->getNbMachines(); ++i)
+    {
+        machine = stationLumineuse->getMachine(i);
+        if(machine == nullptr)
+        {
+            continue;
+        }
+        JsonObject objetMachine   = documentJSON.createNestedObject();
+        objetMachine["idMachine"] = machine->getId();
+        objetMachine["couleur"]   = machine->getCouleur();
+        objetMachine["etat"]      = machine->getEtatNotification();
+        objetMachine["actif"]     = machine->getActivation();
+    }
+
+    envoyerReponseJSON();
+}
+
+void ServeurWeb::traiterRequeteGetMachine()
+{
+    /*  Tests :
+        $ curl --location http://station-lumineuse.local:80/machines/1
+        $ curl --location http://station-lumineuse.local:80/machines/6
+    */
+#ifdef DEBUG_SERVEUR_WEB
+    Serial.println(F("ServeurWeb::traiterRequeteGetMachine()"));
+    Serial.print(F("  REQUETE   : "));
+    Serial.println((method() == HTTP_GET) ? "GET" : "?");
+    Serial.print(F("  URI       : "));
+    Serial.println(uri());
+    Serial.print(F("  {id}      : "));
+    Serial.println(uri().substring(uri().lastIndexOf('/') + 1).toInt());
+#endif
+
+    /*  Exemple de réponse :
+        [{"idMachine":1,"etat":false,"couleur":"#0000ff","actif":true}]
+    */
+
+    // Récupère l'id dans l'URI
+    int idMachine = uri().substring(uri().lastIndexOf('/') + 1).toInt();
+    // Récupère l'objet Machine correspondant à l'id demandé
+    Machine* machine = stationLumineuse->getMachine(idMachine);
+    // L'objet Machine existe ?
+    if(machine == nullptr)
+    {
+        String message = "404 Machine non trouvée\r\n";
+        // Renvoie un message avec un code HTTP 404 (id Machine introuvable)
+        send(404, "text/plain", message);
+#ifdef DEBUG_SERVEUR_WEB
+        Serial.print(F("  REPONSE   : "));
+        Serial.println(message);
+#endif
+        return;
+    }
+
+    // Initialise les données JSON à renvoyer
+    documentJSON.clear();
+    // Crée un objet JSON
+    JsonObject objetMachine = documentJSON.createNestedObject();
+    // Ajoute les données de l'objet Machine en JSON
+    objetMachine["idMachine"] = machine->getId();
+    objetMachine["couleur"]   = machine->getCouleur();
+    objetMachine["etat"]      = machine->getEtatNotification();
+    objetMachine["actif"]     = machine->getActivation();
+
+    envoyerReponseJSON();
+}
+
+void ServeurWeb::traiterRequeteUpdateMachine()
+{
+    /*  Tests :
+        $ curl --location 'http://station-lumineuse.local:80/machines/1' --request PATCH \
+        --header 'Content-Type: application/json' --data '{"idMachine": "1","etat": true}'
+        $ curl --location 'http://station-lumineuse.local:80/machines/1' --request PATCH \
+        --header 'Content-Type: application/json' --data '{"idMachine": "1","etat": false}'
+    */
+#ifdef DEBUG_SERVEUR_WEB
+    Serial.println(F("ServeurWeb::traiterRequeteUpdateMachine()"));
+    Serial.print(F("  REQUETE   : "));
+    Serial.println((method() == HTTP_PATCH) ? "PATCH" : "?");
+    Serial.print(F("  URI       : "));
+    Serial.println(uri());
+    Serial.print(F("  {id}      : "));
+    Serial.println(uri().substring(uri().lastIndexOf('/') + 1).toInt());
+    Serial.print(F("  BODY      : "));
+    Serial.println(arg("plain"));
+#endif
+
+    String               body   = arg("plain");
+    DeserializationError erreur = deserializeJson(documentJSON, body);
+    if(erreur)
+    {
+        String contenu = "{\"code\": 2,\"message\": \"La demande est invalide\"}";
+        send(400, "application/json", contenu);
+#ifdef DEBUG_SERVEUR_WEB
+        Serial.print(F("  REPONSE   : 400 "));
+        Serial.println(contenu);
+#endif
+        return;
+    }
+    int      idMachine = ID_INVALIDE;
+    Machine* machine   = nullptr;
+    // Récupère les données envoyées dans la requête PATCH
+    JsonObject objetJSON = documentJSON.as<JsonObject>();
+    if(objetJSON.containsKey("idMachine"))
+    {
+        idMachine = documentJSON["idMachine"].as<int>();
+        machine   = stationLumineuse->getMachine(idMachine);
+        if(machine == nullptr)
+        {
+            String contenu = "{\"code\": 2,\"message\": \"La demande est invalide\"}";
+            send(400, "application/json", contenu);
+#ifdef DEBUG_SERVEUR_WEB
+            Serial.print(F("  REPONSE   : 400 "));
+            Serial.println(contenu);
+#endif
+            return;
+        }
+    }
+    // Mise à jour de l'activation du module ?
+    if(objetJSON.containsKey("actif"))
+    {
+        bool activationMachine = documentJSON["actif"].as<bool>();
+        machine->setActivation(activationMachine);
+    }
+    // Mise à jour de l'état de notification du module ?
+    if(objetJSON.containsKey("etat"))
+    {
+        bool etatMachine = documentJSON["etat"].as<bool>();
+        machine->setEtatNotification(etatMachine);
+    }
+    if(objetJSON.containsKey("couleur"))
+    {
+        // @todo extraire la couleur du JSON (String)
+
+        // @todo mettre à jour la couleur de la led pour cette machine avec setCouleurLed()
+    }
+
+    // Sauvegarde les états de ce module
+    stationLumineuse->sauvegarderEtatsMachine(idMachine);
+
+    documentJSON.clear();
+    JsonObject objetMachine = documentJSON.createNestedObject();
+    // Ajoute les données mises à jour de l'objet Machine en JSON
+    objetMachine["idMachine"] = machine->getId();
+    objetMachine["couleur"]   = machine->getCouleur();
+    objetMachine["etat"]      = machine->getEtatNotification();
+    objetMachine["actif"]     = machine->getActivation();
+
+    envoyerReponseJSON();
+}
+
+void ServeurWeb::traiterRequeteGetBoites()
+{
+    /*  Test :
+        $ curl --location http://station-lumineuse.local:80/boites
+    */
+#ifdef DEBUG_SERVEUR_WEB
+    Serial.println(F("ServeurWeb::traiterRequeteGetBoites()"));
+    Serial.print(F("  REQUETE   : "));
+    Serial.println((method() == HTTP_GET) ? "GET" : "?");
+    Serial.print(F("  URI       : "));
+    Serial.println(uri());
+#endif
+
+    /*  Exemple de réponse :
+        [{"idBoite":1,"etat":false,"couleur":"#0000ff","actif":true},{"idBoite":2,"etat":true,"couleur":"#00ff00","actif":true}]
+    */
+    documentJSON.clear();
+    Boite* boite = nullptr;
+    for(int i = 1; i <= stationLumineuse->getNbBoites(); ++i)
+    {
+        boite = stationLumineuse->getBoite(i);
+        if(boite == nullptr)
+        {
+            continue;
+        }
+        JsonObject objetBoite = documentJSON.createNestedObject();
+        objetBoite["idBoite"] = boite->getId();
+        objetBoite["couleur"] = boite->getCouleur();
+        objetBoite["etat"]    = boite->getEtatNotification();
+        objetBoite["actif"]   = boite->getActivation();
+    }
+
+    envoyerReponseJSON();
+}
+
+void ServeurWeb::traiterRequeteGetBoite()
+{
+    /*  Tests :
+        $ curl --location http://station-lumineuse.local:80/boites/1
+        $ curl --location http://station-lumineuse.local:80/boites/6
+    */
+#ifdef DEBUG_SERVEUR_WEB
+    Serial.println(F("ServeurWeb::traiterRequeteGetBoite()"));
+    Serial.print(F("  REQUETE   : "));
+    Serial.println((method() == HTTP_GET) ? "GET" : "?");
+    Serial.print(F("  URI       : "));
+    Serial.println(uri());
+    Serial.print(F("  {id}      : "));
+    Serial.println(uri().substring(uri().lastIndexOf('/') + 1).toInt());
+#endif
+
+    /*  Exemple de réponse :
+        [{"idBoite":1,"etat":false,"couleur":"#0000ff","actif":true}]
+    */
+
+    // Récupère l'id dans l'URI
+    int idBoite = uri().substring(uri().lastIndexOf('/') + 1).toInt();
+    // Récupère l'objet Boite correspondant à l'id demandé
+    Boite* boite = stationLumineuse->getBoite(idBoite);
+    // L'objet Boite existe ?
+    if(boite == nullptr)
+    {
+        String message = "404 Boite non trouvée\r\n";
+        // Renvoie un message avec un code HTTP 404 (id Boite introuvable)
+        send(404, "text/plain", message);
+#ifdef DEBUG_SERVEUR_WEB
+        Serial.print(F("  REPONSE   : "));
+        Serial.println(message);
+#endif
+        return;
+    }
+
+    // Initialise les données JSON à renvoyer
+    documentJSON.clear();
+    // Crée un objet JSON
+    JsonObject objetBoite = documentJSON.createNestedObject();
+    // Ajoute les données de l'objet Boite en JSON
+    objetBoite["idBoite"] = boite->getId();
+    objetBoite["couleur"] = boite->getCouleur();
+    objetBoite["etat"]    = boite->getEtatNotification();
+    objetBoite["actif"]   = boite->getActivation();
+
+    envoyerReponseJSON();
+}
+
+void ServeurWeb::traiterRequeteUpdateBoite()
+{
+    /*  Tests :
+        $ curl --location 'http://station-lumineuse.local:80/boites/1' --request PATCH \
+        --header 'Content-Type: application/json' --data '{"idBoite": "1","etat": true}'
+        $ curl --location 'http://station-lumineuse.local:80/boites/1' --request PATCH \
+        --header 'Content-Type: application/json' --data '{"idBoite": "1","etat": false}'
+    */
+#ifdef DEBUG_SERVEUR_WEB
+    Serial.println(F("ServeurWeb::traiterRequeteUpdateBoite()"));
+    Serial.print(F("  REQUETE   : "));
+    Serial.println((method() == HTTP_PATCH) ? "PATCH" : "?");
+    Serial.print(F("  URI       : "));
+    Serial.println(uri());
+    Serial.print(F("  {id}      : "));
+    Serial.println(uri().substring(uri().lastIndexOf('/') + 1).toInt());
+    Serial.print(F("  BODY      : "));
+    Serial.println(arg("plain"));
+#endif
+
+    String               body   = arg("plain");
+    DeserializationError erreur = deserializeJson(documentJSON, body);
+    if(erreur)
+    {
+        String contenu = "{\"code\": 2,\"message\": \"La demande est invalide\"}";
+        send(400, "application/json", contenu);
+#ifdef DEBUG_SERVEUR_WEB
+        Serial.print(F("  REPONSE   : 400 "));
+        Serial.println(contenu);
+#endif
+        return;
+    }
+    int    idBoite = ID_INVALIDE;
+    Boite* boite   = nullptr;
+    // Récupère les données envoyées dans la requête PATCH
+    JsonObject objetJSON = documentJSON.as<JsonObject>();
+    if(objetJSON.containsKey("idBoite"))
+    {
+        idBoite = documentJSON["idBoite"].as<int>();
+        boite   = stationLumineuse->getBoite(idBoite);
+        if(boite == nullptr)
+        {
+            String contenu = "{\"code\": 2,\"message\": \"La demande est invalide\"}";
+            send(400, "application/json", contenu);
+#ifdef DEBUG_SERVEUR_WEB
+            Serial.print(F("  REPONSE   : 400 "));
+            Serial.println(contenu);
+#endif
+            return;
+        }
+    }
+    // Mise à jour de l'activation du module ?
+    if(objetJSON.containsKey("actif"))
+    {
+        bool activationBoite = documentJSON["actif"].as<bool>();
+        boite->setActivation(activationBoite);
+    }
+    // Mise à jour de l'état de notification du module ?
+    if(objetJSON.containsKey("etat"))
+    {
+        bool etatBoite = documentJSON["etat"].as<bool>();
+        boite->setEtatNotification(etatBoite);
+    }
+    if(objetJSON.containsKey("couleur"))
+    {
+        // @todo extraire la couleur du JSON (String)
+
+        // @todo mettre à jour la couleur de la led pour cette boite avec setCouleurLed()
+    }
+
+    // Sauvegarde les états de ce module
+    stationLumineuse->sauvegarderEtatsBoite(idBoite);
+
+    documentJSON.clear();
+    JsonObject objetBoite = documentJSON.createNestedObject();
+    // Ajoute les données mises à jour de l'objet Boite en JSON
+    objetBoite["idBoite"] = boite->getId();
+    objetBoite["couleur"] = boite->getCouleur();
+    objetBoite["etat"]    = boite->getEtatNotification();
+    objetBoite["actif"]   = boite->getActivation();
+
+    envoyerReponseJSON();
 }

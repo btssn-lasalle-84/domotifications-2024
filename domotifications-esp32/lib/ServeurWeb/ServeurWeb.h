@@ -53,6 +53,7 @@ class ServeurWeb : public WebServer
     void afficherAccueil();
     void traiterRequeteNonTrouvee();
     void testerBandeau();
+    void envoyerReponseJSON();
 
   public:
     ServeurWeb(StationLumineuse* stationLumineuse = nullptr);
@@ -65,9 +66,15 @@ class ServeurWeb : public WebServer
     void traiterRequeteGetPoubelle();
     void traiterRequeteUpdatePoubelle();
 
-    // @todo idem pour les modules Machine
+    // pour les modules Machine
+    void traiterRequeteGetMachines();
+    void traiterRequeteGetMachine();
+    void traiterRequeteUpdateMachine();
 
-    // @todo idem pour les modules Boite
+    // pour les modules Boite
+    void traiterRequeteGetBoites();
+    void traiterRequeteGetBoite();
+    void traiterRequeteUpdateBoite();
 };
 
 #endif // SERVEURWEB_H

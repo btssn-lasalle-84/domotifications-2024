@@ -37,7 +37,7 @@ class StationLumineuse
     std::vector<Machine*>  machines;    //!< les machines de la station lumineuse
     std::vector<Poubelle*> poubelles;   //!< les poubelles de la station lumineuse
     static uint32_t
-      couleursPoubelles[NB_LEDS_NOTIFICATION_POUBELLES]; //!< les couleurs des poubelles
+      couleursPoubelles[NB_LEDS_NOTIFICATION_POUBELLES]; //!< les couleurs par défaut des poubelles
 
     void restaurerEtats();
 
@@ -50,17 +50,23 @@ class StationLumineuse
 
     // Méthodes statiques
     static uint32_t convertirCouleurRGB(uint8_t r, uint8_t g, uint8_t b);
-    static uint32_t getCouleurPoubelle(String nom);
-    static String   getNomCouleurPoubelle(uint32_t couleur);
+    static String   getCouleurToString(uint32_t couleur);
+    static uint32_t getCouleurToRGB(String couleur);
 
     // pour les modules Poubelle
     std::size_t getNbPoubelles() const;
     Poubelle*   getPoubelle(int id);
     void        sauvegarderEtatsPoubelle(int id);
 
-    // @todo idem pour les modules Machine
-
     // @todo idem pour les modules Boite
+    std::size_t getNbBoites() const;
+    Boite*      getBoite(int id);
+    void        sauvegarderEtatsBoite(int id);
+
+    // @todo idem pour les modules Machine
+    std::size_t getNbMachines() const;
+    Machine*    getMachine(int id);
+    void        sauvegarderEtatsMachine(int id);
 };
 
 #endif // STATIONLUMINEUSE_H
