@@ -459,7 +459,7 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                 if(notificationEnvoyee == null || !notificationEnvoyee)
                 {
                     // On signale une notification sur la tablette Android
-                    creerNotification("La boîte aux lettres " + module.getNomModule() + " a une notification.");
+                    creerNotification("Le module " + module.getNomModule() + " a une notification.");
                     notificationsEnvoyees.put(idBoite, true);
                 }
             }

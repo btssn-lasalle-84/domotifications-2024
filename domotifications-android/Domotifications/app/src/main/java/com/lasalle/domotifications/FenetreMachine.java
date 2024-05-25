@@ -477,7 +477,7 @@ public class FenetreMachine extends AppCompatActivity
                 if(notificationEnvoyee == null || !notificationEnvoyee)
                 {
                     // On signale une notification sur la tablette Android
-                    creerNotification("La machine " + module.getNomModule() + " a une notification.");
+                    creerNotification("Le module " + module.getNomModule() + " a une notification.");
                     notificationsEnvoyees.put(idMachine, true);
                 }
             }
