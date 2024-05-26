@@ -350,7 +350,7 @@ public class IHM extends AppCompatActivity
         }
         else
         {
-            notificationMachine.setVisibility(View.INVISIBLE);
+            notificationPoubelle.setVisibility(View.INVISIBLE);
         }
     }
 

@@ -1,9 +1,13 @@
 package com.lasalle.domotifications;
 
+import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,10 +17,14 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
+import android.Manifest;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -480,7 +488,7 @@ public class FenetrePoubelle extends AppCompatActivity
                 if(notificationEnvoyee == null || !notificationEnvoyee)
                 {
                     // On signale une notification sur la tablette Android
-                    creerNotification("Le module " + module.getNomModule() + " a une notification.");
+                    creerNotification("La poubelle " + module.getNomModule() + " a une notification.");
                     notificationsEnvoyees.put(idPoubelle, true);
                 }
             }
@@ -509,28 +517,49 @@ public class FenetrePoubelle extends AppCompatActivity
 
     private void creerNotification(String message)
     {
-        NotificationManager notificationManager =
-          (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-
         String titreNotification = getNomApplication(getApplicationContext());
         String texteNotification = message;
 
-        NotificationCompat.Builder notification = new NotificationCompat.Builder(this)
-                                                    .setSmallIcon(R.mipmap.ic_launcher)
-                                                    .setContentTitle(titreNotification)
-                                                    .setContentText(texteNotification);
+        NotificationManager notificationManager =
+          (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Si >= API26, obligation de créer un canal de notifications
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            CharSequence name = getString(R.string.app_name);
+            String description = "Notification domotifications";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("domotifications_id", name, importance);
+            channel.setDescription(description);
+            channel.setImportance(NotificationManager.IMPORTANCE_DEFAULT);
+            notificationManager = (NotificationManager) getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        NotificationCompat.Builder notification =
+                new NotificationCompat.Builder(this, "domotifications_id")
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle(titreNotification)
+                        .setContentText(texteNotification)
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         // On pourrait ici crée une autre activité
         PendingIntent pendingIntent =
-          PendingIntent.getActivity(this, 0, new Intent(), PendingIntent.FLAG_UPDATE_CURRENT);
+          PendingIntent.getActivity(this, 0, new Intent(), PendingIntent.FLAG_IMMUTABLE);
 
         notification.setContentIntent(pendingIntent);
-
         notification.setAutoCancel(true);
-
         notification.setVibrate(new long[] { 0, 200, 100, 200, 100, 200 });
 
-        notificationManager.notify(idNotification++, notification.build());
+        // Si >= API26
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
+        {
+            notificationManager.notify(idNotification, notification.build());
+        }
+        else
+        {
+            NotificationManagerCompat.from(this).notify(idNotification, notification.build());
+        }
     }
 
     public static String getNomApplication(Context context)
@@ -542,5 +571,26 @@ public class FenetrePoubelle extends AppCompatActivity
     private void afficherErreur(String message)
     {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    private boolean verifierPermissionNotification()
+    {
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+                PackageManager.PERMISSION_GRANTED)
+        {
+            Log.d(TAG,
+                    "verifierPermissionNotification() permission notification = PERMISSION_GRANTED");
+            return true;
+        }
+        else
+        {
+            Log.d(TAG,
+                    "verifierPermissionNotification() permission notification = PERMISSION_DENIED");
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[] { Manifest.permission.POST_NOTIFICATIONS },
+                    101);
+        }
+        return false;
     }
 }
