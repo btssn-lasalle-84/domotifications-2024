@@ -20,6 +20,7 @@ class Machine
     int      getId() const;
     uint32_t getCouleurLed() const;
     bool     getActivation() const;
+    void     setCouleur();
     void     setActivation(bool etat);
     bool     getEtatNotification() const;
     void     setEtatNotification(bool etat);

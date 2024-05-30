@@ -52,6 +52,11 @@ void Machine::setEtatNotification(bool etat)
     }
 }
 
+/*void setCouleur(const String& couleur)
+{
+    this->couleur = couleur;
+}*/
+
 void Machine::resetEtatNotification()
 {
     setEtatNotification(false);
