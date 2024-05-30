@@ -24,6 +24,7 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical|center_horizontal"
         android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="MissingConstraints">
 
         <LinearLayout
@@ -61,16 +62,6 @@
                 android:scaleType="fitXY"
                 tools:ignore="MissingConstraints" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/texteCouleur0"
-                android:layout_width="match_parent"
-                android:layout_height="50dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="COULEUR" />
-            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -179,6 +170,7 @@
                 android:background="@android:color/transparent"
                 android:scaleType="fitXY"
                 tools:ignore="MissingConstraints" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -216,6 +208,17 @@
                 android:scaleType="fitXY"
                 tools:ignore="MissingConstraints" />
         </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/couleurhexa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="#FF....." />
+        </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
 

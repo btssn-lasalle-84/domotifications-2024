@@ -87,7 +87,7 @@ public class FenetreMachine extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-       /* Log.d(TAG, "onCreate()");
+        Log.d(TAG, "onCreate()");
 
         initialiserBaseDeDonnees();
         initialiserModulesMachines();
@@ -95,9 +95,7 @@ public class FenetreMachine extends AppCompatActivity
         initialiserHandler();
         initialiserMinuteur();
         initialiserCommunication();
-        recupererEtats();*/
-
-        startActivity(new Intent(this, SelecteurCouleur.class));
+        recupererEtats();
     }
 
     private void initialiserBaseDeDonnees()

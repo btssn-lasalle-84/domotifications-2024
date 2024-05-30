@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +19,14 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class SelecteurCouleur extends AppCompatActivity {
 
+    /**
+     * Constantes
+     */
+    private static final String TAG = "_SelecteurCouleur";
+
+    /**
+     * Attributs
+     */
     ImageView selecteur;
     Bitmap image;
 
@@ -48,9 +58,29 @@ public class SelecteurCouleur extends AppCompatActivity {
                     image = selecteur.getDrawingCache();
                     int pixel = image.getPixel((int) event.getX(), (int) event.getY());
                     //@todo Faire le lien entre la couleur de la LED et de la sélection
+
+                    // Extraction des composantes RGB
+                    int red = Color.red(pixel);
+                    int green = Color.green(pixel);
+                    int blue = Color.blue(pixel);
+                    Log.d(TAG, "rouge = " + red + " - " + "vert = " + green + " - " + " bleu = " + blue);
+                    Log.d(TAG, "rouge = " + String.format("%02X", red) + " - " + "vert = " + String.format("%02X", green) + " - " + " bleu = " + String.format("%02X", blue));
+
+                    // Conversion au format #RRGGBB
+                    String couleurHTML = String.format("#%06X", (pixel & 0x00FFFFFF));
+                    Log.d(TAG, "couleurHTML = " + couleurHTML);
+
+                    // Vérification
+                    int couleurRGB =	Color.parseColor(couleurHTML);
+                    Log.d(TAG, "couleurRGB = " + couleurRGB);
+
+                    TextView textView = findViewById(R.id.couleurhexa);
+                    textView.setText(couleurHTML);
                 }
                 return false;
             }
         });
+
+
     }
 }
