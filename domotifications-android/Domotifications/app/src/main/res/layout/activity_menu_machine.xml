@@ -62,6 +62,16 @@
                 android:scaleType="fitXY"
                 tools:ignore="MissingConstraints" />
 
+            <ImageView
+                android:id="@+id/couleurMachine0"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="25dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/icone_palette"
+                tools:ignore="MissingConstraints" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -208,17 +218,6 @@
                 android:scaleType="fitXY"
                 tools:ignore="MissingConstraints" />
         </LinearLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/couleurhexa"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="#FF....." />
-        </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
 
