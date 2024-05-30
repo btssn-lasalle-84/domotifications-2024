@@ -11,6 +11,11 @@
 #include "Machine.h"
 #include "Poubelle.h"
 #include <sstream>
+#include <fstream>
+#include <cstdint>
+#include <iomanip>
+#include <iostream>
+#include <string>
 
 const char* nomCouleursPoubelles[NB_LEDS_NOTIFICATION_POUBELLES] = { "rouge",
                                                                      "jaune",

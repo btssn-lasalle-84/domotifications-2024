@@ -40,6 +40,9 @@ class StationLumineuse
                     couleursPoubelles[NB_LEDS_NOTIFICATION_POUBELLES]; //!< les couleurs par défaut des poubelles
     static uint32_t couleursMachines[NB_LEDS_NOTIFICATION_MACHINES];
     void            restaurerEtats();
+    uint32_t        couleurPoubelles[5];
+    uint32_t        couleurMachines[5];
+    uint32_t        couleurBoite;
 
   public:
     StationLumineuse();
