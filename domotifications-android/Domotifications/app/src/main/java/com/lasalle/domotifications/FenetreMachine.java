@@ -52,7 +52,7 @@ public class FenetreMachine extends AppCompatActivity
      * Attributs
      */
     private BaseDeDonnees  baseDeDonnees;      //!< Association avec la base de donnees
-    private Vector<Module> modulesMachines;    //!< Conteneur des modules machines
+    public static Vector<Module> modulesMachines;    //!< Conteneur des modules machines
     private int            nbModulesMachines;  //!< le nombre de machines gérées
     private int            idNotification = 0; //!< Identifiant unique pour chaque notification
     private Communication  communication;      //!< Association avec la classe Communication
@@ -81,6 +81,7 @@ public class FenetreMachine extends AppCompatActivity
     private ImageView[] imagesMachines; //!< Images des machines
     private ImageView[] imagesNotificationMachines; //!< Images des notifications des machines
     private Switch[] boutonsActivation; //!< Boutons d'activation/désactivation des modules
+    private ImageView[] imageSelecteur; //!< Images des couleurs des modules
     //!< machines
 
     @Override
@@ -148,8 +149,21 @@ public class FenetreMachine extends AppCompatActivity
         boutonsActivation[3] = (Switch)findViewById(R.id.activationMachine3);
         boutonsActivation[4] = (Switch)findViewById(R.id.activationMachine4);
 
+        imageSelecteur = new ImageView[NB_MACHINES_MAX];
+        imageSelecteur[0] = (ImageView)findViewById(R.id.couleurMachine0);
+        imageSelecteur[1] = (ImageView)findViewById(R.id.couleurMachine1);
+
         for(int i = 0; i < nbModulesMachines; ++i)
         {
+            int idMachine = i;
+            imageSelecteur[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(FenetreMachine.this, SelecteurCouleur.class);
+                    intent.putExtra("idMachine", idMachine);
+                    startActivity(intent);
+                }
+            });
             imagesMachines[i].setImageResource(IMAGE_MACHINES[i]);
             final int numeroMachine = i;
             imagesNotificationMachines[i].setOnClickListener(new View.OnClickListener() {

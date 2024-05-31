@@ -24,6 +24,7 @@ public class Module
         NbTypes
     }
 
+    //@todo Ajouter couleur
     // Constructeur
     public Module(int           idModule,
                   String        nomModule,
@@ -69,7 +70,7 @@ public class Module
         return this.etatNotification;
     }
 
-    private String getCouleur()
+    public String getCouleur()
     {
         return this.couleur;
     }

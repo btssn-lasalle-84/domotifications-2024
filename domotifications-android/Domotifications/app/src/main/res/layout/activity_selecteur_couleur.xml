@@ -8,13 +8,67 @@
     android:layout_height="match_parent"
     tools:context=".SelecteurCouleur">
 
-    <ImageView
-        android:id="@+id/selecteur"
-        android:layout_width="501dp"
-        android:layout_height="471dp"
+    <TextView
+        android:id="@+id/informationsModule"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Module"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.047" />
+    <TextView
+        android:id="@+id/couleurActuelle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="#FF0000"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/selecteur"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/informationsModule" />
+
+    <ImageView
+        android:id="@+id/selecteur"
+        android:layout_width="501dp"
+        android:layout_height="471dp"
+        app:layout_constraintBottom_toTopOf="@+id/couleurhexa"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/couleurActuelle"
         app:srcCompat="@drawable/couleurcercle" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/couleurhexa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/boutonValider"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selecteur"
+        android:hint="#XXXXXX" />
+
+    <Button
+        android:id="@+id/boutonValider"
+        android:layout_width="158dp"
+        android:layout_height="62dp"
+        android:layout_marginStart="16dp"
+        android:text="Valider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/boutonAnnuler"
+        app:layout_constraintTop_toBottomOf="@+id/couleurhexa" />
+    <Button
+        android:id="@+id/boutonAnnuler"
+        android:layout_width="158dp"
+        android:layout_height="62dp"
+        android:layout_marginStart="16dp"
+        android:text="Annuler"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/boutonValider"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/couleurhexa"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

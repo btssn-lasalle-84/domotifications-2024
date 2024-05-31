@@ -108,6 +108,16 @@
                 android:background="@android:color/transparent"
                 android:scaleType="fitXY"
                 tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/couleurMachine1"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="25dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/icone_palette"
+                tools:ignore="MissingConstraints" />
         </LinearLayout>
 
         <LinearLayout
