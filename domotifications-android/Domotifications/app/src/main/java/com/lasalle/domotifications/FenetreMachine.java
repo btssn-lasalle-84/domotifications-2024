@@ -47,12 +47,13 @@ public class FenetreMachine extends AppCompatActivity
     private static final String API_PATCH_MACHINES = "/machines";       //!< Pour une requête PATCH
     private static final int    INTERVALLE         = 1000; //!< Intervalle d'interrogation en ms
     public static final int     NB_MACHINES_MAX    = 5;    //!< Nombre max de machines
+    private static final int CHANGEMENT_COULEUR = 1;
 
     /**
      * Attributs
      */
     private BaseDeDonnees  baseDeDonnees;      //!< Association avec la base de donnees
-    public static Vector<Module> modulesMachines;    //!< Conteneur des modules machines
+    private Vector<Module> modulesMachines;    //!< Conteneur des modules machines
     private int            nbModulesMachines;  //!< le nombre de machines gérées
     private int            idNotification = 0; //!< Identifiant unique pour chaque notification
     private Communication  communication;      //!< Association avec la classe Communication
@@ -81,7 +82,7 @@ public class FenetreMachine extends AppCompatActivity
     private ImageView[] imagesMachines; //!< Images des machines
     private ImageView[] imagesNotificationMachines; //!< Images des notifications des machines
     private Switch[] boutonsActivation; //!< Boutons d'activation/désactivation des modules
-    private ImageView[] imageSelecteur; //!< Images des couleurs des modules
+    private ImageView[] imagesSelecteurCouleur; //!< Images des couleurs des modules
     //!< machines
 
     @Override
@@ -149,19 +150,24 @@ public class FenetreMachine extends AppCompatActivity
         boutonsActivation[3] = (Switch)findViewById(R.id.activationMachine3);
         boutonsActivation[4] = (Switch)findViewById(R.id.activationMachine4);
 
-        imageSelecteur = new ImageView[NB_MACHINES_MAX];
-        imageSelecteur[0] = (ImageView)findViewById(R.id.couleurMachine0);
-        imageSelecteur[1] = (ImageView)findViewById(R.id.couleurMachine1);
+        imagesSelecteurCouleur = new ImageView[NB_MACHINES_MAX];
+        imagesSelecteurCouleur[0] = (ImageView)findViewById(R.id.couleurMachine0);
+        imagesSelecteurCouleur[1] = (ImageView)findViewById(R.id.couleurMachine1);
+        //imagesSelecteurCouleur[2] = (ImageView)findViewById(R.id.couleurMachine2);
+        //imagesSelecteurCouleur[3] = (ImageView)findViewById(R.id.couleurMachine3);
+        //imagesSelecteurCouleur[4] = (ImageView)findViewById(R.id.couleurMachine4);
 
         for(int i = 0; i < nbModulesMachines; ++i)
         {
             int idMachine = i;
-            imageSelecteur[i].setOnClickListener(new View.OnClickListener() {
+            imagesSelecteurCouleur[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(FenetreMachine.this, SelecteurCouleur.class);
-                    intent.putExtra("idMachine", idMachine);
-                    startActivity(intent);
+                    intent.putExtra("idModule", modulesMachines.get(idMachine).getIdModule());
+                    intent.putExtra("nom", modulesMachines.get(idMachine).getNomModule());
+                    intent.putExtra("couleur", modulesMachines.get(idMachine).getCouleur());
+                    startActivityForResult(intent, CHANGEMENT_COULEUR);
                 }
             });
             imagesMachines[i].setImageResource(IMAGE_MACHINES[i]);
@@ -595,5 +601,27 @@ public class FenetreMachine extends AppCompatActivity
                     101);
         }
         return false;
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG,
+                "onActivityResult() requestCode = " + requestCode + " - resultCode = " + resultCode);
+        if(requestCode == CHANGEMENT_COULEUR)
+        {
+            if(resultCode == RESULT_OK)
+            {
+                if(data != null)
+                {
+                    int idModule = data.getIntExtra("idModule", -1);
+                    String nomModule = data.getStringExtra("nom");
+                    String couleurModule = data.getStringExtra("couleur");
+                    Log.d(TAG,
+                            "onActivityResult() idModule = " + idModule + " - nomModule : " + nomModule + " - couleurModule = " + couleurModule);
+                    // @todo émettre une requête PATCH pour changer la couleur
+                }
+            }
+        }
     }
 }
