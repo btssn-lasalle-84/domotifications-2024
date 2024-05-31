@@ -355,6 +355,7 @@ void ServeurWeb::traiterRequeteUpdatePoubelle()
     {
         String couleurPoubelle = documentJSON["couleur"].as<String>();
         poubelle->setCouleurLed(couleurPoubelle);
+        // @todo si le module est en notification alors il faut (re)allumer la led
     }
 
     // Sauvegarde les états de ce module
@@ -520,11 +521,11 @@ void ServeurWeb::traiterRequeteUpdateMachine()
         machine->setEtatNotification(etatMachine);
     }
     // Mise à jour la couleur de la led
-
     if(objetJSON.containsKey("couleur"))
     {
         String couleurMachine = documentJSON["couleur"].as<String>();
         machine->setCouleurLed(couleurMachine);
+        // @todo si le module est en notification alors il faut (re)allumer la led
     }
 
     // Sauvegarde les états de ce module
@@ -694,7 +695,9 @@ void ServeurWeb::traiterRequeteUpdateBoite()
     {
         String couleurBoite = documentJSON["couleur"].as<String>();
         boite->setCouleurLed(couleurBoite);
+        // @todo si le module est en notification alors il faut (re)allumer la led
     }
+
     // Sauvegarde les états de ce module
     stationLumineuse->sauvegarderEtatsBoite(idBoite);
 

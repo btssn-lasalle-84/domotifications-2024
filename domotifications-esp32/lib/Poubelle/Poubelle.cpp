@@ -71,7 +71,7 @@ void Poubelle::eteindreNotification()
 {
     if(activation)
     {
-        leds.setPixelColor(INDEX_LEDS_NOTIFICATION_POUBELLES + numeroLed, leds.Color(255, 0, 0));
+        leds.setPixelColor(INDEX_LEDS_NOTIFICATION_POUBELLES + numeroLed, leds.Color(0, 0, 0));
         leds.show();
     }
 }

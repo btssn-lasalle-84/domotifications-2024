@@ -12,12 +12,15 @@
 #include "Poubelle.h"
 #include <sstream>
 
-uint32_t StationLumineuse::couleursMachines[NB_LEDS_NOTIFICATION_MACHINES] = {
-    StationLumineuse::convertirCouleurRGB(0, 255, 0)
-};
+// les couleurs par défaut des poubelles
 uint32_t StationLumineuse::couleursPoubelles[NB_LEDS_NOTIFICATION_POUBELLES] = {
-    StationLumineuse::convertirCouleurRGB(0, 255, 0)
+    StationLumineuse::convertirCouleurRGB(255, 0, 0),     // Couleur poubelle 0 (rouge)
+    StationLumineuse::convertirCouleurRGB(255, 255, 0),   // Couleur poubelle 1 (jaune)
+    StationLumineuse::convertirCouleurRGB(0, 0, 255),     // Couleur poubelle 2 (bleue)
+    StationLumineuse::convertirCouleurRGB(240, 240, 242), // Couleur poubelle 3 (grise)
+    StationLumineuse::convertirCouleurRGB(0, 255, 0)      // Couleur poubelle 4 (verte)
 };
+
 /**
  * @brief Constructeur de la classe StationLumineuse
  * @fn StationLumineuse::StationLumineuse
@@ -180,6 +183,7 @@ void StationLumineuse::sauvegarderEtatsPoubelle(int id)
     preferences.putBool(cle, poubelles[id - 1]->getEtatNotification());
     sprintf((char*)cle, "%s%d", "actif_p", id);
     preferences.putBool(cle, poubelles[id - 1]->getActivation());
+    sauvegarderCouleurPoubelle(id);
 }
 
 std::size_t StationLumineuse::getNbBoites() const
@@ -210,6 +214,7 @@ void StationLumineuse::sauvegarderEtatsBoite(int id)
     preferences.putBool(cle, boites[id - 1]->getEtatNotification());
     sprintf((char*)cle, "%s%d", "actif_b", id);
     preferences.putBool(cle, boites[id - 1]->getActivation());
+    sauvegarderCouleurBoite(id);
 }
 
 std::size_t StationLumineuse::getNbMachines() const
@@ -240,6 +245,7 @@ void StationLumineuse::sauvegarderEtatsMachine(int id)
     preferences.putBool(cle, machines[id - 1]->getEtatNotification());
     sprintf((char*)cle, "%s%d", "actif_m", id);
     preferences.putBool(cle, machines[id - 1]->getActivation());
+    sauvegarderCouleurMachine(id);
 }
 
 // Méthodes statiques
@@ -248,118 +254,74 @@ uint32_t StationLumineuse::convertirCouleurRGB(uint8_t r, uint8_t g, uint8_t b)
     return ((uint32_t)r << 16) | ((uint32_t)g << 8) | b;
 }
 
-uint32_t StationLumineuse::getCouleurPoubelle(String nom)
-{
-    for(int i = 0; i < NB_LEDS_NOTIFICATION_POUBELLES; ++i)
-    {
-        if(nom == nomCouleursPoubelles[i])
-        {
-            return couleursPoubelles[i];
-        }
-    }
-    return 0;
-}
-
-String StationLumineuse::getNomCouleurPoubelle(uint32_t couleur)
-{
-    for(int i = 0; i < NB_LEDS_NOTIFICATION_POUBELLES; ++i)
-    {
-        if(couleur == couleursPoubelles[i])
-        {
-            return nomCouleursPoubelles[i];
-        }
-    }
-    return "";
-}
-
-void StationLumineuse::sauvegarderCouleurs()
-{
-    for (int i = 1; i <= getNbPoubelles(); ++i) {
-        sauvegarderCouleurPoubelle(i);
-    }
-    for (int i = 1; i <= getNbBoites(); ++i) {
-        sauvegarderCouleurBoite(i);
-    }
-    for (int i = 1; i <= getNbMachines(); ++i) {
-        sauvegarderCouleurMachine(i);
-    }
-}
-
-void StationLumineuse::restaurerCouleurs()
-{
-    for (int i = 1; i <= getNbPoubelles(); ++i) {
-        restaurerCouleurPoubelle(i);
-    }
-    for (int i = 1; i <= getNbBoites(); ++i) {
-        restaurerCouleurBoite(i);
-    }
-    for (int i = 1; i <= getNbMachines(); ++i) {
-        restaurerCouleurMachine(i);
-    }
-}
-
 void StationLumineuse::sauvegarderCouleurPoubelle(int id)
 {
-    if (id < 1 || id > poubelles.size() || poubelles[id - 1] == nullptr) {
+    if(id < 1 || id > poubelles.size() || poubelles[id - 1] == nullptr)
+    {
         return;
     }
     char cle[64] = "";
     sprintf(cle, "couleur_p%d", id);
-    preferences.putUInt(cle, poubelles[id - 1]->getCouleur());
+    preferences.putString(cle, poubelles[id - 1]->getCouleur());
 }
 
 void StationLumineuse::restaurerCouleurPoubelle(int id)
 {
-    if (id < 1 || id > poubelles.size() || poubelles[id - 1] == nullptr) {
+    if(id < 1 || id > poubelles.size() || poubelles[id - 1] == nullptr)
+    {
         return;
     }
+
     char cle[64] = "";
-    sprintf(cle, "couleur_p%d", id);
-    preferences.putUInt(cle, poubelles[id - 1]->getCouleur());
+    sprintf((char*)cle, "%s%d", "couleur_p", id);
+    Poubelle* poubelle = getPoubelle(id);
+    poubelle->setCouleurLed(
+      preferences.getString(cle, StationLumineuse::getCouleurToString(couleursPoubelles[id])));
 }
 
 void StationLumineuse::sauvegarderCouleurBoite(int id)
 {
-    if (id < 1 || id > boites.size() || boites[id - 1] == nullptr) {
+    if(id < 1 || id > boites.size() || boites[id - 1] == nullptr)
+    {
         return;
     }
     char cle[64] = "";
     sprintf(cle, "couleur_b%d", id);
-    preferences.putUInt(cle, boites[id - 1]->getCouleur());
+    preferences.putString(cle, boites[id - 1]->getCouleur());
 }
 
 void StationLumineuse::restaurerCouleurBoite(int id)
 {
-    if (id < 1 || id > boites.size() || boites[id - 1] == nullptr) {
+    if(id < 1 || id > boites.size() || boites[id - 1] == nullptr)
+    {
         return;
     }
     char cle[64] = "";
     sprintf(cle, "couleur_b%d", id);
-    preferences.putUInt(cle, boites[id - 1]->getCouleur());
+    // @todo restaurer la couleur de la led
 }
 
 void StationLumineuse::sauvegarderCouleurMachine(int id)
 {
-    if (id < 1 || id > machines.size() || machines[id - 1] == nullptr) {
+    if(id < 1 || id > machines.size() || machines[id - 1] == nullptr)
+    {
         return;
     }
     char cle[64] = "";
-    sprintf(cle, "couleur_b%d", id);
-    preferences.putUInt(cle, machines[id - 1]->getCouleur());
+    sprintf(cle, "couleur_m%d", id);
+    preferences.putString(cle, machines[id - 1]->getCouleur());
 }
 
 void StationLumineuse::restaurerCouleurMachine(int id)
 {
-    if (id < 1 || id > machines.size() || machines[id - 1] == nullptr) {
+    if(id < 1 || id > machines.size() || machines[id - 1] == nullptr)
+    {
         return;
     }
     char cle[64] = "";
-    sprintf(cle, "couleur_b%d", id);
-    preferences.putUInt(cle, machines[id - 1]->getCouleur());
+    sprintf(cle, "couleur_m%d", id);
+    // @todo restaurer la couleur de la led
 }
-
-
-
 
 // Méthodes privées
 /**
@@ -372,9 +334,11 @@ void StationLumineuse::restaurerEtats()
 
     // pour les modules Poubelle
     Poubelle* poubelle = nullptr;
-    for (int i = 1; i <= getNbPoubelles(); ++i) {
+    for(int i = 1; i <= getNbPoubelles(); ++i)
+    {
         poubelle = getPoubelle(i);
-        if (poubelle == nullptr) {
+        if(poubelle == nullptr)
+        {
             continue;
         }
         sprintf((char*)cle, "%s%d", "notif_p", i);
@@ -386,9 +350,11 @@ void StationLumineuse::restaurerEtats()
 
     // Restaurer les états des modules Boite
     Boite* boite = nullptr;
-    for (int i = 1; i <= getNbBoites(); i++) {
+    for(int i = 1; i <= getNbBoites(); i++)
+    {
         boite = getBoite(i);
-        if (boite == nullptr) {
+        if(boite == nullptr)
+        {
             continue;
         }
         sprintf((char*)cle, "%s%d", "notif_b", i);
@@ -400,9 +366,11 @@ void StationLumineuse::restaurerEtats()
 
     // Restaurer les états des modules Machine
     Machine* machine = nullptr;
-    for (int i = 1; i <= getNbMachines(); i++) {
+    for(int i = 1; i <= getNbMachines(); i++)
+    {
         machine = getMachine(i);
-        if (machine == nullptr) {
+        if(machine == nullptr)
+        {
             continue;
         }
         sprintf((char*)cle, "%s%d", "notif_m", i);
