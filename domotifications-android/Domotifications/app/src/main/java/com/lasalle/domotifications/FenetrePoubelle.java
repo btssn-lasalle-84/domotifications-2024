@@ -47,6 +47,7 @@ public class FenetrePoubelle extends AppCompatActivity
     private static final String TAG                 = "_FenetrePoubelle"; //!< TAG pour les logs
     private static final String API_PATCH_POUBELLES = "/poubelles"; //!< Pour une requête PATCH
     private static final int    INTERVALLE          = 1000; //!< Intervalle d'interrogation en ms
+    private static final int CHANGEMENT_COULEUR = 1;
     /**
      * Attributs
      */
@@ -592,5 +593,33 @@ public class FenetrePoubelle extends AppCompatActivity
                     101);
         }
         return false;
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG,
+                "onActivityResult() requestCode = " + requestCode + " - resultCode = " + resultCode);
+        if(requestCode == CHANGEMENT_COULEUR)
+        {
+            if(resultCode == RESULT_OK)
+            {
+                if(data != null)
+                {
+                    int idModule = data.getIntExtra("idModule", -1);
+                    String nomModule = data.getStringExtra("nom");
+                    String couleurModule = data.getStringExtra("couleur");
+                    Log.d(TAG,
+                            "onActivityResult() idModule = " + idModule + " - nomModule : " + nomModule + " - couleurModule = " + couleurModule);
+
+                    if (idModule != -1)
+                    {
+                        String api = API_PATCH_POUBELLES + "/" + idModule;
+                        String json = "{\"idPoubelle\": \"" + idModule + "\",\"couleur\": \"" + couleurModule + "\"}";
+                        communication.emettreRequetePATCH(api, json, handler);
+                    }
+                }
+            }
+        }
     }
 }
