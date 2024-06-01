@@ -160,7 +160,8 @@ public class FenetreMachine extends AppCompatActivity
         for(int i = 0; i < nbModulesMachines; ++i)
         {
             int idMachine = i;
-            imagesSelecteurCouleur[i].setOnClickListener(new View.OnClickListener() {
+            imagesSelecteurCouleur[i].setOnClickListener(new View.OnClickListener()
+            {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(FenetreMachine.this, SelecteurCouleur.class);
@@ -172,14 +173,16 @@ public class FenetreMachine extends AppCompatActivity
             });
             imagesMachines[i].setImageResource(IMAGE_MACHINES[i]);
             final int numeroMachine = i;
-            imagesNotificationMachines[i].setOnClickListener(new View.OnClickListener() {
+            imagesNotificationMachines[i].setOnClickListener(new View.OnClickListener()
+            {
                 @Override
                 public void onClick(View v)
                 {
                     gererClicBoutonNotification(numeroMachine);
                 }
             });
-            imagesMachines[i].setOnClickListener(new View.OnClickListener() {
+            imagesMachines[i].setOnClickListener(new View.OnClickListener()
+            {
                 @Override
                 public void onClick(View v)
                 {
@@ -619,7 +622,13 @@ public class FenetreMachine extends AppCompatActivity
                     String couleurModule = data.getStringExtra("couleur");
                     Log.d(TAG,
                             "onActivityResult() idModule = " + idModule + " - nomModule : " + nomModule + " - couleurModule = " + couleurModule);
-                    // @todo émettre une requête PATCH pour changer la couleur
+
+                    if (idModule != -1)
+                    {
+                        String api = API_PATCH_MACHINES + "/" + idModule;
+                        String json = "{\"idMachine\": \"" + idModule + "\",\"couleur\": \"" + couleurModule + "\"}";
+                        communication.emettreRequetePATCH(api, json, handler);
+                    }
                 }
             }
         }

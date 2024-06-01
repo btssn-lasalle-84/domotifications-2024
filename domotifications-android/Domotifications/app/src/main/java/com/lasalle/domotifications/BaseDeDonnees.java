@@ -126,12 +126,14 @@ public class BaseDeDonnees extends SQLiteOpenHelper
             String nom    = curseur.getString(curseur.getColumnIndexOrThrow("nom"));
             String actif  = curseur.getString(curseur.getColumnIndexOrThrow("actif"));
             String etat   = curseur.getString(curseur.getColumnIndexOrThrow("etat"));
+            String couleur = curseur.getString(curseur.getColumnIndexOrThrow("couleur"));
             Module module = new Module(Integer.parseInt(id),
                                        nom,
                                        Module.TypeModule.Poubelle,
                                        (Integer.parseInt(actif) == 1 ? true : false),
                                        (Integer.parseInt(etat) == 1 ? true : false),
-                                       baseDeDonnees);
+                                        couleur,
+                                        baseDeDonnees);
             listeModules.add(module);
         }
         curseur.close();
@@ -156,12 +158,15 @@ public class BaseDeDonnees extends SQLiteOpenHelper
             String nom    = curseur.getString(curseur.getColumnIndexOrThrow("nom"));
             String actif  = curseur.getString(curseur.getColumnIndexOrThrow("actif"));
             String etat   = curseur.getString(curseur.getColumnIndexOrThrow("etat"));
+            String couleur = curseur.getString(curseur.getColumnIndexOrThrow("couleur"));
             Module module = new Module(Integer.parseInt(id),
                                        nom,
                                        Module.TypeModule.BoiteAuxLettres,
                                        (Integer.parseInt(actif) == 1 ? true : false),
                                        (Integer.parseInt(etat) == 1 ? true : false),
+                                       couleur,
                                        baseDeDonnees);
+
             listeModules.add(module);
         }
         curseur.close();
@@ -186,12 +191,15 @@ public class BaseDeDonnees extends SQLiteOpenHelper
             String nom    = curseur.getString(curseur.getColumnIndexOrThrow("nom"));
             String actif  = curseur.getString(curseur.getColumnIndexOrThrow("actif"));
             String etat   = curseur.getString(curseur.getColumnIndexOrThrow("etat"));
+            String couleur = curseur.getString(curseur.getColumnIndexOrThrow("couleur"));
             Module module = new Module(Integer.parseInt(id),
                     nom,
                     Module.TypeModule.Machine,
                     (Integer.parseInt(actif) == 1 ? true : false),
                     (Integer.parseInt(etat) == 1 ? true : false),
+                    couleur,
                     baseDeDonnees);
+
             listeModules.add(module);
         }
         curseur.close();
@@ -367,7 +375,7 @@ public class BaseDeDonnees extends SQLiteOpenHelper
         sqlite.execSQL(
           "CREATE TABLE IF NOT EXISTS typesModules (id INTEGER PRIMARY KEY AUTOINCREMENT, type TEXT NOT NULL CHECK(type IN ('BoiteAuxLettres','Poubelle','Machine')));");
         sqlite.execSQL(
-          "CREATE TABLE IF NOT EXISTS modules (id INTEGER, nom TEXT UNIQUE NOT NULL, idTypesModules INTEGER, actif BOOLEAN NOT NULL CHECK (actif IN (0, 1)) DEFAULT 0, etat BOOLEAN NOT NULL CHECK (etat IN (0, 1)) DEFAULT 0, idDomotifications INTEGER, PRIMARY KEY(id, idTypesModules), FOREIGN KEY (idTypesModules) REFERENCES typesModules(id), FOREIGN KEY (idDomotifications) REFERENCES domotifications(id) ON DELETE CASCADE);");
+        "CREATE TABLE IF NOT EXISTS modules (id INTEGER, nom TEXT UNIQUE NOT NULL, idTypesModules INTEGER, actif BOOLEAN NOT NULL CHECK (actif IN (0, 1)) DEFAULT 0, etat BOOLEAN NOT NULL CHECK (etat IN (0, 1)) DEFAULT 0, couleur TEXT, idDomotifications INTEGER, PRIMARY KEY(id, idTypesModules), FOREIGN KEY (idTypesModules) REFERENCES typesModules(id), FOREIGN KEY (idDomotifications) REFERENCES domotifications(id) ON DELETE CASCADE);");
         sqlite.execSQL(
           "CREATE TABLE IF NOT EXISTS notifications (id INTEGER PRIMARY KEY AUTOINCREMENT, idDomotifications INTEGER, idModules INTEGER, idTypesModules INTEGER, horodatage DATETIME NOT NULL, acquittement BOOLEAN NOT NULL CHECK (acquittement IN (0, 1)) DEFAULT 0, FOREIGN KEY (idDomotifications) REFERENCES domotifications(id) ON DELETE CASCADE, FOREIGN KEY (idModules,idTypesModules) REFERENCES modules(id,idTypesModules) ON DELETE CASCADE);");
 
@@ -398,21 +406,21 @@ public class BaseDeDonnees extends SQLiteOpenHelper
         sqlite.execSQL(
           "INSERT INTO domotifications(nom, urlServeurWeb, urlServeurWebsocket, nbBoitesAuxLettres, nbPoubelles, nbMachines) VALUES ('BTS', 'http://station-lumineuse.local:80', 'ws://station-lumineuse.local:5000', 1, 5, 6);");
         sqlite.execSQL(
-          "INSERT INTO modules (id, nom, idTypesModules, actif, idDomotifications) VALUES (1, 'boîte aux lettres', 1, 1, 1);");
+          "INSERT INTO modules (id, nom, idTypesModules, actif, couleur, idDomotifications) VALUES (1, 'boîte aux lettres', 1, 1, 'rouge', 1);");
         sqlite.execSQL(
-          "INSERT INTO modules (id, nom, idTypesModules, actif, idDomotifications) VALUES (1, 'bleue', 2, 1, 1);");
+          "INSERT INTO modules (id, nom, idTypesModules, actif, couleur, idDomotifications) VALUES (1, 'bleue', 2, 1, 'bleu', 1);");
         sqlite.execSQL(
-          "INSERT INTO modules (id, nom, idTypesModules, actif, idDomotifications) VALUES (2, 'verte', 2, 0, 1);");
+          "INSERT INTO modules (id, nom, idTypesModules, actif, couleur, idDomotifications) VALUES (2, 'verte', 2, 0, 'vert', 1);");
         sqlite.execSQL(
-          "INSERT INTO modules (id, nom, idTypesModules, actif, idDomotifications) VALUES (3, 'jaune', 2, 0, 1);");
+          "INSERT INTO modules (id, nom, idTypesModules, actif, couleur, idDomotifications) VALUES (3, 'jaune', 2, 0, 'jaune', 1);");
         sqlite.execSQL(
-          "INSERT INTO modules (id, nom, idTypesModules, actif, idDomotifications) VALUES (4, 'grise', 2, 0, 1);");
+          "INSERT INTO modules (id, nom, idTypesModules, actif, couleur, idDomotifications) VALUES (4, 'grise', 2, 0, 'gris', 1);");
         sqlite.execSQL(
-          "INSERT INTO modules (id, nom, idTypesModules, actif, idDomotifications) VALUES (5, 'rouge', 2, 0, 1);");
+          "INSERT INTO modules (id, nom, idTypesModules, actif, couleur, idDomotifications) VALUES (5, 'rouge', 2, 0, 'rouge', 1);");
         sqlite.execSQL(
-          "INSERT INTO modules (id, nom, idTypesModules, actif, idDomotifications) VALUES (1, 'machine à laver', 3, 1, 1);");
+          "INSERT INTO modules (id, nom, idTypesModules, actif, couleur, idDomotifications) VALUES (1, 'machine à laver', 3, 1, 'orange', 1);");
         sqlite.execSQL(
-          "INSERT INTO modules (id, nom, idTypesModules, actif, idDomotifications) VALUES (2, 'lave-vaiselle', 3, 1, 1);");
+          "INSERT INTO modules (id, nom, idTypesModules, actif, couleur, idDomotifications) VALUES (2, 'lave-vaisselle', 3, 1, 'rose', 1);");
     }
 
     /**
@@ -497,6 +505,28 @@ public class BaseDeDonnees extends SQLiteOpenHelper
             Log.e(TAG, "Erreur de mise à jour de l'état de notification du module");
         }
     }
+
+    /**
+     * @brief Met à jour l'état de la couleur du module dans la base de données
+     */
+    public void mettreAJourCouleurModule(int idModule, int idTypesModules, String couleur)
+    {
+        Log.d(TAG, "mettreAJourCouleurModule() idModule = " + idModule + " couleur = " + couleur);
+
+        try
+        {
+            String requete = "UPDATE modules SET couleur = '" + couleur + "' WHERE id = '" +
+                    idModule + "' AND idTypesModules = '" + (idTypesModules + 1) + "'";
+            Log.d(TAG, "mettreAJourCouleurModule() requete = " + requete);
+            sqlite.execSQL(requete);
+        }
+        catch(SQLiteConstraintException e)
+        {
+            Log.e(TAG, "Erreur de mise à jour de la couleur du module");
+        }
+    }
+
+
 
     /**
      * @brief Enregistre l'acquittement de la notification dans la base de données
