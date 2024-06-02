@@ -69,7 +69,7 @@
                 android:layout_margin="25dp"
                 android:clickable="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/icone_palette"
+                android:src="@drawable/parametres"
                 tools:ignore="MissingConstraints" />
 
         </LinearLayout>
@@ -116,7 +116,7 @@
                 android:layout_margin="25dp"
                 android:clickable="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/icone_palette"
+                android:src="@drawable/parametres"
                 tools:ignore="MissingConstraints" />
         </LinearLayout>
 
@@ -153,6 +153,16 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:scaleType="fitXY"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/couleurMachine2"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="25dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/parametres"
                 tools:ignore="MissingConstraints" />
         </LinearLayout>
 
@@ -191,6 +201,16 @@
                 android:scaleType="fitXY"
                 tools:ignore="MissingConstraints" />
 
+            <ImageView
+                android:id="@+id/couleurMachine3"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="25dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/parametres"
+                tools:ignore="MissingConstraints" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -226,6 +246,16 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:scaleType="fitXY"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/couleurMachine4"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="25dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/parametres"
                 tools:ignore="MissingConstraints" />
         </LinearLayout>
 

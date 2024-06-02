@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SelecteurCouleur">
+    tools:context=".ParametresModule">
 
     <TextView
         android:id="@+id/informationsModule"
@@ -19,16 +19,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.047" />
-    <TextView
-        android:id="@+id/couleurActuelle"
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/nomModule"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/selecteur"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/informationsModule" />
+        app:layout_constraintTop_toBottomOf="@+id/informationsModule"
+        android:hint="nom du module" />
 
     <ImageView
         android:id="@+id/selecteur"
@@ -37,7 +37,7 @@
         app:layout_constraintBottom_toTopOf="@+id/couleurhexa"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/couleurActuelle"
+        app:layout_constraintTop_toBottomOf="@+id/nomModule"
         app:srcCompat="@drawable/couleurcercle" />
 
     <com.google.android.material.textfield.TextInputEditText

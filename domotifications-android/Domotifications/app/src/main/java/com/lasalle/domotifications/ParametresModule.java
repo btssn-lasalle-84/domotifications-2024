@@ -5,16 +5,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.os.Message;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,12 +20,12 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-public class SelecteurCouleur extends AppCompatActivity
+public class ParametresModule extends AppCompatActivity
 {
     /**
      * Constantes
      */
-    private static final String TAG = "_SelecteurCouleur";
+    private static final String TAG = "_ParametresModule";
 
     /**
      * Attributs
@@ -37,13 +33,10 @@ public class SelecteurCouleur extends AppCompatActivity
     private int               idModule;
     private String            nomModule;
     private String            couleurModule;
-    private String            couleurHTML;
     private ImageView         selecteur;
     private Bitmap            image;
-    private TextInputEditText nouvelleCouleur;
-
-    Communication   communication; //!< Association avec la classe Communication
-    private Handler handler;
+    private TextInputEditText nom;
+    private TextInputEditText couleur;
 
     @Override
     @SuppressLint("ClickableViewAccessibility")
@@ -51,7 +44,7 @@ public class SelecteurCouleur extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_selecteur_couleur);
+        setContentView(R.layout.activity_parametres_module);
         // Gestion des événements
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -72,11 +65,17 @@ public class SelecteurCouleur extends AppCompatActivity
         TextView informationsModuleTextView = findViewById(R.id.informationsModule);
         informationsModuleTextView.setText("Module " + nomModule);
 
-        TextView couleurModuleTextView = findViewById(R.id.couleurhexa);
+        couleur = (TextInputEditText)findViewById(R.id.couleurhexa);
         if(couleurModule != null)
-            couleurModuleTextView.setText(couleurModule);
+            couleur.setText(couleurModule);
         else
-            couleurModuleTextView.setText("");
+            couleur.setText("");
+
+        nom = (TextInputEditText)findViewById(R.id.nomModule);
+        if(nomModule != null)
+            nom.setText(nomModule);
+        else
+            nom.setText("");
 
         Button boutonValider = (Button)findViewById(R.id.boutonValider);
         boutonValider.setOnClickListener(new View.OnClickListener() {
@@ -86,11 +85,12 @@ public class SelecteurCouleur extends AppCompatActivity
 
                 Intent intent = new Intent();
                 intent.putExtra("idModule", idModule);
-                intent.putExtra("nom", nomModule);
-                intent.putExtra("couleur", nouvelleCouleur.getText().toString().trim());
+                intent.putExtra("nom", nom.getText().toString().trim());
+                intent.putExtra("couleur", couleur.getText().toString().trim());
                 Log.d(TAG,
-                      "onClick() idModule = " + idModule + " - nomModule = " + nomModule +
-                        " - nouvelleCouleur = " + nouvelleCouleur.getText().toString().trim());
+                      "onClick() idModule = " + idModule +
+                        " - nomModule = " + nom.getText().toString().trim() +
+                        " - nouvelleCouleur = " + couleur.getText().toString().trim());
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -105,8 +105,7 @@ public class SelecteurCouleur extends AppCompatActivity
             }
         });
 
-        nouvelleCouleur = (TextInputEditText)findViewById(R.id.couleurhexa);
-        selecteur       = findViewById(R.id.selecteur);
+        selecteur = findViewById(R.id.selecteur);
         selecteur.setDrawingCacheEnabled(true);
         selecteur.buildDrawingCache(true);
         selecteur.setOnTouchListener(new View.OnTouchListener() {
@@ -129,7 +128,7 @@ public class SelecteurCouleur extends AppCompatActivity
                             + " bleu = " + String.format("%02X", bleu));
 
                     // Conversion au format #RRGGBB
-                    couleurHTML = String.format("#%06X", (pixel & 0x00FFFFFF));
+                    String couleurHTML = String.format("#%06X", (pixel & 0x00FFFFFF));
                     Log.d(TAG, "couleurHTML = " + couleurHTML);
 
                     // Vérification
@@ -138,7 +137,9 @@ public class SelecteurCouleur extends AppCompatActivity
                     Log.d(TAG, "couleurRGB = " + couleurRGB);
                     */
 
-                    nouvelleCouleur.setText(couleurHTML);
+                    couleur.setText(couleurHTML);
+
+                    return true;
                 }
                 return false;
             }

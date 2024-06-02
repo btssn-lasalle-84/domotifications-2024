@@ -36,7 +36,7 @@
             android:name=".FenetreBoiteAuxLettres"
             android:exported="false"></activity>
         <activity
-            android:name=".SelecteurCouleur"
+            android:name=".ParametresModule"
             android:exported="false" />
     </application>
 
