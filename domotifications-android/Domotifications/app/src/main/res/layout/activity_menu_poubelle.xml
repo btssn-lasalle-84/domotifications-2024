@@ -60,6 +60,17 @@
                 android:background="@android:color/transparent"
                 android:scaleType="fitXY"
                 tools:ignore="MissingConstraints" />
+
+
+            <ImageView
+                android:id="@+id/couleurPoubelle0"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="25dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/parametres"
+                tools:ignore="MissingConstraints" />
         </LinearLayout>
 
         <LinearLayout
@@ -95,6 +106,16 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:scaleType="fitXY"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/couleurPoubelle1"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="25dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/parametres"
                 tools:ignore="MissingConstraints" />
         </LinearLayout>
 
@@ -132,6 +153,16 @@
                 android:background="@android:color/transparent"
                 android:scaleType="fitXY"
                 tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/couleurPoubelle2"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="25dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/parametres"
+                tools:ignore="MissingConstraints" />
         </LinearLayout>
 
         <LinearLayout
@@ -168,6 +199,16 @@
                 android:background="@android:color/transparent"
                 android:scaleType="fitXY"
                 tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/couleurPoubelle3"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="25dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/parametres"
+                tools:ignore="MissingConstraints" />
         </LinearLayout>
 
         <LinearLayout
@@ -203,6 +244,16 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:scaleType="fitXY"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/couleurPoubelle4"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="25dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/parametres"
                 tools:ignore="MissingConstraints" />
         </LinearLayout>
 

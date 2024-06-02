@@ -76,7 +76,7 @@
         android:layout_margin="25dp"
         android:clickable="true"
         android:scaleType="fitXY"
-        android:src="@drawable/icone_palette"
+        android:src="@drawable/parametres"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

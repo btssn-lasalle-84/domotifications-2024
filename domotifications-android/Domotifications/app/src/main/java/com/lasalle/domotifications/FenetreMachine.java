@@ -78,11 +78,12 @@ public class FenetreMachine extends AppCompatActivity
         R.drawable.machine,
         R.drawable.machine,
         R.drawable.machine
-    };                                  //!< Id de l'image de la machine dans les ressources Android
-    private ImageView[] imagesMachines; //!< Images des machines
+    }; //!< Id de l'image de la machine dans les ressources Android
+    private ImageView[] imagesMachines;             //!< Images des machines
     private ImageView[] imagesNotificationMachines; //!< Images des notifications des machines
-    private Switch[] boutonsActivation;         //!< Boutons d'activation/désactivation des modules
-    private ImageView[] imagesSelecteurCouleur; //!< Images des couleurs des modules
+    private Switch[]    boutonsActivation; //!< Boutons d'activation/désactivation des modules
+                                           //!< machines
+    private ImageView[] imagesParametres;  //!< Images des couleurs des modules
     //!< machines
 
     @Override
@@ -150,17 +151,17 @@ public class FenetreMachine extends AppCompatActivity
         boutonsActivation[3] = (Switch)findViewById(R.id.activationMachine3);
         boutonsActivation[4] = (Switch)findViewById(R.id.activationMachine4);
 
-        imagesSelecteurCouleur    = new ImageView[NB_MACHINES_MAX];
-        imagesSelecteurCouleur[0] = (ImageView)findViewById(R.id.couleurMachine0);
-        imagesSelecteurCouleur[1] = (ImageView)findViewById(R.id.couleurMachine1);
-        imagesSelecteurCouleur[2] = (ImageView)findViewById(R.id.couleurMachine2);
-        imagesSelecteurCouleur[3] = (ImageView)findViewById(R.id.couleurMachine3);
-        imagesSelecteurCouleur[4] = (ImageView)findViewById(R.id.couleurMachine4);
+        imagesParametres    = new ImageView[NB_MACHINES_MAX];
+        imagesParametres[0] = (ImageView)findViewById(R.id.couleurMachine0);
+        imagesParametres[1] = (ImageView)findViewById(R.id.couleurMachine1);
+        imagesParametres[2] = (ImageView)findViewById(R.id.couleurMachine2);
+        imagesParametres[3] = (ImageView)findViewById(R.id.couleurMachine3);
+        imagesParametres[4] = (ImageView)findViewById(R.id.couleurMachine4);
 
         for(int i = 0; i < nbModulesMachines; ++i)
         {
             int idMachine = i;
-            imagesSelecteurCouleur[i].setOnClickListener(new View.OnClickListener() {
+            imagesParametres[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v)
                 {
@@ -193,7 +194,7 @@ public class FenetreMachine extends AppCompatActivity
             imagesMachines[i].setVisibility(View.INVISIBLE);
             imagesNotificationMachines[i].setVisibility(View.INVISIBLE);
             boutonsActivation[i].setVisibility(View.INVISIBLE);
-            imagesSelecteurCouleur[i].setVisibility(View.INVISIBLE);
+            imagesParametres[i].setVisibility(View.INVISIBLE);
         }
 
         for(int i = 0; i < nbModulesMachines; ++i)
@@ -201,7 +202,7 @@ public class FenetreMachine extends AppCompatActivity
             imagesMachines[i].setVisibility(View.VISIBLE);
             imagesNotificationMachines[i].setVisibility(View.VISIBLE);
             boutonsActivation[i].setVisibility(View.VISIBLE);
-            imagesSelecteurCouleur[i].setVisibility(View.VISIBLE);
+            imagesParametres[i].setVisibility(View.VISIBLE);
         }
 
         for(int i = 0; i < nbModulesMachines; i++)
@@ -622,35 +623,31 @@ public class FenetreMachine extends AppCompatActivity
                     String nomModule     = data.getStringExtra("nom");
                     String couleurModule = data.getStringExtra("couleur");
                     Log.d(TAG,
-                          "onActivityResult() idModule = " + idModule +
-                            " - nomModule : " + nomModule + " - couleurModule = " + couleurModule);
+                          "onActivityResult() idModule = " + idModule + " - nomModule : " +
+                            nomModule + " - couleurModule = " + couleurModule);
 
                     if(idModule != -1)
                     {
-                        for (int i = 0; i < modulesMachines.size(); ++i)
+                        Module module = modulesMachines.get(idModule);
+                        if(module != null)
                         {
-                            Module module = modulesMachines.get(i);
-                            if (module.getIdModule() == idModule)
+                            if(!module.getNomModule().equals(nomModule))
                             {
-                                if (!module.getNomModule().equals(nomModule))
-                                {
-                                    module.setNomModule(nomModule);
-                                    baseDeDonnees.modifierNomModule(idModule, nomModule);
-                                }
-                                module.setCouleur(couleurModule);
-                                break;
+                                module.setNomModule(nomModule);
+                                baseDeDonnees.modifierNomModule(module.getIdModule(),
+                                                                module.getTypeModule().ordinal(),
+                                                                nomModule);
                             }
+                            module.setCouleur(couleurModule);
                         }
-
-                        String api  = API_PATCH_MACHINES + "/" + idModule;
-                        String json = "{\"idMachine\": \"" + idModule + "\",\"couleur\": \"" +
-                                      couleurModule + "\"}";
-                        communication.emettreRequetePATCH(api, json, handler);
                     }
+
+                    String api  = API_PATCH_MACHINES + "/" + idModule;
+                    String json = "{\"idMachine\": \"" + idModule + "\",\"couleur\": \"" +
+                                  couleurModule + "\"}";
+                    communication.emettreRequetePATCH(api, json, handler);
                 }
             }
         }
     }
-
-
 }
