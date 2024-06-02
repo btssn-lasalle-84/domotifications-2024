@@ -29,6 +29,12 @@ INNER JOIN modules ON (notifications.idModules = modules.id)
 INNER JOIN typesModules ON (modules.idTypesModules = typesModules.id)
 WHERE modules.id='2';
 
+--- Table notifications
+
+INSERT INTO notifications (idDomotifications, idModules, idTypesModules, horodatage, acquittement) VALUES (1, 1, 2, DATETIME('now'), 0);
+INSERT INTO notifications (idDomotifications, idModules, idTypesModules, horodatage, acquittement) VALUES (1, 2, 2, DATETIME('now'), 0);
+INSERT INTO notifications (idDomotifications, idModules, idTypesModules, horodatage, acquittement) VALUES (1, 3, 2, DATETIME('now'), 1);
+
 --- Mettre à jour une notification
 
 UPDATE notifications SET acquittement=1 WHERE id='1';

@@ -31,15 +31,28 @@ La station de notifications lumineuses est composée d’un bandeau circulaire �
 
 ## Fonctionnalités
 
+- Application Android
+
 ![diagramme-cas-utilisation](images/diagramme-cas-utilisation.png)
 
-| Fonctionnalité                         | OUI  | NON |
-|----------------------------------------|:----:|:---:|
-| Application mobile fonctionnelle       |  X   |     |
-| Afficher une notification              |      |  X  |
-| Acquitter une notification             |      |  X  |
-| Dialoguer avec l'IHM                   |      |  X  |
-| Activer/Désactiver un module           |      |  X  |
+| Fonctionnalité                      | OUI | NON |
+| ----------------------------------- | :-: | :-: |
+| Visualiser une notification         |  X  |     |
+| Acquitter une notification          |  X  |     |
+| Activer/désactiver un module        |  X  |     |
+| Dialoguer avec la station lumineuse |  X  |     |
+| Configurer le système               |     |  X  |
+
+- Station lumineuse
+
+| Fonctionnalité               | OUI | NON |
+| ---------------------------- | :-: | :-: |
+| Visualiser une notification  |  X  |     |
+| Acquitter une notification   |  X  |     |
+| Activer/désactiver un module |  X  |     |
+| Traiter les requêtes HTTP    |  X  |     |
+| Configurer la station        |     |  X  |
+
 
 ## Documentation du code
 
@@ -47,23 +60,35 @@ https://btssn-lasalle-84.github.io/domotifications-2024/
 
 ## Diagramme de classes
 
-![diagramme-classes-android](images/domotifications-android-classes.png)
+- Application Android
+
+![diagramme-classes-android](images/domotifications-android-classes-0.2.png)
+
+- Station lumineuse (ESP32)
+
+![diagramme-classes-esp32](images/domotifications-esp32-classes-0.2.png)
 
 ## Protocole
 
- cf. [Spécification API HTTP REST](./specifications-openapi/README.md)
+cf. [Spécification API HTTP REST](./specifications-openapi/README.md)
+
+![](images/api-machines.png)
+![](images/api-poubelles.png)
+![](images/api-boites.png)
 
 ## Screenshots
 
-- Version 0.1 (Android)
-
-![](images/screenshot-android-v0.1.png)
+![](images/domotifications-android.gif)
 
 ## Historique des versions
 
+- 0.2
+
+![](images/jira_v0.2.png)
+
 - 0.1
 
-![alt text](images/jira.PNG)
+![](images/jira_v0.1.png)
 
 ## Auteurs
 

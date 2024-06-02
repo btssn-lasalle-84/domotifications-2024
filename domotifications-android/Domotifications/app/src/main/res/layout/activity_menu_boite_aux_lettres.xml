@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/machine1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FenetreBoiteAuxLettres">
@@ -42,57 +42,47 @@
         android:layout_height="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.039"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.48"
+        app:layout_constraintVertical_bias="0.481"
         app:srcCompat="@drawable/boite_aux_lettres" />
 
-    <ImageView
-        android:id="@+id/boiteAuxLettres1"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+    <Switch
+        android:id="@+id/activationBoite0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.262"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.48"
-        app:srcCompat="@drawable/boite_aux_lettres" />
+        app:layout_constraintVertical_bias="0.608" />
 
     <ImageView
-        android:id="@+id/boiteAuxLettres2"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:id="@+id/notificationBoite0"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.48"
-        app:srcCompat="@drawable/boite_aux_lettres" />
+        app:layout_constraintVertical_bias="0.323"
+        app:srcCompat="@drawable/cloche" />
 
     <ImageView
-        android:id="@+id/boiteAuxLettres3"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:id="@+id/couleurBoite0"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="25dp"
+        android:clickable="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/parametres"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.726"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.48"
-        app:srcCompat="@drawable/boite_aux_lettres" />
-
-    <ImageView
-        android:id="@+id/boiteAuxLettres4"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.922"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.48"
-        app:srcCompat="@drawable/boite_aux_lettres" />
+        app:layout_constraintVertical_bias="0.714"
+        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

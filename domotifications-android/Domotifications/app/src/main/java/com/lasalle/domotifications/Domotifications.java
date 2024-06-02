@@ -4,11 +4,9 @@ import java.util.List;
 
 public class Domotifications
 {
-    private List<Module>  modules;
-    private Communication communication;
+    private List<Module> modules;
 
     public Domotifications()
     {
-        communication = new Communication();
     }
 }

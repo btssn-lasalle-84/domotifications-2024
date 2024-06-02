@@ -11,6 +11,7 @@
 #include "Machine.h"
 #include "Poubelle.h"
 #include <sstream>
+#include <iomanip>
 
 // les couleurs par défaut des poubelles
 uint32_t StationLumineuse::couleursPoubelles[NB_LEDS_NOTIFICATION_POUBELLES] = {
@@ -137,7 +138,10 @@ String StationLumineuse::getCouleurToString(uint32_t couleur)
 {
     std::stringstream couleurStream;
 
-    couleurStream << std::hex << couleur;
+    // #RRGGBB
+    couleurStream << std::setfill('0') << std::setw(2) << std::hex << ((couleur >> 16) & 0xff);
+    couleurStream << std::setfill('0') << std::setw(2) << std::hex << ((couleur >> 8) & 0xff);
+    couleurStream << std::setfill('0') << std::setw(2) << std::hex << (couleur & 0xff);
 
     return String("#") + String(couleurStream.str().c_str());
 }

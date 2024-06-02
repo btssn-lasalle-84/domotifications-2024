@@ -7,8 +7,7 @@
 
 package com.lasalle.domotifications;
 
-import static android.provider.MediaStore.getVersion;
-
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
@@ -16,7 +15,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -31,7 +29,8 @@ public class BaseDeDonnees extends SQLiteOpenHelper
     private static final String TAG = "_BaseDeDonnees"; //!< TAG pour les logs
     private static final String DOMOTIFICATIONS_BDD =
       "domotifications.db";                                   //!< Nom de la base de données
-    private static final int VERSION_DOMOTIFICATIONS_BDD = 1; //!< Version de la base de données
+    private static final int VERSION_DOMOTIFICATIONS_BDD = 2; //!< Version de la base de données
+    public static final int  ID_DOMOTIFICATIONS          = 1;
 
     /**
      * Attributs
@@ -65,15 +64,39 @@ public class BaseDeDonnees extends SQLiteOpenHelper
     }
 
     // Exemples de requêtes SQL
+    /**
+     * @brief Renvoie l'url du serveur web
+     */
+    public String getURLServeurWeb()
+    {
+        Log.d(TAG, "getURLServeurWeb()");
+
+        Cursor curseur =
+          sqlite.rawQuery("SELECT domotifications.urlServeurWeb FROM domotifications WHERE id=" +
+                            ID_DOMOTIFICATIONS + ";",
+                          null);
+
+        String urlServeurWeb = null;
+        if(curseur.moveToFirst())
+        {
+            urlServeurWeb = curseur.getString(0);
+        }
+        curseur.close();
+
+        return urlServeurWeb;
+    }
 
     /**
-     * @brief Renvoie un vecteur de string contenant le noms des participants enregistrés
+     * @brief Renvoie un vecteur de string contenant le noms des modules
      */
     public Vector<String> getNomModules()
     {
         Log.d(TAG, "getNomModules()");
 
-        Cursor curseur = sqlite.rawQuery("SELECT nom FROM modules ORDER BY nom ASC", null);
+        Cursor curseur =
+          sqlite.rawQuery("SELECT nom FROM modules  WHERE idDomotifications=" + ID_DOMOTIFICATIONS +
+                            " ORDER BY nom ASC",
+                          null);
 
         Vector<String> listeNomModules = new Vector<>();
 
@@ -88,14 +111,114 @@ public class BaseDeDonnees extends SQLiteOpenHelper
     }
 
     /**
+     * @brief Renvoie un vecteur de Module contenant le poubelles
+     */
+    public Vector<Module> getPoubelles()
+    {
+        String requete =
+          "SELECT * FROM modules WHERE modules.idTypesModules='2' AND idDomotifications=" +
+          ID_DOMOTIFICATIONS + ";";
+        Log.d(TAG, "getPoubelles() requete = " + requete);
+        Cursor         curseur      = sqlite.rawQuery(requete, null);
+        Vector<Module> listeModules = new Vector<Module>();
+        while(curseur.moveToNext())
+        {
+            String id      = curseur.getString(curseur.getColumnIndexOrThrow("id"));
+            String nom     = curseur.getString(curseur.getColumnIndexOrThrow("nom"));
+            String actif   = curseur.getString(curseur.getColumnIndexOrThrow("actif"));
+            String etat    = curseur.getString(curseur.getColumnIndexOrThrow("etat"));
+            String couleur = curseur.getString(curseur.getColumnIndexOrThrow("couleur"));
+            Module module  = new Module(Integer.parseInt(id),
+                                       nom,
+                                       Module.TypeModule.Poubelle,
+                                       (Integer.parseInt(actif) == 1 ? true : false),
+                                       (Integer.parseInt(etat) == 1 ? true : false),
+                                       couleur,
+                                       baseDeDonnees);
+            listeModules.add(module);
+        }
+        curseur.close();
+
+        return listeModules;
+    }
+
+    /**
+     * @brief Renvoie un vecteur de Module contenant les boîtes
+     */
+    public Vector<Module> getBoites()
+    {
+        String requete =
+          "SELECT * FROM modules WHERE modules.idTypesModules='1' AND idDomotifications=" +
+          ID_DOMOTIFICATIONS + ";";
+        Log.d(TAG, "getBoites() requete = " + requete);
+        Cursor         curseur      = sqlite.rawQuery(requete, null);
+        Vector<Module> listeModules = new Vector<Module>();
+        while(curseur.moveToNext())
+        {
+            String id      = curseur.getString(curseur.getColumnIndexOrThrow("id"));
+            String nom     = curseur.getString(curseur.getColumnIndexOrThrow("nom"));
+            String actif   = curseur.getString(curseur.getColumnIndexOrThrow("actif"));
+            String etat    = curseur.getString(curseur.getColumnIndexOrThrow("etat"));
+            String couleur = curseur.getString(curseur.getColumnIndexOrThrow("couleur"));
+            Module module  = new Module(Integer.parseInt(id),
+                                       nom,
+                                       Module.TypeModule.BoiteAuxLettres,
+                                       (Integer.parseInt(actif) == 1 ? true : false),
+                                       (Integer.parseInt(etat) == 1 ? true : false),
+                                       couleur,
+                                       baseDeDonnees);
+
+            listeModules.add(module);
+        }
+        curseur.close();
+
+        return listeModules;
+    }
+
+    /**
+     * @brief Renvoie un vecteur de Module contenant les machines
+     */
+    public Vector<Module> getMachines()
+    {
+        String requete =
+          "SELECT * FROM modules WHERE modules.idTypesModules='3' AND idDomotifications=" +
+          ID_DOMOTIFICATIONS + ";";
+        Log.d(TAG, "getMachines() requete = " + requete);
+        Cursor         curseur      = sqlite.rawQuery(requete, null);
+        Vector<Module> listeModules = new Vector<Module>();
+        while(curseur.moveToNext())
+        {
+            String id      = curseur.getString(curseur.getColumnIndexOrThrow("id"));
+            String nom     = curseur.getString(curseur.getColumnIndexOrThrow("nom"));
+            String actif   = curseur.getString(curseur.getColumnIndexOrThrow("actif"));
+            String etat    = curseur.getString(curseur.getColumnIndexOrThrow("etat"));
+            String couleur = curseur.getString(curseur.getColumnIndexOrThrow("couleur"));
+            Module module  = new Module(Integer.parseInt(id),
+                                       nom,
+                                       Module.TypeModule.Machine,
+                                       (Integer.parseInt(actif) == 1 ? true : false),
+                                       (Integer.parseInt(etat) == 1 ? true : false),
+                                       couleur,
+                                       baseDeDonnees);
+
+            listeModules.add(module);
+        }
+        curseur.close();
+
+        return listeModules;
+    }
+
+    /**
      * @brief Renvoie le nombre max de modules de type Poubelle
      */
     public int getNbMaxModulesPoubelles()
     {
         Log.d(TAG, "getNbMaxModulesPoubelles()");
 
-        Cursor curseur =
-          sqlite.rawQuery("SELECT domotifications.nbPoubelles FROM domotifications;", null);
+        Cursor curseur = sqlite.rawQuery(
+          "SELECT domotifications.nbPoubelles FROM domotifications WHERE id=" + ID_DOMOTIFICATIONS +
+            ";",
+          null);
 
         int nbPoubelles = 0;
         if(curseur.moveToFirst())
@@ -108,15 +231,60 @@ public class BaseDeDonnees extends SQLiteOpenHelper
     }
 
     /**
+     * @brief Renvoie le nombre max de modules de type Boîte
+     */
+    public int getNbMaxModulesBoites()
+    {
+        Log.d(TAG, "getNbMaxModulesBoites()");
+
+        Cursor curseur = sqlite.rawQuery(
+          "SELECT domotifications.nbBoitesAuxLettres FROM domotifications WHERE id=" +
+            ID_DOMOTIFICATIONS + ";",
+          null);
+
+        int nbBoitesAuxLettres = 0;
+        if(curseur.moveToFirst())
+        {
+            nbBoitesAuxLettres = curseur.getInt(0);
+        }
+        curseur.close();
+
+        return nbBoitesAuxLettres;
+    }
+
+    /**
+     * @brief Renvoie le nombre max de modules de type Machines
+     */
+    public int getNbMaxModulesMachines()
+    {
+        Log.d(TAG, "getNbMaxModulesMachines()");
+
+        Cursor curseur = sqlite.rawQuery(
+          "SELECT domotifications.nbMachines FROM domotifications WHERE id=" + ID_DOMOTIFICATIONS +
+            ";",
+          null);
+
+        int nbMachines = 0;
+        if(curseur.moveToFirst())
+        {
+            nbMachines = curseur.getInt(0);
+        }
+        curseur.close();
+
+        return nbMachines;
+    }
+
+    /**
      * @brief Renvoie le nombre de modules installés de type Poubelle
      */
     public int getNbModulesPoubelles()
     {
         Log.d(TAG, "getNbModulesPoubelles()");
 
-        Cursor curseur = sqlite.rawQuery(
-          "SELECT COUNT(*) AS NbPoubelles FROM modules WHERE modules.idTypesModules='2';",
-          null);
+        Cursor curseur = sqlite.rawQuery("SELECT COUNT(*) AS NbPoubelles FROM modules WHERE " +
+                                         "modules.idTypesModules='2' AND idDomotifications=" +
+                                           ID_DOMOTIFICATIONS + ";",
+                                         null);
 
         int nbPoubelles = 0;
         if(curseur.moveToFirst())
@@ -126,6 +294,50 @@ public class BaseDeDonnees extends SQLiteOpenHelper
         curseur.close();
 
         return nbPoubelles;
+    }
+
+    /**
+     * @brief Renvoie le nombre de modules installés de type Boîtes
+     */
+    public int getNbModulesBoites()
+    {
+        Log.d(TAG, "getNbModulesBoites()");
+
+        Cursor curseur = sqlite.rawQuery("SELECT COUNT(*) AS NbBoites FROM modules WHERE " +
+                                         "modules.idTypesModules='1' AND idDomotifications=" +
+                                           ID_DOMOTIFICATIONS + ";",
+                                         null);
+
+        int nbBoitesAuxLettres = 0;
+        if(curseur.moveToFirst())
+        {
+            nbBoitesAuxLettres = curseur.getInt(0);
+        }
+        curseur.close();
+
+        return nbBoitesAuxLettres;
+    }
+
+    /**
+     * @brief Renvoie le nombre de modules installés de type Machines
+     */
+    public int getNbModulesMachines()
+    {
+        Log.d(TAG, "getNbModulesMachines()");
+
+        Cursor curseur = sqlite.rawQuery("SELECT COUNT(*) AS NbMachines FROM modules WHERE " +
+                                         "modules.idTypesModules='3' AND idDomotifications=" +
+                                           ID_DOMOTIFICATIONS + ";",
+                                         null);
+
+        int nbMachines = 0;
+        if(curseur.moveToFirst())
+        {
+            nbMachines = curseur.getInt(0);
+        }
+        curseur.close();
+
+        return nbMachines;
     }
 
     /**
@@ -145,14 +357,6 @@ public class BaseDeDonnees extends SQLiteOpenHelper
     }
 
     /**
-     * @brief Actualiser les données d'un enregistrement
-     */
-    private void actualiser(String id, String data)
-    {
-        sqlite.execSQL("UPDATE ... SET data = '" + data + "' WHERE id = '" + id + "'");
-    }
-
-    /**
      * @brief Supprime un enregistrement
      */
     public void supprimerJoueur(String nom)
@@ -167,14 +371,27 @@ public class BaseDeDonnees extends SQLiteOpenHelper
     public void onCreate(SQLiteDatabase sqlite)
     {
         Log.d(TAG, "onCreate()");
+        sqlite.execSQL("CREATE TABLE IF NOT EXISTS domotifications (id INTEGER PRIMARY KEY " +
+                       "AUTOINCREMENT, nom TEXT UNIQUE NOT NULL, urlServeurWeb varchar(255) NOT " +
+                       "NULL, urlServeurWebsocket varchar(255) NOT NULL, nbBoitesAuxLettres " +
+                       "INTEGER, nbPoubelles INTEGER, nbMachines INTEGER);");
         sqlite.execSQL(
-          "CREATE TABLE IF NOT EXISTS domotifications (id INTEGER PRIMARY KEY AUTOINCREMENT, nom TEXT UNIQUE NOT NULL, urlServeurWeb varchar(255) NOT NULL, urlServeurWebsocket varchar(255) NOT NULL, nbBoitesAuxLettres INTEGER, nbPoubelles INTEGER, nbMachines INTEGER);");
+          "CREATE TABLE IF NOT EXISTS typesModules (id INTEGER PRIMARY KEY AUTOINCREMENT, type " +
+          "TEXT NOT NULL CHECK(type IN ('BoiteAuxLettres','Poubelle','Machine')));");
         sqlite.execSQL(
-          "CREATE TABLE IF NOT EXISTS typesModules (id INTEGER PRIMARY KEY AUTOINCREMENT, type TEXT NOT NULL CHECK(type IN ('BoiteAuxLettres','Poubelle','Machine')));");
+          "CREATE TABLE IF NOT EXISTS modules (id INTEGER, nom TEXT UNIQUE NOT NULL, " +
+          "idTypesModules INTEGER, actif BOOLEAN NOT NULL CHECK (actif IN (0, 1)) DEFAULT 0, " +
+          "etat BOOLEAN NOT NULL CHECK (etat IN (0, 1)) DEFAULT 0, couleur TEXT, " +
+          "idDomotifications INTEGER, PRIMARY KEY(id, idTypesModules), FOREIGN KEY " +
+          "(idTypesModules) REFERENCES typesModules(id), FOREIGN KEY (idDomotifications) " +
+          "REFERENCES domotifications(id) ON DELETE CASCADE);");
         sqlite.execSQL(
-          "CREATE TABLE IF NOT EXISTS modules (id INTEGER PRIMARY KEY AUTOINCREMENT, nom TEXT UNIQUE NOT NULL, idTypesModules INTEGER, actif BOOLEAN NOT NULL CHECK (actif IN (0, 1)) DEFAULT 0, idDomotifications INTEGER, FOREIGN KEY (idTypesModules) REFERENCES typesModules(id), FOREIGN KEY (idDomotifications) REFERENCES domotifications(id) ON DELETE CASCADE);");
-        sqlite.execSQL(
-          "CREATE TABLE IF NOT EXISTS notifications (id INTEGER PRIMARY KEY AUTOINCREMENT, idDomotifications INTEGER, idModules INTEGER, horodatage DATETIME NOT NULL, acquittement BOOLEAN NOT NULL CHECK (acquittement IN (0, 1)) DEFAULT 0, FOREIGN KEY (idDomotifications) REFERENCES domotifications(id) ON DELETE CASCADE, FOREIGN KEY (idModules) REFERENCES modules(id) ON DELETE CASCADE);");
+          "CREATE TABLE IF NOT EXISTS notifications (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+          "idDomotifications INTEGER, idModules INTEGER, idTypesModules INTEGER, horodatage " +
+          "DATETIME NOT NULL, acquittement BOOLEAN NOT NULL CHECK (acquittement IN (0, 1)) " +
+          "DEFAULT 0, FOREIGN KEY (idDomotifications) REFERENCES domotifications(id) ON DELETE " +
+          "CASCADE, FOREIGN KEY (idModules,idTypesModules) REFERENCES modules(id,idTypesModules) " +
+          "ON DELETE CASCADE);");
 
         initialiserBaseDeDonnees(sqlite);
     }
@@ -201,21 +418,25 @@ public class BaseDeDonnees extends SQLiteOpenHelper
         Log.d(TAG, "initialiserTestBaseDeDonnees()");
         // Pour les tests
         sqlite.execSQL(
-          "INSERT INTO domotifications(nom, urlServeurWeb, urlServeurWebsocket, nbBoitesAuxLettres, nbPoubelles, nbMachines) VALUES ('BTS', 'http://station-lumineuse.local:80/', 'ws://station-lumineuse.local:5000', 1, 5, 6);");
-        sqlite.execSQL(
-          "INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('boîte aux lettres', 1, 1, 1);");
-        sqlite.execSQL(
-          "INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('bleue', 2, 1, 1);");
-        sqlite.execSQL(
-          "INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('verte', 2, 0, 1);");
-        // sqlite.execSQL("INSERT INTO modules (nom, idTypesModules, actif, idDomotifications)
-        // VALUES ('jaune', 2, 0, 1);"); sqlite.execSQL("INSERT INTO modules (nom, idTypesModules,
-        // actif, idDomotifications) VALUES ('grise', 2, 0, 1);"); sqlite.execSQL("INSERT INTO
-        // modules (nom, idTypesModules, actif, idDomotifications) VALUES ('rouge', 2, 0, 1);");
-        sqlite.execSQL(
-          "INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('machine à laver', 3, 1, 1);");
-        sqlite.execSQL(
-          "INSERT INTO modules (nom, idTypesModules, actif, idDomotifications) VALUES ('lave-vaiselle', 3, 1, 1);");
+          "INSERT INTO domotifications(nom, urlServeurWeb, urlServeurWebsocket, " +
+          "nbBoitesAuxLettres, nbPoubelles, nbMachines) VALUES ('BTS', " +
+          "'http://station-lumineuse.local:80', 'ws://station-lumineuse.local:5000', 1, 5, 6);");
+        sqlite.execSQL("INSERT INTO modules (id, nom, idTypesModules, actif, couleur, " +
+                       "idDomotifications) VALUES (1, 'boîte aux lettres', 1, 1, '#FF0000', 1);");
+        sqlite.execSQL("INSERT INTO modules (id, nom, idTypesModules, actif, couleur, " +
+                       "idDomotifications) VALUES (1, 'bleue', 2, 1, '#0000FF', 1);");
+        sqlite.execSQL("INSERT INTO modules (id, nom, idTypesModules, actif, couleur, " +
+                       "idDomotifications) VALUES (2, 'verte', 2, 0, '#00FF00', 1);");
+        sqlite.execSQL("INSERT INTO modules (id, nom, idTypesModules, actif, couleur, " +
+                       "idDomotifications) VALUES (3, 'jaune', 2, 0, '#FFFF00', 1);");
+        sqlite.execSQL("INSERT INTO modules (id, nom, idTypesModules, actif, couleur, " +
+                       "idDomotifications) VALUES (4, 'grise', 2, 0, '#F0F0F2', 1);");
+        sqlite.execSQL("INSERT INTO modules (id, nom, idTypesModules, actif, couleur, " +
+                       "idDomotifications) VALUES (5, 'rouge', 2, 0, '#FF0000', 1);");
+        sqlite.execSQL("INSERT INTO modules (id, nom, idTypesModules, actif, couleur, " +
+                       "idDomotifications) VALUES (1, 'machine à laver', 3, 1, '#FF7F00', 1);");
+        sqlite.execSQL("INSERT INTO modules (id, nom, idTypesModules, actif, couleur, " +
+                       "idDomotifications) VALUES (2, 'lave-vaisselle', 3, 1, '#EEC4C9', 1);");
     }
 
     /**
@@ -242,5 +463,131 @@ public class BaseDeDonnees extends SQLiteOpenHelper
         sqlite.execSQL("DROP TABLE IF EXISTS domotifications;");
         sqlite.setVersion(newVersion);
         onCreate(sqlite);
+    }
+
+    public void sauvegarderURLServeurWeb(String urlServeurWeb)
+    {
+        Log.d(TAG, "sauvegarderURLServeurWeb()");
+
+        try
+        {
+            sqlite.execSQL("UPDATE domotifications SET urlServeurWeb = ?;",
+                           new String[] { urlServeurWeb });
+        }
+        catch(SQLiteConstraintException e)
+        {
+            Log.e(TAG, "Erreur de mise à jour de l'URL du Serveur Web");
+        }
+    }
+
+    /**
+     * @brief Met à jour l'état d'activation du module dans la base de données
+     */
+    public void mettreAJourEtatActivationModule(int idModule, int idTypesModules, boolean actif)
+    {
+        Log.d(TAG,
+              "mettreAJourEtatActivationModule() idModule = " + idModule + " actif = " + actif);
+
+        try
+        {
+            String requete = "UPDATE modules SET actif = '" + (actif ? 1 : 0) + "' WHERE id = '" +
+                             idModule + "' AND idTypesModules = '" + (idTypesModules + 1) + "'";
+            Log.d(TAG, "mettreAJourEtatActivationModule() requete = " + requete);
+            sqlite.execSQL(requete);
+        }
+        catch(SQLiteConstraintException e)
+        {
+            Log.e(TAG, "Erreur de mise à jour de l'état d'activation du module");
+        }
+    }
+
+    /**
+     * @brief Met à jour l'état de notification du module dans la base de données
+     */
+    public void mettreAJourEtatNotificationModule(int idModule, int idTypesModules, boolean etat)
+    {
+        Log.d(TAG,
+              "mettreAJourEtatNotificationModule() idModule = " + idModule + " etat = " + etat);
+
+        try
+        {
+            String requete = "UPDATE modules SET etat = '" + (etat ? 1 : 0) + "' WHERE id = '" +
+                             idModule + "' AND idTypesModules = '" + (idTypesModules + 1) + "'";
+            Log.d(TAG, "mettreAJourEtatNotificationModule() requete = " + requete);
+            sqlite.execSQL(requete);
+        }
+        catch(SQLiteConstraintException e)
+        {
+            Log.e(TAG, "Erreur de mise à jour de l'état de notification du module");
+        }
+    }
+
+    /**
+     * @brief Met à jour l'état de la couleur du module dans la base de données
+     */
+    public void mettreAJourCouleurModule(int idModule, int idTypesModules, String couleur)
+    {
+        Log.d(TAG, "mettreAJourCouleurModule() idModule = " + idModule + " couleur = " + couleur);
+
+        try
+        {
+            String requete = "UPDATE modules SET couleur = '" + couleur + "' WHERE id = '" +
+                             idModule + "' AND idTypesModules = '" + (idTypesModules + 1) + "'";
+            Log.d(TAG, "mettreAJourCouleurModule() requete = " + requete);
+            sqlite.execSQL(requete);
+        }
+        catch(SQLiteConstraintException e)
+        {
+            Log.e(TAG, "Erreur de mise à jour de la couleur du module");
+        }
+    }
+
+    /**
+     * @brief Enregistre l'acquittement de la notification dans la base de données
+     */
+    public void enregistrerAcquittementNotification(int     idModule,
+                                                    int     idTypesModules,
+                                                    boolean acquittement)
+    {
+        Log.d(TAG,
+              "enregistrerAcquittementNotification() idModule = " + idModule +
+                " idTypesModules = " + idTypesModules + " acquittement = " + acquittement);
+
+        try
+        {
+            String requete = "INSERT INTO notifications (idDomotifications, idModules, " +
+                             "idTypesModules, horodatage, acquittement) VALUES (" +
+                             ID_DOMOTIFICATIONS + ", " + idModule + ", " + (idTypesModules + 1) +
+                             ", "
+                             + "datetime('now'), " + (acquittement ? 1 : 0) + ");";
+            Log.d(TAG, "enregistrerAcquittementNotification() requete = " + requete);
+            sqlite.execSQL(requete);
+        }
+        catch(SQLiteConstraintException e)
+        {
+            Log.e(TAG, "Erreur d'enregistrement de l'acquittement de la notification");
+        }
+    }
+
+    /**
+     * @brief Enregistre la modification du nom du module dans la base de données
+     */
+    public void modifierNomModule(int idModule, int idTypesModules, String nouveauNomModule)
+    {
+        Log.d(TAG,
+              "modifierNomModule() idModule = " + idModule + " idTypesModules = " + idTypesModules +
+                " nouveauNomModule = " + nouveauNomModule);
+
+        try
+        {
+            String requete = "UPDATE modules SET nom = '" + nouveauNomModule + "' WHERE id = '" +
+                             idModule + "' AND idTypesModules = '" + (idTypesModules + 1) + "'";
+            Log.d(TAG, "modifierNomModule() requete = " + requete);
+            sqlite.execSQL(requete);
+        }
+        catch(SQLiteConstraintException e)
+        {
+            Log.e(TAG, "Erreur de mise à jour du nom du module");
+        }
     }
 }
