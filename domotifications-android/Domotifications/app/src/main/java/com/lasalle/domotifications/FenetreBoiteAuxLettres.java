@@ -46,6 +46,7 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
     private static final String TAG              = "_FenetreBoiteAuxLettres"; //!< TAG pour les logs
     private static final String API_PATCH_BOITES = "/boites"; //!< Pour une requête PATCH
     private static final int    INTERVALLE       = 1000;      //!< Intervalle d'interrogation en ms
+    private static final int    CHANGEMENT_COULEUR = 1;
 
     /**
      * Attributs
@@ -61,9 +62,9 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
       null; //!< Pour gérer la récupération des états des modules boites aux lettres
     private TimerTask tacheRecuperationEtats =
       null; //!< Pour effectuer la récupération des états des modules boites aux lettres
-    private boolean erreurCommunication = false;
+    private boolean               erreurCommunication = false;
     private Map<Integer, Boolean> notificationsEnvoyees =
-            new HashMap<>(); //<! Pour la signalisation des notifications
+      new HashMap<>(); //<! Pour la signalisation des notifications
     private int numeroBoiteAcquittement = -1;
     /**
      * GUI
@@ -74,10 +75,12 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
     }; //!< Id de l'image de la boîte au lettre dans les ressources Android
     private ImageView[] imagesBoites;             //!< Images des boites aux lettres
     private ImageView[] imagesNotificationBoites; //!< Images des notifications des boites aux
-                                                  //!< lettres
+    //!< lettres
     private Switch[] boutonsActivation; //!< Boutons d'activation/désactivation des modules
     //!< boitesAuxLettres
-    private ImageButton boutonAccueil;
+    private ImageButton boutonAccueil;    //!< Boutons d'activation/désactivation des modules
+                                          //!< boites
+    private ImageView[] imagesParametres; //!< Images des couleurs des modules
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -133,10 +136,27 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
         boutonsActivation    = new Switch[nbModulesBoitesAuxLettres];
         boutonsActivation[0] = (Switch)findViewById(R.id.activationBoite0);
 
+        imagesParametres    = new ImageView[nbModulesBoitesAuxLettres];
+        imagesParametres[0] = (ImageView)findViewById(R.id.couleurBoite0);
+
         for(int i = 0; i < nbModulesBoitesAuxLettres; ++i)
         {
             imagesBoites[i].setImageResource(IMAGE_BOITES[i]);
             final int numeroBoite = i;
+
+            imagesParametres[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    Intent intent = new Intent(FenetreBoiteAuxLettres.this, ParametresModule.class);
+                    intent.putExtra("idModule",
+                                    modulesBoitesAuxLettres.get(numeroBoite).getIdModule());
+                    intent.putExtra("nom", modulesBoitesAuxLettres.get(numeroBoite).getNomModule());
+                    intent.putExtra("couleur",
+                                    modulesBoitesAuxLettres.get(numeroBoite).getCouleur());
+                    startActivityForResult(intent, CHANGEMENT_COULEUR);
+                }
+            });
             imagesNotificationBoites[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v)
@@ -299,11 +319,11 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
               "gererClicBoutonActivation() numeroBoite = " + numeroBoite +
                 " activation = " + boutonsActivation[numeroBoite].isChecked());
 
-        String api = API_PATCH_BOITES + "/" + modulesBoitesAuxLettres.get(numeroBoite).getIdModule();
+        String api =
+          API_PATCH_BOITES + "/" + modulesBoitesAuxLettres.get(numeroBoite).getIdModule();
 
-        String json = "{\"idBoite\": \"" +
-                modulesBoitesAuxLettres.get(numeroBoite).getIdModule() +
-                "\",\"actif\": " + boutonsActivation[numeroBoite].isChecked() + "}";
+        String json = "{\"idBoite\": \"" + modulesBoitesAuxLettres.get(numeroBoite).getIdModule() +
+                      "\",\"actif\": " + boutonsActivation[numeroBoite].isChecked() + "}";
 
         communication.emettreRequetePATCH(api, json, handler);
 
@@ -338,7 +358,7 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
 
     public void traiterReponseJSON(String reponse)
     {
-        //Log.d(TAG, "traiterReponseJSON() reponse = " + reponse);
+        // Log.d(TAG, "traiterReponseJSON() reponse = " + reponse);
         /*
             Exemple de réponsee : pour la requête GET /boites
             body =
@@ -420,17 +440,16 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                       "enregistrerAcquittementNotification() idBoitesAuxLettres = " + idBoite +
                         " couleur = " + couleur + " etat = " + etat + " actif = " + actif);
 
-                    Module module = modulesBoitesAuxLettres.get(numeroBoiteAcquittement);
-                    if(module.getIdModule() == idBoite &&
-                       module.getTypeModule() == Module.TypeModule.BoiteAuxLettres && !etat)
-                    {
-                        baseDeDonnees.enregistrerAcquittementNotification(
-                          module.getIdModule(),
-                          module.getTypeModule().ordinal(),
-                          true);
-                        numeroBoiteAcquittement = -1;
-                    }
-
+                Module module = modulesBoitesAuxLettres.get(numeroBoiteAcquittement);
+                if(module.getIdModule() == idBoite &&
+                   module.getTypeModule() == Module.TypeModule.BoiteAuxLettres && !etat)
+                {
+                    baseDeDonnees.enregistrerAcquittementNotification(
+                      module.getIdModule(),
+                      module.getTypeModule().ordinal(),
+                      true);
+                    numeroBoiteAcquittement = -1;
+                }
             }
         }
         catch(JSONException e)
@@ -447,8 +466,8 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
             return;
         }
 
-        Module module = modulesBoitesAuxLettres.get(numeroBoite);
-        int idBoite = module.getIdModule();
+        Module module  = modulesBoitesAuxLettres.get(numeroBoite);
+        int    idBoite = module.getIdModule();
 
         if(module.estActif())
         {
@@ -459,7 +478,8 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                 if(notificationEnvoyee == null || !notificationEnvoyee)
                 {
                     // On signale une notification sur la tablette Android
-                    creerNotification("Le module " + module.getNomModule() + " a une notification.");
+                    creerNotification("Le module " + module.getNomModule() +
+                                      " a une notification.");
                     notificationsEnvoyees.put(idBoite, true);
                 }
             }
@@ -492,38 +512,39 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
         String texteNotification = message;
 
         NotificationManager notificationManager =
-                (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+          (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Si >= API26, obligation de créer un canal de notifications
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
-            CharSequence name = getString(R.string.app_name);
-            String description = "Notification domotifications";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("domotifications_id", name, importance);
+            CharSequence        name        = getString(R.string.app_name);
+            String              description = "Notification domotifications";
+            int                 importance  = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel =
+              new NotificationChannel("domotifications_id", name, importance);
             channel.setDescription(description);
             channel.setImportance(NotificationManager.IMPORTANCE_DEFAULT);
-            notificationManager = (NotificationManager) getSystemService(NotificationManager.class);
+            notificationManager = (NotificationManager)getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
 
         NotificationCompat.Builder notification =
-                new NotificationCompat.Builder(this, "domotifications_id")
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle(titreNotification)
-                        .setContentText(texteNotification)
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+          new NotificationCompat.Builder(this, "domotifications_id")
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle(titreNotification)
+            .setContentText(texteNotification)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         // On pourrait ici crée une autre activité
         PendingIntent pendingIntent =
-                PendingIntent.getActivity(this, 0, new Intent(), PendingIntent.FLAG_IMMUTABLE);
+          PendingIntent.getActivity(this, 0, new Intent(), PendingIntent.FLAG_IMMUTABLE);
 
         notification.setContentIntent(pendingIntent);
         notification.setAutoCancel(true);
         notification.setVibrate(new long[] { 0, 200, 100, 200, 100, 200 });
 
         // Si >= API26
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
+        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
         {
             notificationManager.notify(idNotification, notification.build());
         }
@@ -546,22 +567,65 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
 
     private boolean verifierPermissionNotification()
     {
-        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) ==
-                PackageManager.PERMISSION_GRANTED)
+        if(ContextCompat.checkSelfPermission(this,
+                                             android.Manifest.permission.POST_NOTIFICATIONS) ==
+           PackageManager.PERMISSION_GRANTED)
         {
             Log.d(TAG,
-                    "verifierPermissionNotification() permission notification = PERMISSION_GRANTED");
+                  "verifierPermissionNotification() permission notification = PERMISSION_GRANTED");
             return true;
         }
         else
         {
             Log.d(TAG,
-                    "verifierPermissionNotification() permission notification = PERMISSION_DENIED");
+                  "verifierPermissionNotification() permission notification = PERMISSION_DENIED");
             ActivityCompat.requestPermissions(
-                    this,
-                    new String[] { Manifest.permission.POST_NOTIFICATIONS },
-                    101);
+              this,
+              new String[] { Manifest.permission.POST_NOTIFICATIONS },
+              101);
         }
         return false;
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG,
+              "onActivityResult() requestCode = " + requestCode + " - resultCode = " + resultCode);
+        if(requestCode == CHANGEMENT_COULEUR)
+        {
+            if(resultCode == RESULT_OK)
+            {
+                if(data != null)
+                {
+                    int    idModule      = data.getIntExtra("idModule", -1);
+                    String nomModule     = data.getStringExtra("nom");
+                    String couleurModule = data.getStringExtra("couleur");
+                    Log.d(TAG,
+                          "onActivityResult() idModule = " + idModule + " - nomModule : " +
+                            nomModule + " - couleurModule = " + couleurModule);
+
+                    if(idModule != -1)
+                    {
+                        if(idModule >= 0 && idModule < modulesBoitesAuxLettres.size())
+                        {
+                            Module module = modulesBoitesAuxLettres.get(idModule);
+                            if(!module.getNomModule().equals(nomModule))
+                            {
+                                module.setNomModule(nomModule);
+                                baseDeDonnees.modifierNomModule(module.getIdModule(),
+                                                                module.getTypeModule().ordinal(),
+                                                                nomModule);
+                            }
+                            module.setCouleur(couleurModule);
+                        }
+                    }
+                    String api = API_PATCH_BOITES + "/" + idModule;
+                    String json =
+                      "{\"idBoite\": \"" + idModule + "\",\"couleur\": \"" + couleurModule + "\"}";
+                    communication.emettreRequetePATCH(api, json, handler);
+                }
+            }
+        }
     }
 }

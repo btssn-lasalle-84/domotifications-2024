@@ -30,6 +30,7 @@ public class Module
                   TypeModule    typeModule,
                   boolean       etatActivation,
                   boolean       etatNotification,
+                  String        couleur,
                   BaseDeDonnees baseDeDonnees)
 
     {
@@ -41,6 +42,7 @@ public class Module
         this.typeModule       = typeModule;
         this.etatActivation   = etatActivation;
         this.etatNotification = etatNotification;
+        this.couleur          = couleur;
         this.baseDeDonnees    = baseDeDonnees;
     }
 
@@ -69,7 +71,7 @@ public class Module
         return this.etatNotification;
     }
 
-    private String getCouleur()
+    public String getCouleur()
     {
         return this.couleur;
     }
@@ -108,7 +110,9 @@ public class Module
     }
 
     public void setCouleur(String couleur)
+
     {
         this.couleur = couleur;
+        baseDeDonnees.mettreAJourCouleurModule(idModule, getTypeModule().ordinal(), couleur);
     }
 }

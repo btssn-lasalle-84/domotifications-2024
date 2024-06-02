@@ -47,6 +47,7 @@ public class FenetreMachine extends AppCompatActivity
     private static final String API_PATCH_MACHINES = "/machines";       //!< Pour une requête PATCH
     private static final int    INTERVALLE         = 1000; //!< Intervalle d'interrogation en ms
     public static final int     NB_MACHINES_MAX    = 5;    //!< Nombre max de machines
+    private static final int    CHANGEMENT_COULEUR = 1;
 
     /**
      * Attributs
@@ -61,10 +62,10 @@ public class FenetreMachine extends AppCompatActivity
     private Timer minuteur = null; //!< Pour gérer la récupération des états des modules machines
     private TimerTask tacheRecuperationEtats =
       null; //!< Pour effectuer la récupération des états des modules machines
-    private boolean erreurCommunication       = false;
+    private boolean               erreurCommunication = false;
     private Map<Integer, Boolean> notificationsEnvoyees =
-            new HashMap<>(); //<! Pour la signalisation des notifications
-    private int     numeroMachineAcquittement = -1;
+      new HashMap<>(); //<! Pour la signalisation des notifications
+    private int numeroMachineAcquittement = -1;
 
     /**
      * GUI
@@ -77,10 +78,12 @@ public class FenetreMachine extends AppCompatActivity
         R.drawable.machine,
         R.drawable.machine,
         R.drawable.machine
-    };                                  //!< Id de l'image de la machine dans les ressources Android
-    private ImageView[] imagesMachines; //!< Images des machines
+    }; //!< Id de l'image de la machine dans les ressources Android
+    private ImageView[] imagesMachines;             //!< Images des machines
     private ImageView[] imagesNotificationMachines; //!< Images des notifications des machines
-    private Switch[] boutonsActivation; //!< Boutons d'activation/désactivation des modules
+    private Switch[]    boutonsActivation; //!< Boutons d'activation/désactivation des modules
+                                           //!< machines
+    private ImageView[] imagesParametres;  //!< Images des couleurs des modules
     //!< machines
 
     @Override
@@ -148,22 +151,40 @@ public class FenetreMachine extends AppCompatActivity
         boutonsActivation[3] = (Switch)findViewById(R.id.activationMachine3);
         boutonsActivation[4] = (Switch)findViewById(R.id.activationMachine4);
 
+        imagesParametres    = new ImageView[NB_MACHINES_MAX];
+        imagesParametres[0] = (ImageView)findViewById(R.id.couleurMachine0);
+        imagesParametres[1] = (ImageView)findViewById(R.id.couleurMachine1);
+        imagesParametres[2] = (ImageView)findViewById(R.id.couleurMachine2);
+        imagesParametres[3] = (ImageView)findViewById(R.id.couleurMachine3);
+        imagesParametres[4] = (ImageView)findViewById(R.id.couleurMachine4);
+
         for(int i = 0; i < nbModulesMachines; ++i)
         {
+            int idMachine = i;
+            imagesParametres[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    Intent intent = new Intent(FenetreMachine.this, ParametresModule.class);
+                    intent.putExtra("idModule", modulesMachines.get(idMachine).getIdModule());
+                    intent.putExtra("nom", modulesMachines.get(idMachine).getNomModule());
+                    intent.putExtra("couleur", modulesMachines.get(idMachine).getCouleur());
+                    startActivityForResult(intent, CHANGEMENT_COULEUR);
+                }
+            });
             imagesMachines[i].setImageResource(IMAGE_MACHINES[i]);
-            final int numeroMachine = i;
             imagesNotificationMachines[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v)
                 {
-                    gererClicBoutonNotification(numeroMachine);
+                    gererClicBoutonNotification(idMachine);
                 }
             });
             imagesMachines[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v)
                 {
-                    gererClicBoutonNotification(numeroMachine);
+                    gererClicBoutonNotification(idMachine);
                 }
             });
         }
@@ -173,6 +194,7 @@ public class FenetreMachine extends AppCompatActivity
             imagesMachines[i].setVisibility(View.INVISIBLE);
             imagesNotificationMachines[i].setVisibility(View.INVISIBLE);
             boutonsActivation[i].setVisibility(View.INVISIBLE);
+            imagesParametres[i].setVisibility(View.INVISIBLE);
         }
 
         for(int i = 0; i < nbModulesMachines; ++i)
@@ -180,6 +202,7 @@ public class FenetreMachine extends AppCompatActivity
             imagesMachines[i].setVisibility(View.VISIBLE);
             imagesNotificationMachines[i].setVisibility(View.VISIBLE);
             boutonsActivation[i].setVisibility(View.VISIBLE);
+            imagesParametres[i].setVisibility(View.VISIBLE);
         }
 
         for(int i = 0; i < nbModulesMachines; i++)
@@ -380,9 +403,8 @@ public class FenetreMachine extends AppCompatActivity
                 String     couleur   = machines.getString("couleur");
                 Boolean    etat      = machines.getBoolean("etat");
                 Boolean    actif     = machines.getBoolean("actif");
-                /*Log.d(TAG,
-                      "traiterReponseJSON() idMachine = " + idMachine + " couleur = " + couleur +
-                        " etat = " + etat + " actif = " + actif);*/
+                // Log.d(TAG, "traiterReponseJSON() idMachine = " + idMachine + " couleur = " +
+                // couleur + " etat = " + etat + " actif = " + actif);
                 for(int j = 0; j < modulesMachines.size(); ++j)
                 {
                     Module module = modulesMachines.get(j);
@@ -465,8 +487,8 @@ public class FenetreMachine extends AppCompatActivity
             return;
         }
 
-        Module module = modulesMachines.get(numeroMachine);
-        int idMachine = module.getIdModule();
+        Module module    = modulesMachines.get(numeroMachine);
+        int    idMachine = module.getIdModule();
 
         if(module.estActif())
         {
@@ -477,7 +499,8 @@ public class FenetreMachine extends AppCompatActivity
                 if(notificationEnvoyee == null || !notificationEnvoyee)
                 {
                     // On signale une notification sur la tablette Android
-                    creerNotification("Le module " + module.getNomModule() + " a une notification.");
+                    creerNotification("Le module " + module.getNomModule() +
+                                      " a une notification.");
                     notificationsEnvoyees.put(idMachine, true);
                 }
             }
@@ -510,38 +533,39 @@ public class FenetreMachine extends AppCompatActivity
         String texteNotification = message;
 
         NotificationManager notificationManager =
-                (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+          (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Si >= API26, obligation de créer un canal de notifications
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
-            CharSequence name = getString(R.string.app_name);
-            String description = "Notification domotifications";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("domotifications_id", name, importance);
+            CharSequence        name        = getString(R.string.app_name);
+            String              description = "Notification domotifications";
+            int                 importance  = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel =
+              new NotificationChannel("domotifications_id", name, importance);
             channel.setDescription(description);
             channel.setImportance(NotificationManager.IMPORTANCE_DEFAULT);
-            notificationManager = (NotificationManager) getSystemService(NotificationManager.class);
+            notificationManager = (NotificationManager)getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
 
         NotificationCompat.Builder notification =
-                new NotificationCompat.Builder(this, "domotifications_id")
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle(titreNotification)
-                        .setContentText(texteNotification)
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+          new NotificationCompat.Builder(this, "domotifications_id")
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle(titreNotification)
+            .setContentText(texteNotification)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         // On pourrait ici crée une autre activité
         PendingIntent pendingIntent =
-                PendingIntent.getActivity(this, 0, new Intent(), PendingIntent.FLAG_IMMUTABLE);
+          PendingIntent.getActivity(this, 0, new Intent(), PendingIntent.FLAG_IMMUTABLE);
 
         notification.setContentIntent(pendingIntent);
         notification.setAutoCancel(true);
         notification.setVibrate(new long[] { 0, 200, 100, 200, 100, 200 });
 
         // Si >= API26
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
+        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
         {
             notificationManager.notify(idNotification, notification.build());
         }
@@ -564,22 +588,66 @@ public class FenetreMachine extends AppCompatActivity
 
     private boolean verifierPermissionNotification()
     {
-        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) ==
-                PackageManager.PERMISSION_GRANTED)
+        if(ContextCompat.checkSelfPermission(this,
+                                             android.Manifest.permission.POST_NOTIFICATIONS) ==
+           PackageManager.PERMISSION_GRANTED)
         {
             Log.d(TAG,
-                    "verifierPermissionNotification() permission notification = PERMISSION_GRANTED");
+                  "verifierPermissionNotification() permission notification = PERMISSION_GRANTED");
             return true;
         }
         else
         {
             Log.d(TAG,
-                    "verifierPermissionNotification() permission notification = PERMISSION_DENIED");
+                  "verifierPermissionNotification() permission notification = PERMISSION_DENIED");
             ActivityCompat.requestPermissions(
-                    this,
-                    new String[] { Manifest.permission.POST_NOTIFICATIONS },
-                    101);
+              this,
+              new String[] { Manifest.permission.POST_NOTIFICATIONS },
+              101);
         }
         return false;
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG,
+              "onActivityResult() requestCode = " + requestCode + " - resultCode = " + resultCode);
+        if(requestCode == CHANGEMENT_COULEUR)
+        {
+            if(resultCode == RESULT_OK)
+            {
+                if(data != null)
+                {
+                    int    idModule      = data.getIntExtra("idModule", -1);
+                    String nomModule     = data.getStringExtra("nom");
+                    String couleurModule = data.getStringExtra("couleur");
+                    Log.d(TAG,
+                          "onActivityResult() idModule = " + idModule + " - nomModule : " +
+                            nomModule + " - couleurModule = " + couleurModule);
+
+                    if(idModule != -1)
+                    {
+                        Module module = modulesMachines.get(idModule);
+                        if(module != null)
+                        {
+                            if(!module.getNomModule().equals(nomModule))
+                            {
+                                module.setNomModule(nomModule);
+                                baseDeDonnees.modifierNomModule(module.getIdModule(),
+                                                                module.getTypeModule().ordinal(),
+                                                                nomModule);
+                            }
+                            module.setCouleur(couleurModule);
+                        }
+                    }
+
+                    String api  = API_PATCH_MACHINES + "/" + idModule;
+                    String json = "{\"idMachine\": \"" + idModule + "\",\"couleur\": \"" +
+                                  couleurModule + "\"}";
+                    communication.emettreRequetePATCH(api, json, handler);
+                }
+            }
+        }
     }
 }

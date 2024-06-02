@@ -47,6 +47,7 @@ public class FenetrePoubelle extends AppCompatActivity
     private static final String TAG                 = "_FenetrePoubelle"; //!< TAG pour les logs
     private static final String API_PATCH_POUBELLES = "/poubelles"; //!< Pour une requête PATCH
     private static final int    INTERVALLE          = 1000; //!< Intervalle d'interrogation en ms
+    private static final int    CHANGEMENT_COULEUR  = 1;
     /**
      * Attributs
      */
@@ -60,10 +61,10 @@ public class FenetrePoubelle extends AppCompatActivity
     private Timer minuteur = null; //!< Pour gérer la récupération des états des modules poubelles
     private TimerTask tacheRecuperationEtats =
       null; //!< Pour effectuer la récupération des états des modules poubelles
-    private boolean erreurCommunication        = false;
+    private boolean               erreurCommunication = false;
     private Map<Integer, Boolean> notificationsEnvoyees =
-            new HashMap<>(); //<! Pour la signalisation des notifications
-    int             numeroPoubelleAcquittement = -1;
+      new HashMap<>(); //<! Pour la signalisation des notifications
+    int numeroPoubelleAcquittement = -1;
     /**
      * GUI
      */
@@ -74,17 +75,18 @@ public class FenetrePoubelle extends AppCompatActivity
     public static final int ROUGE                = 4; //!< Poubelle rouge
     public static final int NB_COULEURS_POUBELLE = 5; //!< Nombre de couleurs max pour les poubelles
     public static final int[] IMAGES_POUBELLES   = {
-          R.drawable.poubelle_bleue,
-          R.drawable.poubelle_verte,
-          R.drawable.poubelle_jaune,
-          R.drawable.poubelle_grise,
-          R.drawable.poubelle_rouge
+        R.drawable.poubelle_bleue,
+        R.drawable.poubelle_verte,
+        R.drawable.poubelle_jaune,
+        R.drawable.poubelle_grise,
+        R.drawable.poubelle_rouge
     }; //!< Id des images des poubelles dans les ressources Android
     private ImageView[] imagesPoubelles;             //!< Images des poubelles de couleur
     private ImageButton boutonAccueil;               //!< Bouton pour revenir à l'accueil
     private ImageView[] imagesNotificationPoubelles; //!< Images des notifications des poubelles
-    private Switch[] boutonsActivation; //!< Boutons d'activation/désactivation des modules
-                                        //!< poubelles
+    private Switch[]    boutonsActivation; //!< Boutons d'activation/désactivation des modules
+                                           //!< poubelles
+    private ImageView[] imagesParametres;  //!< Images des couleurs des modules
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -123,11 +125,13 @@ public class FenetrePoubelle extends AppCompatActivity
         // contenu bord à bord
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_menu_poubelle);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.fenetrePoubelle), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        ViewCompat.setOnApplyWindowInsetsListener(
+          findViewById(R.id.fenetrePoubelle),
+          (v, insets) -> {
+              Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+              v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+              return insets;
+          });
         Log.d(TAG, "initialiserGUI()");
 
         boutonAccueil = (ImageButton)findViewById(R.id.boutonAccueil);
@@ -153,10 +157,29 @@ public class FenetrePoubelle extends AppCompatActivity
         boutonsActivation[3] = (Switch)findViewById(R.id.activationPoubelle3);
         boutonsActivation[4] = (Switch)findViewById(R.id.activationPoubelle4);
 
+        imagesParametres    = new ImageView[NB_COULEURS_POUBELLE];
+        imagesParametres[0] = (ImageView)findViewById(R.id.couleurPoubelle0);
+        imagesParametres[1] = (ImageView)findViewById(R.id.couleurPoubelle1);
+        imagesParametres[2] = (ImageView)findViewById(R.id.couleurPoubelle2);
+        imagesParametres[3] = (ImageView)findViewById(R.id.couleurPoubelle3);
+        imagesParametres[4] = (ImageView)findViewById(R.id.couleurPoubelle4);
+
         for(int i = 0; i < nbModulesPoubelles; ++i)
         {
             imagesPoubelles[i].setImageResource(IMAGES_POUBELLES[i]);
             final int numeroPoubelle = i;
+            imagesParametres[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    Intent intent = new Intent(FenetrePoubelle.this, ParametresModule.class);
+                    intent.putExtra("idModule", modulesPoubelles.get(numeroPoubelle).getIdModule());
+                    intent.putExtra("nom", modulesPoubelles.get(numeroPoubelle).getNomModule());
+                    intent.putExtra("couleur", modulesPoubelles.get(numeroPoubelle).getCouleur());
+                    startActivityForResult(intent, CHANGEMENT_COULEUR);
+                }
+            });
+
             imagesNotificationPoubelles[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v)
@@ -178,6 +201,7 @@ public class FenetrePoubelle extends AppCompatActivity
             imagesPoubelles[i].setVisibility(View.INVISIBLE);
             imagesNotificationPoubelles[i].setVisibility(View.INVISIBLE);
             boutonsActivation[i].setVisibility(View.INVISIBLE);
+            imagesParametres[i].setVisibility(View.INVISIBLE);
         }
 
         for(int i = 0; i < nbModulesPoubelles; ++i)
@@ -185,6 +209,7 @@ public class FenetrePoubelle extends AppCompatActivity
             imagesPoubelles[i].setVisibility(View.VISIBLE);
             imagesNotificationPoubelles[i].setVisibility(View.VISIBLE);
             boutonsActivation[i].setVisibility(View.VISIBLE);
+            imagesParametres[i].setVisibility(View.VISIBLE);
         }
 
         for(int i = 0; i < nbModulesPoubelles; i++)
@@ -297,8 +322,7 @@ public class FenetrePoubelle extends AppCompatActivity
 
         String api = API_PATCH_POUBELLES + "/" + modulesPoubelles.get(numeroPoubelle).getIdModule();
 
-        String json = "{\"idPoubelle\": \"" +
-                        modulesPoubelles.get(numeroPoubelle).getIdModule() +
+        String json = "{\"idPoubelle\": \"" + modulesPoubelles.get(numeroPoubelle).getIdModule() +
                       "\",\"actif\": " + boutonsActivation[numeroPoubelle].isChecked() + "}";
 
         communication.emettreRequetePATCH(api, json, handler);
@@ -476,8 +500,8 @@ public class FenetrePoubelle extends AppCompatActivity
             return;
         }
 
-        Module module = modulesPoubelles.get(numeroPoubelle);
-        int idPoubelle = module.getIdModule();
+        Module module     = modulesPoubelles.get(numeroPoubelle);
+        int    idPoubelle = module.getIdModule();
 
         if(module.estActif())
         {
@@ -488,7 +512,8 @@ public class FenetrePoubelle extends AppCompatActivity
                 if(notificationEnvoyee == null || !notificationEnvoyee)
                 {
                     // On signale une notification sur la tablette Android
-                    creerNotification("La poubelle " + module.getNomModule() + " a une notification.");
+                    creerNotification("La poubelle " + module.getNomModule() +
+                                      " a une notification.");
                     notificationsEnvoyees.put(idPoubelle, true);
                 }
             }
@@ -524,24 +549,25 @@ public class FenetrePoubelle extends AppCompatActivity
           (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Si >= API26, obligation de créer un canal de notifications
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
-            CharSequence name = getString(R.string.app_name);
-            String description = "Notification domotifications";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("domotifications_id", name, importance);
+            CharSequence        name        = getString(R.string.app_name);
+            String              description = "Notification domotifications";
+            int                 importance  = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel =
+              new NotificationChannel("domotifications_id", name, importance);
             channel.setDescription(description);
             channel.setImportance(NotificationManager.IMPORTANCE_DEFAULT);
-            notificationManager = (NotificationManager) getSystemService(NotificationManager.class);
+            notificationManager = (NotificationManager)getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
 
         NotificationCompat.Builder notification =
-                new NotificationCompat.Builder(this, "domotifications_id")
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle(titreNotification)
-                        .setContentText(texteNotification)
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+          new NotificationCompat.Builder(this, "domotifications_id")
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle(titreNotification)
+            .setContentText(texteNotification)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         // On pourrait ici crée une autre activité
         PendingIntent pendingIntent =
@@ -552,7 +578,7 @@ public class FenetrePoubelle extends AppCompatActivity
         notification.setVibrate(new long[] { 0, 200, 100, 200, 100, 200 });
 
         // Si >= API26
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
+        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
         {
             notificationManager.notify(idNotification, notification.build());
         }
@@ -576,21 +602,63 @@ public class FenetrePoubelle extends AppCompatActivity
     private boolean verifierPermissionNotification()
     {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
-                PackageManager.PERMISSION_GRANTED)
+           PackageManager.PERMISSION_GRANTED)
         {
             Log.d(TAG,
-                    "verifierPermissionNotification() permission notification = PERMISSION_GRANTED");
+                  "verifierPermissionNotification() permission notification = PERMISSION_GRANTED");
             return true;
         }
         else
         {
             Log.d(TAG,
-                    "verifierPermissionNotification() permission notification = PERMISSION_DENIED");
+                  "verifierPermissionNotification() permission notification = PERMISSION_DENIED");
             ActivityCompat.requestPermissions(
-                    this,
-                    new String[] { Manifest.permission.POST_NOTIFICATIONS },
-                    101);
+              this,
+              new String[] { Manifest.permission.POST_NOTIFICATIONS },
+              101);
         }
         return false;
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG,
+              "onActivityResult() requestCode = " + requestCode + " - resultCode = " + resultCode);
+        if(requestCode == CHANGEMENT_COULEUR)
+        {
+            if(resultCode == RESULT_OK)
+            {
+                if(data != null)
+                {
+                    int    idModule      = data.getIntExtra("idModule", -1);
+                    String nomModule     = data.getStringExtra("nom");
+                    String couleurModule = data.getStringExtra("couleur");
+                    Log.d(TAG,
+                          "onActivityResult() idModule = " + idModule + " - nomModule : " +
+                            nomModule + " - couleurModule = " + couleurModule);
+
+                    if(idModule != -1)
+                    {
+                        if(idModule >= 0 && idModule < modulesPoubelles.size())
+                        {
+                            Module module = modulesPoubelles.get(idModule);
+                            if(!module.getNomModule().equals(nomModule))
+                            {
+                                module.setNomModule(nomModule);
+                                baseDeDonnees.modifierNomModule(module.getIdModule(),
+                                                                module.getTypeModule().ordinal(),
+                                                                nomModule);
+                            }
+                            module.setCouleur(couleurModule);
+                        }
+                    }
+                    String api  = API_PATCH_POUBELLES + "/" + idModule;
+                    String json = "{\"idPoubelle\": \"" + idModule + "\",\"couleur\": \"" +
+                                  couleurModule + "\"}";
+                    communication.emettreRequetePATCH(api, json, handler);
+                }
+            }
+        }
     }
 }
