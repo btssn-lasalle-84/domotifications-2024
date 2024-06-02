@@ -614,6 +614,21 @@ public class FenetrePoubelle extends AppCompatActivity
 
                     if (idModule != -1)
                     {
+                        for (int i = 0; i < modulesPoubelles.size(); ++i)
+                        {
+                            Module module = modulesPoubelles.get(i);
+                            if (module.getIdModule() == idModule)
+                            {
+                                if (!module.getNomModule().equals(nomModule))
+                                {
+                                    module.setNomModule(nomModule);
+                                    baseDeDonnees.modifierNomModule(idModule, nomModule);
+                                }
+                                module.setCouleur(couleurModule);
+                                break;
+                            }
+                        }
+
                         String api = API_PATCH_POUBELLES + "/" + idModule;
                         String json = "{\"idPoubelle\": \"" + idModule + "\",\"couleur\": \"" + couleurModule + "\"}";
                         communication.emettreRequetePATCH(api, json, handler);

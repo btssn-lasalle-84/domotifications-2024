@@ -7,6 +7,7 @@
 
 package com.lasalle.domotifications;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
@@ -553,4 +554,18 @@ public class BaseDeDonnees extends SQLiteOpenHelper
             Log.e(TAG, "Erreur d'enregistrement de l'acquittement de la notification");
         }
     }
+
+    /**
+     * @brief Enregistre la modification du nom du module dans la base de données
+     */
+    public void modifierNomModule(int idModule, String nouveauNomModule)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("nom", nouveauNomModule);
+
+        db.update("modules", values, "idModule = ?", new String[]{String.valueOf(idModule)});
+        db.close();
+    }
+
 }

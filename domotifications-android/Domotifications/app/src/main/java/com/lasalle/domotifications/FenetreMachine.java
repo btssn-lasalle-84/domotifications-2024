@@ -624,10 +624,24 @@ public class FenetreMachine extends AppCompatActivity
                     Log.d(TAG,
                           "onActivityResult() idModule = " + idModule +
                             " - nomModule : " + nomModule + " - couleurModule = " + couleurModule);
-                    // @todo si le nom a changé alors modifier le nom dans l'objet et l'enregistrer
-                    // dans la base de données
+
                     if(idModule != -1)
                     {
+                        for (int i = 0; i < modulesMachines.size(); ++i)
+                        {
+                            Module module = modulesMachines.get(i);
+                            if (module.getIdModule() == idModule)
+                            {
+                                if (!module.getNomModule().equals(nomModule))
+                                {
+                                    module.setNomModule(nomModule);
+                                    baseDeDonnees.modifierNomModule(idModule, nomModule);
+                                }
+                                module.setCouleur(couleurModule);
+                                break;
+                            }
+                        }
+
                         String api  = API_PATCH_MACHINES + "/" + idModule;
                         String json = "{\"idMachine\": \"" + idModule + "\",\"couleur\": \"" +
                                       couleurModule + "\"}";
@@ -637,4 +651,6 @@ public class FenetreMachine extends AppCompatActivity
             }
         }
     }
+
+
 }
