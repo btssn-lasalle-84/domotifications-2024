@@ -266,7 +266,7 @@ void StationLumineuse::sauvegarderCouleurPoubelle(int id)
     }
     char cle[64] = "";
     sprintf(cle, "couleur_p%d", id);
-    preferences.putString(cle, poubelles[id - 1]->getCouleur());
+    preferences.getString(cle, poubelles[id - 1]->getCouleur());
 }
 
 void StationLumineuse::restaurerCouleurPoubelle(int id)
@@ -291,7 +291,7 @@ void StationLumineuse::sauvegarderCouleurBoite(int id)
     }
     char cle[64] = "";
     sprintf(cle, "couleur_b%d", id);
-    preferences.putString(cle, boites[id - 1]->getCouleur());
+    preferences.getString(cle, boites[id - 1]->getCouleur());
 }
 
 void StationLumineuse::restaurerCouleurBoite(int id)
@@ -302,7 +302,9 @@ void StationLumineuse::restaurerCouleurBoite(int id)
     }
     char cle[64] = "";
     sprintf(cle, "couleur_b%d", id);
-    // @todo restaurer la couleur de la led
+    Boite* boite = getBoite(id);
+    boite->setCouleurLed(
+      preferences.getString(cle, StationLumineuse::getCouleurToString(leds.Color(255, 0, 0))));
 }
 
 void StationLumineuse::sauvegarderCouleurMachine(int id)
@@ -313,7 +315,7 @@ void StationLumineuse::sauvegarderCouleurMachine(int id)
     }
     char cle[64] = "";
     sprintf(cle, "couleur_m%d", id);
-    preferences.putString(cle, machines[id - 1]->getCouleur());
+    preferences.getString(cle, machines[id - 1]->getCouleur());
 }
 
 void StationLumineuse::restaurerCouleurMachine(int id)
@@ -324,7 +326,9 @@ void StationLumineuse::restaurerCouleurMachine(int id)
     }
     char cle[64] = "";
     sprintf(cle, "couleur_m%d", id);
-    // @todo restaurer la couleur de la led
+    Machine* machine = getMachine(id);
+    machine->setCouleurLed(
+      preferences.getString(cle, StationLumineuse::getCouleurToString(leds.Color(0, 255, 0))));
 }
 
 // Méthodes privées
