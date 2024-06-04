@@ -422,7 +422,13 @@ public class BaseDeDonnees extends SQLiteOpenHelper
           "nbBoitesAuxLettres, nbPoubelles, nbMachines) VALUES ('BTS', " +
           "'http://station-lumineuse.local:80', 'ws://station-lumineuse.local:5000', 1, 5, 6);");
         sqlite.execSQL("INSERT INTO modules (id, nom, idTypesModules, actif, couleur, " +
-                       "idDomotifications) VALUES (1, 'boîte aux lettres', 1, 1, '#FF0000', 1);");
+                       "idDomotifications) VALUES (1, 'boîte aux lettres 1', 1, 1, '#FF0000', 1);");
+        sqlite.execSQL("INSERT INTO modules (id, nom, idTypesModules, actif, couleur, " +
+                "idDomotifications) VALUES (2, 'boîte aux lettres 2', 1, 1, '#FF0000', 1);");
+        sqlite.execSQL("INSERT INTO modules (id, nom, idTypesModules, actif, couleur, " +
+                "idDomotifications) VALUES (3, 'boîte aux lettres 3', 1, 1, '#FF0000', 1);");
+        sqlite.execSQL("INSERT INTO modules (id, nom, idTypesModules, actif, couleur, " +
+                "idDomotifications) VALUES (4, 'boîte aux lettres 4', 1, 1, '#FF0000', 1);");
         sqlite.execSQL("INSERT INTO modules (id, nom, idTypesModules, actif, couleur, " +
                        "idDomotifications) VALUES (1, 'bleue', 2, 1, '#0000FF', 1);");
         sqlite.execSQL("INSERT INTO modules (id, nom, idTypesModules, actif, couleur, " +
@@ -437,6 +443,18 @@ public class BaseDeDonnees extends SQLiteOpenHelper
                        "idDomotifications) VALUES (1, 'machine à laver', 3, 1, '#FF7F00', 1);");
         sqlite.execSQL("INSERT INTO modules (id, nom, idTypesModules, actif, couleur, " +
                        "idDomotifications) VALUES (2, 'lave-vaisselle', 3, 1, '#EEC4C9', 1);");
+        sqlite.execSQL("INSERT INTO modules (id, nom, idTypesModules, actif, couleur, " +
+                "idDomotifications) VALUES (3, 'sèche-linge', 3, 1, '#0000FF', 1);");
+        sqlite.execSQL("INSERT INTO modules (id, nom, idTypesModules, actif, couleur, " +
+                "idDomotifications) VALUES (4, 'machine à laver', 3, 1, '##00FF00', 1);");
+        sqlite.execSQL("INSERT INTO modules (id, nom, idTypesModules, actif, couleur, " +
+                "idDomotifications) VALUES (5, 'lave-vaisselle', 3, 1, '#F100FF', 1);");
+        sqlite.execSQL("INSERT INTO modules (id, nom, idTypesModules, actif, couleur, " +
+                "idDomotifications) VALUES (6, 'lave-vaisselle', 3, 1, '#FF84009', 1);");
+
+
+
+
     }
 
     /**

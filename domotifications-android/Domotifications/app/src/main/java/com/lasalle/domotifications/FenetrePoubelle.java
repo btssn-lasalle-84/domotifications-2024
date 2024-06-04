@@ -396,11 +396,11 @@ public class FenetrePoubelle extends AppCompatActivity
             Exemple de réponsee : pour la requête GET /poubelles
             body =
             [
-                {"idPoubelle":1,"couleur":"rouge","etat":false,"actif":true},
-                {"idPoubelle":2,"couleur":"jaune","etat":false,"actif":true},
-                {"idPoubelle":3,"couleur":"bleu","etat":false,"actif":true},
-                {"idPoubelle":4,"couleur":"gris","etat":false,"actif":true},
-                {"idPoubelle":5,"couleur":"vert","etat":false,"actif":true}
+                {"idPoubelle":1,"couleur":"#FF0000","etat":false,"actif":true},
+                {"idPoubelle":2,"couleur":"#FFFF00","etat":false,"actif":true},
+                {"idPoubelle":3,"couleur":"#0000FF","etat":false,"actif":true},
+                {"idPoubelle":4,"couleur":"#F0F0F2","etat":false,"actif":true},
+                {"idPoubelle":5,"couleur":"#00FF00","etat":false,"actif":true}
             ]
         */
         JSONArray json = null;
@@ -455,7 +455,7 @@ public class FenetrePoubelle extends AppCompatActivity
             Exemple de réponsee : pour la requête PATCH /poubelles/1
             body =
             [
-                {"idPoubelle":1,"couleur":"rouge","etat":false,"actif":true}
+                {"idPoubelle":1,"couleur":"#FF0000","etat":false,"actif":true}
             ]
         */
         JSONArray json = null;
@@ -491,6 +491,8 @@ public class FenetrePoubelle extends AppCompatActivity
             e.printStackTrace();
         }
     }
+
+    //@todo modifier la visibilité du module quand il est crée / supprimé
 
     private void mettreAJourModule(int numeroPoubelle)
     {

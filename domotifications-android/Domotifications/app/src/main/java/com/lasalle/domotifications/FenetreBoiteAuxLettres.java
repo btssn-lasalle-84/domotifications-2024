@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -47,6 +48,8 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
     private static final String API_PATCH_BOITES = "/boites"; //!< Pour une requête PATCH
     private static final int    INTERVALLE       = 1000;      //!< Intervalle d'interrogation en ms
     private static final int    CHANGEMENT_COULEUR = 1;
+
+    //@todo gérer le nombres de boites
 
     /**
      * Attributs
@@ -129,15 +132,27 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
 
         imagesBoites    = new ImageView[nbModulesBoitesAuxLettres];
         imagesBoites[0] = (ImageView)findViewById(R.id.boiteAuxLettres0);
+        imagesBoites[1] = (ImageView)findViewById(R.id.boiteAuxLettres1);
+        imagesBoites[2] = (ImageView)findViewById(R.id.boiteAuxLettres2);
+        imagesBoites[3] = (ImageView)findViewById(R.id.boiteAuxLettres3);
 
         imagesNotificationBoites    = new ImageView[nbModulesBoitesAuxLettres];
         imagesNotificationBoites[0] = (ImageView)findViewById(R.id.notificationBoite0);
+        imagesNotificationBoites[1] = (ImageView)findViewById(R.id.notificationBoite1);
+        imagesNotificationBoites[2] = (ImageView)findViewById(R.id.notificationBoite2);
+        imagesNotificationBoites[3] = (ImageView)findViewById(R.id.notificationBoite3);
 
-        boutonsActivation    = new Switch[nbModulesBoitesAuxLettres];
+        boutonsActivation  = new Switch[nbModulesBoitesAuxLettres];
         boutonsActivation[0] = (Switch)findViewById(R.id.activationBoite0);
+        boutonsActivation[1] = (Switch)findViewById(R.id.activationBoite1);
+        boutonsActivation[2] = (Switch)findViewById(R.id.activationBoite2);
+        boutonsActivation[3] = (Switch)findViewById(R.id.activationBoite3);
 
         imagesParametres    = new ImageView[nbModulesBoitesAuxLettres];
         imagesParametres[0] = (ImageView)findViewById(R.id.couleurBoite0);
+        imagesParametres[1] = (ImageView)findViewById(R.id.couleurBoite1);
+        imagesParametres[2] = (ImageView)findViewById(R.id.couleurBoite2);
+        imagesParametres[3] = (ImageView)findViewById(R.id.couleurBoite3);
 
         for(int i = 0; i < nbModulesBoitesAuxLettres; ++i)
         {
@@ -363,10 +378,10 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
             Exemple de réponsee : pour la requête GET /boites
             body =
             [
-                {"idBoite":1,"couleur":"rouge","etat":false,"actif":true},
-                {"idBoite":2,"couleur":"jaune","etat":false,"actif":true},
-                {"idBoite":3,"couleur":"bleu","etat":false,"actif":true},
-                {"idBoite":4,"couleur":"gris","etat":false,"actif":true},
+                {"idBoite":1,"couleur":"#FF0000","etat":false,"actif":true},
+                {"idBoite":2,"couleur":"#FFFF00","etat":false,"actif":true},
+                {"idBoite":3,"couleur":"#0000FF","etat":false,"actif":true},
+                {"idBoite":4,"couleur":"#F0F0F2","etat":false,"actif":true},
             ]
         */
         JSONArray json = null;
@@ -421,7 +436,7 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
             Exemple de réponsee : pour la requête PATCH /boites/1
             body =
             [
-                {"idBoite":1,"couleur":"rouge","etat":false,"actif":true}
+                {"idBoite":1,"couleur":"#FF0000","etat":false,"actif":true}
             ]
         */
         JSONArray json = null;
@@ -457,6 +472,8 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
             e.printStackTrace();
         }
     }
+
+    //@todo modifier la visibilité du module quand il est crée / supprimé
 
     private void mettreAJourModule(int numeroBoite)
     {

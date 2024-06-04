@@ -21,15 +21,15 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
 public class Communication
 {
     /**
      * Constantes
-a     */
+a
+*/
     private static final String TAG                = "_Communication"; //!< TAG pour les logs
     private static final String ADRESSE_STATION    = "station-lumineuse.local";
-    public static final String  ADRESSE_IP_STATION = "192.168.52.208"; // Simulateur station
+    public static final String  ADRESSE_IP_STATION = "192.168.1.47"; // Simulateur station
     private static final int    PORT_HTTP          = 80;
     public final static int     CODE_HTTP_REPONSE_JSON =
       0; //!< Code indicatif de l'handler pour les requêtes qui retournent des réponses au format
@@ -39,10 +39,9 @@ a     */
     public final static int CODE_HTTP_ERREUR =
       2; //!< Code indicatif de l'handler pour signaler des requêtes qui ont échouées (onFailure)
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-    public static final String API_GET_POUBELLES   = "/poubelles";       //!< Pour une requête GET
-    public static final String API_GET_BOITES   = "/boites"; //!< Pour une requête GET
-    public static final String API_GET_MACHINES   = "/machines";       //!< Pour une requête GET
-
+    public static final String    API_GET_POUBELLES = "/poubelles"; //!< Pour une requête GET
+    public static final String    API_GET_BOITES    = "/boites";    //!< Pour une requête GET
+    public static final String    API_GET_MACHINES  = "/machines";  //!< Pour une requête GET
 
     /**
      * Attributs

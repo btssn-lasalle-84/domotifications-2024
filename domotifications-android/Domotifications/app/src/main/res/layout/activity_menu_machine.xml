@@ -25,7 +25,10 @@
         android:gravity="center_vertical|center_horizontal"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="0dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -98,7 +101,7 @@
                 android:background="@android:color/transparent"
                 android:clickable="true"
                 android:scaleType="fitXY"
-                app:srcCompat="@drawable/lavevaisselle"
+                android:src="@drawable/machine"
                 tools:ignore="MissingConstraints" />
 
             <Switch
@@ -118,6 +121,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/parametres"
                 tools:ignore="MissingConstraints" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -144,7 +148,7 @@
                 android:background="@android:color/transparent"
                 android:clickable="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/machine"
+                app:srcCompat="@drawable/lavevaisselle"
                 tools:ignore="MissingConstraints" />
 
             <Switch
@@ -210,7 +214,6 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/parametres"
                 tools:ignore="MissingConstraints" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -257,6 +260,53 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/parametres"
                 tools:ignore="MissingConstraints" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="vertical"
+            tools:ignore="MissingConstraints">
+
+            <ImageView
+                android:id="@+id/notificationMachine5"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/cloche"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/machine5"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="25dp"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/machine"
+                tools:ignore="MissingConstraints" />
+
+            <Switch
+                android:id="@+id/activationMachine5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:scaleType="fitXY"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/couleurMachine5"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="25dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/parametres"
+                tools:ignore="MissingConstraints" />
         </LinearLayout>
 
     </LinearLayout>
@@ -274,4 +324,42 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:ignore="MissingConstraints" />
+
+    <LinearLayout
+        android:layout_width="179dp"
+        android:layout_height="806dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="MissingConstraints">
+    <ImageView
+        android:id="@+id/boutonAjouterModule"
+        android:layout_width="158dp"
+        android:layout_height="116dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.985"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.052"
+        app:srcCompat="@drawable/boutonajoutermodule" />
+
+    <ImageView
+        android:id="@+id/boutonSupprimerModule"
+        android:layout_width="158dp"
+        android:layout_height="116dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.984"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.252"
+        app:srcCompat="@drawable/boutonsupprimermodule" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

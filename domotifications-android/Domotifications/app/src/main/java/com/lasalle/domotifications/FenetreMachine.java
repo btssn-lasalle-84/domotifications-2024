@@ -46,7 +46,7 @@ public class FenetreMachine extends AppCompatActivity
     private static final String TAG                = "_FenetreMachine"; //!< TAG pour les logs
     private static final String API_PATCH_MACHINES = "/machines";       //!< Pour une requête PATCH
     private static final int    INTERVALLE         = 1000; //!< Intervalle d'interrogation en ms
-    public static final int     NB_MACHINES_MAX    = 5;    //!< Nombre max de machines
+    public static final int     NB_MACHINES_MAX    = 6;    //!< Nombre max de machines
     private static final int    CHANGEMENT_COULEUR = 1;
 
     /**
@@ -136,6 +136,7 @@ public class FenetreMachine extends AppCompatActivity
         imagesMachines[2] = (ImageView)findViewById(R.id.machine2);
         imagesMachines[3] = (ImageView)findViewById(R.id.machine3);
         imagesMachines[4] = (ImageView)findViewById(R.id.machine4);
+        imagesMachines[5] = (ImageView)findViewById(R.id.machine5);
 
         imagesNotificationMachines    = new ImageView[NB_MACHINES_MAX];
         imagesNotificationMachines[0] = (ImageView)findViewById(R.id.notificationMachine0);
@@ -143,6 +144,7 @@ public class FenetreMachine extends AppCompatActivity
         imagesNotificationMachines[2] = (ImageView)findViewById(R.id.notificationMachine2);
         imagesNotificationMachines[3] = (ImageView)findViewById(R.id.notificationMachine3);
         imagesNotificationMachines[4] = (ImageView)findViewById(R.id.notificationMachine4);
+        imagesNotificationMachines[5] = (ImageView)findViewById(R.id.notificationMachine5);
 
         boutonsActivation    = new Switch[NB_MACHINES_MAX];
         boutonsActivation[0] = (Switch)findViewById(R.id.activationMachine0);
@@ -150,6 +152,7 @@ public class FenetreMachine extends AppCompatActivity
         boutonsActivation[2] = (Switch)findViewById(R.id.activationMachine2);
         boutonsActivation[3] = (Switch)findViewById(R.id.activationMachine3);
         boutonsActivation[4] = (Switch)findViewById(R.id.activationMachine4);
+        boutonsActivation[5] = (Switch)findViewById(R.id.activationMachine5);
 
         imagesParametres    = new ImageView[NB_MACHINES_MAX];
         imagesParametres[0] = (ImageView)findViewById(R.id.couleurMachine0);
@@ -157,6 +160,7 @@ public class FenetreMachine extends AppCompatActivity
         imagesParametres[2] = (ImageView)findViewById(R.id.couleurMachine2);
         imagesParametres[3] = (ImageView)findViewById(R.id.couleurMachine3);
         imagesParametres[4] = (ImageView)findViewById(R.id.couleurMachine4);
+        imagesParametres[5] = (ImageView)findViewById(R.id.couleurMachine5);
 
         for(int i = 0; i < nbModulesMachines; ++i)
         {
@@ -385,10 +389,10 @@ public class FenetreMachine extends AppCompatActivity
             Exemple de réponsee : pour la requête GET /machines
             body =
             [
-                {"idMachine":1,"couleur":"rouge","etat":false,"actif":true},
-                {"idMachine":2,"couleur":"jaune","etat":false,"actif":true},
-                {"idMachine":3,"couleur":"bleu","etat":false,"actif":true},
-                {"idMachine":4,"couleur":"gris","etat":false,"actif":true},
+                {"idMachine":1,"couleur":"#FF0000","etat":false,"actif":true},
+                {"idMachine":2,"couleur":"#FFFF00","etat":false,"actif":true},
+                {"idMachine":3,"couleur":"#0000FF","etat":false,"actif":true},
+                {"idMachine":4,"couleur":"#F0F0F2","etat":false,"actif":true},
             ]
         */
         JSONArray json = null;
@@ -442,7 +446,7 @@ public class FenetreMachine extends AppCompatActivity
             Exemple de réponsee : pour la requête PATCH /machines/3
             body =
             [
-                {"idMachine":1,"couleur":"rouge","etat":false,"actif":true}
+                {"idMachine":1,"couleur":"#FF0000","etat":false,"actif":true}
             ]
         */
         JSONArray json = null;
@@ -478,6 +482,8 @@ public class FenetreMachine extends AppCompatActivity
             e.printStackTrace();
         }
     }
+
+    //@todo modifier la visibilité du module quand il est crée / supprimé
 
     private void mettreAJourModule(int numeroMachine)
     {
