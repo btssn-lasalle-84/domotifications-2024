@@ -1,10 +1,12 @@
 package com.lasalle.domotifications;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -84,9 +86,11 @@ public class FenetrePoubelle extends AppCompatActivity
     private ImageView[] imagesPoubelles;             //!< Images des poubelles de couleur
     private ImageButton boutonAccueil;               //!< Bouton pour revenir à l'accueil
     private ImageView[] imagesNotificationPoubelles; //!< Images des notifications des poubelles
-    private Switch[]    boutonsActivation; //!< Boutons d'activation/désactivation des modules
-                                           //!< poubelles
-    private ImageView[] imagesParametres;  //!< Images des couleurs des modules
+    private Switch[] boutonsActivation;        //!< Boutons d'activation/désactivation des modules
+                                               //!< poubelles
+    private ImageView boutonAjouterModule;     //!< Bouton pour ajouter les modules poubelles
+    private ImageView[] boutonSupprimerModule; //!< Bouton pour supprimer les modules poubelles
+    private ImageView[] imagesParametres;      //!< Images des couleurs des modules
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -164,6 +168,15 @@ public class FenetrePoubelle extends AppCompatActivity
         imagesParametres[3] = (ImageView)findViewById(R.id.couleurPoubelle3);
         imagesParametres[4] = (ImageView)findViewById(R.id.couleurPoubelle4);
 
+        boutonSupprimerModule    = new ImageView[NB_COULEURS_POUBELLE];
+        boutonSupprimerModule[0] = (ImageView)findViewById(R.id.boutonSupprimerPoubelle0);
+        boutonSupprimerModule[1] = (ImageView)findViewById(R.id.boutonSupprimerPoubelle1);
+        boutonSupprimerModule[2] = (ImageView)findViewById(R.id.boutonSupprimerPoubelle2);
+        boutonSupprimerModule[3] = (ImageView)findViewById(R.id.boutonSupprimerPoubelle3);
+        boutonSupprimerModule[4] = (ImageView)findViewById(R.id.boutonSupprimerPoubelle4);
+
+        boutonAjouterModule = (ImageView)findViewById(R.id.boutonAjouterModule);
+
         for(int i = 0; i < nbModulesPoubelles; ++i)
         {
             imagesPoubelles[i].setImageResource(IMAGES_POUBELLES[i]);
@@ -194,6 +207,77 @@ public class FenetrePoubelle extends AppCompatActivity
                     gererClicBoutonNotification(numeroPoubelle);
                 }
             });
+
+            boutonSupprimerModule[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    int    idModule  = modulesPoubelles.get(numeroPoubelle).getIdModule();
+                    String nomModule = modulesPoubelles.get(numeroPoubelle).getNomModule();
+                    afficherBoiteDialogueSuppression(idModule, nomModule);
+                }
+            });
+
+            boutonAjouterModule.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    String[] nomsModules = new String[modulesPoubelles.size()];
+
+                    for(int i = 0; i < modulesPoubelles.size(); i++)
+                    {
+                        nomsModules[i] = modulesPoubelles.get(i).getNomModule();
+                    }
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(FenetrePoubelle.this);
+                    builder.setTitle("Ajoutez un nouveau module")
+                      .setItems(nomsModules, new DialogInterface.OnClickListener() {
+                          public void onClick(DialogInterface dialog, int which)
+                          {
+                              int idModule = modulesPoubelles.get(which).getIdModule();
+                              if(idModule >= 0 && idModule < modulesPoubelles.size())
+                              {
+                                  ImageView module = imagesPoubelles[idModule];
+                                  if(module != null)
+                                  {
+                                      if(module.getVisibility() == View.INVISIBLE &&
+                                         imagesPoubelles[idModule].getVisibility() ==
+                                           View.INVISIBLE &&
+                                         boutonsActivation[idModule].getVisibility() ==
+                                           View.INVISIBLE &&
+                                         boutonSupprimerModule[idModule].getVisibility() ==
+                                           View.INVISIBLE &&
+                                         imagesParametres[idModule].getVisibility() ==
+                                           View.INVISIBLE)
+                                      {
+                                          module.setVisibility(View.VISIBLE);
+                                          imagesPoubelles[idModule].setVisibility(View.VISIBLE);
+                                          boutonsActivation[idModule].setVisibility(View.VISIBLE);
+                                          boutonSupprimerModule[idModule].setVisibility(
+                                            View.VISIBLE);
+                                          imagesParametres[idModule].setVisibility(View.VISIBLE);
+                                          Toast
+                                            .makeText(getApplicationContext(),
+                                                      "Module " + idModule + " ajouté",
+                                                      Toast.LENGTH_SHORT)
+                                            .show();
+                                      }
+                                  }
+                                  else
+                                  {
+                                      Log.e(TAG, "Module nul");
+                                  }
+                              }
+                              else
+                              {
+                                  Log.e(TAG, "Erreur de taille index");
+                              }
+                          }
+                      });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            });
         }
 
         for(int i = 0; i < NB_COULEURS_POUBELLE; ++i)
@@ -202,6 +286,7 @@ public class FenetrePoubelle extends AppCompatActivity
             imagesNotificationPoubelles[i].setVisibility(View.INVISIBLE);
             boutonsActivation[i].setVisibility(View.INVISIBLE);
             imagesParametres[i].setVisibility(View.INVISIBLE);
+            boutonSupprimerModule[i].setVisibility(View.INVISIBLE);
         }
 
         for(int i = 0; i < nbModulesPoubelles; ++i)
@@ -210,6 +295,7 @@ public class FenetrePoubelle extends AppCompatActivity
             imagesNotificationPoubelles[i].setVisibility(View.VISIBLE);
             boutonsActivation[i].setVisibility(View.VISIBLE);
             imagesParametres[i].setVisibility(View.VISIBLE);
+            boutonSupprimerModule[i].setVisibility(View.VISIBLE);
         }
 
         for(int i = 0; i < nbModulesPoubelles; i++)
@@ -492,8 +578,6 @@ public class FenetrePoubelle extends AppCompatActivity
         }
     }
 
-    //@todo modifier la visibilité du module quand il est crée / supprimé
-
     private void mettreAJourModule(int numeroPoubelle)
     {
         if(modulesPoubelles.get(numeroPoubelle) == null)
@@ -637,8 +721,8 @@ public class FenetrePoubelle extends AppCompatActivity
                     String nomModule     = data.getStringExtra("nom");
                     String couleurModule = data.getStringExtra("couleur");
                     Log.d(TAG,
-                          "onActivityResult() idModule = " + idModule + " - nomModule : " +
-                            nomModule + " - couleurModule = " + couleurModule);
+                          "onActivityResult() idModule = " + idModule +
+                            " - nomModule : " + nomModule + " - couleurModule = " + couleurModule);
 
                     if(idModule != -1)
                     {
@@ -661,6 +745,42 @@ public class FenetrePoubelle extends AppCompatActivity
                     communication.emettreRequetePATCH(api, json, handler);
                 }
             }
+        }
+    }
+
+    private void afficherBoiteDialogueSuppression(int idModule, String nomModule)
+    {
+        // Créer une nouvelle instance de BoiteDeDialogue
+        BoiteDeDialogue boiteDeDialogue = new BoiteDeDialogue();
+
+        // Passer l'ID et le nom du module à la boîte de dialogue
+        Bundle args = new Bundle();
+        args.putInt("idModule", idModule);
+        args.putString("nomModule", nomModule);
+        boiteDeDialogue.setArguments(args);
+
+        // Afficher la boîte de dialogue
+        boiteDeDialogue.show(getSupportFragmentManager(), "Dialogue suppression module");
+        if(idModule >= 0 && idModule < imagesNotificationPoubelles.length &&
+           idModule < boutonsActivation.length && idModule < boutonSupprimerModule.length &&
+           idModule < imagesParametres.length && imagesNotificationPoubelles[idModule] != null &&
+           boutonsActivation[idModule] != null && boutonSupprimerModule[idModule] != null &&
+           imagesParametres[idModule] != null)
+        {
+            // Cacher les modules après avoir appuyé sur supprimer
+            imagesPoubelles[idModule].setVisibility(View.INVISIBLE);
+            imagesNotificationPoubelles[idModule].setVisibility(View.INVISIBLE);
+            boutonsActivation[idModule].setVisibility(View.INVISIBLE);
+            if(boutonAjouterModule != null && idModule == boutonAjouterModule.getId())
+            {
+                boutonAjouterModule.setVisibility(View.INVISIBLE);
+            }
+            boutonSupprimerModule[idModule].setVisibility(View.INVISIBLE);
+            imagesParametres[idModule].setVisibility(View.INVISIBLE);
+        }
+        else
+        {
+            Log.e(TAG, "Index du tableau supérieur à 5" + idModule);
         }
     }
 }
