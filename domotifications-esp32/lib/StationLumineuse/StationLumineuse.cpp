@@ -266,7 +266,7 @@ void StationLumineuse::sauvegarderCouleurPoubelle(int id)
     }
     char cle[64] = "";
     sprintf(cle, "couleur_p%d", id);
-    preferences.getString(cle, poubelles[id - 1]->getCouleur());
+    preferences.putString(cle, poubelles[id - 1]->getCouleur());
 }
 
 void StationLumineuse::restaurerCouleurPoubelle(int id)
@@ -291,7 +291,7 @@ void StationLumineuse::sauvegarderCouleurBoite(int id)
     }
     char cle[64] = "";
     sprintf(cle, "couleur_b%d", id);
-    preferences.getString(cle, boites[id - 1]->getCouleur());
+    preferences.putString(cle, boites[id - 1]->getCouleur());
 }
 
 void StationLumineuse::restaurerCouleurBoite(int id)
@@ -315,7 +315,7 @@ void StationLumineuse::sauvegarderCouleurMachine(int id)
     }
     char cle[64] = "";
     sprintf(cle, "couleur_m%d", id);
-    preferences.getString(cle, machines[id - 1]->getCouleur());
+    preferences.putString(cle, machines[id - 1]->getCouleur());
 }
 
 void StationLumineuse::restaurerCouleurMachine(int id)

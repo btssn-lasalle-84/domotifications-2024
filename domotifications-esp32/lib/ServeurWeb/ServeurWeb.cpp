@@ -355,7 +355,7 @@ void ServeurWeb::traiterRequeteUpdatePoubelle()
     {
         String couleurPoubelle = documentJSON["couleur"].as<String>();
         poubelle->setCouleurLed(couleurPoubelle);
-        // @todo si le module est en notification alors il faut (re)allumer la led
+        // si le module est en notification alors il faut (re)allumer la led
         if(poubelle->getEtatNotification())
         {
             poubelle->allumerNotification();
@@ -529,7 +529,7 @@ void ServeurWeb::traiterRequeteUpdateMachine()
     {
         String couleurMachine = documentJSON["couleur"].as<String>();
         machine->setCouleurLed(couleurMachine);
-        // @todo si le module est en notification alors il faut (re)allumer la led
+        // si le module est en notification alors il faut (re)allumer la led
         if(machine->getEtatNotification())
         {
             machine->allumerNotification();
@@ -703,7 +703,7 @@ void ServeurWeb::traiterRequeteUpdateBoite()
     {
         String couleurBoite = documentJSON["couleur"].as<String>();
         boite->setCouleurLed(couleurBoite);
-        // @todo si le module est en notification alors il faut (re)allumer la led
+        // si le module est en notification alors il faut (re)allumer la led
         if(boite->getEtatNotification())
         {
             boite->allumerNotification();
