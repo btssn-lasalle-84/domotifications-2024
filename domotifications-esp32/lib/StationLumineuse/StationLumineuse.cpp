@@ -354,6 +354,11 @@ void StationLumineuse::restaurerEtats()
         sprintf((char*)cle, "%s%d", "actif_p", i);
         poubelle->setActivation(preferences.getBool(cle, false));
         restaurerCouleurPoubelle(i);
+        // @todo restaurer l'état de la led :
+        // si la poubelle est active
+        // alors si la notification est activee
+        // alors allumer la led
+        // sinon eteindre la led
     }
 
     // Restaurer les états des modules Boite
@@ -370,6 +375,11 @@ void StationLumineuse::restaurerEtats()
         sprintf((char*)cle, "%s%d", "actif_b", i);
         boite->setActivation(preferences.getBool(cle, false));
         restaurerCouleurBoite(i);
+        // @todo restaurer l'état de la led :
+        // si la boite est active
+        // alors si la notification est activee
+        // alors allumer la led
+        // sinon eteindre la led
     }
 
     // Restaurer les états des modules Machine
@@ -386,5 +396,10 @@ void StationLumineuse::restaurerEtats()
         sprintf((char*)cle, "%s%d", "actif_m", i);
         machine->setActivation(preferences.getBool(cle, false));
         restaurerCouleurMachine(i);
+        // @todo restaurer l'état de la led :
+        // si la machine est active
+        // alors si la notification est activee
+        // alors allumer la led
+        // sinon eteindre la led
     }
 }
