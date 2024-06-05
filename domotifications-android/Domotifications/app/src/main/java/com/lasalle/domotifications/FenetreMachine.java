@@ -75,11 +75,8 @@ public class FenetreMachine extends AppCompatActivity
     private ImageButton boutonAccueil;
 
     public static final int[] IMAGE_MACHINES = {
-        R.drawable.machine,
-        R.drawable.lavevaisselle,
-        R.drawable.machine,
-        R.drawable.machine,
-        R.drawable.machine
+        R.drawable.machine, R.drawable.lavevaisselle, R.drawable.machine,
+        R.drawable.machine, R.drawable.machine,       R.drawable.machine
     };                                  //!< Id de l'image de la machine dans les ressources Android
     private ImageView[] imagesMachines; //!< Images des machines
     private ImageView[] imagesNotificationMachines; //!< Images des notifications des machines

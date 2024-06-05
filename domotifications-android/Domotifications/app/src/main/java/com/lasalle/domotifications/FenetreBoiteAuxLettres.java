@@ -73,9 +73,9 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
      * GUI
      */
 
-    public static final int[] IMAGE_BOITES = {
-        R.drawable.boite_aux_lettres,
-    }; //!< Id de l'image de la boîte au lettre dans les ressources Android
+    public static final int IMAGE_BOITES =
+      R.drawable
+        .boite_aux_lettres; //!< Id de l'image de la boîte au lettre dans les ressources Android
     private ImageView[] imagesBoites;             //!< Images des boites aux lettres
     private ImageView[] imagesNotificationBoites; //!< Images des notifications des boites aux
     //!< lettres
@@ -166,7 +166,7 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
 
         for(int i = 0; i < nbModulesBoitesAuxLettres; ++i)
         {
-            imagesBoites[i].setImageResource(IMAGE_BOITES[i]);
+            imagesBoites[i].setImageResource(IMAGE_BOITES);
             final int numeroBoite = i;
 
             imagesParametres[i].setOnClickListener(new View.OnClickListener() {
