@@ -271,8 +271,8 @@
         android:background="@android:color/transparent"
         android:scaleType="fitXY"
         app:layout_constraintBaseline_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/boutonajoutermodule"
-        tools:layout_editor_absoluteY="661dp" />
+        app:srcCompat="@drawable/boutonajoutermodule" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

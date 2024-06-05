@@ -49,7 +49,8 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
     private static final String TAG              = "_FenetreBoiteAuxLettres"; //!< TAG pour les logs
     private static final String API_PATCH_BOITES = "/boites"; //!< Pour une requête PATCH
     private static final int    INTERVALLE       = 1000;      //!< Intervalle d'interrogation en ms
-    private static final int    CHANGEMENT_COULEUR = 1;
+    private static final int    CHANGEMENT_COULEUR    = 1;
+    private static final int    NB_MODULES_BOITES_MAX = 4;
 
     /**
      * Attributs
@@ -132,37 +133,52 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
 
         boutonAccueil = (ImageButton)findViewById(R.id.boutonAccueil);
 
-        imagesBoites    = new ImageView[nbModulesBoitesAuxLettres];
+        imagesBoites    = new ImageView[NB_MODULES_BOITES_MAX];
         imagesBoites[0] = (ImageView)findViewById(R.id.boiteAuxLettres0);
         imagesBoites[1] = (ImageView)findViewById(R.id.boiteAuxLettres1);
         imagesBoites[2] = (ImageView)findViewById(R.id.boiteAuxLettres2);
         imagesBoites[3] = (ImageView)findViewById(R.id.boiteAuxLettres3);
 
-        imagesNotificationBoites    = new ImageView[nbModulesBoitesAuxLettres];
+        imagesNotificationBoites    = new ImageView[NB_MODULES_BOITES_MAX];
         imagesNotificationBoites[0] = (ImageView)findViewById(R.id.notificationBoite0);
         imagesNotificationBoites[1] = (ImageView)findViewById(R.id.notificationBoite1);
         imagesNotificationBoites[2] = (ImageView)findViewById(R.id.notificationBoite2);
         imagesNotificationBoites[3] = (ImageView)findViewById(R.id.notificationBoite3);
 
-        boutonsActivation    = new Switch[nbModulesBoitesAuxLettres];
+        boutonsActivation    = new Switch[NB_MODULES_BOITES_MAX];
         boutonsActivation[0] = (Switch)findViewById(R.id.activationBoite0);
         boutonsActivation[1] = (Switch)findViewById(R.id.activationBoite1);
         boutonsActivation[2] = (Switch)findViewById(R.id.activationBoite2);
         boutonsActivation[3] = (Switch)findViewById(R.id.activationBoite3);
 
-        imagesParametres    = new ImageView[nbModulesBoitesAuxLettres];
+        imagesParametres    = new ImageView[NB_MODULES_BOITES_MAX];
         imagesParametres[0] = (ImageView)findViewById(R.id.couleurBoite0);
         imagesParametres[1] = (ImageView)findViewById(R.id.couleurBoite1);
         imagesParametres[2] = (ImageView)findViewById(R.id.couleurBoite2);
         imagesParametres[3] = (ImageView)findViewById(R.id.couleurBoite3);
 
-        boutonSupprimerModule    = new ImageView[nbModulesBoitesAuxLettres];
+        boutonSupprimerModule    = new ImageView[NB_MODULES_BOITES_MAX];
         boutonSupprimerModule[0] = (ImageView)findViewById(R.id.boutonSupprimerBoite0);
         boutonSupprimerModule[1] = (ImageView)findViewById(R.id.boutonSupprimerBoite1);
         boutonSupprimerModule[2] = (ImageView)findViewById(R.id.boutonSupprimerBoite2);
         boutonSupprimerModule[3] = (ImageView)findViewById(R.id.boutonSupprimerBoite3);
 
+        for(int i = nbModulesBoitesAuxLettres; i < NB_MODULES_BOITES_MAX; ++i)
+        {
+            imagesBoites[i].setVisibility(View.INVISIBLE);
+            imagesNotificationBoites[i].setVisibility(View.INVISIBLE);
+            boutonsActivation[i].setVisibility(View.INVISIBLE);
+            imagesParametres[i].setVisibility(View.INVISIBLE);
+            boutonSupprimerModule[i].setVisibility(View.INVISIBLE);
+        }
+
         boutonAjouterModule = (ImageView)findViewById(R.id.boutonAjouterModule);
+        boutonAjouterModule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+            }
+        });
 
         for(int i = 0; i < nbModulesBoitesAuxLettres; ++i)
         {
@@ -204,56 +220,6 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                     int    idModule  = modulesBoitesAuxLettres.get(numeroBoite).getIdModule();
                     String nomModule = modulesBoitesAuxLettres.get(numeroBoite).getNomModule();
                     afficherBoiteDialogueSuppression(idModule, nomModule);
-                }
-            });
-
-            boutonAjouterModule.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v)
-                {
-                    String[] nomsModules = new String[modulesBoitesAuxLettres.size()];
-
-                    for(int i = 0; i < modulesBoitesAuxLettres.size(); i++)
-                    {
-                        nomsModules[i] = modulesBoitesAuxLettres.get(i).getNomModule();
-                    }
-
-                    AlertDialog.Builder builder =
-                      new AlertDialog.Builder(FenetreBoiteAuxLettres.this);
-                    builder.setTitle("Ajoutez un nouveau module")
-                      .setItems(nomsModules, new DialogInterface.OnClickListener() {
-                          public void onClick(DialogInterface dialog, int which)
-                          {
-                              int idModule = modulesBoitesAuxLettres.get(which).getIdModule();
-                              if(idModule >= 0 && idModule < modulesBoitesAuxLettres.size())
-                              {
-                                  ImageView module = imagesNotificationBoites[idModule];
-                                  if(module != null)
-                                  {
-                                      module.setVisibility(View.VISIBLE);
-                                      imagesBoites[idModule].setVisibility(View.VISIBLE);
-                                      boutonsActivation[idModule].setVisibility(View.VISIBLE);
-                                      boutonSupprimerModule[idModule].setVisibility(View.VISIBLE);
-                                      imagesParametres[idModule].setVisibility(View.VISIBLE);
-                                      Toast
-                                        .makeText(getApplicationContext(),
-                                                  "Module " + idModule + " ajouté",
-                                                  Toast.LENGTH_SHORT)
-                                        .show();
-                                  }
-                                  else
-                                  {
-                                      Log.e(TAG, "Module nul");
-                                  }
-                              }
-                              else
-                              {
-                                  Log.e(TAG, "Erreur de taille index");
-                              }
-                          }
-                      });
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
                 }
             });
         }
@@ -727,25 +693,5 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
 
         // Afficher la boîte de dialogue
         boiteDeDialogue.show(getSupportFragmentManager(), "Dialogue suppression module");
-        if(idModule >= 0 && idModule < imagesBoites.length && idModule < boutonsActivation.length &&
-           idModule < boutonSupprimerModule.length && idModule < imagesParametres.length &&
-           imagesNotificationBoites[idModule] != null && boutonsActivation[idModule] != null &&
-           boutonSupprimerModule[idModule] != null && imagesParametres[idModule] != null)
-        {
-            // Cacher les modules après avoir appuyé sur supprimer
-            imagesBoites[idModule].setVisibility(View.INVISIBLE);
-            imagesNotificationBoites[idModule].setVisibility(View.INVISIBLE);
-            boutonsActivation[idModule].setVisibility(View.INVISIBLE);
-            if(boutonAjouterModule != null && idModule == boutonAjouterModule.getId())
-            {
-                boutonAjouterModule.setVisibility(View.INVISIBLE);
-            }
-            boutonSupprimerModule[idModule].setVisibility(View.INVISIBLE);
-            imagesParametres[idModule].setVisibility(View.INVISIBLE);
-        }
-        else
-        {
-            Log.e(TAG, "Index du tableau supérieur à 5" + idModule);
-        }
     }
 }
