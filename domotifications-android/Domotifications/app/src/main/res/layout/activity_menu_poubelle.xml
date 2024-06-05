@@ -76,12 +76,8 @@
                 android:id="@+id/boutonSupprimerPoubelle0"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.984"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.252"
+                android:clickable="true"
+                android:scaleType="fitXY"
                 app:srcCompat="@drawable/boutonsupprimermodule" />
         </LinearLayout>
 
@@ -134,12 +130,8 @@
                 android:id="@+id/boutonSupprimerPoubelle1"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.984"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.252"
+                android:clickable="true"
+                android:scaleType="fitXY"
                 app:srcCompat="@drawable/boutonsupprimermodule" />
         </LinearLayout>
 
@@ -192,12 +184,8 @@
                 android:id="@+id/boutonSupprimerPoubelle2"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.984"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.252"
+                android:clickable="true"
+                android:scaleType="fitXY"
                 app:srcCompat="@drawable/boutonsupprimermodule" />
         </LinearLayout>
 
@@ -250,12 +238,8 @@
                 android:id="@+id/boutonSupprimerPoubelle3"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.984"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.252"
+                android:clickable="true"
+                android:scaleType="fitXY"
                 app:srcCompat="@drawable/boutonsupprimermodule" />
         </LinearLayout>
 
@@ -308,12 +292,8 @@
                 android:id="@+id/boutonSupprimerPoubelle4"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.984"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.252"
+                android:clickable="true"
+                android:scaleType="fitXY"
                 app:srcCompat="@drawable/boutonsupprimermodule" />
         </LinearLayout>
 
