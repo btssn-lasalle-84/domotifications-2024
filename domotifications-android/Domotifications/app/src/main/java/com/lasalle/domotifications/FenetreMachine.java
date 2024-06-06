@@ -212,56 +212,8 @@ public class FenetreMachine extends AppCompatActivity
                     afficherBoiteDialogueSuppression(idModule, nomModule);
                 }
             });
-
-            boutonAjouterModule.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v)
-                {
-                    String[] nomsModules = new String[modulesMachines.size()];
-
-                    for(int i = 0; i < modulesMachines.size(); i++)
-                    {
-                        nomsModules[i] = modulesMachines.get(i).getNomModule();
-                    }
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(FenetreMachine.this);
-                    builder.setTitle("Ajoutez un nouveau module")
-                      .setItems(nomsModules, new DialogInterface.OnClickListener() {
-                          public void onClick(DialogInterface dialog, int which)
-                          {
-                              int idModule = modulesMachines.get(which).getIdModule();
-                              if(idModule >= 0 && idModule < modulesMachines.size())
-                              {
-                                  ImageView module = imagesNotificationMachines[idModule];
-                                  if(module != null)
-                                  {
-                                      module.setVisibility(View.VISIBLE);
-                                      imagesMachines[idModule].setVisibility(View.VISIBLE);
-                                      boutonsActivation[idModule].setVisibility(View.VISIBLE);
-                                      boutonSupprimerModule[idModule].setVisibility(View.VISIBLE);
-                                      imagesParametres[idModule].setVisibility(View.VISIBLE);
-                                      Toast
-                                        .makeText(getApplicationContext(),
-                                                  "Module " + idModule + " ajouté",
-                                                  Toast.LENGTH_SHORT)
-                                        .show();
-                                  }
-                                  else
-                                  {
-                                      Log.e(TAG, "Module nul");
-                                  }
-                              }
-                              else
-                              {
-                                  Log.e(TAG, "Erreur de taille index");
-                              }
-                          }
-                      });
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                }
-            });
         }
+
         for(int i = 0; i < NB_MACHINES_MAX; ++i)
         {
             imagesMachines[i].setVisibility(View.INVISIBLE);
@@ -318,6 +270,13 @@ public class FenetreMachine extends AppCompatActivity
                 {
                     Log.d(TAG, "clic boutonAccueil");
                     finish();
+                }
+            });
+            boutonAjouterModule.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    ajouterModule();
                 }
             });
         }
@@ -728,6 +687,7 @@ public class FenetreMachine extends AppCompatActivity
 
     private void afficherBoiteDialogueSuppression(int idModule, String nomModule)
     {
+        Log.d(TAG, "afficherBoiteDialogueSuppression()");
         // Créer une nouvelle instance de BoiteDeDialogue
         BoiteDeDialogue boiteDeDialogue = new BoiteDeDialogue();
 
@@ -739,22 +699,37 @@ public class FenetreMachine extends AppCompatActivity
 
         // Afficher la boîte de dialogue
         boiteDeDialogue.show(getSupportFragmentManager(), "Dialogue suppression module");
-        if(idModule >= 0 && idModule < imagesNotificationMachines.length &&
-           idModule < boutonsActivation.length && idModule < boutonSupprimerModule.length &&
-           idModule < imagesParametres.length && imagesNotificationMachines[idModule] != null &&
-           boutonsActivation[idModule] != null && boutonSupprimerModule[idModule] != null &&
-           imagesParametres[idModule] != null)
+    }
+
+    private void ajouterModule()
+    {
+        Log.d(TAG, "ajouterModule()");
+        // Vérifier s'il reste de la place pour un nouveau module
+        if(nbModulesMachines >= NB_MACHINES_MAX)
         {
-            // Cacher les modules après avoir appuyé sur supprimer
-            imagesMachines[idModule].setVisibility(View.INVISIBLE);
-            imagesNotificationMachines[idModule].setVisibility(View.INVISIBLE);
-            boutonsActivation[idModule].setVisibility(View.INVISIBLE);
-            boutonSupprimerModule[idModule].setVisibility(View.INVISIBLE);
-            imagesParametres[idModule].setVisibility(View.INVISIBLE);
+            Toast
+              .makeText(getApplicationContext(),
+                        "Nombre maximal de machines atteint",
+                        Toast.LENGTH_SHORT)
+              .show();
+            Log.d(TAG, "ajouterModule()" + nbModulesMachines + " >= " + NB_MACHINES_MAX);
+            return;
         }
-        else
-        {
-            Log.e(TAG, "Ereur de taille index" + idModule);
-        }
+
+        // Créer un nouvel objet Module
+        Module nouveauModule = new Module(nbModulesMachines + 1,
+                                          "Nouvelle Machine",
+                                          Module.TypeModule.Machine,
+                                          true,
+                                          true,
+                                          "#FF0000",
+                                          baseDeDonnees);
+
+        // Ajouter le module au conteneur
+        modulesMachines.add(nouveauModule);
+        nbModulesMachines++;
+
+        // Insérer le module dans la base de données
+        //baseDeDonnees.insererModule(nouveauModule);
     }
 }

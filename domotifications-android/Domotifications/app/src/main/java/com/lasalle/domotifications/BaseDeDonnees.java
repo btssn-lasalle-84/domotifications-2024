@@ -590,4 +590,20 @@ public class BaseDeDonnees extends SQLiteOpenHelper
             Log.e(TAG, "Erreur de mise à jour du nom du module");
         }
     }
+
+    public void insererModule(int idModule, int idTypesModules)
+    {
+        //@todo à compléter
+        Log.d(TAG, "insererModule() idModule = " + idModule + " idTypesModules = " + idTypesModules);
+        try
+        {
+            String requete = "INSERT INTO modules (id, nom, idTypesModules, idDomotifications) VALUES (" +
+                    Log.d(TAG, "insererModule() requete = "  );
+            sqlite.execSQL(requete);
+        }
+        catch(SQLiteConstraintException e)
+        {
+            Log.e(TAG, "Erreur d'insertion du module");
+        }
+    }
 }

@@ -29,7 +29,7 @@ a
 */
     private static final String TAG                = "_Communication"; //!< TAG pour les logs
     private static final String ADRESSE_STATION    = "station-lumineuse.local";
-    public static final String  ADRESSE_IP_STATION = "192.168.52.235"; // Simulateur station
+    public static final String  ADRESSE_IP_STATION = "192.168.52.188"; // Simulateur station
     private static final int    PORT_HTTP          = 80;
     public final static int     CODE_HTTP_REPONSE_JSON =
       0; //!< Code indicatif de l'handler pour les requêtes qui retournent des réponses au format
