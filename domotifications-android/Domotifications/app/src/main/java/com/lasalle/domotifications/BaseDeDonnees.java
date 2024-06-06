@@ -591,14 +591,22 @@ public class BaseDeDonnees extends SQLiteOpenHelper
         }
     }
 
-    public void insererModule(int idModule, int idTypesModules)
+    public void insererModule(int     idModule,
+                              int     idTypesModules,
+                              String  nom,
+                              boolean actif,
+                              String  couleur)
     {
-        //@todo à compléter
-        Log.d(TAG, "insererModule() idModule = " + idModule + " idTypesModules = " + idTypesModules);
+        Log.d(TAG,
+              "insererModule() idModule = " + idModule + " idTypesModules = " + idTypesModules +
+                " nom = " + nom + " actif = " + actif + " couleur = " + couleur);
         try
         {
-            String requete = "INSERT INTO modules (id, nom, idTypesModules, idDomotifications) VALUES (" +
-                    Log.d(TAG, "insererModule() requete = "  );
+            String requete = "INSERT INTO modules (id, nom, idTypesModules, actif, couleur, "
+                             + "idDomotifications) VALUES (" + idModule + ", '" + nom + "', " +
+                             idTypesModules + ", " + (actif ? 1 : 0) + ", '" + couleur + "', " +
+                             ID_DOMOTIFICATIONS + ");";
+            Log.d(TAG, "insererModule() requete = " + requete);
             sqlite.execSQL(requete);
         }
         catch(SQLiteConstraintException e)

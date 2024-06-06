@@ -77,12 +77,12 @@ public class FenetreMachine extends AppCompatActivity
     public static final int[] IMAGE_MACHINES = {
         R.drawable.machine, R.drawable.lavevaisselle, R.drawable.machine,
         R.drawable.machine, R.drawable.machine,       R.drawable.machine
-    };                                  //!< Id de l'image de la machine dans les ressources Android
-    private ImageView[] imagesMachines; //!< Images des machines
+    }; //!< Id de l'image de la machine dans les ressources Android
+    private ImageView[] imagesMachines;             //!< Images des machines
     private ImageView[] imagesNotificationMachines; //!< Images des notifications des machines
-    private Switch[] boutonsActivation;        //!< Boutons d'activation/désactivation des modules
-                                               //!< machines
-    private ImageView boutonAjouterModule;     //!< Bouton pour supprimer les modules machines
+    private Switch[]    boutonsActivation; //!< Boutons d'activation/désactivation des modules
+    //!< machines
+    private ImageView   boutonAjouterModule;   //!< Bouton pour supprimer les modules machines
     private ImageView[] boutonSupprimerModule; //!< Boutons pour supprimer les modules machines
     private ImageView[] imagesParametres;      //!< Images des couleurs des modules
     //!< machines
@@ -657,8 +657,8 @@ public class FenetreMachine extends AppCompatActivity
                     String nomModule     = data.getStringExtra("nom");
                     String couleurModule = data.getStringExtra("couleur");
                     Log.d(TAG,
-                          "onActivityResult() idModule = " + idModule +
-                            " - nomModule : " + nomModule + " - couleurModule = " + couleurModule);
+                          "onActivityResult() idModule = " + idModule + " - nomModule : " +
+                            nomModule + " - couleurModule = " + couleurModule);
 
                     if(idModule != -1)
                     {
@@ -704,6 +704,7 @@ public class FenetreMachine extends AppCompatActivity
     private void ajouterModule()
     {
         Log.d(TAG, "ajouterModule()");
+
         // Vérifier s'il reste de la place pour un nouveau module
         if(nbModulesMachines >= NB_MACHINES_MAX)
         {
@@ -712,10 +713,9 @@ public class FenetreMachine extends AppCompatActivity
                         "Nombre maximal de machines atteint",
                         Toast.LENGTH_SHORT)
               .show();
-            Log.d(TAG, "ajouterModule()" + nbModulesMachines + " >= " + NB_MACHINES_MAX);
+            Log.d(TAG, "ajouterModule() " + nbModulesMachines + " >= " + NB_MACHINES_MAX);
             return;
         }
-
         // Créer un nouvel objet Module
         Module nouveauModule = new Module(nbModulesMachines + 1,
                                           "Nouvelle Machine",
@@ -724,12 +724,14 @@ public class FenetreMachine extends AppCompatActivity
                                           true,
                                           "#FF0000",
                                           baseDeDonnees);
-
         // Ajouter le module au conteneur
         modulesMachines.add(nouveauModule);
         nbModulesMachines++;
-
         // Insérer le module dans la base de données
-        //baseDeDonnees.insererModule(nouveauModule);
+        baseDeDonnees.insererModule(nouveauModule.getIdModule(),
+                                    nouveauModule.getTypeModule().ordinal(),
+                                    nouveauModule.getNomModule(),
+                                    nouveauModule.estActif(),
+                                    nouveauModule.getCouleur());
     }
 }
