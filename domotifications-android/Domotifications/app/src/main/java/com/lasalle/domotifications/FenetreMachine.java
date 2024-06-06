@@ -34,6 +34,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -54,12 +55,12 @@ public class FenetreMachine extends AppCompatActivity
     /**
      * Attributs
      */
-    private BaseDeDonnees  baseDeDonnees;      //!< Association avec la base de donnees
-    private Vector<Module> modulesMachines;    //!< Conteneur des modules machines
-    private int            nbModulesMachines;  //!< le nombre de machines gérées
-    private int            idNotification = 0; //!< Identifiant unique pour chaque notification
-    private Communication  communication;      //!< Association avec la classe Communication
-    private Handler        handler =
+    private BaseDeDonnees    baseDeDonnees;      //!< Association avec la base de donnees
+    protected Vector<Module> modulesMachines;    //!< Conteneur des modules machines
+    private int              nbModulesMachines;  //!< le nombre de machines gérées
+    private int              idNotification = 0; //!< Identifiant unique pour chaque notification
+    private Communication    communication;      //!< Association avec la classe Communication
+    private Handler          handler =
       null; //!< Handler permettant la communication entre la classe Communication et l'activité
     private Timer minuteur = null; //!< Pour gérer la récupération des états des modules machines
     private TimerTask tacheRecuperationEtats =
@@ -82,7 +83,7 @@ public class FenetreMachine extends AppCompatActivity
     private ImageView[] imagesNotificationMachines; //!< Images des notifications des machines
     private Switch[]    boutonsActivation; //!< Boutons d'activation/désactivation des modules
     //!< machines
-    private ImageView   boutonAjouterModule;   //!< Bouton pour supprimer les modules machines
+    private ImageView   boutonAjouterModule;   //!< Bouton pour ajouter les modules machines
     private ImageView[] boutonSupprimerModule; //!< Boutons pour supprimer les modules machines
     private ImageView[] imagesParametres;      //!< Images des couleurs des modules
     //!< machines
@@ -207,9 +208,8 @@ public class FenetreMachine extends AppCompatActivity
                 @Override
                 public void onClick(View v)
                 {
-                    int    idModule  = modulesMachines.get(idMachine).getIdModule();
-                    String nomModule = modulesMachines.get(idMachine).getNomModule();
-                    afficherBoiteDialogueSuppression(idModule, nomModule);
+                    Log.d(TAG, "afficherBoiteDialogueSuppressionModule()");
+                    afficherBoiteDialogueSuppressionModule();
                 }
             });
         }
@@ -276,7 +276,7 @@ public class FenetreMachine extends AppCompatActivity
                 @Override
                 public void onClick(View v)
                 {
-                    ajouterModule();
+                    afficherBoiteDialogueAjoutModule();
                 }
             });
         }
@@ -685,53 +685,84 @@ public class FenetreMachine extends AppCompatActivity
         }
     }
 
-    private void afficherBoiteDialogueSuppression(int idModule, String nomModule)
+    private void afficherBoiteDialogueAjoutModule()
     {
-        Log.d(TAG, "afficherBoiteDialogueSuppression()");
-        // Créer une nouvelle instance de BoiteDeDialogue
-        BoiteDeDialogue boiteDeDialogue = new BoiteDeDialogue();
+        Log.d(TAG, "afficherBoiteDialogueAjoutModule()");
+        // Construire la liste des modules disponibles à ajouter
+        ArrayList<String> modulesDisponibles = new ArrayList<>();
+        for(int i = nbModulesMachines + 1; i <= NB_MACHINES_MAX; i++)
+        {
+            modulesDisponibles.add("Machine " + i);
+        }
 
-        // Passer l'ID et le nom du module à la boîte de dialogue
-        Bundle args = new Bundle();
-        args.putInt("idModule", idModule);
-        args.putString("nomModule", nomModule);
-        boiteDeDialogue.setArguments(args);
+        // Convertir la liste en tableau pour l'affichage de la boîte de dialogue
+        final CharSequence[] items = modulesDisponibles.toArray(new CharSequence[0]);
 
         // Afficher la boîte de dialogue
-        boiteDeDialogue.show(getSupportFragmentManager(), "Dialogue suppression module");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Ajouter un module");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                // L'utilisateur a sélectionné un module à ajouter
+                int    idModule  = nbModulesMachines + which + 1;
+                String nomModule = "Machine " + idModule;
+
+                Log.d(TAG, "Module sélectionné : " + nomModule);
+
+                // Insérer le module dans la base de données
+                baseDeDonnees.insererModule(idModule,
+                                            Module.TypeModule.Machine.ordinal(),
+                                            nomModule,
+                                            true,
+                                            "#FF0000"); // Couleur par défaut
+
+                // Créer un nouvel objet Module et l'ajouter au conteneur
+                Module nouveauModule = new Module(idModule,
+                                                  nomModule,
+                                                  Module.TypeModule.Machine,
+                                                  true,
+                                                  false, // Notification désactivée par défaut
+                                                  "#FF0000", //
+                                                  baseDeDonnees);
+                modulesMachines.add(nouveauModule);
+                nbModulesMachines++;
+
+                // Mettre à jour l'interface utilisateur
+                mettreAJourInterfaceUtilisateur();
+            }
+        });
+        builder.show();
     }
 
-    private void ajouterModule()
+    private void mettreAJourInterfaceUtilisateur()
     {
-        Log.d(TAG, "ajouterModule()");
+        //@todo mettre à jour l'interface selon si on ajoute un module ou si on le supprime
+    }
 
-        // Vérifier s'il reste de la place pour un nouveau module
-        if(nbModulesMachines >= NB_MACHINES_MAX)
+    /**
+     * @brief Méthode pour afficher la boîte de dialogue de suppression de module
+     */
+    private void afficherBoiteDialogueSuppressionModule()
+    {
+        // On convertit la liste des noms des modules machines actuellement présents dans la base de
+        // données
+        ArrayList<String> nomsModules = new ArrayList<>();
+        for(Module module: modulesMachines)
         {
-            Toast
-              .makeText(getApplicationContext(),
-                        "Nombre maximal de machines atteint",
-                        Toast.LENGTH_SHORT)
-              .show();
-            Log.d(TAG, "ajouterModule() " + nbModulesMachines + " >= " + NB_MACHINES_MAX);
-            return;
+            nomsModules.add(module.getNomModule());
         }
-        // Créer un nouvel objet Module
-        Module nouveauModule = new Module(nbModulesMachines + 1,
-                                          "Nouvelle Machine",
-                                          Module.TypeModule.Machine,
-                                          true,
-                                          true,
-                                          "#FF0000",
-                                          baseDeDonnees);
-        // Ajouter le module au conteneur
-        modulesMachines.add(nouveauModule);
-        nbModulesMachines++;
-        // Insérer le module dans la base de données
-        baseDeDonnees.insererModule(nouveauModule.getIdModule(),
-                                    nouveauModule.getTypeModule().ordinal(),
-                                    nouveauModule.getNomModule(),
-                                    nouveauModule.estActif(),
-                                    nouveauModule.getCouleur());
+
+        // On convertit la liste en tableau pour l'affichage de la boîte de dialogue
+        final CharSequence[] items = nomsModules.toArray(new CharSequence[0]);
+
+        // On crée une instance de la boîte de dialogue
+        BoiteDeDialogue boiteDeDialogue = new BoiteDeDialogue(baseDeDonnees, modulesMachines);
+        Bundle          args            = new Bundle();
+        args.putCharSequenceArray("nomsModules", items);
+        boiteDeDialogue.setArguments(args);
+
+        // On affiche la boîte de dialogue
+        boiteDeDialogue.show(getSupportFragmentManager(), "BoiteDeDialogueSuppressionModule");
     }
 }

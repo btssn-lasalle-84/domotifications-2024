@@ -35,6 +35,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -84,7 +85,7 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
     //!< boitesAuxLettres
     private ImageButton boutonAccueil;         //!< Boutons d'activation/désactivation des modules
                                                //!< boites
-    private ImageView boutonAjouterModule;     //!!< Boutons d'ajout des modules
+    private ImageView   boutonAjouterModule;   //!!< Boutons d'ajout des modules
     private ImageView[] boutonSupprimerModule; //!!< Boutons de suppression des modules
     private ImageView[] imagesParametres;      //!< Images des couleurs des modules
 
@@ -270,6 +271,14 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                     if(minuteur != null)
                         minuteur.cancel();
                     finish();
+                }
+            });
+
+            boutonAjouterModule.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    afficherBoiteDialogueAjoutModule();
                 }
             });
         }
@@ -653,8 +662,8 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                     String nomModule     = data.getStringExtra("nom");
                     String couleurModule = data.getStringExtra("couleur");
                     Log.d(TAG,
-                          "onActivityResult() idModule = " + idModule +
-                            " - nomModule : " + nomModule + " - couleurModule = " + couleurModule);
+                          "onActivityResult() idModule = " + idModule + " - nomModule : " +
+                            nomModule + " - couleurModule = " + couleurModule);
 
                     if(idModule != -1)
                     {
@@ -682,8 +691,12 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
 
     private void afficherBoiteDialogueSuppression(int idModule, String nomModule)
     {
+        Log.d(TAG,
+              "afficherBoiteDialogueSuppression(), idModule = " + idModule +
+                ", nomModule = " + nomModule);
         // Créer une nouvelle instance de BoiteDeDialogue
-        BoiteDeDialogue boiteDeDialogue = new BoiteDeDialogue();
+        BoiteDeDialogue boiteDeDialogue =
+          new BoiteDeDialogue(baseDeDonnees, modulesBoitesAuxLettres);
 
         // Passer l'ID et le nom du module à la boîte de dialogue
         Bundle args = new Bundle();
@@ -693,5 +706,59 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
 
         // Afficher la boîte de dialogue
         boiteDeDialogue.show(getSupportFragmentManager(), "Dialogue suppression module");
+    }
+
+    private void afficherBoiteDialogueAjoutModule()
+    {
+        Log.d(TAG, "afficherBoiteDialogueAjoutModule()");
+        // On construit la liste des modules disponibles à ajouter
+        ArrayList<String> modulesDisponibles = new ArrayList<>();
+        for(int i = nbModulesBoitesAuxLettres + 1; i <= NB_MODULES_BOITES_MAX; i++)
+        {
+            modulesDisponibles.add("Boîte " + i);
+        }
+
+        // On convertit la liste en tableau pour l'affichage de la boîte de dialogue
+        final CharSequence[] items = modulesDisponibles.toArray(new CharSequence[0]);
+
+        // On affiche cela sur la boîte de dialogue
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Ajouter un module");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                int    idModule  = nbModulesBoitesAuxLettres + which + 1;
+                String nomModule = "Boîte " + idModule;
+
+                Log.d(TAG, "Module sélectionné : " + nomModule);
+
+                // Insérer le module dans la base de données
+                baseDeDonnees.insererModule(idModule,
+                                            Module.TypeModule.BoiteAuxLettres.ordinal(),
+                                            nomModule,
+                                            true,
+                                            "#FF0000"); // Couleur par défaut
+
+                // Créer un nouvel objet Module et l'ajouter au conteneur
+                Module nouveauModule = new Module(idModule,
+                                                  nomModule,
+                                                  Module.TypeModule.BoiteAuxLettres,
+                                                  true,
+                                                  false, // Notification désactivée par défaut
+                                                  "#FFFFFF", //
+                                                  baseDeDonnees);
+                modulesBoitesAuxLettres.add(nouveauModule);
+                nbModulesBoitesAuxLettres++;
+
+                // Mettre à jour l'interface utilisateur
+                mettreAJourInterfaceUtilisateur();
+            }
+        });
+        builder.show();
+    }
+
+    private void mettreAJourInterfaceUtilisateur()
+    {
+        //@todo mettre à jour l'interface selon si on ajoute un module ou si on le supprime
     }
 }

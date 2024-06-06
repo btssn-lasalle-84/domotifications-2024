@@ -4,9 +4,12 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
+
+import java.util.Vector;
 
 public class BoiteDeDialogue extends DialogFragment
 {
@@ -18,8 +21,21 @@ public class BoiteDeDialogue extends DialogFragment
     /**
      * Attributs
      */
-    private int    idModule;
-    private String nomModule;
+    private int               idModule;
+    private String            nomModule;
+    private Module.TypeModule typeModule;
+    private BaseDeDonnees     baseDeDonnees;
+    private Vector<Module>    modules;
+
+
+    /**
+     * Constructeur
+     */
+    public BoiteDeDialogue(BaseDeDonnees baseDeDonnees, Vector<Module> modules)
+    {
+        this.baseDeDonnees = baseDeDonnees;
+        this.modules       = modules;
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)
@@ -28,8 +44,9 @@ public class BoiteDeDialogue extends DialogFragment
         Bundle args = getArguments();
         if(args != null)
         {
-            idModule  = args.getInt("idModule", -1);
-            nomModule = args.getString("nomModule", "");
+            idModule   = args.getInt("idModule", -1);
+            nomModule  = args.getString("nomModule", "");
+            typeModule = (Module.TypeModule)args.getSerializable("typeModule");
         }
 
         AlertDialog.Builder boiteSuppression = new AlertDialog.Builder(getActivity());
@@ -38,16 +55,37 @@ public class BoiteDeDialogue extends DialogFragment
         boiteSuppression.setPositiveButton("SUPPRIMER", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which)
             {
+                Log.d(TAG, "Suppression du module '" + nomModule + "' avec idModule = " + idModule);
+
+                // Supprimer le module de la base de données
+                for(Module module: modules)
+                {
+                    if(module.getIdModule() == idModule && module.getNomModule().equals(nomModule))
+                    {
+                        baseDeDonnees.supprimerModule(idModule,
+                                                      typeModule.ordinal(),
+                                                      nomModule,
+                                                      module.estActif(),
+                                                      module.getCouleur());
+                        modules.remove(module);
+                        break;
+                    }
+                }
+
+                // Notifier l'utilisateur
                 Toast
                   .makeText(getActivity(),
                             "Module '" + nomModule + "' supprimé.",
                             Toast.LENGTH_SHORT)
                   .show();
+
+                Log.d(TAG, "Module supprimé de la base de données et de la liste des modules");
             }
         });
         boiteSuppression.setNegativeButton("ANNULER", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which)
             {
+                Log.d(TAG, "Annulation de la suppression du module '" + nomModule + "'");
                 // On ferme la boîte de dialogue
                 dismiss();
             }

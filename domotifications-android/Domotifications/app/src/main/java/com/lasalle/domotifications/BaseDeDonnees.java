@@ -614,4 +614,28 @@ public class BaseDeDonnees extends SQLiteOpenHelper
             Log.e(TAG, "Erreur d'insertion du module");
         }
     }
+
+    public void supprimerModule(int     idModule,
+                                int     idTypesModules,
+                                String  nom,
+                                boolean actif,
+                                String  couleur)
+    {
+        Log.d(TAG,
+              "supprimerModule() idModule = " + idModule + " idTypesModules = " + idTypesModules +
+                " nom = " + nom + " actif = " + actif + " couleur = " + couleur);
+        try
+        {
+            String requete =
+              "DELETE FROM modules WHERE id = " + idModule +
+              " AND idTypesModules = " + idTypesModules + " AND nom = '" + nom + "'"
+              + " AND actif = " + (actif ? 1 : 0) + " AND couleur = '" + couleur + "'";
+            Log.d(TAG, "supprimerModule() requete = " + requete);
+            sqlite.execSQL(requete);
+        }
+        catch(SQLiteConstraintException e)
+        {
+            Log.e(TAG, "Erreur de suppression du module : " + idModule, e);
+        }
+    }
 }
