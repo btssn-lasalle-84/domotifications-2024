@@ -49,9 +49,11 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
      */
     private static final String TAG              = "_FenetreBoiteAuxLettres"; //!< TAG pour les logs
     private static final String API_PATCH_BOITES = "/boites"; //!< Pour une requête PATCH
-    private static final int    INTERVALLE       = 1000;      //!< Intervalle d'interrogation en ms
-    private static final int    CHANGEMENT_COULEUR    = 1;
-    private static final int    NB_MODULES_BOITES_MAX = 4;
+    private static final String API_POST_BOITES  = "/boites"; //!< Pour une requête POST
+
+    private static final int INTERVALLE            = 1000; //!< Intervalle d'interrogation en ms
+    private static final int CHANGEMENT_COULEUR    = 1;
+    private static final int NB_MODULES_BOITES_MAX = 4;
 
     /**
      * Attributs
@@ -85,7 +87,7 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
     //!< boitesAuxLettres
     private ImageButton boutonAccueil;         //!< Boutons d'activation/désactivation des modules
                                                //!< boites
-    private ImageView   boutonAjouterModule;   //!!< Boutons d'ajout des modules
+    private ImageView boutonAjouterModule;     //!!< Boutons d'ajout des modules
     private ImageView[] boutonSupprimerModule; //!!< Boutons de suppression des modules
     private ImageView[] imagesParametres;      //!< Images des couleurs des modules
 
@@ -305,6 +307,11 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                         Log.d(TAG, "[Handler] REPONSE PATCH");
                         traiterReponseJSON(message.obj.toString());
                         enregistrerAcquittementNotification(message.obj.toString());
+                        erreurCommunication = false;
+                        break;
+                    case Communication.CODE_HTTP_REPONSE_POST:
+                        Log.d(TAG, "[Handler] REPONSE POST");
+                        traiterReponseJSON(message.obj.toString());
                         erreurCommunication = false;
                         break;
                     case Communication.CODE_HTTP_ERREUR:
@@ -662,8 +669,8 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                     String nomModule     = data.getStringExtra("nom");
                     String couleurModule = data.getStringExtra("couleur");
                     Log.d(TAG,
-                          "onActivityResult() idModule = " + idModule + " - nomModule : " +
-                            nomModule + " - couleurModule = " + couleurModule);
+                          "onActivityResult() idModule = " + idModule +
+                            " - nomModule : " + nomModule + " - couleurModule = " + couleurModule);
 
                     if(idModule != -1)
                     {
@@ -731,7 +738,11 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                 String nomModule = "Boîte " + idModule;
 
                 Log.d(TAG, "Module sélectionné : " + nomModule);
-
+                // JSON et API pour la requête POST
+                String api = API_POST_BOITES + "/" + idModule;
+                String json =
+                  "{\"idModule\": \"" + idModule + "\", \"nomModule\": \"" + nomModule + "\"}";
+                communication.emettreRequetePOST(api, json, handler);
                 // Insérer le module dans la base de données
                 baseDeDonnees.insererModule(idModule,
                                             Module.TypeModule.BoiteAuxLettres.ordinal(),

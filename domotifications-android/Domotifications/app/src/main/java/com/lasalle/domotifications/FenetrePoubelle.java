@@ -49,6 +49,7 @@ public class FenetrePoubelle extends AppCompatActivity
      */
     private static final String TAG                 = "_FenetrePoubelle"; //!< TAG pour les logs
     private static final String API_PATCH_POUBELLES = "/poubelles"; //!< Pour une requête PATCH
+    private static final String API_POST_POUBELLES  = "/poubelles"; //!< Pour une requête PATCH
     private static final int    INTERVALLE          = 1000; //!< Intervalle d'interrogation en ms
     private static final int    CHANGEMENT_COULEUR  = 1;
     /**
@@ -87,9 +88,9 @@ public class FenetrePoubelle extends AppCompatActivity
     private ImageView[] imagesPoubelles;             //!< Images des poubelles de couleur
     private ImageButton boutonAccueil;               //!< Bouton pour revenir à l'accueil
     private ImageView[] imagesNotificationPoubelles; //!< Images des notifications des poubelles
-    private Switch[]    boutonsActivation;     //!< Boutons d'activation/désactivation des modules
+    private Switch[] boutonsActivation;        //!< Boutons d'activation/désactivation des modules
                                                //!< poubelles
-    private ImageView   boutonAjouterModule;   //!< Bouton pour ajouter les modules poubelles
+    private ImageView boutonAjouterModule;     //!< Bouton pour ajouter les modules poubelles
     private ImageView[] boutonSupprimerModule; //!< Bouton pour supprimer les modules poubelles
     private ImageView[] imagesParametres;      //!< Images des couleurs des modules
 
@@ -315,6 +316,11 @@ public class FenetrePoubelle extends AppCompatActivity
                         Log.d(TAG, "[Handler] REPONSE PATCH");
                         traiterReponseJSON(message.obj.toString());
                         enregistrerAcquittementNotification(message.obj.toString());
+                        erreurCommunication = false;
+                        break;
+                    case Communication.CODE_HTTP_REPONSE_POST:
+                        Log.d(TAG, "[Handler] REPONSE POST");
+                        traiterReponseJSON(message.obj.toString());
                         erreurCommunication = false;
                         break;
                     case Communication.CODE_HTTP_ERREUR:
@@ -671,8 +677,8 @@ public class FenetrePoubelle extends AppCompatActivity
                     String nomModule     = data.getStringExtra("nom");
                     String couleurModule = data.getStringExtra("couleur");
                     Log.d(TAG,
-                          "onActivityResult() idModule = " + idModule + " - nomModule : " +
-                            nomModule + " - couleurModule = " + couleurModule);
+                          "onActivityResult() idModule = " + idModule +
+                            " - nomModule : " + nomModule + " - couleurModule = " + couleurModule);
 
                     if(idModule != -1)
                     {
@@ -739,7 +745,11 @@ public class FenetrePoubelle extends AppCompatActivity
                 String nomModule = "Poubelle " + idModule;
 
                 Log.d(TAG, "Module sélectionné : " + nomModule);
-
+                // JSON et API pour la requête POST
+                String api = API_POST_POUBELLES + "/" + idModule;
+                String json =
+                  "{\"idModule\": \"" + idModule + "\", \"nomModule\": \"" + nomModule + "\"}";
+                communication.emettreRequetePOST(api, json, handler);
                 // Insérer le module dans la base de données
                 baseDeDonnees.insererModule(idModule,
                                             Module.TypeModule.Poubelle.ordinal(),

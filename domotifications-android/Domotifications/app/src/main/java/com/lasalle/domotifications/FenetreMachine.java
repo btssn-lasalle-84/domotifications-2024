@@ -48,6 +48,7 @@ public class FenetreMachine extends AppCompatActivity
      */
     private static final String TAG                = "_FenetreMachine"; //!< TAG pour les logs
     private static final String API_PATCH_MACHINES = "/machines";       //!< Pour une requête PATCH
+    private static final String API_POST_MACHINES  = "/machines";       //!< Pour une requête POST
     private static final int    INTERVALLE         = 1000; //!< Intervalle d'interrogation en ms
     public static final int     NB_MACHINES_MAX    = 6;    //!< Nombre max de machines
     private static final int    CHANGEMENT_COULEUR = 1;
@@ -78,12 +79,12 @@ public class FenetreMachine extends AppCompatActivity
     public static final int[] IMAGE_MACHINES = {
         R.drawable.machine, R.drawable.lavevaisselle, R.drawable.machine,
         R.drawable.machine, R.drawable.machine,       R.drawable.machine
-    }; //!< Id de l'image de la machine dans les ressources Android
-    private ImageView[] imagesMachines;             //!< Images des machines
+    };                                  //!< Id de l'image de la machine dans les ressources Android
+    private ImageView[] imagesMachines; //!< Images des machines
     private ImageView[] imagesNotificationMachines; //!< Images des notifications des machines
-    private Switch[]    boutonsActivation; //!< Boutons d'activation/désactivation des modules
+    private Switch[] boutonsActivation; //!< Boutons d'activation/désactivation des modules
     //!< machines
-    private ImageView   boutonAjouterModule;   //!< Bouton pour ajouter les modules machines
+    private ImageView boutonAjouterModule;     //!< Bouton pour ajouter les modules machines
     private ImageView[] boutonSupprimerModule; //!< Boutons pour supprimer les modules machines
     private ImageView[] imagesParametres;      //!< Images des couleurs des modules
     //!< machines
@@ -303,6 +304,11 @@ public class FenetreMachine extends AppCompatActivity
                         Log.d(TAG, "[Handler] REPONSE PATCH");
                         traiterReponseJSON(message.obj.toString());
                         enregistrerAcquittementNotification(message.obj.toString());
+                        erreurCommunication = false;
+                        break;
+                    case Communication.CODE_HTTP_REPONSE_POST:
+                        Log.d(TAG, "[Handler] REPONSE POST");
+                        traiterReponseJSON(message.obj.toString());
                         erreurCommunication = false;
                         break;
                     case Communication.CODE_HTTP_ERREUR:
@@ -657,8 +663,8 @@ public class FenetreMachine extends AppCompatActivity
                     String nomModule     = data.getStringExtra("nom");
                     String couleurModule = data.getStringExtra("couleur");
                     Log.d(TAG,
-                          "onActivityResult() idModule = " + idModule + " - nomModule : " +
-                            nomModule + " - couleurModule = " + couleurModule);
+                          "onActivityResult() idModule = " + idModule +
+                            " - nomModule : " + nomModule + " - couleurModule = " + couleurModule);
 
                     if(idModule != -1)
                     {
@@ -710,6 +716,11 @@ public class FenetreMachine extends AppCompatActivity
 
                 Log.d(TAG, "Module sélectionné : " + nomModule);
 
+                // JSON et API pour la requête POST
+                String api = API_POST_MACHINES + "/" + idModule;
+                String json =
+                  "{\"idModule\": \"" + idModule + "\", \"nomModule\": \"" + nomModule + "\"}";
+                communication.emettreRequetePOST(api, json, handler);
                 // Insérer le module dans la base de données
                 baseDeDonnees.insererModule(idModule,
                                             Module.TypeModule.Machine.ordinal(),

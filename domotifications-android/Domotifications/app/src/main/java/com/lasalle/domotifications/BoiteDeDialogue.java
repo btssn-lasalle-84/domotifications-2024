@@ -27,7 +27,6 @@ public class BoiteDeDialogue extends DialogFragment
     private BaseDeDonnees     baseDeDonnees;
     private Vector<Module>    modules;
 
-
     /**
      * Constructeur
      */
@@ -62,11 +61,7 @@ public class BoiteDeDialogue extends DialogFragment
                 {
                     if(module.getIdModule() == idModule && module.getNomModule().equals(nomModule))
                     {
-                        baseDeDonnees.supprimerModule(idModule,
-                                                      typeModule.ordinal(),
-                                                      nomModule,
-                                                      module.estActif(),
-                                                      module.getCouleur());
+                        baseDeDonnees.supprimerModule(idModule, typeModule.ordinal());
                         modules.remove(module);
                         break;
                     }
