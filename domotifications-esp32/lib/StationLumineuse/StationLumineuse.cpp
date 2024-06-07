@@ -359,6 +359,17 @@ void StationLumineuse::restaurerEtats()
         // alors si la notification est activee
         // alors allumer la led
         // sinon eteindre la led
+        if(poubelle->getActivation())
+        {
+            if(poubelle->getEtatNotification())
+            {
+                poubelle->allumerNotification();
+            }
+            else
+            {
+                poubelle->eteindreNotification();
+            }
+        }
     }
 
     // Restaurer les états des modules Boite
@@ -380,6 +391,17 @@ void StationLumineuse::restaurerEtats()
         // alors si la notification est activee
         // alors allumer la led
         // sinon eteindre la led
+        if(boite->getActivation())
+        {
+            if(boite->getEtatNotification())
+            {
+                boite->allumerNotification();
+            }
+            else
+            {
+                boite->eteindreNotification();
+            }
+        }
     }
 
     // Restaurer les états des modules Machine
@@ -401,5 +423,16 @@ void StationLumineuse::restaurerEtats()
         // alors si la notification est activee
         // alors allumer la led
         // sinon eteindre la led
+        if(machine->getActivation())
+        {
+            if(machine->getEtatNotification())
+            {
+                machine->allumerNotification();
+            }
+            else
+            {
+                machine->eteindreNotification();
+            }
+        }
     }
 }
