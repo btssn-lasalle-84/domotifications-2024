@@ -361,6 +361,22 @@ void ServeurWeb::traiterRequeteUpdatePoubelle()
             poubelle->allumerNotification();
         }
     }
+    // Mise à jour du bandeau
+    if(poubelle->getActivation())
+    {
+        if(poubelle->getEtatNotification())
+        {
+            poubelle->allumerNotification();
+        }
+        else
+        {
+            poubelle->eteindreNotification();
+        }
+    }
+    else
+    {
+        poubelle->eteindreNotification();
+    }
 
     // Sauvegarde les états de ce module
     stationLumineuse->sauvegarderEtatsPoubelle(idPoubelle);
@@ -535,6 +551,22 @@ void ServeurWeb::traiterRequeteUpdateMachine()
             machine->allumerNotification();
         }
     }
+    // Mise à jour du bandeau
+    if(machine->getActivation())
+    {
+        if(machine->getEtatNotification())
+        {
+            machine->allumerNotification();
+        }
+        else
+        {
+            machine->eteindreNotification();
+        }
+    }
+    else
+    {
+        machine->eteindreNotification();
+    }
 
     // Sauvegarde les états de ce module
     stationLumineuse->sauvegarderEtatsMachine(idMachine);
@@ -708,6 +740,22 @@ void ServeurWeb::traiterRequeteUpdateBoite()
         {
             boite->allumerNotification();
         }
+    }
+    // Mise à jour du bandeau
+    if(boite->getActivation())
+    {
+        if(boite->getEtatNotification())
+        {
+            boite->allumerNotification();
+        }
+        else
+        {
+            boite->eteindreNotification();
+        }
+    }
+    else
+    {
+        boite->eteindreNotification();
     }
 
     // Sauvegarde les états de ce module

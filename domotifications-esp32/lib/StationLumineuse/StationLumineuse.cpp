@@ -354,11 +354,6 @@ void StationLumineuse::restaurerEtats()
         sprintf((char*)cle, "%s%d", "actif_p", i);
         poubelle->setActivation(preferences.getBool(cle, false));
         restaurerCouleurPoubelle(i);
-        // @todo restaurer l'état de la led :
-        // si la poubelle est active
-        // alors si la notification est activee
-        // alors allumer la led
-        // sinon eteindre la led
         if(poubelle->getActivation())
         {
             if(poubelle->getEtatNotification())
@@ -369,6 +364,10 @@ void StationLumineuse::restaurerEtats()
             {
                 poubelle->eteindreNotification();
             }
+        }
+        else
+        {
+            poubelle->eteindreNotification();
         }
     }
 
@@ -386,11 +385,6 @@ void StationLumineuse::restaurerEtats()
         sprintf((char*)cle, "%s%d", "actif_b", i);
         boite->setActivation(preferences.getBool(cle, false));
         restaurerCouleurBoite(i);
-        // @todo restaurer l'état de la led :
-        // si la boite est active
-        // alors si la notification est activee
-        // alors allumer la led
-        // sinon eteindre la led
         if(boite->getActivation())
         {
             if(boite->getEtatNotification())
@@ -401,6 +395,10 @@ void StationLumineuse::restaurerEtats()
             {
                 boite->eteindreNotification();
             }
+        }
+        else
+        {
+            boite->eteindreNotification();
         }
     }
 
@@ -418,11 +416,6 @@ void StationLumineuse::restaurerEtats()
         sprintf((char*)cle, "%s%d", "actif_m", i);
         machine->setActivation(preferences.getBool(cle, false));
         restaurerCouleurMachine(i);
-        // @todo restaurer l'état de la led :
-        // si la machine est active
-        // alors si la notification est activee
-        // alors allumer la led
-        // sinon eteindre la led
         if(machine->getActivation())
         {
             if(machine->getEtatNotification())
@@ -433,6 +426,10 @@ void StationLumineuse::restaurerEtats()
             {
                 machine->eteindreNotification();
             }
+        }
+        else
+        {
+            machine->eteindreNotification();
         }
     }
 }
