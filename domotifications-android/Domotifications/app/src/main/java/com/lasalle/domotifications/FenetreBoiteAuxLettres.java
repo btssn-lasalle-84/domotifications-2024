@@ -1,10 +1,12 @@
 package com.lasalle.domotifications;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -12,7 +14,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -69,7 +73,9 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
     private boolean               erreurCommunication = false;
     private Map<Integer, Boolean> notificationsEnvoyees =
       new HashMap<>(); //<! Pour la signalisation des notifications
-    private int numeroBoiteAcquittement = -1;
+    private int    numeroBoiteAcquittement = -1;
+    private String nomAjoutModule;
+
     /**
      * GUI
      */
@@ -84,7 +90,7 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
     //!< boitesAuxLettres
     private ImageButton boutonAccueil;         //!< Boutons d'activation/désactivation des modules
                                                //!< boites
-    private ImageView boutonAjouterModule;     //!!< Boutons d'ajout des modules
+    private ImageView   boutonAjouterModule;   //!!< Boutons d'ajout des modules
     private ImageView[] boutonSupprimerModule; //!!< Boutons de suppression des modules
     private ImageView[] imagesParametres;      //!< Images des couleurs des modules
 
@@ -212,12 +218,12 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
 
         for(int i = 0; i < NB_MODULES_BOITES_MAX; ++i)
         {
-            // @todo cacherBoiteAuxLettres(i);
+            cacherBoiteAuxLettres(i);
         }
 
         for(int i = 0; i < nbModulesBoitesAuxLettres; ++i)
         {
-            // @todo afficherBoiteAuxLettres(i);
+            afficherBoiteAuxLettres(i);
         }
 
         for(int i = 0; i < nbModulesBoitesAuxLettres; i++)
@@ -301,12 +307,12 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                         break;
                     case Communication.CODE_HTTP_REPONSE_POST:
                         Log.d(TAG, "[Handler] REPONSE POST");
-                        // @todo validerAjoutBoite(message.obj.toString());
+                        validerAjoutBoite(message.obj.toString());
                         erreurCommunication = false;
                         break;
                     case Communication.CODE_HTTP_REPONSE_DELETE:
                         Log.d(TAG, "[Handler] REPONSE POST");
-                        // @todo validerSuppressionBoite(message.obj.toString());
+                        validerSuppressionBoite(message.obj.toString());
                         erreurCommunication = false;
                         break;
                     case Communication.CODE_HTTP_ERREUR:
@@ -460,6 +466,95 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                     }
                 }
             }
+        }
+        catch(JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void validerAjoutBoite(String reponse)
+    {
+        Log.d(TAG, "validerAjoutBoite() reponse = " + reponse);
+        /*
+            Exemple de réponse : pour la requête POST
+            body =
+            [
+                {"idBoite":5,"couleur":"#FF0000","etat":false,"actif":false}
+            ]
+        */
+        JSONArray json = null;
+
+        try
+        {
+            json               = new JSONArray(reponse);
+            JSONObject boite   = json.getJSONObject(0);
+            int        idBoite = boite.getInt("idBoite");
+            String     couleur = boite.getString("couleur");
+            Boolean    etat    = boite.getBoolean("etat");
+            Boolean    actif   = boite.getBoolean("actif");
+            Log.d(TAG,
+                  "validerAjoutBoite() idBoite = " + idBoite + " couleur = " + couleur +
+                    " etat = " + etat + " actif = " + actif);
+            Module module = new Module(idBoite,
+                                       nomAjoutModule,
+                                       Module.TypeModule.BoiteAuxLettres,
+                                       actif,
+                                       etat,
+                                       couleur,
+                                       baseDeDonnees);
+            modulesBoitesAuxLettres.add(module);
+            baseDeDonnees.insererModule(module.getIdModule(),
+                                        module.getTypeModule().ordinal() + 1,
+                                        module.getNomModule(),
+                                        module.estActif(),
+                                        module.getCouleur());
+            afficherBoiteAuxLettres(nbModulesBoitesAuxLettres);
+            int numeroBoite = getNumeroBoite(module.getIdModule());
+            mettreAJourModule(numeroBoite);
+            nomAjoutModule            = "";
+            nbModulesBoitesAuxLettres = modulesBoitesAuxLettres.size();
+            Log.d(TAG,
+                  "validerAjoutBoite() nbModulesBoitesAuxLettres = " + nbModulesBoitesAuxLettres);
+        }
+        catch(JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void validerSuppressionBoite(String reponse)
+    {
+        Log.d(TAG, "validerSuppressionBoite() reponse = " + reponse);
+        /*
+            Exemple de réponse : pour la requête DELETE
+            body =
+            [
+                {"idBoite":5}
+            ]
+        */
+        JSONArray json = null;
+
+        try
+        {
+            json               = new JSONArray(reponse);
+            JSONObject boites  = json.getJSONObject(0);
+            int        idBoite = boites.getInt("idBoite");
+            Log.d(TAG, "validerSuppressionBoite() idBoite = " + idBoite);
+            int numeroBoite = getNumeroBoite(idBoite);
+            if(numeroBoite == -1)
+            {
+                Log.d(TAG, "validerSuppressionBoite() idBoite introuvable !");
+                return;
+            }
+            Module module = modulesBoitesAuxLettres.get(numeroBoite);
+            baseDeDonnees.supprimerModule(idBoite, module.getTypeModule().ordinal() + 1);
+            modulesBoitesAuxLettres.remove(module);
+            cacherBoiteAuxLettres(numeroBoite);
+            nbModulesBoitesAuxLettres = modulesBoitesAuxLettres.size();
+            Log.d(TAG,
+                  "validerSuppressionBoite() nbModulesBoitesAuxLettres = " +
+                    nbModulesBoitesAuxLettres);
         }
         catch(JSONException e)
         {
@@ -664,8 +759,8 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                     String nomModule     = data.getStringExtra("nom");
                     String couleurModule = data.getStringExtra("couleur");
                     Log.d(TAG,
-                          "onActivityResult() idModule = " + idModule +
-                            " - nomModule : " + nomModule + " - couleurModule = " + couleurModule);
+                          "onActivityResult() idModule = " + idModule + " - nomModule : " +
+                            nomModule + " - couleurModule = " + couleurModule);
 
                     if(idModule != -1)
                     {
@@ -694,7 +789,60 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
     private void afficherBoiteDialogueAjoutModule()
     {
         Log.d(TAG, "afficherBoiteDialogueAjoutModule()");
-        // @todo afficherBoiteDialogueAjoutModule()
+        Log.d(TAG, "afficherBoiteDialogueAjoutModule()");
+        AlertDialog.Builder ajoutModule     = new AlertDialog.Builder(this);
+        LayoutInflater      factory         = LayoutInflater.from(this);
+        final View          ajoutModuleView = factory.inflate(R.layout.ajout_module, null);
+        ajoutModule.setView(ajoutModuleView);
+        ajoutModule.setTitle("Ajouter un nouveau module");
+        ajoutModule.setPositiveButton("Valider", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                // Lorsque l'on cliquera sur le bouton "OK", on récupère l'EditText correspondant à
+                // la vue personnalisée (cad à ajoutModuleView)
+                EditText nomModule = (EditText)ajoutModuleView.findViewById(R.id.editTextNom);
+                if(!nomModule.getText().toString().isEmpty())
+                    nomAjoutModule = nomModule.getText().toString();
+                else
+                    nomAjoutModule = "boite";
+                Log.d(TAG, "afficherBoiteDialogueAjoutModule() nomModule = " + nomAjoutModule);
+
+                // @todo ajouter le choix de la couleur (cf. R.layout.ajout_module)
+
+                // Emettre la requête POST à la station
+
+                int idBoite = rechercherIdDisponible();
+                Log.d(TAG, "afficherBoiteDialogueAjoutModule() idBoite = " + idBoite);
+                // si idBoite= 0 alors la station choisira l'idBoite à ajouter sinon c'est
+                // l'application qui le détermine
+                String api  = API_PATCH_BOITES;
+                String json = "{\"idBoite\": " + idBoite +
+                              ", \"couleur\" \"#00FF00\":, \"actif\": true"
+                              + "}";
+                communication.emettreRequetePOST(api, json, handler);
+
+                // Notifier l'utilisateur
+                Toast
+                  .makeText(getApplicationContext(),
+                            "Demande d'ajout du module '" + nomAjoutModule + "' envoyée",
+                            Toast.LENGTH_SHORT)
+                  .show();
+
+                // Mode démo
+                String reponseJson =
+                  "{\"idBoite\": " + idBoite +
+                  ", \"couleur\": \"#00FF00\", \"etat\": false, \"actif\": true"
+                  + "}";
+                validerAjoutBoite("[" + reponseJson + "]");
+            }
+        });
+        ajoutModule.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which)
+            {
+            }
+        });
+
+        ajoutModule.show();
     }
 
     private void afficherBoiteDialogueSuppressionModule(int numeroBoite)
@@ -704,6 +852,91 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
             Log.e(TAG, "afficherBoiteDialogueSuppressionModule() Aucune boîte aux lettres !");
             return;
         }
-        // @todo afficherBoiteDialogueSuppressionModule()
+        String nomModule = modulesBoitesAuxLettres.get(numeroBoite).getNomModule();
+
+        AlertDialog.Builder boiteSuppression = new AlertDialog.Builder(this);
+        boiteSuppression.setMessage("Vous êtes sur le point de supprimer le module '" + nomModule +
+                                    "'.");
+        boiteSuppression.setPositiveButton("SUPPRIMER", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                // Emettre la requête DELETE à la station
+                String api =
+                  API_PATCH_BOITES + "/" + modulesBoitesAuxLettres.get(numeroBoite).getIdModule();
+                String json =
+                  "{\"idBoite\": " + modulesBoitesAuxLettres.get(numeroBoite).getIdModule() + "}";
+                communication.emettreRequeteDELETE(api, json, handler);
+
+                // Notifier l'utilisateur
+                Toast
+                  .makeText(getApplicationContext(),
+                            "Demande de suppression du module '" + nomModule + "' envoyée",
+                            Toast.LENGTH_SHORT)
+                  .show();
+
+                // Mode démo
+                validerSuppressionBoite("[" + json + "]");
+            }
+        });
+        boiteSuppression.setNegativeButton("ANNULER", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which)
+            {
+            }
+        });
+
+        AlertDialog alert = boiteSuppression.create();
+        alert.setCanceledOnTouchOutside(false);
+        alert.show();
+    }
+
+    private void cacherBoiteAuxLettres(int numeroBoite)
+    {
+        imagesBoites[numeroBoite].setVisibility(View.INVISIBLE);
+        imagesNotificationBoites[numeroBoite].setVisibility(View.INVISIBLE);
+        boutonsActivation[numeroBoite].setVisibility(View.INVISIBLE);
+        imagesParametres[numeroBoite].setVisibility(View.INVISIBLE);
+        boutonSupprimerModule[numeroBoite].setVisibility(View.INVISIBLE);
+    }
+
+    private void afficherBoiteAuxLettres(int numeroBoite)
+    {
+        imagesBoites[numeroBoite].setVisibility(View.VISIBLE);
+        imagesNotificationBoites[numeroBoite].setVisibility(View.VISIBLE);
+        boutonsActivation[numeroBoite].setVisibility(View.VISIBLE);
+        imagesParametres[numeroBoite].setVisibility(View.VISIBLE);
+        boutonSupprimerModule[numeroBoite].setVisibility(View.VISIBLE);
+    }
+
+    private int getNumeroBoite(int idBoite)
+    {
+        for(int i = 0; i < modulesBoitesAuxLettres.size(); ++i)
+        {
+            Module module = modulesBoitesAuxLettres.get(i);
+            if(module.getIdModule() == idBoite)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private int rechercherIdDisponible()
+    {
+        for(int id = 1; id <= NB_MODULES_BOITES_MAX; id++)
+        {
+            if(!estPresent(id))
+                return id;
+        }
+        return 0; // pas d'id de disponible
+    }
+
+    private boolean estPresent(int id)
+    {
+        for(int i = 0; i < modulesBoitesAuxLettres.size(); i++)
+        {
+            if(id == modulesBoitesAuxLettres.get(i).getIdModule())
+                return true;
+        }
+        return false;
     }
 }

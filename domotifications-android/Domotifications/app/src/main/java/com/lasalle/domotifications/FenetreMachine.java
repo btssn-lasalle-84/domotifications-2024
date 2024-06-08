@@ -72,7 +72,7 @@ public class FenetreMachine extends AppCompatActivity
     private boolean               erreurCommunication = false;
     private Map<Integer, Boolean> notificationsEnvoyees =
       new HashMap<>(); //<! Pour la signalisation des notifications
-    private int numeroMachineAcquittement = -1;
+    private int    numeroMachineAcquittement = -1;
     private String nomAjoutModule;
 
     /**
@@ -83,12 +83,12 @@ public class FenetreMachine extends AppCompatActivity
     public static final int[] IMAGE_MACHINES = {
         R.drawable.machine, R.drawable.lavevaisselle, R.drawable.machine,
         R.drawable.machine, R.drawable.machine,       R.drawable.machine
-    };                                  //!< Id de l'image de la machine dans les ressources Android
-    private ImageView[] imagesMachines; //!< Images des machines
+    }; //!< Id de l'image de la machine dans les ressources Android
+    private ImageView[] imagesMachines;             //!< Images des machines
     private ImageView[] imagesNotificationMachines; //!< Images des notifications des machines
-    private Switch[] boutonsActivation; //!< Boutons d'activation/désactivation des modules
+    private Switch[]    boutonsActivation; //!< Boutons d'activation/désactivation des modules
     //!< machines
-    private ImageView boutonAjouterModule;     //!< Bouton pour ajouter les modules machines
+    private ImageView   boutonAjouterModule;   //!< Bouton pour ajouter les modules machines
     private ImageView[] boutonSupprimerModule; //!< Boutons pour supprimer les modules machines
     private ImageView[] imagesParametres;      //!< Images des couleurs des modules
     //!< machines
@@ -490,7 +490,7 @@ public class FenetreMachine extends AppCompatActivity
         try
         {
             json                 = new JSONArray(reponse);
-            JSONObject machine  = json.getJSONObject(0);
+            JSONObject machine   = json.getJSONObject(0);
             int        idMachine = machine.getInt("idMachine");
             String     couleur   = machine.getString("couleur");
             Boolean    etat      = machine.getBoolean("etat");
@@ -506,11 +506,15 @@ public class FenetreMachine extends AppCompatActivity
                                        couleur,
                                        baseDeDonnees);
             modulesMachines.add(module);
-            baseDeDonnees.insererModule(module.getIdModule(), module.getTypeModule().ordinal()+1, module.getNomModule(), module.estActif(), module.getCouleur());
+            baseDeDonnees.insererModule(module.getIdModule(),
+                                        module.getTypeModule().ordinal() + 1,
+                                        module.getNomModule(),
+                                        module.estActif(),
+                                        module.getCouleur());
             afficherMachine(nbModulesMachines);
             int numeroMachine = getNumeroMachine(module.getIdModule());
             mettreAJourModule(numeroMachine);
-            nomAjoutModule = "";
+            nomAjoutModule    = "";
             nbModulesMachines = modulesMachines.size();
             Log.d(TAG, "validerAjoutMachine() nbModulesMachines = " + nbModulesMachines);
         }
@@ -545,7 +549,7 @@ public class FenetreMachine extends AppCompatActivity
                 return;
             }
             Module module = modulesMachines.get(numeroMachine);
-            baseDeDonnees.supprimerModule(idMachine, module.getTypeModule().ordinal()+1);
+            baseDeDonnees.supprimerModule(idMachine, module.getTypeModule().ordinal() + 1);
             modulesMachines.remove(module);
             cacherMachine(numeroMachine);
             nbModulesMachines = modulesMachines.size();
@@ -754,8 +758,8 @@ public class FenetreMachine extends AppCompatActivity
                     String nomModule     = data.getStringExtra("nom");
                     String couleurModule = data.getStringExtra("couleur");
                     Log.d(TAG,
-                          "onActivityResult() idModule = " + idModule +
-                            " - nomModule : " + nomModule + " - couleurModule = " + couleurModule);
+                          "onActivityResult() idModule = " + idModule + " - nomModule : " +
+                            nomModule + " - couleurModule = " + couleurModule);
 
                     if(idModule != -1)
                     {
@@ -785,16 +789,16 @@ public class FenetreMachine extends AppCompatActivity
     private void afficherBoiteDialogueAjoutModule()
     {
         Log.d(TAG, "afficherBoiteDialogueAjoutModule()");
-        AlertDialog.Builder ajoutModule = new AlertDialog.Builder(this);
-        LayoutInflater factory = LayoutInflater.from(this);
-        final View ajoutModuleView = factory.inflate(R.layout.ajout_module, null);
+        AlertDialog.Builder ajoutModule     = new AlertDialog.Builder(this);
+        LayoutInflater      factory         = LayoutInflater.from(this);
+        final View          ajoutModuleView = factory.inflate(R.layout.ajout_module, null);
         ajoutModule.setView(ajoutModuleView);
         ajoutModule.setTitle("Ajouter un nouveau module");
-        ajoutModule.setPositiveButton("Valider", new DialogInterface.OnClickListener()
-        {
+        ajoutModule.setPositiveButton("Valider", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which)
             {
-                // Lorsque l'on cliquera sur le bouton "OK", on récupère l'EditText correspondant à la vue personnalisée (cad à ajoutModuleView)
+                // Lorsque l'on cliquera sur le bouton "OK", on récupère l'EditText correspondant à
+                // la vue personnalisée (cad à ajoutModuleView)
                 EditText nomModule = (EditText)ajoutModuleView.findViewById(R.id.editTextNom);
                 if(!nomModule.getText().toString().isEmpty())
                     nomAjoutModule = nomModule.getText().toString();
@@ -808,27 +812,32 @@ public class FenetreMachine extends AppCompatActivity
 
                 int idMachine = rechercherIdDisponible();
                 Log.d(TAG, "afficherBoiteDialogueAjoutModule() idMachine = " + idMachine);
-                // si idMachine = 0 alors la station choisira l'idMachine à ajouter sinon c'est l'application qui le détermine
-                String api =
-                        API_PATCH_MACHINES;
-                String json =
-                        "{\"idMachine\": " + idMachine + ", \"couleur\" \"#00FF00\":, \"actif\": true" +  "}";
+                // si idMachine = 0 alors la station choisira l'idMachine à ajouter sinon c'est
+                // l'application qui le détermine
+                String api  = API_PATCH_MACHINES;
+                String json = "{\"idMachine\": " + idMachine +
+                              ", \"couleur\" \"#00FF00\":, \"actif\": true"
+                              + "}";
                 communication.emettreRequetePOST(api, json, handler);
 
                 // Notifier l'utilisateur
-                Toast.makeText(getApplicationContext(), "Demande d'ajout du module '" + nomAjoutModule + "' envoyée", Toast.LENGTH_SHORT).show();
+                Toast
+                  .makeText(getApplicationContext(),
+                            "Demande d'ajout du module '" + nomAjoutModule + "' envoyée",
+                            Toast.LENGTH_SHORT)
+                  .show();
 
                 // Mode démo
                 String reponseJson =
-                        "{\"idMachine\": " + idMachine + ", \"couleur\": \"#00FF00\", \"etat\": false, \"actif\": true" +  "}";
+                  "{\"idMachine\": " + idMachine +
+                  ", \"couleur\": \"#00FF00\", \"etat\": false, \"actif\": true"
+                  + "}";
                 validerAjoutMachine("[" + reponseJson + "]");
             }
         });
-        ajoutModule.setNegativeButton("Annuler", new DialogInterface.OnClickListener()
-        {
+        ajoutModule.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which)
             {
-
             }
         });
 
@@ -862,7 +871,11 @@ public class FenetreMachine extends AppCompatActivity
                 communication.emettreRequeteDELETE(api, json, handler);
 
                 // Notifier l'utilisateur
-                Toast.makeText(getApplicationContext(), "Demande de supression du module '" + nomModule + "' envoyée", Toast.LENGTH_SHORT).show();
+                Toast
+                  .makeText(getApplicationContext(),
+                            "Demande de suppression du module '" + nomModule + "' envoyée",
+                            Toast.LENGTH_SHORT)
+                  .show();
 
                 // Mode démo
                 validerSuppressionMachine("[" + json + "]");
