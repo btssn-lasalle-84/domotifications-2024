@@ -92,7 +92,7 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
     //!< boitesAuxLettres
     private ImageButton boutonAccueil;         //!< Boutons d'activation/désactivation des modules
                                                //!< boites
-    private ImageView   boutonAjouterModule;   //!!< Boutons d'ajout des modules
+    private ImageView boutonAjouterModule;     //!!< Boutons d'ajout des modules
     private ImageView[] boutonSupprimerModule; //!!< Boutons de suppression des modules
     private ImageView[] imagesParametres;      //!< Images des couleurs des modules
 
@@ -761,8 +761,8 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                     String nomModule     = data.getStringExtra("nom");
                     String couleurModule = data.getStringExtra("couleur");
                     Log.d(TAG,
-                          "onActivityResult() idModule = " + idModule + " - nomModule : " +
-                            nomModule + " - couleurModule = " + couleurModule);
+                          "onActivityResult() idModule = " + idModule +
+                            " - nomModule : " + nomModule + " - couleurModule = " + couleurModule);
 
                     if(idModule != -1)
                     {
@@ -774,9 +774,9 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                             {
                                 module.setNomModule(nomModule);
                                 baseDeDonnees.modifierNomModule(module.getIdModule(),
-                                        module.getTypeModule().ordinal() +
-                                                1,
-                                        nomModule);
+                                                                module.getTypeModule().ordinal() +
+                                                                  1,
+                                                                nomModule);
                             }
                             module.setCouleur(couleurModule);
                         }
@@ -806,20 +806,20 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                 // la vue personnalisée (cad à ajoutModuleView)
                 EditText nomModule = (EditText)ajoutModuleView.findViewById(R.id.editTextNom);
                 if(!nomModule.getText().toString().isEmpty())
-                    nomAjoutModule = nomModule.getText().toString();
+                    nomAjoutModule = nomModule.getText().toString().trim();
                 else
                     nomAjoutModule = "boite";
                 Log.d(TAG, "afficherBoiteDialogueAjoutModule() nomModule = " + nomAjoutModule);
                 TextInputEditText couleurModule =
                   (TextInputEditText)ajoutModuleView.findViewById(R.id.editTextCouleurHTML);
-                String couleurAjoutModule = "#00FF00";
+                String couleurAjoutModule = "#FF0000";
                 if(!couleurModule.getText().toString().trim().isEmpty())
                     couleurAjoutModule = couleurModule.getText().toString().trim();
                 Log.d(TAG,
                       "afficherBoiteDialogueAjoutModule() couleurAjoutModule = " +
                         couleurAjoutModule);
-                // Emettre la requête POST à la station
 
+                // Préparer et émettre la requête POST à la station
                 int idBoite = rechercherIdDisponible();
                 Log.d(TAG, "afficherBoiteDialogueAjoutModule() idBoite = " + idBoite);
                 // si idBoite= 0 alors la station choisira l'idBoite à ajouter sinon c'est
@@ -829,8 +829,8 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                 if(idBoite > 0)
                 {
                     String api  = API_PATCH_BOITES;
-                    String json = "{\"idBoite\": " + idBoite +
-                                  ", \"couleur\": \"#00FF00\", \"actif\": true"
+                    String json = "{\"idBoite\": " + idBoite + ", \"couleur\": \"" +
+                                  couleurAjoutModule + "\", \"actif\": true"
                                   + "}";
                     communication.emettreRequetePOST(api, json, handler);
 
@@ -842,10 +842,9 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                       .show();
 
                     // Mode démo
-                    String reponseJson =
-                      "{\"idBoite\": " + idBoite +
-                      ", \"couleur\": \"#00FF00\", \"etat\": false, \"actif\": true"
-                      + "}";
+                    String reponseJson = "{\"idBoite\": " + idBoite + ", \"couleur\": \"" +
+                                         couleurAjoutModule + "\", \"etat\": false, \"actif\": true"
+                                         + "}";
                     validerAjoutBoite("[" + reponseJson + "]");
                 }
             }

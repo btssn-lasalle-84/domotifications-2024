@@ -86,18 +86,18 @@ public class FenetrePoubelle extends AppCompatActivity
     public static final int ROUGE                = 4; //!< Poubelle rouge
     public static final int NB_COULEURS_POUBELLE = 5; //!< Nombre de couleurs max pour les poubelles
     public static final int[] IMAGES_POUBELLES   = {
-        R.drawable.poubelle_bleue,
-        R.drawable.poubelle_verte,
-        R.drawable.poubelle_jaune,
-        R.drawable.poubelle_grise,
-        R.drawable.poubelle_rouge
+          R.drawable.poubelle_bleue,
+          R.drawable.poubelle_verte,
+          R.drawable.poubelle_jaune,
+          R.drawable.poubelle_grise,
+          R.drawable.poubelle_rouge
     }; //!< Id des images des poubelles dans les ressources Android
     private ImageView[] imagesPoubelles;             //!< Images des poubelles de couleur
     private ImageButton boutonAccueil;               //!< Bouton pour revenir à l'accueil
     private ImageView[] imagesNotificationPoubelles; //!< Images des notifications des poubelles
-    private Switch[]    boutonsActivation;     //!< Boutons d'activation/désactivation des modules
+    private Switch[] boutonsActivation;        //!< Boutons d'activation/désactivation des modules
                                                //!< poubelles
-    private ImageView   boutonAjouterModule;   //!< Bouton pour ajouter les modules poubelles
+    private ImageView boutonAjouterModule;     //!< Bouton pour ajouter les modules poubelles
     private ImageView[] boutonSupprimerModule; //!< Bouton pour supprimer les modules poubelles
     private ImageView[] imagesParametres;      //!< Images des couleurs des modules
 
@@ -768,8 +768,8 @@ public class FenetrePoubelle extends AppCompatActivity
                     String nomModule     = data.getStringExtra("nom");
                     String couleurModule = data.getStringExtra("couleur");
                     Log.d(TAG,
-                          "onActivityResult() idModule = " + idModule + " - nomModule : " +
-                            nomModule + " - couleurModule = " + couleurModule);
+                          "onActivityResult() idModule = " + idModule +
+                            " - nomModule : " + nomModule + " - couleurModule = " + couleurModule);
 
                     if(idModule != -1)
                     {
@@ -781,9 +781,9 @@ public class FenetrePoubelle extends AppCompatActivity
                             {
                                 module.setNomModule(nomModule);
                                 baseDeDonnees.modifierNomModule(module.getIdModule(),
-                                        module.getTypeModule().ordinal() +
-                                                1,
-                                        nomModule);
+                                                                module.getTypeModule().ordinal() +
+                                                                  1,
+                                                                nomModule);
                             }
                             module.setCouleur(couleurModule);
                         }
@@ -813,7 +813,7 @@ public class FenetrePoubelle extends AppCompatActivity
                 // la vue personnalisée (cad à ajoutModuleView)
                 EditText nomModule = (EditText)ajoutModuleView.findViewById(R.id.editTextNom);
                 if(!nomModule.getText().toString().isEmpty())
-                    nomAjoutModule = nomModule.getText().toString();
+                    nomAjoutModule = nomModule.getText().toString().trim();
                 else
                     nomAjoutModule = "poubelle";
                 Log.d(TAG, "afficherBoiteDialogueAjoutModule() nomModule = " + nomAjoutModule);
@@ -825,8 +825,8 @@ public class FenetrePoubelle extends AppCompatActivity
                 Log.d(TAG,
                       "afficherBoiteDialogueAjoutModule() couleurAjoutModule = " +
                         couleurAjoutModule);
-                // Emettre la requête POST à la station
 
+                // Préparer et émettre la requête POST à la station
                 int idPoubelle = rechercherIdDisponible();
                 Log.d(TAG, "afficherBoiteDialogueAjoutModule() idPoubelle = " + idPoubelle);
                 // si idPoubelle = 0 alors la station choisira l'idPoubelle à ajouter sinon c'est
@@ -836,8 +836,8 @@ public class FenetrePoubelle extends AppCompatActivity
                 if(idPoubelle > 0)
                 {
                     String api  = API_PATCH_POUBELLES;
-                    String json = "{\"idPoubelle\": " + idPoubelle +
-                                  ", \"couleur\": \"#00FF00\", \"actif\": true"
+                    String json = "{\"idPoubelle\": " + idPoubelle + ", \"couleur\": \"" +
+                                  couleurAjoutModule + "\", \"actif\": true"
                                   + "}";
                     communication.emettreRequetePOST(api, json, handler);
 
@@ -849,10 +849,9 @@ public class FenetrePoubelle extends AppCompatActivity
                       .show();
 
                     // Mode démo
-                    String reponseJson =
-                      "{\"idPoubelle\": " + idPoubelle +
-                      ", \"couleur\": \"#00FF00\", \"etat\": false, \"actif\": true"
-                      + "}";
+                    String reponseJson = "{\"idPoubelle\": " + idPoubelle + ", \"couleur\": \"" +
+                                         couleurAjoutModule + "\", \"etat\": false, \"actif\": true"
+                                         + "}";
                     validerAjoutPoubelle("[" + reponseJson + "]");
                 }
             }

@@ -302,7 +302,7 @@ public class FenetreMachine extends AppCompatActivity
                 switch(message.what)
                 {
                     case Communication.CODE_HTTP_REPONSE_JSON:
-                        //Log.d(TAG, "[Handler] REPONSE JSON");
+                        // Log.d(TAG, "[Handler] REPONSE JSON");
                         traiterReponseJSON(message.obj.toString());
                         erreurCommunication = false;
                         break;
@@ -805,7 +805,7 @@ public class FenetreMachine extends AppCompatActivity
                 // la vue personnalisée (cad à ajoutModuleView)
                 EditText nomModule = (EditText)ajoutModuleView.findViewById(R.id.editTextNom);
                 if(!nomModule.getText().toString().isEmpty())
-                    nomAjoutModule = nomModule.getText().toString();
+                    nomAjoutModule = nomModule.getText().toString().trim();
                 else
                     nomAjoutModule = "machine";
                 Log.d(TAG, "afficherBoiteDialogueAjoutModule() nomModule = " + nomAjoutModule);
