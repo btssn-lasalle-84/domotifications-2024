@@ -7,11 +7,11 @@
 - [Le projet domotifications 2024](#le-projet-domotifications-2024)
   - [Présentation](#présentation)
   - [Fonctionnalités](#fonctionnalités)
-  - [Documentation du code](#documentation-du-code)
+  - [Screenshots](#screenshots)
   - [Diagramme de classes](#diagramme-de-classes)
   - [Protocole](#protocole)
-  - [Screenshots](#screenshots)
   - [Historique des versions](#historique-des-versions)
+  - [Documentation du code](#documentation-du-code)
   - [Auteurs](#auteurs)
 
 ---
@@ -26,14 +26,13 @@ La station de notifications lumineuses est composée d’un bandeau circulaire �
 - en rouge : la présence d’un colis dans la boîte aux lettres,
 - en rouge/bleu/vert/gris/jaune : la notification d'une poubelle de tri à sortir.
 
-
 ![alt text](images/modules.png)
 
 ## Fonctionnalités
 
 - Application Android
 
-![diagramme-cas-utilisation](images/diagramme-cas-utilisation.png)
+![diagramme-cas-utilisation](images/diagramme-cas-utilisation-android.png)
 
 | Fonctionnalité                      | OUI | NON |
 | ----------------------------------- | :-: | :-: |
@@ -41,9 +40,11 @@ La station de notifications lumineuses est composée d’un bandeau circulaire �
 | Acquitter une notification          |  X  |     |
 | Activer/désactiver un module        |  X  |     |
 | Dialoguer avec la station lumineuse |  X  |     |
-| Configurer le système               |     |  X  |
+| Configurer le système               |  X  |     |
 
 - Station lumineuse
+
+![diagramme-cas-utilisation](images/diagramme-cas-utilisation-esp32.png)
 
 | Fonctionnalité               | OUI | NON |
 | ---------------------------- | :-: | :-: |
@@ -53,20 +54,21 @@ La station de notifications lumineuses est composée d’un bandeau circulaire �
 | Traiter les requêtes HTTP    |  X  |     |
 | Configurer la station        |     |  X  |
 
+## Screenshots
 
-## Documentation du code
-
-https://btssn-lasalle-84.github.io/domotifications-2024/
+![](images/domotifications-android-v1.0.gif)
 
 ## Diagramme de classes
 
 - Application Android
 
-![diagramme-classes-android](images/domotifications-android-classes-0.2.png)
+![diagramme-classes-android-ihm](images/domotifications-android-classes-ihm-v1.0.png)
+
+![diagramme-classes-android-machine](images/domotifications-android-classes-machine-v1.0.png)
 
 - Station lumineuse (ESP32)
 
-![diagramme-classes-esp32](images/domotifications-esp32-classes-0.2.png)
+![diagramme-classes-esp32](images/domotifications-esp32-classes-1.0.png)
 
 ## Protocole
 
@@ -76,11 +78,11 @@ cf. [Spécification API HTTP REST](./specifications-openapi/README.md)
 ![](images/api-poubelles.png)
 ![](images/api-boites.png)
 
-## Screenshots
-
-![](images/domotifications-android.gif)
-
 ## Historique des versions
+
+- 1.0
+
+![](images/jira_v1.0.png)
 
 - 0.2
 
@@ -89,6 +91,10 @@ cf. [Spécification API HTTP REST](./specifications-openapi/README.md)
 - 0.1
 
 ![](images/jira_v0.1.png)
+
+## Documentation du code
+
+https://btssn-lasalle-84.github.io/domotifications-2024/
 
 ## Auteurs
 

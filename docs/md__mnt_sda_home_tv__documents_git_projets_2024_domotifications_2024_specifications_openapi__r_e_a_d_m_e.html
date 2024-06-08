@@ -1,0 +1,350 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Projet domotifications: Domotifications 2024</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="customdoxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="projet-logo.png"/></td>
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Projet domotifications
+   &#160;<span id="projectnumber">1.0</span>
+   </div>
+   <div id="projectbrief">BTS SNIR LaSalle Avignon 2024</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.9.1 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Recherche','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','Recherche');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('md__mnt_sda_home_tv__documents_git_projets_2024_domotifications_2024_specifications_openapi__r_e_a_d_m_e.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="PageDoc"><div class="header">
+  <div class="headertitle">
+<div class="title">Domotifications 2024 </div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><ul>
+<li><a href="#domotifications-2024">Domotifications 2024</a><ul>
+<li><a href="#spécification-api-http-rest">Spécification API HTTP REST</a></li>
+<li><a href="#tests">Tests</a></li>
+<li><a href="#annexes">Annexes</a><ul>
+<li><a href="#api-http-rest">API HTTP REST</a></li>
+<li><a href="#openapi">OpenAPI</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1>Spécification API HTTP REST</h1>
+<p>La spécification utilisée ici est destinée à un serveur <a href="https://fr.wikipedia.org/wiki/ESP32">ESP32</a>. Elle permet gérer des modules (Boîtes aux lettres, poubelles, machines éléctriques, ...) qui communiquent en WiFi.</p>
+<p>En résumé :</p>
+<ul>
+<li>pour la collection <code>poubelles</code> :</li>
+</ul>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadCenter">Requête HTTP   </th><th class="markdownTableHeadCenter">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter"><b>GET</b> /poubelles   </td><td class="markdownTableBodyCenter">Lister les poubelles    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter"><b>POST</b> /poubelles   </td><td class="markdownTableBodyCenter">Ajouter une poubelle    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter"><b>DELETE</b> /poubelles/{idPoubelle}   </td><td class="markdownTableBodyCenter">Supprimer une poubelle    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter"><b>GET</b> /poubelles/{idPoubelle}   </td><td class="markdownTableBodyCenter">Obtenir les détails d&amp;#x27;une poubelle    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter"><b>PATCH</b> /poubelles/{idPoubelle}   </td><td class="markdownTableBodyCenter">Mettre à jour une poubelle   </td></tr>
+</table>
+<ul>
+<li>pour la collection <code>machines</code> :</li>
+</ul>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadCenter">Requête HTTP   </th><th class="markdownTableHeadCenter">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter"><b>GET</b> /machines   </td><td class="markdownTableBodyCenter">Lister les machines    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter"><b>POST</b> /machines   </td><td class="markdownTableBodyCenter">Ajouter une machine    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter"><b>DELETE</b> /machines/{idMachine}   </td><td class="markdownTableBodyCenter">Supprimer une machine    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter"><b>GET</b> /machines/{idMachine}   </td><td class="markdownTableBodyCenter">Obtenir les détails d&amp;#x27;une machine    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter"><b>PATCH</b> /machines/{idMachine}   </td><td class="markdownTableBodyCenter">Mettre à jour une machine   </td></tr>
+</table>
+<ul>
+<li>pour la collection <code>boites</code> :</li>
+</ul>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadCenter">Requête HTTP   </th><th class="markdownTableHeadCenter">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter"><b>GET</b> /boites   </td><td class="markdownTableBodyCenter">Lister les boites    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter"><b>POST</b> /boites   </td><td class="markdownTableBodyCenter">Ajouter une poubelle    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter"><b>DELETE</b> /boites/{idBoite}   </td><td class="markdownTableBodyCenter">Supprimer une boite    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter"><b>GET</b> /boites/{idBoite}   </td><td class="markdownTableBodyCenter">Obtenir les détails d&amp;#x27;une boite    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter"><b>PATCH</b> /boites/{idBoite}   </td><td class="markdownTableBodyCenter">Mettre à jour une boite   </td></tr>
+</table>
+<blockquote class="doxtable">
+<p>cf. <a href="#api-http-rest">API HTTP REST</a> </p>
+</blockquote>
+<p>La spécification complète : <a href="domotifications-v0.1.yaml">domotifications-v0.1.yaml</a></p>
+<blockquote class="doxtable">
+<p>cf. <a href="#openapi">OpenAPI</a> </p>
+</blockquote>
+<p>Les propriétés <code>openapi</code> et <code>info</code> :</p>
+<div class="fragment"><div class="line">openapi: 3.0.3</div>
+<div class="line">info:</div>
+<div class="line">  title: Domotifications 2024</div>
+<div class="line">  version: &quot;0.1&quot;</div>
+<div class="line">  description: Système de notifications visuelles des évènements domotiques</div>
+<div class="line">  contact:</div>
+<div class="line">    name: Thierry VAIRA</div>
+<div class="line">    email: tvaira@free.fr</div>
+<div class="line">    url: http://tvaira.free.fr</div>
+<div class="line">  license:</div>
+<div class="line">    name: Apache 2.0</div>
+<div class="line">    url: https://www.apache.org/licenses/LICENSE-2.0.html</div>
+</div><!-- fragment --><p>La propriété <code>servers</code> :</p>
+<div class="fragment"><div class="line">...</div>
+<div class="line">servers:</div>
+<div class="line">  - url: http://{adresseIPESP32}</div>
+<div class="line">    description: La station de notifications lumineuses</div>
+<div class="line">    variables:</div>
+<div class="line">      adresseIPESP32:</div>
+<div class="line">        default: 192.168.0.1</div>
+<div class="line">        description: |</div>
+<div class="line">          Aller sur http://station-lumineuse.local:80/</div>
+</div><!-- fragment --><p>La propriété <code>paths</code> :</p>
+<div class="fragment"><div class="line">...</div>
+<div class="line">tags:</div>
+<div class="line">  - name: poubelles</div>
+<div class="line">    description: Les modules Poubelle</div>
+<div class="line">  - name: machines</div>
+<div class="line">    description: Les modules Machine</div>
+<div class="line">  - name: boites</div>
+<div class="line">    description: Les modules Boite aux lettres</div>
+</div><!-- fragment --><p>La propriété <code>components</code> :</p>
+<ul>
+<li>Exemple pour une requête <code>GET</code> sur <code>/poubelles</code> :</li>
+</ul>
+<div class="fragment"><div class="line">...</div>
+<div class="line">paths:</div>
+<div class="line">  /poubelles:</div>
+<div class="line">    get:</div>
+<div class="line">      summary: Lister les modules Poubelle</div>
+<div class="line">      description: Lister toutes modules Poubelle disponibles</div>
+<div class="line">      operationId: getPoubelles</div>
+<div class="line">      tags:</div>
+<div class="line">        - poubelles</div>
+<div class="line">      responses:</div>
+<div class="line">        &quot;200&quot;:</div>
+<div class="line">          description: Succès de l&#39;opération</div>
+<div class="line">          content:</div>
+<div class="line">            application/json:</div>
+<div class="line">              schema:</div>
+<div class="line">                $ref: &quot;#/components/schemas/getPoubelles&quot;</div>
+<div class="line">...</div>
+</div><!-- fragment --><ul>
+<li>Exemple de réponse à cette requête retourne un objet <code>getPoubelles</code> référencé dans la propriété <code>components</code> :</li>
+</ul>
+<div class="fragment"><div class="line">...</div>
+<div class="line">components:</div>
+<div class="line">  schemas:</div>
+<div class="line">    getPoubelles:</div>
+<div class="line">      type: array</div>
+<div class="line">      items:</div>
+<div class="line">        $ref: &quot;#/components/schemas/Poubelle&quot;</div>
+<div class="line">      example:</div>
+<div class="line">        [</div>
+<div class="line">          { &quot;idPoubelle&quot;: 1, &quot;etat&quot;: false, &quot;actif&quot;: true, &quot;couleur&quot;: &quot;bleue&quot; },</div>
+<div class="line">          { &quot;idPoubelle&quot;: 2, &quot;etat&quot;: true, &quot;actif&quot;: true, &quot;couleur&quot;: &quot;verte&quot; },</div>
+<div class="line">        ]</div>
+<div class="line">...</div>
+<div class="line">    Poubelle:</div>
+<div class="line">      type: object</div>
+<div class="line">      description: Un module Poubelle</div>
+<div class="line">      required:</div>
+<div class="line">        - idPoubelle</div>
+<div class="line">        - etat</div>
+<div class="line">      properties:</div>
+<div class="line">        idPoubelle:</div>
+<div class="line">          type: integer</div>
+<div class="line">          format: int32</div>
+<div class="line">        etat:</div>
+<div class="line">          type: boolean</div>
+<div class="line">          description: |</div>
+<div class="line">            `true` si une notification sur le module Poubelle sinon `false`</div>
+<div class="line">        actif:</div>
+<div class="line">          type: boolean</div>
+<div class="line">          description: |</div>
+<div class="line">            `true` si le module est activé sinon `false`</div>
+<div class="line">        couleur:</div>
+<div class="line">          type: string</div>
+<div class="line">          enum:</div>
+<div class="line">            - bleue</div>
+<div class="line">            - verte</div>
+<div class="line">            - jaune</div>
+<div class="line">            - grise</div>
+<div class="line">            - rouge</div>
+<div class="line">...</div>
+</div><!-- fragment --><p>On obtiendra alors une réponse en JSON de ce type :</p>
+<div class="fragment"><div class="line">[</div>
+<div class="line">    { &quot;idPoubelle&quot;: 1, &quot;etat&quot;: false, &quot;actif&quot;: true, &quot;couleur&quot;: &quot;bleue&quot; },</div>
+<div class="line">    { &quot;idPoubelle&quot;: 2, &quot;etat&quot;: true, &quot;actif&quot;: true, &quot;couleur&quot;: &quot;verte&quot; },</div>
+<div class="line">]</div>
+</div><!-- fragment --><blockquote class="doxtable">
+<p>La spécification complète : <a href="domotifications-v0.1.yaml">domotifications-v0.1.yaml</a> Avec l'<a href="http://editor.swagger.io/">éditeur en ligne</a> : <a href="http://editor.swagger.io/">http://editor.swagger.io/</a> </p>
+</blockquote>
+<h1>Tests</h1>
+<p>Exemples avec <code>curl</code> :</p>
+<ul>
+<li>Lister les poubelles (<code>GET</code>) :</li>
+</ul>
+<div class="fragment"><div class="line">$ curl --location http://station-lumineuse.local:80/poubelles</div>
+<div class="line">[{&quot;idPoubelle&quot;:1,&quot;etat&quot;:false,&quot;couleur&quot;:&quot;rouge&quot;,&quot;actif&quot;:false},{&quot;idPoubelle&quot;:2,&quot;etat&quot;:true,&quot;couleur&quot;:&quot;jaune&quot;,&quot;actif&quot;:false},{&quot;idPoubelle&quot;:3,&quot;etat&quot;:false,&quot;couleur&quot;:&quot;bleue&quot;,&quot;actif&quot;:false},{&quot;idPoubelle&quot;:4,&quot;etat&quot;:false,&quot;couleur&quot;:&quot;grise&quot;,&quot;actif&quot;:false},{&quot;idPoubelle&quot;:5,&quot;etat&quot;:false,&quot;couleur&quot;:&quot;verte&quot;,&quot;actif&quot;:false}]</div>
+</div><!-- fragment --><ul>
+<li>Modifier une poubelle (<code>PATCH</code>) :</li>
+</ul>
+<div class="fragment"><div class="line">$ curl --location &#39;http://station-lumineuse.local:80/poubelles/1&#39; \</div>
+<div class="line">--request PATCH \</div>
+<div class="line">--header &#39;Content-Type: application/json&#39; \</div>
+<div class="line">--data &#39;{</div>
+<div class="line">  &quot;idPoubelle&quot;: &quot;1&quot;,</div>
+<div class="line">  &quot;etat&quot;: true</div>
+<div class="line">}&#39;</div>
+<div class="line">[{&quot;idPoubelle&quot;:1,&quot;etat&quot;:true,&quot;couleur&quot;:&quot;bleue&quot;,&quot;actif&quot;:true}]</div>
+<div class="line"> </div>
+<div class="line">$ curl --location &#39;http://station-lumineuse.local:80/poubelles/1&#39; \</div>
+<div class="line">--request PATCH \</div>
+<div class="line">--header &#39;Content-Type: application/json&#39; \</div>
+<div class="line">--data &#39;{</div>
+<div class="line">  &quot;idPoubelle&quot;: &quot;1&quot;,</div>
+<div class="line">  &quot;etat&quot;: false,</div>
+<div class="line">  &quot;actif&quot;: false</div>
+<div class="line">}&#39;</div>
+<div class="line">[{&quot;idPoubelle&quot;:1,&quot;etat&quot;:false,&quot;couleur&quot;:&quot;bleue&quot;,&quot;actif&quot;:false}]</div>
+</div><!-- fragment --><ul>
+<li>Obtenir les informations sur une poubelle (<code>GET</code>) :</li>
+</ul>
+<div class="fragment"><div class="line">$ curl --location http://station-lumineuse.local:80/poubelles/1</div>
+<div class="line">[{&quot;idPoubelle&quot;:1,&quot;etat&quot;:false,&quot;couleur&quot;:&quot;bleue&quot;,&quot;actif&quot;:false}]</div>
+<div class="line"> </div>
+<div class="line">$ curl --location http://station-lumineuse.local:80/poubelles/6</div>
+<div class="line">404 Poubelle non trouvée</div>
+</div><!-- fragment --><h1>Annexes</h1>
+<h2>API HTTP REST</h2>
+<p>L'<a href="https://fr.wikipedia.org/wiki/API_Web">API Web</a> est une interface de programmation d'application (API) entre la station de notifications lumineuses (serveur Web ESP32) et les clients Web (modules, application mobile, ...).</p>
+<p>Elle se compose d'un ou plusieurs points d'accès exposés publiquement répondant avec des données, généralement exprimé en <a href="https://fr.wikipedia.org/wiki/Extensible_Markup_Language">XML</a> ou <a href="https://fr.wikipedia.org/wiki/JavaScript_Object_Notation">JSON</a>.</p>
+<p>Les points d'accès spécifient où se trouvent les ressources accessibles par les clients. Généralement l'accès se fait via une URI sur laquelle sont postées les requêtes HTTP, et dont la réponse est donc attendue. Les API Web peuvent être publiques ou privées, dans ce cas elles nécessitent un <a href="https://fr.wikipedia.org/wiki/Jeton_d%27acc%C3%A8s">jeton d'accès</a> (<em>token</em>).</p>
+<p>Les API Web Web 2.0 utilisent <a href="#rest">REST</a> et <a href="https://fr.wikipedia.org/wiki/SOAP">SOAP</a>. Les API Web <em>RESTful</em> utilisent des méthodes HTTP pour accéder aux ressources via des paramètres encodés en URL et utilisent JSON ou XML pour transmettre des données. En revanche, les protocoles SOAP sont normalisés par le W3C et imposent l'utilisation de XML.</p>
+<p>Le tableau suivant indique comment les méthodes HTTP sont généralement utilisées dans une API REST :</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">URI   </th><th class="markdownTableHeadNone">GET   </th><th class="markdownTableHeadNone">POST   </th><th class="markdownTableHeadNone">PUT   </th><th class="markdownTableHeadNone">PATCH   </th><th class="markdownTableHeadNone">DELETE    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code><a href="http://api.exemple.com/collection/">http://api.exemple.com/collection/</a></code>   </td><td class="markdownTableBodyNone">Récupère les URI des ressources membres de la ressource <code>collection</code> dans le corps de la réponse.   </td><td class="markdownTableBodyNone">Crée une ressource membre dans la ressource <code>collection</code> en utilisant les instructions du corps de la requête.   </td><td class="markdownTableBodyNone">Remplace toutes les représentations des ressources membres de la ressource <code>collection</code> par la représentation dans le corps de la requête ou crée la ressource <code>collection</code> si elle n'existe pas.   </td><td class="markdownTableBodyNone">Met à jour toutes les représentations des ressources membres de la ressource <code>collection</code> en utilisant les instructions du corps de la requête   </td><td class="markdownTableBodyNone">Supprime toutes les représentations des ressources membres de la ressource <code>collection</code>.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code><a href="http://api.exemple.com/collection/item3">http://api.exemple.com/collection/item3</a></code>   </td><td class="markdownTableBodyNone">Récupère une représentation de la ressource membre dans le corps de la réponse.   </td><td class="markdownTableBodyNone">Crée une ressource membre dans la ressource membre en utilisant les instructions du corps de la requête.   </td><td class="markdownTableBodyNone">Remplace toutes les représentations de la ressource membre ou crée la ressource membre si elle n'existe pas par la représentation dans le corps de la requête.   </td><td class="markdownTableBodyNone">Met à jour toutes les représentations de la ressource membre ou crée éventuellement la ressource membre   </td><td class="markdownTableBodyNone">Supprime toutes les représentations de la ressource membre.   </td></tr>
+</table>
+<blockquote class="doxtable">
+<p>[!CAUTION] Il n'y a pas de norme officielle pour les API REST, parce que REST est une architecture et non un protocole. </p>
+</blockquote>
+<h2>OpenAPI</h2>
+<p><a href="https://swagger.io/specification/">OpenAPI</a> est une norme de description des API HTTP conformes à l’architecture REST.</p>
+<blockquote class="doxtable">
+<p>La spécification OpenAPI v3 actuelle découle d’un projet antérieur nommé <a href="https://swagger.io/">Swagger</a> jusqu'à la v2. </p>
+</blockquote>
+<p>Spécifications : <a href="https://swagger.io/specification/">https://swagger.io/specification/</a></p>
+<p>Documentation : <a href="https://swagger.io/docs/specification/about/">https://swagger.io/docs/specification/about/</a></p>
+<p>La structure de base du fichier possède notamment les propriétés suivantes :</p>
+<ul>
+<li><code>openapi</code> : indique la version des spécifications utilisées</li>
+<li><code>info</code> : décrit des informations (métadonnées) sur l'API</li>
+<li><code>servers</code> : définit les paramètres, comme l'<a href="https://fr.wikipedia.org/wiki/Uniform_Resource_Locator">URL</a> de base, du (ou des) serveur(s)</li>
+<li><code>paths</code> : définit les <a href="https://fr.wikipedia.org/wiki/Uniform_Resource_Locator">URL</a>s et les opérations de l'API (<code>get</code>, <code>post</code>, ...)</li>
+<li><code>components</code> : contient un ensemble d’objets réutilisables et explicitement référencés à partir des propriétés définies dans <code>paths</code></li>
+</ul>
+<hr  />
+<p> ©️ 2024 BTS LaSalle Avignon - Thierry VAIRA </p>
+</div></div><!-- contents -->
+</div><!-- PageDoc -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.1-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer"><img class="footer" src="lasalle-logo.png" height="31" alt="La Salle Avignon"/>&nbsp;<b>Campus La Salle Avignon</b>&nbsp;-&nbsp;9 Rue Notre Dame des 7 douleurs&nbsp;-&nbsp;BP 50165&nbsp;-&nbsp;84008 Avignon&nbsp;-&nbsp;Généré le Samedi 8 Juin 2024 23:47:14 pour Projet domotifications par&nbsp;<a href="https://www.doxygen.org/index.html">doxygen</a>&nbsp;1.9.1&nbsp;</li>
+  </ul>
+</div>
+</body>
+</html>

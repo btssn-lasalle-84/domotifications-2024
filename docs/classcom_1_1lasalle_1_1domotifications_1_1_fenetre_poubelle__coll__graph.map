@@ -1,0 +1,5 @@
+<map id="com.lasalle.domotifications.FenetrePoubelle" name="com.lasalle.domotifications.FenetrePoubelle">
+<area shape="rect" id="node1" title=" " alt="" coords="60,975,341,1697"/>
+<area shape="rect" id="node2" href="$classcom_1_1lasalle_1_1domotifications_1_1_communication.html" title=" " alt="" coords="265,424,504,912"/>
+<area shape="rect" id="node3" href="$classcom_1_1lasalle_1_1domotifications_1_1_base_de_donnees.html" title="La classe assurant la gestion de la base de données SQLite &quot;domotifications.db&quot;." alt="" coords="5,5,287,361"/>
+</map>

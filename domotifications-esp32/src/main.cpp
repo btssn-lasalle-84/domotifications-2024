@@ -2,7 +2,7 @@
  * @file src/main.cpp
  * @brief Programme principal de la station de notifications lumineuses
  * @author Corentin MOUTTE
- * @version 0.1
+ * @version 1.0
  */
 
 #define ERREUR_BROWNOUT

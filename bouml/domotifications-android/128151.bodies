@@ -1,0 +1,262 @@
+class Communication
+!!!128151.java!!!	Communication(inout context : Context)
+        this.clientOkHttp = new OkHttpClient();
+        baseDeDonnees     = BaseDeDonnees.getInstance(context);
+        url               = recupererURLStation();
+        Log.d(TAG, "Communication() url = " + url);
+!!!151850.java!!!	Communication(in adresseStation : String, inout context : Context)
+        this.clientOkHttp = new OkHttpClient();
+        baseDeDonnees     = BaseDeDonnees.getInstance(context);
+        setAdresseStation(adresseStation);
+        Log.d(TAG, "Communication() url = " + url);
+!!!151978.java!!!	getInstance(inout context : Context) : Communication
+        if(communication == null)
+        {
+            communication = new Communication(context);
+        }
+        return communication;
+!!!152106.java!!!	getInstance(in adresseStation : String, inout context : Context) : Communication
+        if(communication == null)
+        {
+            communication = new Communication(adresseStation, context);
+        }
+        return communication;
+!!!152234.java!!!	getAdresseStation() : String
+        return this.adresseStation;
+!!!152362.java!!!	setAdresseStation(in adresseStation : String) : void
+        if(adresseStation != this.adresseStation)
+        {
+            this.adresseStation = adresseStation;
+            baseDeDonnees.sauvegarderURLServeurWeb(adresseStation);
+        }
+        url = "http://" + adresseStation + ":" + numeroPort;
+!!!152490.java!!!	emettreRequeteGET(in api : String, inout handler : Handler) : void
+        if(clientOkHttp == null)
+            return;
+
+        if(!api.startsWith("/"))
+        {
+            api = "/" + api;
+        }
+
+        String urlRequete = url + api;
+
+        Log.d(TAG, "emettreRequeteGET() url = " + urlRequete);
+
+        Request request = new Request.Builder()
+                            .url(urlRequete)
+                            .addHeader("Content-Type", "application/json")
+                            .build();
+
+        clientOkHttp.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e)
+            {
+                Log.d(TAG, "emettreRequeteGET() onFailure");
+                e.printStackTrace();
+                Message message = Message.obtain();
+                message.what    = CODE_HTTP_ERREUR;
+
+                handler.sendMessage(message);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException
+            {
+                Log.d(TAG, "emettreRequeteGET() onResponse - message = " + response.message());
+                Log.d(TAG, "emettreRequeteGET() onResponse - code    = " + response.code());
+
+                if(!response.isSuccessful())
+                {
+                    throw new IOException(response.toString());
+                }
+
+                // la réponse à transmettre à l'emetteur de la requête
+                final String body = response.body().string();
+                Log.d(TAG, "emettreRequeteGET() onResponse - body = " + body);
+                new Thread() {
+                    @Override
+                    public void run()
+                    {
+                        Message message = Message.obtain();
+                        message.what    = CODE_HTTP_REPONSE_JSON;
+                        message.obj     = body;
+                        handler.sendMessage(message);
+                    }
+                }.start();
+            }
+        });
+!!!152618.java!!!	emettreRequetePATCH(in api : String, in json : String, inout handler : Handler) : void
+        if(clientOkHttp == null)
+            return;
+
+        String urlRequete = url + api;
+
+        Log.d(TAG, "emettreRequetePATCH() url  = " + urlRequete);
+        Log.d(TAG, "emettreRequetePATCH() json = " + json);
+
+        RequestBody body    = RequestBody.create(json, JSON);
+        Request     request = new Request.Builder()
+                            .url(urlRequete)
+                            .addHeader("Content-Type", "application/json")
+                            .patch(body)
+                            .build();
+
+        clientOkHttp.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e)
+            {
+                Log.d(TAG, "emettreRequetePATCH() onFailure");
+                e.printStackTrace();
+                Message message = Message.obtain();
+                message.what    = CODE_HTTP_ERREUR;
+                handler.sendMessage(message);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException
+            {
+                Log.d(TAG, "emettreRequetePATCH() onResponse - message = " + response.message());
+                Log.d(TAG, "emettreRequetePATCH() onResponse - code    = " + response.code());
+
+                if(!response.isSuccessful())
+                {
+                    throw new IOException(response.toString());
+                }
+
+                // la réponse à transmettre à l'emetteur de la requête
+                final String body = response.body().string();
+                Log.d(TAG, "emettreRequetePATCH() onResponse - body = " + body);
+                new Thread() {
+                    @Override
+                    public void run()
+                    {
+                        Message message = Message.obtain();
+                        message.what    = CODE_HTTP_REPONSE_PATCH;
+                        message.obj     = body;
+                        handler.sendMessage(message);
+                    }
+                }.start();
+            }
+        });
+!!!152746.java!!!	emettreRequetePOST(in api : String, in json : String, inout handler : Handler) : void
+        if(clientOkHttp == null)
+            return;
+
+        String urlRequete = url + api;
+
+        Log.d(TAG, "emettreRequetePOST() url  = " + urlRequete);
+        Log.d(TAG, "emettreRequetePOST() json = " + json);
+
+        RequestBody body    = RequestBody.create(json, JSON);
+        Request     request = new Request.Builder()
+                .url(urlRequete)
+                .addHeader("Content-Type", "application/json")
+                .post(body)
+                .build();
+
+        clientOkHttp.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e)
+            {
+                Log.d(TAG, "emettreRequetePOST() onFailure");
+                e.printStackTrace();
+                Message message = Message.obtain();
+                message.what    = CODE_HTTP_ERREUR;
+                handler.sendMessage(message);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException
+            {
+                Log.d(TAG, "emettreRequetePOST() onResponse - message = " + response.message());
+                Log.d(TAG, "emettreRequetePOST() onResponse - code    = " + response.code());
+
+                if(!response.isSuccessful())
+                {
+                    throw new IOException(response.toString());
+                }
+
+                // la réponse à transmettre à l'emetteur de la requête
+                final String body = response.body().string();
+                Log.d(TAG, "emettreRequetePOST() onResponse - body = " + body);
+                new Thread() {
+                    @Override
+                    public void run()
+                    {
+                        Message message = Message.obtain();
+                        message.what    = CODE_HTTP_REPONSE_POST;
+                        message.obj     = body;
+                        handler.sendMessage(message);
+                    }
+                }.start();
+            }
+        });
+!!!152874.java!!!	emettreRequeteDELETE(in api : String, in json : String, inout handler : Handler) : void
+        if(clientOkHttp == null)
+            return;
+
+        String urlRequete = url + api;
+
+        Log.d(TAG, "emettreRequeteDELETE() url  = " + urlRequete);
+        Log.d(TAG, "emettreRequeteDELETE() json = " + json);
+
+        RequestBody body    = RequestBody.create(json, JSON);
+        Request     request = new Request.Builder()
+                .url(urlRequete)
+                .addHeader("Content-Type", "application/json")
+                .delete(body)
+                .build();
+
+        clientOkHttp.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e)
+            {
+                Log.d(TAG, "emettreRequeteDELETE() onFailure");
+                e.printStackTrace();
+                Message message = Message.obtain();
+                message.what    = CODE_HTTP_ERREUR;
+                handler.sendMessage(message);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException
+            {
+                Log.d(TAG, "emettreRequeteDELETE() onResponse - message = " + response.message());
+                Log.d(TAG, "emettreRequeteDELETE() onResponse - code    = " + response.code());
+
+                if(!response.isSuccessful())
+                {
+                    throw new IOException(response.toString());
+                }
+
+                // la réponse à transmettre à l'emetteur de la requête
+                final String body = response.body().string();
+                Log.d(TAG, "emettreRequeteDELETE() onResponse - body = " + body);
+                new Thread() {
+                    @Override
+                    public void run()
+                    {
+                        Message message = Message.obtain();
+                        message.what    = CODE_HTTP_REPONSE_DELETE;
+                        message.obj     = body;
+                        handler.sendMessage(message);
+                    }
+                }.start();
+            }
+        });
+!!!153002.java!!!	recupererURLStation() : String
+        String urlServeurWeb = baseDeDonnees.getURLServeurWeb();
+
+        return urlServeurWeb;
+!!!153130.java!!!	estConnecteReseau(inout context : Context) : boolean
+        ConnectivityManager connectivityManager =
+          (ConnectivityManager)context.getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if(networkInfo == null || !networkInfo.isConnected() ||
+           (networkInfo.getType() != ConnectivityManager.TYPE_WIFI &&
+            networkInfo.getType() != ConnectivityManager.TYPE_MOBILE))
+        {
+            return false;
+        }
+        return true;
