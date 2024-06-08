@@ -1,12 +1,9 @@
 package com.lasalle.domotifications;
 
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -35,7 +32,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -51,7 +47,9 @@ public class FenetrePoubelle extends AppCompatActivity
     private static final String API_PATCH_POUBELLES = "/poubelles"; //!< Pour une requête PATCH
     private static final String API_POST_POUBELLES  = "/poubelles"; //!< Pour une requête PATCH
     private static final int    INTERVALLE          = 1000; //!< Intervalle d'interrogation en ms
-    private static final int    CHANGEMENT_COULEUR  = 1;
+    public static final int     NB_POUBELLES_MAX    = 5;    //!< Nombre max de poubelles
+    private static final int PARAMETRAGE_MODULE = 1; //!< Code pour l'activité de paramètrage du module
+
     /**
      * Attributs
      */
@@ -79,11 +77,11 @@ public class FenetrePoubelle extends AppCompatActivity
     public static final int ROUGE                = 4; //!< Poubelle rouge
     public static final int NB_COULEURS_POUBELLE = 5; //!< Nombre de couleurs max pour les poubelles
     public static final int[] IMAGES_POUBELLES   = {
-        R.drawable.poubelle_bleue,
-        R.drawable.poubelle_verte,
-        R.drawable.poubelle_jaune,
-        R.drawable.poubelle_grise,
-        R.drawable.poubelle_rouge
+          R.drawable.poubelle_bleue,
+          R.drawable.poubelle_verte,
+          R.drawable.poubelle_jaune,
+          R.drawable.poubelle_grise,
+          R.drawable.poubelle_rouge
     }; //!< Id des images des poubelles dans les ressources Android
     private ImageView[] imagesPoubelles;             //!< Images des poubelles de couleur
     private ImageButton boutonAccueil;               //!< Bouton pour revenir à l'accueil
@@ -142,35 +140,35 @@ public class FenetrePoubelle extends AppCompatActivity
 
         boutonAccueil = (ImageButton)findViewById(R.id.boutonAccueil);
 
-        imagesPoubelles    = new ImageView[NB_COULEURS_POUBELLE];
+        imagesPoubelles    = new ImageView[NB_POUBELLES_MAX];
         imagesPoubelles[0] = (ImageView)findViewById(R.id.poubelle0);
         imagesPoubelles[1] = (ImageView)findViewById(R.id.poubelle1);
         imagesPoubelles[2] = (ImageView)findViewById(R.id.poubelle2);
         imagesPoubelles[3] = (ImageView)findViewById(R.id.poubelle3);
         imagesPoubelles[4] = (ImageView)findViewById(R.id.poubelle4);
 
-        imagesNotificationPoubelles    = new ImageView[NB_COULEURS_POUBELLE];
+        imagesNotificationPoubelles    = new ImageView[NB_POUBELLES_MAX];
         imagesNotificationPoubelles[0] = (ImageView)findViewById(R.id.notificationPoubelle0);
         imagesNotificationPoubelles[1] = (ImageView)findViewById(R.id.notificationPoubelle1);
         imagesNotificationPoubelles[2] = (ImageView)findViewById(R.id.notificationPoubelle2);
         imagesNotificationPoubelles[3] = (ImageView)findViewById(R.id.notificationPoubelle3);
         imagesNotificationPoubelles[4] = (ImageView)findViewById(R.id.notificationPoubelle4);
 
-        boutonsActivation    = new Switch[NB_COULEURS_POUBELLE];
+        boutonsActivation    = new Switch[NB_POUBELLES_MAX];
         boutonsActivation[0] = (Switch)findViewById(R.id.activationPoubelle0);
         boutonsActivation[1] = (Switch)findViewById(R.id.activationPoubelle1);
         boutonsActivation[2] = (Switch)findViewById(R.id.activationPoubelle2);
         boutonsActivation[3] = (Switch)findViewById(R.id.activationPoubelle3);
         boutonsActivation[4] = (Switch)findViewById(R.id.activationPoubelle4);
 
-        imagesParametres    = new ImageView[NB_COULEURS_POUBELLE];
+        imagesParametres    = new ImageView[NB_POUBELLES_MAX];
         imagesParametres[0] = (ImageView)findViewById(R.id.couleurPoubelle0);
         imagesParametres[1] = (ImageView)findViewById(R.id.couleurPoubelle1);
         imagesParametres[2] = (ImageView)findViewById(R.id.couleurPoubelle2);
         imagesParametres[3] = (ImageView)findViewById(R.id.couleurPoubelle3);
         imagesParametres[4] = (ImageView)findViewById(R.id.couleurPoubelle4);
 
-        boutonSupprimerModule    = new ImageView[NB_COULEURS_POUBELLE];
+        boutonSupprimerModule    = new ImageView[NB_POUBELLES_MAX];
         boutonSupprimerModule[0] = (ImageView)findViewById(R.id.boutonSupprimerPoubelle0);
         boutonSupprimerModule[1] = (ImageView)findViewById(R.id.boutonSupprimerPoubelle1);
         boutonSupprimerModule[2] = (ImageView)findViewById(R.id.boutonSupprimerPoubelle2);
@@ -179,12 +177,10 @@ public class FenetrePoubelle extends AppCompatActivity
 
         boutonAjouterModule = (ImageView)findViewById(R.id.boutonAjouterModule);
 
-        int maxModules = Math.min(nbModulesPoubelles, NB_COULEURS_POUBELLE);
-
-        for(int i = 0; i < maxModules; ++i)
+        for(int i = 0; i < NB_POUBELLES_MAX; ++i)
         {
-            imagesPoubelles[i].setImageResource(IMAGES_POUBELLES[i]);
             final int numeroPoubelle = i;
+
             imagesParametres[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v)
@@ -193,9 +189,11 @@ public class FenetrePoubelle extends AppCompatActivity
                     intent.putExtra("idModule", modulesPoubelles.get(numeroPoubelle).getIdModule());
                     intent.putExtra("nom", modulesPoubelles.get(numeroPoubelle).getNomModule());
                     intent.putExtra("couleur", modulesPoubelles.get(numeroPoubelle).getCouleur());
-                    startActivityForResult(intent, CHANGEMENT_COULEUR);
+                    startActivityForResult(intent, PARAMETRAGE_MODULE);
                 }
             });
+
+            imagesPoubelles[i].setImageResource(IMAGES_POUBELLES[i]);
 
             imagesNotificationPoubelles[i].setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -216,34 +214,26 @@ public class FenetrePoubelle extends AppCompatActivity
                 @Override
                 public void onClick(View v)
                 {
-                    int    idModule  = modulesPoubelles.get(numeroPoubelle).getIdModule();
-                    String nomModule = modulesPoubelles.get(numeroPoubelle).getNomModule();
-                    afficherBoiteDialogueSuppression(idModule, nomModule);
+                    Log.d(TAG, "afficherBoiteDialogueSuppressionModule()");
+                    afficherBoiteDialogueSuppressionModule(numeroPoubelle);
                 }
             });
         }
 
-        for(int i = 0; i < NB_COULEURS_POUBELLE; ++i)
+        for(int i = 0; i < NB_POUBELLES_MAX; ++i)
         {
-            imagesPoubelles[i].setVisibility(View.INVISIBLE);
-            imagesNotificationPoubelles[i].setVisibility(View.INVISIBLE);
-            boutonsActivation[i].setVisibility(View.INVISIBLE);
-            imagesParametres[i].setVisibility(View.INVISIBLE);
-            boutonSupprimerModule[i].setVisibility(View.INVISIBLE);
+            // @todo cacherPoubelle(i);
         }
 
-        for(int i = 0; i < maxModules; ++i)
+        for(int i = 0; i < nbModulesPoubelles; ++i)
         {
-            imagesPoubelles[i].setVisibility(View.VISIBLE);
-            imagesNotificationPoubelles[i].setVisibility(View.VISIBLE);
-            boutonsActivation[i].setVisibility(View.VISIBLE);
-            imagesParametres[i].setVisibility(View.VISIBLE);
-            boutonSupprimerModule[i].setVisibility(View.VISIBLE);
+            // @todo afficherPoubelle(i);
         }
 
-        for(int i = 0; i < maxModules; i++)
+        for(int i = 0; i < nbModulesPoubelles; i++)
         {
             final int numeroPoubelle = i;
+
             // initialise la GUI en fonction de l'état de notification
             if(modulesPoubelles.get(i).estNotifie())
             {
@@ -253,6 +243,7 @@ public class FenetrePoubelle extends AppCompatActivity
             {
                 imagesNotificationPoubelles[i].setVisibility(View.INVISIBLE);
             }
+
             // initialise la GUI en fonction de l'état d'activation
             if(modulesPoubelles.get(i).estActif())
             {
@@ -320,7 +311,12 @@ public class FenetrePoubelle extends AppCompatActivity
                         break;
                     case Communication.CODE_HTTP_REPONSE_POST:
                         Log.d(TAG, "[Handler] REPONSE POST");
-                        traiterReponseJSON(message.obj.toString());
+                        // @todo validerAjoutPoubelle(message.obj.toString());
+                        erreurCommunication = false;
+                        break;
+                    case Communication.CODE_HTTP_REPONSE_DELETE:
+                        Log.d(TAG, "[Handler] REPONSE POST");
+                        // @todo validerSuppressionPoubelle(message.obj.toString());
                         erreurCommunication = false;
                         break;
                     case Communication.CODE_HTTP_ERREUR:
@@ -667,7 +663,7 @@ public class FenetrePoubelle extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG,
               "onActivityResult() requestCode = " + requestCode + " - resultCode = " + resultCode);
-        if(requestCode == CHANGEMENT_COULEUR)
+        if(requestCode == PARAMETRAGE_MODULE)
         {
             if(resultCode == RESULT_OK)
             {
@@ -704,79 +700,19 @@ public class FenetrePoubelle extends AppCompatActivity
         }
     }
 
-    private void afficherBoiteDialogueSuppression(int idModule, String nomModule)
-    {
-        Log.d(TAG,
-              "afficherBoiteDialogueSuppression(), idModule = " + idModule +
-                ", nomModule = " + nomModule);
-        // Créer une nouvelle instance de BoiteDeDialogue
-        BoiteDeDialogue boiteDeDialogue = new BoiteDeDialogue(baseDeDonnees, modulesPoubelles);
-
-        // Passer l'ID et le nom du module à la boîte de dialogue
-        Bundle args = new Bundle();
-        args.putInt("idModule", idModule);
-        args.putString("nomModule", nomModule);
-        boiteDeDialogue.setArguments(args);
-
-        // Afficher la boîte de dialogue
-        boiteDeDialogue.show(getSupportFragmentManager(), "Dialogue suppression module");
-    }
-
     private void afficherBoiteDialogueAjoutModule()
     {
         Log.d(TAG, "afficherBoiteDialogueAjoutModule()");
-        // On construit la liste des modules disponibles à ajouter
-        ArrayList<String> modulesDisponibles = new ArrayList<>();
-        for(int i = nbModulesPoubelles + 1; i <= NB_COULEURS_POUBELLE; i++)
-        {
-            modulesDisponibles.add("Poubelle " + i);
-        }
-
-        // On convertit la liste en tableau pour l'affichage de la boîte de dialogue
-        final CharSequence[] items = modulesDisponibles.toArray(new CharSequence[0]);
-
-        // On affiche cela sur la boîte de dialogue
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Ajouter un module");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which)
-            {
-                int    idModule  = nbModulesPoubelles + which + 1;
-                String nomModule = "Poubelle " + idModule;
-
-                Log.d(TAG, "Module sélectionné : " + nomModule);
-                // JSON et API pour la requête POST
-                String api = API_POST_POUBELLES + "/" + idModule;
-                String json =
-                  "{\"idModule\": \"" + idModule + "\", \"nomModule\": \"" + nomModule + "\"}";
-                communication.emettreRequetePOST(api, json, handler);
-                // Insérer le module dans la base de données
-                baseDeDonnees.insererModule(idModule,
-                                            Module.TypeModule.Poubelle.ordinal(),
-                                            nomModule,
-                                            true,
-                                            "#FF0000"); // Couleur par défaut
-
-                // Créer un nouvel objet Module et l'ajouter au conteneur
-                Module nouveauModule = new Module(idModule,
-                                                  nomModule,
-                                                  Module.TypeModule.Poubelle,
-                                                  true,
-                                                  false, // Notification désactivée par défaut
-                                                  "#FFFFFF", //
-                                                  baseDeDonnees);
-                modulesPoubelles.add(nouveauModule);
-                nbModulesPoubelles++;
-
-                // Mettre à jour l'interface utilisateur
-                mettreAJourInterfaceUtilisateur();
-            }
-        });
-        builder.show();
+        // @todo afficherBoiteDialogueAjoutModule()
     }
 
-    private void mettreAJourInterfaceUtilisateur()
+    private void afficherBoiteDialogueSuppressionModule(int numeroPoubelle)
     {
-        //@todo mettre à jour l'interface selon si on ajoute un module ou si on le supprime
+        if(modulesPoubelles.get(numeroPoubelle) == null)
+        {
+            Log.e(TAG, "afficherBoiteDialogueSuppressionModule() Aucune poubelle !");
+            return;
+        }
+        // @todo afficherBoiteDialogueSuppressionModule()
     }
 }

@@ -41,6 +41,8 @@ a
 
     public final static int CODE_HTTP_REPONSE_POST =
       3; //!< Code indicatif de l'handler pour les retours des requêtes POST
+    public final static int CODE_HTTP_REPONSE_DELETE =
+            4; //!< Code indicatif de l'handler pour les retours des requêtes DELETE
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     public static final String    API_GET_POUBELLES = "/poubelles"; //!< Pour une requête GET
     public static final String    API_GET_BOITES    = "/boites";    //!< Pour une requête GET
@@ -165,62 +167,6 @@ a
         });
     }
 
-    public void emettreRequetePOST(String api, String json, Handler handler)
-    {
-        if(clientOkHttp == null)
-            return;
-
-        String urlRequete = url + api;
-
-        Log.d(TAG, "emettreRequetePOST() url  = " + urlRequete);
-        Log.d(TAG, "emettreRequetePOST() json = " + json);
-
-        RequestBody body    = RequestBody.create(json, JSON);
-        Request     request = new Request.Builder()
-                            .url(urlRequete)
-                            .addHeader("Content-Type", "application/json")
-                            .post(body)
-                            .build();
-
-        clientOkHttp.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e)
-            {
-                Log.d(TAG, "emettreRequetePOST() onFailure");
-                e.printStackTrace();
-                Message message = Message.obtain();
-                message.what    = CODE_HTTP_ERREUR;
-                handler.sendMessage(message);
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException
-            {
-                Log.d(TAG, "emettreRequetePOST() onResponse - message = " + response.message());
-                Log.d(TAG, "emettreRequetePOST() onResponse - code    = " + response.code());
-
-                if(!response.isSuccessful())
-                {
-                    throw new IOException(response.toString());
-                }
-
-                // la réponse à transmettre à l'emetteur de la requête
-                final String body = response.body().string();
-                Log.d(TAG, "emettreRequetePOST() onResponse - body = " + body);
-                new Thread() {
-                    @Override
-                    public void run()
-                    {
-                        Message message = Message.obtain();
-                        message.what    = CODE_HTTP_REPONSE_POST;
-                        message.obj     = body;
-                        handler.sendMessage(message);
-                    }
-                }.start();
-            }
-        });
-    }
-
     public void emettreRequetePATCH(String api, String json, Handler handler)
     {
         if(clientOkHttp == null)
@@ -276,6 +222,119 @@ a
             }
         });
     }
+
+    public void emettreRequetePOST(String api, String json, Handler handler)
+    {
+        if(clientOkHttp == null)
+            return;
+
+        String urlRequete = url + api;
+
+        Log.d(TAG, "emettreRequetePOST() url  = " + urlRequete);
+        Log.d(TAG, "emettreRequetePOST() json = " + json);
+
+        RequestBody body    = RequestBody.create(json, JSON);
+        Request     request = new Request.Builder()
+                .url(urlRequete)
+                .addHeader("Content-Type", "application/json")
+                .post(body)
+                .build();
+
+        clientOkHttp.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e)
+            {
+                Log.d(TAG, "emettreRequetePOST() onFailure");
+                e.printStackTrace();
+                Message message = Message.obtain();
+                message.what    = CODE_HTTP_ERREUR;
+                handler.sendMessage(message);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException
+            {
+                Log.d(TAG, "emettreRequetePOST() onResponse - message = " + response.message());
+                Log.d(TAG, "emettreRequetePOST() onResponse - code    = " + response.code());
+
+                if(!response.isSuccessful())
+                {
+                    throw new IOException(response.toString());
+                }
+
+                // la réponse à transmettre à l'emetteur de la requête
+                final String body = response.body().string();
+                Log.d(TAG, "emettreRequetePOST() onResponse - body = " + body);
+                new Thread() {
+                    @Override
+                    public void run()
+                    {
+                        Message message = Message.obtain();
+                        message.what    = CODE_HTTP_REPONSE_POST;
+                        message.obj     = body;
+                        handler.sendMessage(message);
+                    }
+                }.start();
+            }
+        });
+    }
+
+    public void emettreRequeteDELETE(String api, String json, Handler handler)
+    {
+        if(clientOkHttp == null)
+            return;
+
+        String urlRequete = url + api;
+
+        Log.d(TAG, "emettreRequeteDELETE() url  = " + urlRequete);
+        Log.d(TAG, "emettreRequeteDELETE() json = " + json);
+
+        RequestBody body    = RequestBody.create(json, JSON);
+        Request     request = new Request.Builder()
+                .url(urlRequete)
+                .addHeader("Content-Type", "application/json")
+                .delete(body)
+                .build();
+
+        clientOkHttp.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e)
+            {
+                Log.d(TAG, "emettreRequeteDELETE() onFailure");
+                e.printStackTrace();
+                Message message = Message.obtain();
+                message.what    = CODE_HTTP_ERREUR;
+                handler.sendMessage(message);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException
+            {
+                Log.d(TAG, "emettreRequeteDELETE() onResponse - message = " + response.message());
+                Log.d(TAG, "emettreRequeteDELETE() onResponse - code    = " + response.code());
+
+                if(!response.isSuccessful())
+                {
+                    throw new IOException(response.toString());
+                }
+
+                // la réponse à transmettre à l'emetteur de la requête
+                final String body = response.body().string();
+                Log.d(TAG, "emettreRequeteDELETE() onResponse - body = " + body);
+                new Thread() {
+                    @Override
+                    public void run()
+                    {
+                        Message message = Message.obtain();
+                        message.what    = CODE_HTTP_REPONSE_DELETE;
+                        message.obj     = body;
+                        handler.sendMessage(message);
+                    }
+                }.start();
+            }
+        });
+    }
+
     private String recupererURLStation()
     {
         String urlServeurWeb = baseDeDonnees.getURLServeurWeb();

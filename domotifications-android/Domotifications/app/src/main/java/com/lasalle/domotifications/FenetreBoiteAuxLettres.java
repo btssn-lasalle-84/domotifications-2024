@@ -1,19 +1,16 @@
 package com.lasalle.domotifications;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -35,7 +32,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -52,8 +48,9 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
     private static final String API_POST_BOITES  = "/boites"; //!< Pour une requête POST
 
     private static final int INTERVALLE            = 1000; //!< Intervalle d'interrogation en ms
-    private static final int CHANGEMENT_COULEUR    = 1;
     private static final int NB_MODULES_BOITES_MAX = 4;
+    private static final int PARAMETRAGE_MODULE =
+      1; //!< Code pour l'activité de paramètrage du module
 
     /**
      * Attributs
@@ -166,26 +163,10 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
         boutonSupprimerModule[2] = (ImageView)findViewById(R.id.boutonSupprimerBoite2);
         boutonSupprimerModule[3] = (ImageView)findViewById(R.id.boutonSupprimerBoite3);
 
-        for(int i = nbModulesBoitesAuxLettres; i < NB_MODULES_BOITES_MAX; ++i)
-        {
-            imagesBoites[i].setVisibility(View.INVISIBLE);
-            imagesNotificationBoites[i].setVisibility(View.INVISIBLE);
-            boutonsActivation[i].setVisibility(View.INVISIBLE);
-            imagesParametres[i].setVisibility(View.INVISIBLE);
-            boutonSupprimerModule[i].setVisibility(View.INVISIBLE);
-        }
-
         boutonAjouterModule = (ImageView)findViewById(R.id.boutonAjouterModule);
-        boutonAjouterModule.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-            }
-        });
 
-        for(int i = 0; i < nbModulesBoitesAuxLettres; ++i)
+        for(int i = 0; i < NB_MODULES_BOITES_MAX; ++i)
         {
-            imagesBoites[i].setImageResource(IMAGE_BOITES);
             final int numeroBoite = i;
 
             imagesParametres[i].setOnClickListener(new View.OnClickListener() {
@@ -198,9 +179,12 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                     intent.putExtra("nom", modulesBoitesAuxLettres.get(numeroBoite).getNomModule());
                     intent.putExtra("couleur",
                                     modulesBoitesAuxLettres.get(numeroBoite).getCouleur());
-                    startActivityForResult(intent, CHANGEMENT_COULEUR);
+                    startActivityForResult(intent, PARAMETRAGE_MODULE);
                 }
             });
+
+            imagesBoites[i].setImageResource(IMAGE_BOITES);
+
             imagesNotificationBoites[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v)
@@ -220,22 +204,26 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                 @Override
                 public void onClick(View v)
                 {
-                    int    idModule  = modulesBoitesAuxLettres.get(numeroBoite).getIdModule();
-                    String nomModule = modulesBoitesAuxLettres.get(numeroBoite).getNomModule();
-                    afficherBoiteDialogueSuppression(idModule, nomModule);
+                    Log.d(TAG, "afficherBoiteDialogueSuppressionModule()");
+                    afficherBoiteDialogueSuppressionModule(numeroBoite);
                 }
             });
         }
 
+        for(int i = 0; i < NB_MODULES_BOITES_MAX; ++i)
+        {
+            // @todo cacherBoiteAuxLettres(i);
+        }
+
         for(int i = 0; i < nbModulesBoitesAuxLettres; ++i)
         {
-            imagesBoites[i].setVisibility(View.VISIBLE);
-            boutonsActivation[i].setVisibility(View.VISIBLE);
+            // @todo afficherBoiteAuxLettres(i);
         }
 
         for(int i = 0; i < nbModulesBoitesAuxLettres; i++)
         {
             final int numeroBoite = i;
+
             // initialise la GUI en fonction de l'état de notification
             if(modulesBoitesAuxLettres.get(i).estNotifie())
             {
@@ -245,6 +233,7 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
             {
                 imagesNotificationBoites[i].setVisibility(View.INVISIBLE);
             }
+
             // initialise la GUI en fonction de l'état d'activation
             if(modulesBoitesAuxLettres.get(i).estActif())
             {
@@ -266,24 +255,25 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                     gererClicBoutonActivation(numeroBoite);
                 }
             });
-            boutonAccueil.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v)
-                {
-                    Log.d(TAG, "clic boutonAccueil");
-                    if(minuteur != null)
-                        minuteur.cancel();
-                    finish();
-                }
-            });
-
-            boutonAjouterModule.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v)
-                {
-                    afficherBoiteDialogueAjoutModule();
-                }
-            });
         }
+
+        boutonAccueil.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)
+            {
+                Log.d(TAG, "clic boutonAccueil");
+                if(minuteur != null)
+                    minuteur.cancel();
+                finish();
+            }
+        });
+
+        boutonAjouterModule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                afficherBoiteDialogueAjoutModule();
+            }
+        });
     }
 
     private void initialiserHandler()
@@ -311,7 +301,12 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                         break;
                     case Communication.CODE_HTTP_REPONSE_POST:
                         Log.d(TAG, "[Handler] REPONSE POST");
-                        traiterReponseJSON(message.obj.toString());
+                        // @todo validerAjoutBoite(message.obj.toString());
+                        erreurCommunication = false;
+                        break;
+                    case Communication.CODE_HTTP_REPONSE_DELETE:
+                        Log.d(TAG, "[Handler] REPONSE POST");
+                        // @todo validerSuppressionBoite(message.obj.toString());
                         erreurCommunication = false;
                         break;
                     case Communication.CODE_HTTP_ERREUR:
@@ -659,7 +654,7 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG,
               "onActivityResult() requestCode = " + requestCode + " - resultCode = " + resultCode);
-        if(requestCode == CHANGEMENT_COULEUR)
+        if(requestCode == PARAMETRAGE_MODULE)
         {
             if(resultCode == RESULT_OK)
             {
@@ -696,80 +691,19 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
         }
     }
 
-    private void afficherBoiteDialogueSuppression(int idModule, String nomModule)
-    {
-        Log.d(TAG,
-              "afficherBoiteDialogueSuppression(), idModule = " + idModule +
-                ", nomModule = " + nomModule);
-        // Créer une nouvelle instance de BoiteDeDialogue
-        BoiteDeDialogue boiteDeDialogue =
-          new BoiteDeDialogue(baseDeDonnees, modulesBoitesAuxLettres);
-
-        // Passer l'ID et le nom du module à la boîte de dialogue
-        Bundle args = new Bundle();
-        args.putInt("idModule", idModule);
-        args.putString("nomModule", nomModule);
-        boiteDeDialogue.setArguments(args);
-
-        // Afficher la boîte de dialogue
-        boiteDeDialogue.show(getSupportFragmentManager(), "Dialogue suppression module");
-    }
-
     private void afficherBoiteDialogueAjoutModule()
     {
         Log.d(TAG, "afficherBoiteDialogueAjoutModule()");
-        // On construit la liste des modules disponibles à ajouter
-        ArrayList<String> modulesDisponibles = new ArrayList<>();
-        for(int i = nbModulesBoitesAuxLettres + 1; i <= NB_MODULES_BOITES_MAX; i++)
-        {
-            modulesDisponibles.add("Boîte " + i);
-        }
-
-        // On convertit la liste en tableau pour l'affichage de la boîte de dialogue
-        final CharSequence[] items = modulesDisponibles.toArray(new CharSequence[0]);
-
-        // On affiche cela sur la boîte de dialogue
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Ajouter un module");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which)
-            {
-                int    idModule  = nbModulesBoitesAuxLettres + which + 1;
-                String nomModule = "Boîte " + idModule;
-
-                Log.d(TAG, "Module sélectionné : " + nomModule);
-                // JSON et API pour la requête POST
-                String api = API_POST_BOITES + "/" + idModule;
-                String json =
-                  "{\"idModule\": \"" + idModule + "\", \"nomModule\": \"" + nomModule + "\"}";
-                communication.emettreRequetePOST(api, json, handler);
-                // Insérer le module dans la base de données
-                baseDeDonnees.insererModule(idModule,
-                                            Module.TypeModule.BoiteAuxLettres.ordinal(),
-                                            nomModule,
-                                            true,
-                                            "#FF0000"); // Couleur par défaut
-
-                // Créer un nouvel objet Module et l'ajouter au conteneur
-                Module nouveauModule = new Module(idModule,
-                                                  nomModule,
-                                                  Module.TypeModule.BoiteAuxLettres,
-                                                  true,
-                                                  false, // Notification désactivée par défaut
-                                                  "#FFFFFF", //
-                                                  baseDeDonnees);
-                modulesBoitesAuxLettres.add(nouveauModule);
-                nbModulesBoitesAuxLettres++;
-
-                // Mettre à jour l'interface utilisateur
-                mettreAJourInterfaceUtilisateur();
-            }
-        });
-        builder.show();
+        // @todo afficherBoiteDialogueAjoutModule()
     }
 
-    private void mettreAJourInterfaceUtilisateur()
+    private void afficherBoiteDialogueSuppressionModule(int numeroBoite)
     {
-        //@todo mettre à jour l'interface selon si on ajoute un module ou si on le supprime
+        if(modulesBoitesAuxLettres.get(numeroBoite) == null)
+        {
+            Log.e(TAG, "afficherBoiteDialogueSuppressionModule() Aucune boîte aux lettres !");
+            return;
+        }
+        // @todo afficherBoiteDialogueSuppressionModule()
     }
 }
