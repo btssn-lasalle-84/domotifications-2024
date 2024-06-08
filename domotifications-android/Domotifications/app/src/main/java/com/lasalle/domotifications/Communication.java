@@ -21,15 +21,15 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
 public class Communication
 {
     /**
      * Constantes
-a     */
+a
+*/
     private static final String TAG                = "_Communication"; //!< TAG pour les logs
     private static final String ADRESSE_STATION    = "station-lumineuse.local";
-    public static final String  ADRESSE_IP_STATION = "192.168.52.208"; // Simulateur station
+    public static final String  ADRESSE_IP_STATION = "192.168.52.218"; // Simulateur station
     private static final int    PORT_HTTP          = 80;
     public final static int     CODE_HTTP_REPONSE_JSON =
       0; //!< Code indicatif de l'handler pour les requêtes qui retournent des réponses au format
@@ -38,11 +38,15 @@ a     */
       1; //!< Code indicatif de l'handler pour les retours des requêtes PATCH
     public final static int CODE_HTTP_ERREUR =
       2; //!< Code indicatif de l'handler pour signaler des requêtes qui ont échouées (onFailure)
-    public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-    public static final String API_GET_POUBELLES   = "/poubelles";       //!< Pour une requête GET
-    public static final String API_GET_BOITES   = "/boites"; //!< Pour une requête GET
-    public static final String API_GET_MACHINES   = "/machines";       //!< Pour une requête GET
 
+    public final static int CODE_HTTP_REPONSE_POST =
+      3; //!< Code indicatif de l'handler pour les retours des requêtes POST
+    public final static int CODE_HTTP_REPONSE_DELETE =
+            4; //!< Code indicatif de l'handler pour les retours des requêtes DELETE
+    public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+    public static final String    API_GET_POUBELLES = "/poubelles"; //!< Pour une requête GET
+    public static final String    API_GET_BOITES    = "/boites";    //!< Pour une requête GET
+    public static final String    API_GET_MACHINES  = "/machines";  //!< Pour une requête GET
 
     /**
      * Attributs
@@ -211,6 +215,118 @@ a     */
                     {
                         Message message = Message.obtain();
                         message.what    = CODE_HTTP_REPONSE_PATCH;
+                        message.obj     = body;
+                        handler.sendMessage(message);
+                    }
+                }.start();
+            }
+        });
+    }
+
+    public void emettreRequetePOST(String api, String json, Handler handler)
+    {
+        if(clientOkHttp == null)
+            return;
+
+        String urlRequete = url + api;
+
+        Log.d(TAG, "emettreRequetePOST() url  = " + urlRequete);
+        Log.d(TAG, "emettreRequetePOST() json = " + json);
+
+        RequestBody body    = RequestBody.create(json, JSON);
+        Request     request = new Request.Builder()
+                .url(urlRequete)
+                .addHeader("Content-Type", "application/json")
+                .post(body)
+                .build();
+
+        clientOkHttp.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e)
+            {
+                Log.d(TAG, "emettreRequetePOST() onFailure");
+                e.printStackTrace();
+                Message message = Message.obtain();
+                message.what    = CODE_HTTP_ERREUR;
+                handler.sendMessage(message);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException
+            {
+                Log.d(TAG, "emettreRequetePOST() onResponse - message = " + response.message());
+                Log.d(TAG, "emettreRequetePOST() onResponse - code    = " + response.code());
+
+                if(!response.isSuccessful())
+                {
+                    throw new IOException(response.toString());
+                }
+
+                // la réponse à transmettre à l'emetteur de la requête
+                final String body = response.body().string();
+                Log.d(TAG, "emettreRequetePOST() onResponse - body = " + body);
+                new Thread() {
+                    @Override
+                    public void run()
+                    {
+                        Message message = Message.obtain();
+                        message.what    = CODE_HTTP_REPONSE_POST;
+                        message.obj     = body;
+                        handler.sendMessage(message);
+                    }
+                }.start();
+            }
+        });
+    }
+
+    public void emettreRequeteDELETE(String api, String json, Handler handler)
+    {
+        if(clientOkHttp == null)
+            return;
+
+        String urlRequete = url + api;
+
+        Log.d(TAG, "emettreRequeteDELETE() url  = " + urlRequete);
+        Log.d(TAG, "emettreRequeteDELETE() json = " + json);
+
+        RequestBody body    = RequestBody.create(json, JSON);
+        Request     request = new Request.Builder()
+                .url(urlRequete)
+                .addHeader("Content-Type", "application/json")
+                .delete(body)
+                .build();
+
+        clientOkHttp.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e)
+            {
+                Log.d(TAG, "emettreRequeteDELETE() onFailure");
+                e.printStackTrace();
+                Message message = Message.obtain();
+                message.what    = CODE_HTTP_ERREUR;
+                handler.sendMessage(message);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException
+            {
+                Log.d(TAG, "emettreRequeteDELETE() onResponse - message = " + response.message());
+                Log.d(TAG, "emettreRequeteDELETE() onResponse - code    = " + response.code());
+
+                if(!response.isSuccessful())
+                {
+                    throw new IOException(response.toString());
+                }
+
+                // la réponse à transmettre à l'emetteur de la requête
+                final String body = response.body().string();
+                Log.d(TAG, "emettreRequeteDELETE() onResponse - body = " + body);
+                new Thread() {
+                    @Override
+                    public void run()
+                    {
+                        Message message = Message.obtain();
+                        message.what    = CODE_HTTP_REPONSE_DELETE;
                         message.obj     = body;
                         handler.sendMessage(message);
                     }

@@ -1,10 +1,12 @@
 package com.lasalle.domotifications;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -12,7 +14,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -28,10 +32,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -45,19 +52,21 @@ public class FenetreMachine extends AppCompatActivity
      */
     private static final String TAG                = "_FenetreMachine"; //!< TAG pour les logs
     private static final String API_PATCH_MACHINES = "/machines";       //!< Pour une requête PATCH
+    private static final String API_POST_MACHINES  = "/machines";       //!< Pour une requête POST
     private static final int    INTERVALLE         = 1000; //!< Intervalle d'interrogation en ms
-    public static final int     NB_MACHINES_MAX    = 5;    //!< Nombre max de machines
-    private static final int    CHANGEMENT_COULEUR = 1;
+    public static final int     NB_MACHINES_MAX    = 6;    //!< Nombre max de machines
+    private static final int    PARAMETRAGE_MODULE =
+      1; //!< Code pour l'activité de paramètrage du module
 
     /**
      * Attributs
      */
-    private BaseDeDonnees  baseDeDonnees;      //!< Association avec la base de donnees
-    private Vector<Module> modulesMachines;    //!< Conteneur des modules machines
-    private int            nbModulesMachines;  //!< le nombre de machines gérées
-    private int            idNotification = 0; //!< Identifiant unique pour chaque notification
-    private Communication  communication;      //!< Association avec la classe Communication
-    private Handler        handler =
+    private BaseDeDonnees    baseDeDonnees;      //!< Association avec la base de donnees
+    protected Vector<Module> modulesMachines;    //!< Conteneur des modules machines
+    private int              nbModulesMachines;  //!< le nombre de machines gérées
+    private int              idNotification = 0; //!< Identifiant unique pour chaque notification
+    private Communication    communication;      //!< Association avec la classe Communication
+    private Handler          handler =
       null; //!< Handler permettant la communication entre la classe Communication et l'activité
     private Timer minuteur = null; //!< Pour gérer la récupération des états des modules machines
     private TimerTask tacheRecuperationEtats =
@@ -65,7 +74,8 @@ public class FenetreMachine extends AppCompatActivity
     private boolean               erreurCommunication = false;
     private Map<Integer, Boolean> notificationsEnvoyees =
       new HashMap<>(); //<! Pour la signalisation des notifications
-    private int numeroMachineAcquittement = -1;
+    private int    numeroMachineAcquittement = -1;
+    private String nomAjoutModule;
 
     /**
      * GUI
@@ -73,17 +83,16 @@ public class FenetreMachine extends AppCompatActivity
     private ImageButton boutonAccueil;
 
     public static final int[] IMAGE_MACHINES = {
-        R.drawable.machine,
-        R.drawable.lavevaisselle,
-        R.drawable.machine,
-        R.drawable.machine,
-        R.drawable.machine
-    }; //!< Id de l'image de la machine dans les ressources Android
-    private ImageView[] imagesMachines;             //!< Images des machines
+        R.drawable.machine, R.drawable.lavevaisselle, R.drawable.machine,
+        R.drawable.machine, R.drawable.machine,       R.drawable.machine
+    };                                  //!< Id de l'image de la machine dans les ressources Android
+    private ImageView[] imagesMachines; //!< Images des machines
     private ImageView[] imagesNotificationMachines; //!< Images des notifications des machines
-    private Switch[]    boutonsActivation; //!< Boutons d'activation/désactivation des modules
-                                           //!< machines
-    private ImageView[] imagesParametres;  //!< Images des couleurs des modules
+    private Switch[] boutonsActivation; //!< Boutons d'activation/désactivation des modules
+    //!< machines
+    private ImageView boutonAjouterModule;     //!< Bouton pour ajouter les modules machines
+    private ImageView[] boutonSupprimerModule; //!< Boutons pour supprimer les modules machines
+    private ImageView[] imagesParametres;      //!< Images des couleurs des modules
     //!< machines
 
     @Override
@@ -110,8 +119,9 @@ public class FenetreMachine extends AppCompatActivity
     private void initialiserModulesMachines()
     {
         Log.d(TAG, "initialiserModulesMachines()");
-        modulesMachines   = baseDeDonnees.getMachines();
-        nbModulesMachines = baseDeDonnees.getNbModulesMachines();
+        modulesMachines = baseDeDonnees.getMachines();
+        // nbModulesMachines = baseDeDonnees.getNbModulesMachines();
+        nbModulesMachines = modulesMachines.size();
         Log.d(TAG, "nbModulesMachines = " + nbModulesMachines);
     }
 
@@ -136,6 +146,7 @@ public class FenetreMachine extends AppCompatActivity
         imagesMachines[2] = (ImageView)findViewById(R.id.machine2);
         imagesMachines[3] = (ImageView)findViewById(R.id.machine3);
         imagesMachines[4] = (ImageView)findViewById(R.id.machine4);
+        imagesMachines[5] = (ImageView)findViewById(R.id.machine5);
 
         imagesNotificationMachines    = new ImageView[NB_MACHINES_MAX];
         imagesNotificationMachines[0] = (ImageView)findViewById(R.id.notificationMachine0);
@@ -143,6 +154,7 @@ public class FenetreMachine extends AppCompatActivity
         imagesNotificationMachines[2] = (ImageView)findViewById(R.id.notificationMachine2);
         imagesNotificationMachines[3] = (ImageView)findViewById(R.id.notificationMachine3);
         imagesNotificationMachines[4] = (ImageView)findViewById(R.id.notificationMachine4);
+        imagesNotificationMachines[5] = (ImageView)findViewById(R.id.notificationMachine5);
 
         boutonsActivation    = new Switch[NB_MACHINES_MAX];
         boutonsActivation[0] = (Switch)findViewById(R.id.activationMachine0);
@@ -150,6 +162,7 @@ public class FenetreMachine extends AppCompatActivity
         boutonsActivation[2] = (Switch)findViewById(R.id.activationMachine2);
         boutonsActivation[3] = (Switch)findViewById(R.id.activationMachine3);
         boutonsActivation[4] = (Switch)findViewById(R.id.activationMachine4);
+        boutonsActivation[5] = (Switch)findViewById(R.id.activationMachine5);
 
         imagesParametres    = new ImageView[NB_MACHINES_MAX];
         imagesParametres[0] = (ImageView)findViewById(R.id.couleurMachine0);
@@ -157,8 +170,19 @@ public class FenetreMachine extends AppCompatActivity
         imagesParametres[2] = (ImageView)findViewById(R.id.couleurMachine2);
         imagesParametres[3] = (ImageView)findViewById(R.id.couleurMachine3);
         imagesParametres[4] = (ImageView)findViewById(R.id.couleurMachine4);
+        imagesParametres[5] = (ImageView)findViewById(R.id.couleurMachine5);
 
-        for(int i = 0; i < nbModulesMachines; ++i)
+        boutonSupprimerModule    = new ImageView[NB_MACHINES_MAX];
+        boutonSupprimerModule[0] = (ImageView)findViewById(R.id.boutonSupprimerMachine0);
+        boutonSupprimerModule[1] = (ImageView)findViewById(R.id.boutonSupprimerMachine1);
+        boutonSupprimerModule[2] = (ImageView)findViewById(R.id.boutonSupprimerMachine2);
+        boutonSupprimerModule[3] = (ImageView)findViewById(R.id.boutonSupprimerMachine3);
+        boutonSupprimerModule[4] = (ImageView)findViewById(R.id.boutonSupprimerMachine4);
+        boutonSupprimerModule[5] = (ImageView)findViewById(R.id.boutonSupprimerMachine5);
+
+        boutonAjouterModule = (ImageView)findViewById(R.id.boutonAjouterModule);
+
+        for(int i = 0; i < NB_MACHINES_MAX; ++i)
         {
             int idMachine = i;
             imagesParametres[i].setOnClickListener(new View.OnClickListener() {
@@ -169,10 +193,12 @@ public class FenetreMachine extends AppCompatActivity
                     intent.putExtra("idModule", modulesMachines.get(idMachine).getIdModule());
                     intent.putExtra("nom", modulesMachines.get(idMachine).getNomModule());
                     intent.putExtra("couleur", modulesMachines.get(idMachine).getCouleur());
-                    startActivityForResult(intent, CHANGEMENT_COULEUR);
+                    startActivityForResult(intent, PARAMETRAGE_MODULE);
                 }
             });
+
             imagesMachines[i].setImageResource(IMAGE_MACHINES[i]);
+
             imagesNotificationMachines[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v)
@@ -180,6 +206,7 @@ public class FenetreMachine extends AppCompatActivity
                     gererClicBoutonNotification(idMachine);
                 }
             });
+
             imagesMachines[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v)
@@ -187,27 +214,31 @@ public class FenetreMachine extends AppCompatActivity
                     gererClicBoutonNotification(idMachine);
                 }
             });
+
+            boutonSupprimerModule[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    Log.d(TAG, "afficherBoiteDialogueSuppressionModule()");
+                    afficherBoiteDialogueSuppressionModule(idMachine);
+                }
+            });
         }
 
         for(int i = 0; i < NB_MACHINES_MAX; ++i)
         {
-            imagesMachines[i].setVisibility(View.INVISIBLE);
-            imagesNotificationMachines[i].setVisibility(View.INVISIBLE);
-            boutonsActivation[i].setVisibility(View.INVISIBLE);
-            imagesParametres[i].setVisibility(View.INVISIBLE);
+            cacherMachine(i);
         }
 
         for(int i = 0; i < nbModulesMachines; ++i)
         {
-            imagesMachines[i].setVisibility(View.VISIBLE);
-            imagesNotificationMachines[i].setVisibility(View.VISIBLE);
-            boutonsActivation[i].setVisibility(View.VISIBLE);
-            imagesParametres[i].setVisibility(View.VISIBLE);
+            afficherMachine(i);
         }
 
         for(int i = 0; i < nbModulesMachines; i++)
         {
             final int numeroMachine = i;
+
             // initialise la GUI en fonction de l'état de notification
             if(modulesMachines.get(i).estNotifie())
             {
@@ -217,6 +248,7 @@ public class FenetreMachine extends AppCompatActivity
             {
                 imagesNotificationMachines[i].setVisibility(View.INVISIBLE);
             }
+
             // initialise la GUI en fonction de l'état d'activation
             if(modulesMachines.get(i).estActif())
             {
@@ -238,14 +270,23 @@ public class FenetreMachine extends AppCompatActivity
                     gererClicBoutonActivation(numeroMachine);
                 }
             });
-            boutonAccueil.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v)
-                {
-                    Log.d(TAG, "clic boutonAccueil");
-                    finish();
-                }
-            });
         }
+
+        boutonAccueil.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)
+            {
+                Log.d(TAG, "clic boutonAccueil");
+                finish();
+            }
+        });
+
+        boutonAjouterModule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                afficherBoiteDialogueAjoutModule();
+            }
+        });
     }
 
     private void initialiserHandler()
@@ -261,7 +302,7 @@ public class FenetreMachine extends AppCompatActivity
                 switch(message.what)
                 {
                     case Communication.CODE_HTTP_REPONSE_JSON:
-                        Log.d(TAG, "[Handler] REPONSE JSON");
+                        // Log.d(TAG, "[Handler] REPONSE JSON");
                         traiterReponseJSON(message.obj.toString());
                         erreurCommunication = false;
                         break;
@@ -269,6 +310,16 @@ public class FenetreMachine extends AppCompatActivity
                         Log.d(TAG, "[Handler] REPONSE PATCH");
                         traiterReponseJSON(message.obj.toString());
                         enregistrerAcquittementNotification(message.obj.toString());
+                        erreurCommunication = false;
+                        break;
+                    case Communication.CODE_HTTP_REPONSE_POST:
+                        Log.d(TAG, "[Handler] REPONSE POST");
+                        validerAjoutMachine(message.obj.toString());
+                        erreurCommunication = false;
+                        break;
+                    case Communication.CODE_HTTP_REPONSE_DELETE:
+                        Log.d(TAG, "[Handler] REPONSE DELETE");
+                        validerSuppressionMachine(message.obj.toString());
                         erreurCommunication = false;
                         break;
                     case Communication.CODE_HTTP_ERREUR:
@@ -382,13 +433,13 @@ public class FenetreMachine extends AppCompatActivity
     {
         // Log.d(TAG, "traiterReponseJSON() reponse = " + reponse);
         /*
-            Exemple de réponsee : pour la requête GET /machines
+            Exemple de réponse : pour la requête GET /machines
             body =
             [
-                {"idMachine":1,"couleur":"rouge","etat":false,"actif":true},
-                {"idMachine":2,"couleur":"jaune","etat":false,"actif":true},
-                {"idMachine":3,"couleur":"bleu","etat":false,"actif":true},
-                {"idMachine":4,"couleur":"gris","etat":false,"actif":true},
+                {"idMachine":1,"couleur":"#FF0000","etat":false,"actif":true},
+                {"idMachine":2,"couleur":"#FFFF00","etat":false,"actif":true},
+                {"idMachine":3,"couleur":"#0000FF","etat":false,"actif":true},
+                {"idMachine":4,"couleur":"#F0F0F2","etat":false,"actif":true},
             ]
         */
         JSONArray json = null;
@@ -426,6 +477,92 @@ public class FenetreMachine extends AppCompatActivity
         }
     }
 
+    public void validerAjoutMachine(String reponse)
+    {
+        Log.d(TAG, "validerAjoutMachine() reponse = " + reponse);
+        /*
+            Exemple de réponse : pour la requête POST
+            body =
+            [
+                {"idMachine":5,"couleur":"#FF0000","etat":false,"actif":false}
+            ]
+        */
+        JSONArray json = null;
+
+        try
+        {
+            json                 = new JSONArray(reponse);
+            JSONObject machine   = json.getJSONObject(0);
+            int        idMachine = machine.getInt("idMachine");
+            String     couleur   = machine.getString("couleur");
+            Boolean    etat      = machine.getBoolean("etat");
+            Boolean    actif     = machine.getBoolean("actif");
+            Log.d(TAG,
+                  "validerAjoutMachine() idMachine = " + idMachine + " couleur = " + couleur +
+                    " etat = " + etat + " actif = " + actif);
+            Module module = new Module(idMachine,
+                                       nomAjoutModule,
+                                       Module.TypeModule.Machine,
+                                       actif,
+                                       etat,
+                                       couleur,
+                                       baseDeDonnees);
+            modulesMachines.add(module);
+            baseDeDonnees.insererModule(module.getIdModule(),
+                                        module.getTypeModule().ordinal() + 1,
+                                        module.getNomModule(),
+                                        module.estActif(),
+                                        module.getCouleur());
+            afficherMachine(nbModulesMachines);
+            int numeroMachine = getNumeroMachine(module.getIdModule());
+            mettreAJourModule(numeroMachine);
+            nomAjoutModule    = "";
+            nbModulesMachines = modulesMachines.size();
+            Log.d(TAG, "validerAjoutMachine() nbModulesMachines = " + nbModulesMachines);
+        }
+        catch(JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void validerSuppressionMachine(String reponse)
+    {
+        Log.d(TAG, "validerSuppressionMachine() reponse = " + reponse);
+        /*
+            Exemple de réponse : pour la requête DELETE
+            body =
+            [
+                {"idMachine":5}
+            ]
+        */
+        JSONArray json = null;
+
+        try
+        {
+            json                 = new JSONArray(reponse);
+            JSONObject machines  = json.getJSONObject(0);
+            int        idMachine = machines.getInt("idMachine");
+            Log.d(TAG, "validerSuppressionMachine() idMachine = " + idMachine);
+            int numeroMachine = getNumeroMachine(idMachine);
+            if(numeroMachine == -1)
+            {
+                Log.d(TAG, "validerSuppressionMachine() idMachine introuvable !");
+                return;
+            }
+            Module module = modulesMachines.get(numeroMachine);
+            baseDeDonnees.supprimerModule(idMachine, module.getTypeModule().ordinal() + 1);
+            modulesMachines.remove(module);
+            cacherMachine(numeroMachine);
+            nbModulesMachines = modulesMachines.size();
+            Log.d(TAG, "validerSuppressionMachine() nbModulesMachines = " + nbModulesMachines);
+        }
+        catch(JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     public void enregistrerAcquittementNotification(String reponse)
     {
         if(numeroMachineAcquittement == -1)
@@ -442,7 +579,7 @@ public class FenetreMachine extends AppCompatActivity
             Exemple de réponsee : pour la requête PATCH /machines/3
             body =
             [
-                {"idMachine":1,"couleur":"rouge","etat":false,"actif":true}
+                {"idMachine":1,"couleur":"#FF0000","etat":false,"actif":true}
             ]
         */
         JSONArray json = null;
@@ -613,7 +750,7 @@ public class FenetreMachine extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG,
               "onActivityResult() requestCode = " + requestCode + " - resultCode = " + resultCode);
-        if(requestCode == CHANGEMENT_COULEUR)
+        if(requestCode == PARAMETRAGE_MODULE)
         {
             if(resultCode == RESULT_OK)
             {
@@ -623,19 +760,21 @@ public class FenetreMachine extends AppCompatActivity
                     String nomModule     = data.getStringExtra("nom");
                     String couleurModule = data.getStringExtra("couleur");
                     Log.d(TAG,
-                          "onActivityResult() idModule = " + idModule + " - nomModule : " +
-                            nomModule + " - couleurModule = " + couleurModule);
+                          "onActivityResult() idModule = " + idModule +
+                            " - nomModule : " + nomModule + " - couleurModule = " + couleurModule);
 
                     if(idModule != -1)
                     {
-                        Module module = modulesMachines.get(idModule);
+                        int    numeroModule = getNumeroMachine(idModule);
+                        Module module       = modulesMachines.get(numeroModule);
                         if(module != null)
                         {
                             if(!module.getNomModule().equals(nomModule))
                             {
                                 module.setNomModule(nomModule);
                                 baseDeDonnees.modifierNomModule(module.getIdModule(),
-                                                                module.getTypeModule().ordinal(),
+                                                                module.getTypeModule().ordinal() +
+                                                                  1,
                                                                 nomModule);
                             }
                             module.setCouleur(couleurModule);
@@ -649,5 +788,173 @@ public class FenetreMachine extends AppCompatActivity
                 }
             }
         }
+    }
+
+    private void afficherBoiteDialogueAjoutModule()
+    {
+        Log.d(TAG, "afficherBoiteDialogueAjoutModule()");
+        AlertDialog.Builder ajoutModule     = new AlertDialog.Builder(this);
+        LayoutInflater      factory         = LayoutInflater.from(this);
+        final View          ajoutModuleView = factory.inflate(R.layout.ajout_module, null);
+        ajoutModule.setView(ajoutModuleView);
+        ajoutModule.setTitle("Ajouter un nouveau module");
+        ajoutModule.setPositiveButton("Valider", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                // Lorsque l'on cliquera sur le bouton "OK", on récupère l'EditText correspondant à
+                // la vue personnalisée (cad à ajoutModuleView)
+                EditText nomModule = (EditText)ajoutModuleView.findViewById(R.id.editTextNom);
+                if(!nomModule.getText().toString().isEmpty())
+                    nomAjoutModule = nomModule.getText().toString().trim();
+                else
+                    nomAjoutModule = "machine";
+                Log.d(TAG, "afficherBoiteDialogueAjoutModule() nomModule = " + nomAjoutModule);
+                TextInputEditText couleurModule =
+                  (TextInputEditText)ajoutModuleView.findViewById(R.id.editTextCouleurHTML);
+                String couleurAjoutModule = "#00FF00";
+                if(!couleurModule.getText().toString().trim().isEmpty())
+                    couleurAjoutModule = couleurModule.getText().toString().trim();
+                Log.d(TAG,
+                      "afficherBoiteDialogueAjoutModule() couleurAjoutModule = " +
+                        couleurAjoutModule);
+
+                // Préparer et émettre la requête POST à la station
+                int idMachine = rechercherIdDisponible();
+                Log.d(TAG, "afficherBoiteDialogueAjoutModule() idMachine = " + idMachine);
+                // si idMachine = 0 alors la station choisira l'idMachine à ajouter sinon c'est
+                // l'application qui le détermine
+
+                // Mode démo
+                if(idMachine > 0)
+                {
+                    String api  = API_PATCH_MACHINES;
+                    String json = "{\"idMachine\": " + idMachine + ", \"couleur\": \"" +
+                                  couleurAjoutModule + "\", \"actif\": true"
+                                  + "}";
+                    communication.emettreRequetePOST(api, json, handler);
+
+                    // Notifier l'utilisateur
+                    Toast
+                      .makeText(getApplicationContext(),
+                                "Demande d'ajout du module '" + nomAjoutModule + "' envoyée",
+                                Toast.LENGTH_SHORT)
+                      .show();
+
+                    // Mode démo
+                    String reponseJson = "{\"idMachine\": " + idMachine + ", \"couleur\": \"" +
+                                         couleurAjoutModule + "\", \"etat\": false, \"actif\": true"
+                                         + "}";
+                    validerAjoutMachine("[" + reponseJson + "]");
+                }
+            }
+        });
+        ajoutModule.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which)
+            {
+            }
+        });
+
+        AlertDialog alert = ajoutModule.create();
+        alert.setCanceledOnTouchOutside(false);
+        alert.show();
+    }
+
+    /**
+     * @brief Méthode pour afficher la boîte de dialogue de suppression de module
+     */
+    private void afficherBoiteDialogueSuppressionModule(int numeroMachine)
+    {
+        if(modulesMachines.get(numeroMachine) == null)
+        {
+            Log.e(TAG, "afficherBoiteDialogueSuppressionModule() Aucune machine !");
+            return;
+        }
+
+        String nomModule = modulesMachines.get(numeroMachine).getNomModule();
+
+        AlertDialog.Builder boiteSuppression = new AlertDialog.Builder(this);
+        boiteSuppression.setMessage("Vous êtes sur le point de supprimer le module '" + nomModule +
+                                    "'.");
+        boiteSuppression.setPositiveButton("SUPPRIMER", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                // Emettre la requête DELETE à la station
+                String api =
+                  API_PATCH_MACHINES + "/" + modulesMachines.get(numeroMachine).getIdModule();
+                String json =
+                  "{\"idMachine\": " + modulesMachines.get(numeroMachine).getIdModule() + "}";
+                communication.emettreRequeteDELETE(api, json, handler);
+
+                // Notifier l'utilisateur
+                Toast
+                  .makeText(getApplicationContext(),
+                            "Demande de suppression du module '" + nomModule + "' envoyée",
+                            Toast.LENGTH_SHORT)
+                  .show();
+
+                // Mode démo
+                validerSuppressionMachine("[" + json + "]");
+            }
+        });
+        boiteSuppression.setNegativeButton("ANNULER", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which)
+            {
+            }
+        });
+
+        AlertDialog alert = boiteSuppression.create();
+        alert.setCanceledOnTouchOutside(false);
+        alert.show();
+    }
+
+    private void cacherMachine(int numeroMachine)
+    {
+        imagesMachines[numeroMachine].setVisibility(View.INVISIBLE);
+        imagesNotificationMachines[numeroMachine].setVisibility(View.INVISIBLE);
+        boutonsActivation[numeroMachine].setVisibility(View.INVISIBLE);
+        imagesParametres[numeroMachine].setVisibility(View.INVISIBLE);
+        boutonSupprimerModule[numeroMachine].setVisibility(View.INVISIBLE);
+    }
+
+    private void afficherMachine(int numeroMachine)
+    {
+        imagesMachines[numeroMachine].setVisibility(View.VISIBLE);
+        imagesNotificationMachines[numeroMachine].setVisibility(View.VISIBLE);
+        boutonsActivation[numeroMachine].setVisibility(View.VISIBLE);
+        imagesParametres[numeroMachine].setVisibility(View.VISIBLE);
+        boutonSupprimerModule[numeroMachine].setVisibility(View.VISIBLE);
+    }
+
+    private int getNumeroMachine(int idMachine)
+    {
+        for(int i = 0; i < modulesMachines.size(); ++i)
+        {
+            Module module = modulesMachines.get(i);
+            if(module.getIdModule() == idMachine)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private int rechercherIdDisponible()
+    {
+        for(int id = 1; id <= NB_MACHINES_MAX; id++)
+        {
+            if(!estPresent(id))
+                return id;
+        }
+        return 0; // pas d'id de disponible
+    }
+
+    private boolean estPresent(int id)
+    {
+        for(int i = 0; i < modulesMachines.size(); i++)
+        {
+            if(id == modulesMachines.get(i).getIdModule())
+                return true;
+        }
+        return false;
     }
 }
