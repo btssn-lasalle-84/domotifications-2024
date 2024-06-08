@@ -3,11 +3,777 @@ class FenetreMachine
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()");
 
+        initialiserBaseDeDonnees();
+        initialiserModulesMachines();
+        initialiserGUI();
+        initialiserHandler();
+        initialiserMinuteur();
+        initialiserCommunication();
+        recupererEtats();
+!!!156458.java!!!	initialiserBaseDeDonnees() : void
+        Log.d(TAG, "initialiserBaseDeDonnees()");
+        baseDeDonnees = BaseDeDonnees.getInstance(this);
+!!!156586.java!!!	initialiserModulesMachines() : void
+        Log.d(TAG, "initialiserModulesMachines()");
+        modulesMachines = baseDeDonnees.getMachines();
+        // nbModulesMachines = baseDeDonnees.getNbModulesMachines();
+        nbModulesMachines = modulesMachines.size();
+        Log.d(TAG, "nbModulesMachines = " + nbModulesMachines);
+!!!156714.java!!!	initialiserGUI() : void
         // contenu bord à bord
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_menu_machine);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+        ViewCompat.setOnApplyWindowInsetsListener(
+          findViewById(R.id.fenetreMachine),
+          (v, insets) -> {
+              Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+              v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+              return insets;
+          });
+
+        boutonAccueil = (ImageButton)findViewById(R.id.boutonAccueil);
+
+        imagesMachines    = new ImageView[NB_MACHINES_MAX];
+        imagesMachines[0] = (ImageView)findViewById(R.id.machine0);
+        imagesMachines[1] = (ImageView)findViewById(R.id.machine1);
+        imagesMachines[2] = (ImageView)findViewById(R.id.machine2);
+        imagesMachines[3] = (ImageView)findViewById(R.id.machine3);
+        imagesMachines[4] = (ImageView)findViewById(R.id.machine4);
+        imagesMachines[5] = (ImageView)findViewById(R.id.machine5);
+
+        imagesNotificationMachines    = new ImageView[NB_MACHINES_MAX];
+        imagesNotificationMachines[0] = (ImageView)findViewById(R.id.notificationMachine0);
+        imagesNotificationMachines[1] = (ImageView)findViewById(R.id.notificationMachine1);
+        imagesNotificationMachines[2] = (ImageView)findViewById(R.id.notificationMachine2);
+        imagesNotificationMachines[3] = (ImageView)findViewById(R.id.notificationMachine3);
+        imagesNotificationMachines[4] = (ImageView)findViewById(R.id.notificationMachine4);
+        imagesNotificationMachines[5] = (ImageView)findViewById(R.id.notificationMachine5);
+
+        boutonsActivation    = new Switch[NB_MACHINES_MAX];
+        boutonsActivation[0] = (Switch)findViewById(R.id.activationMachine0);
+        boutonsActivation[1] = (Switch)findViewById(R.id.activationMachine1);
+        boutonsActivation[2] = (Switch)findViewById(R.id.activationMachine2);
+        boutonsActivation[3] = (Switch)findViewById(R.id.activationMachine3);
+        boutonsActivation[4] = (Switch)findViewById(R.id.activationMachine4);
+        boutonsActivation[5] = (Switch)findViewById(R.id.activationMachine5);
+
+        imagesParametres    = new ImageView[NB_MACHINES_MAX];
+        imagesParametres[0] = (ImageView)findViewById(R.id.couleurMachine0);
+        imagesParametres[1] = (ImageView)findViewById(R.id.couleurMachine1);
+        imagesParametres[2] = (ImageView)findViewById(R.id.couleurMachine2);
+        imagesParametres[3] = (ImageView)findViewById(R.id.couleurMachine3);
+        imagesParametres[4] = (ImageView)findViewById(R.id.couleurMachine4);
+        imagesParametres[5] = (ImageView)findViewById(R.id.couleurMachine5);
+
+        boutonSupprimerModule    = new ImageView[NB_MACHINES_MAX];
+        boutonSupprimerModule[0] = (ImageView)findViewById(R.id.boutonSupprimerMachine0);
+        boutonSupprimerModule[1] = (ImageView)findViewById(R.id.boutonSupprimerMachine1);
+        boutonSupprimerModule[2] = (ImageView)findViewById(R.id.boutonSupprimerMachine2);
+        boutonSupprimerModule[3] = (ImageView)findViewById(R.id.boutonSupprimerMachine3);
+        boutonSupprimerModule[4] = (ImageView)findViewById(R.id.boutonSupprimerMachine4);
+        boutonSupprimerModule[5] = (ImageView)findViewById(R.id.boutonSupprimerMachine5);
+
+        boutonAjouterModule = (ImageView)findViewById(R.id.boutonAjouterModule);
+
+        for(int i = 0; i < NB_MACHINES_MAX; ++i)
+        {
+            int idMachine = i;
+            imagesParametres[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    Intent intent = new Intent(FenetreMachine.this, ParametresModule.class);
+                    intent.putExtra("idModule", modulesMachines.get(idMachine).getIdModule());
+                    intent.putExtra("nom", modulesMachines.get(idMachine).getNomModule());
+                    intent.putExtra("couleur", modulesMachines.get(idMachine).getCouleur());
+                    startActivityForResult(intent, PARAMETRAGE_MODULE);
+                }
+            });
+
+            imagesMachines[i].setImageResource(IMAGE_MACHINES[i]);
+
+            imagesNotificationMachines[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    gererClicBoutonNotification(idMachine);
+                }
+            });
+
+            imagesMachines[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    gererClicBoutonNotification(idMachine);
+                }
+            });
+
+            boutonSupprimerModule[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    Log.d(TAG, "afficherBoiteDialogueSuppressionModule()");
+                    afficherBoiteDialogueSuppressionModule(idMachine);
+                }
+            });
+        }
+
+        for(int i = 0; i < NB_MACHINES_MAX; ++i)
+        {
+            cacherMachine(i);
+        }
+
+        for(int i = 0; i < nbModulesMachines; ++i)
+        {
+            afficherMachine(i);
+        }
+
+        for(int i = 0; i < nbModulesMachines; i++)
+        {
+            final int numeroMachine = i;
+
+            // initialise la GUI en fonction de l'état de notification
+            if(modulesMachines.get(i).estNotifie())
+            {
+                imagesNotificationMachines[i].setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                imagesNotificationMachines[i].setVisibility(View.INVISIBLE);
+            }
+
+            // initialise la GUI en fonction de l'état d'activation
+            if(modulesMachines.get(i).estActif())
+            {
+                boutonsActivation[i].setChecked(true);
+                imagesNotificationMachines[i].setEnabled(true);
+                imagesMachines[i].setEnabled(true);
+            }
+            else
+            {
+                boutonsActivation[i].setChecked(false);
+                imagesNotificationMachines[i].setEnabled(false);
+                imagesMachines[i].setEnabled(false);
+            }
+
+            boutonsActivation[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    gererClicBoutonActivation(numeroMachine);
+                }
+            });
+        }
+
+        boutonAccueil.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)
+            {
+                Log.d(TAG, "clic boutonAccueil");
+                finish();
+            }
         });
+
+        boutonAjouterModule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                afficherBoiteDialogueAjoutModule();
+            }
+        });
+!!!156842.java!!!	initialiserHandler() : void
+        Log.d(TAG, "initialiserHandler()");
+        this.handler = new Handler(this.getMainLooper()) {
+            @Override
+            public void handleMessage(Message message)
+            {
+                // Log.d(TAG, "[Handler] message what = " + message.what);
+                // Log.d(TAG, "[Handler] message obj = " + message.obj.toString());
+
+                switch(message.what)
+                {
+                    case Communication.CODE_HTTP_REPONSE_JSON:
+                        // Log.d(TAG, "[Handler] REPONSE JSON");
+                        traiterReponseJSON(message.obj.toString());
+                        erreurCommunication = false;
+                        break;
+                    case Communication.CODE_HTTP_REPONSE_PATCH:
+                        Log.d(TAG, "[Handler] REPONSE PATCH");
+                        traiterReponseJSON(message.obj.toString());
+                        enregistrerAcquittementNotification(message.obj.toString());
+                        erreurCommunication = false;
+                        break;
+                    case Communication.CODE_HTTP_REPONSE_POST:
+                        Log.d(TAG, "[Handler] REPONSE POST");
+                        validerAjoutMachine(message.obj.toString());
+                        erreurCommunication = false;
+                        break;
+                    case Communication.CODE_HTTP_REPONSE_DELETE:
+                        Log.d(TAG, "[Handler] REPONSE DELETE");
+                        validerSuppressionMachine(message.obj.toString());
+                        erreurCommunication = false;
+                        break;
+                    case Communication.CODE_HTTP_ERREUR:
+                        if(!erreurCommunication)
+                        {
+                            Log.d(TAG, "[Handler] ERREUR HTTP");
+                            afficherErreur("Impossible de communiquer avec la station !");
+                            erreurCommunication = true;
+                        }
+                        break;
+                }
+            }
+        };
+!!!156970.java!!!	initialiserMinuteur() : void
+        Log.d(TAG, "initialiserMinuteur()");
+        minuteur = new Timer();
+!!!157098.java!!!	initialiserCommunication() : void
+        Log.d(TAG, "initialiserCommunication()");
+        // On récupère l'URL de la station dans la base de données
+        // communication = Communication.getInstance(this);
+        // ou on indique l'adresse de la station :
+        communication = Communication.getInstance(Communication.ADRESSE_IP_STATION, this);
+!!!157226.java!!!	gererClicBoutonNotification(in numeroMachine : int) : void
+        if(modulesMachines.get(numeroMachine) == null)
+        {
+            Log.e(TAG, "gererClicBoutonNotification() Aucune machine !");
+            return;
+        }
+        Log.d(TAG,
+              "gererClicBoutonNotification() numeroMachine = " + numeroMachine +
+                " idMachine = " + modulesMachines.get(numeroMachine).getIdModule() +
+                " notification = " + modulesMachines.get(numeroMachine).estNotifie() +
+                " activation = " + modulesMachines.get(numeroMachine).estActif());
+
+        if(modulesMachines.get(numeroMachine).estActif())
+        {
+            if(modulesMachines.get(numeroMachine).estNotifie())
+            {
+                /*
+                Exemple :
+                $ curl --location 'http://station-lumineuse.local:80/machines/3' --request PATCH
+                --header 'Content-Type: application/json' --data '{"idMachine": "1","etat": false}'
+                */
+                numeroMachineAcquittement = numeroMachine;
+                String api =
+                  API_PATCH_MACHINES + "/" + modulesMachines.get(numeroMachine).getIdModule();
+                String json = "{\"idMachine\": \"" +
+                              modulesMachines.get(numeroMachine).getIdModule() +
+                              "\",\"etat\": false}";
+                communication.emettreRequetePATCH(api, json, handler);
+            }
+        }
+!!!157354.java!!!	gererClicBoutonActivation(in numeroMachine : int) : void
+        if(modulesMachines.get(numeroMachine) == null)
+        {
+            Log.e(TAG, "gererClicBoutonActivation() Aucune machine !");
+            return;
+        }
+        Log.d(TAG,
+              "gererClicBoutonActivation() numeroMachine = " + numeroMachine +
+                " activation = " + boutonsActivation[numeroMachine].isChecked());
+
+        String api = API_PATCH_MACHINES + "/" + modulesMachines.get(numeroMachine).getIdModule();
+
+        String json = "{\"idMachine\": \"" + modulesMachines.get(numeroMachine).getIdModule() +
+                      "\",\"actif\": " + boutonsActivation[numeroMachine].isChecked() + "}";
+
+        communication.emettreRequetePATCH(api, json, handler);
+
+        modulesMachines.get(numeroMachine).setActif(boutonsActivation[numeroMachine].isChecked());
+
+        if(modulesMachines.get(numeroMachine).estActif())
+        {
+            imagesMachines[numeroMachine].setEnabled(true);
+            imagesNotificationMachines[numeroMachine].setEnabled(true);
+        }
+        else
+        {
+            imagesMachines[numeroMachine].setEnabled(false);
+            imagesNotificationMachines[numeroMachine].setEnabled(false);
+        }
+!!!157482.java!!!	recupererEtats() : void
+        Log.d(TAG, "recupererEtats()");
+        tacheRecuperationEtats = new TimerTask() {
+            public void run()
+            {
+                communication.emettreRequeteGET(Communication.API_GET_MACHINES, handler);
+            }
+        };
+
+        // toutes les secondes (en attente de l'implémentation de la websocket)
+        minuteur.schedule(tacheRecuperationEtats, INTERVALLE, INTERVALLE);
+!!!157610.java!!!	traiterReponseJSON(in reponse : String) : void
+        // Log.d(TAG, "traiterReponseJSON() reponse = " + reponse);
+        /*
+            Exemple de réponse : pour la requête GET /machines
+            body =
+            [
+                {"idMachine":1,"couleur":"#FF0000","etat":false,"actif":true},
+                {"idMachine":2,"couleur":"#FFFF00","etat":false,"actif":true},
+                {"idMachine":3,"couleur":"#0000FF","etat":false,"actif":true},
+                {"idMachine":4,"couleur":"#F0F0F2","etat":false,"actif":true},
+            ]
+        */
+        JSONArray json = null;
+
+        try
+        {
+            json = new JSONArray(reponse);
+            for(int i = 0; i < json.length(); ++i)
+            {
+                JSONObject machines  = json.getJSONObject(i);
+                int        idMachine = machines.getInt("idMachine");
+                String     couleur   = machines.getString("couleur");
+                Boolean    etat      = machines.getBoolean("etat");
+                Boolean    actif     = machines.getBoolean("actif");
+                // Log.d(TAG, "traiterReponseJSON() idMachine = " + idMachine + " couleur = " +
+                // couleur + " etat = " + etat + " actif = " + actif);
+                for(int j = 0; j < modulesMachines.size(); ++j)
+                {
+                    Module module = modulesMachines.get(j);
+                    if(module.getIdModule() == idMachine &&
+                       module.getTypeModule() == Module.TypeModule.Machine)
+                    {
+                        module.setCouleur(couleur);
+                        module.setActif(actif);
+                        module.setEtatNotification(etat);
+                        mettreAJourModule(j);
+                        break;
+                    }
+                }
+            }
+        }
+        catch(JSONException e)
+        {
+            e.printStackTrace();
+        }
+!!!157738.java!!!	validerAjoutMachine(in reponse : String) : void
+        Log.d(TAG, "validerAjoutMachine() reponse = " + reponse);
+        /*
+            Exemple de réponse : pour la requête POST
+            body =
+            [
+                {"idMachine":5,"couleur":"#FF0000","etat":false,"actif":false}
+            ]
+        */
+        JSONArray json = null;
+
+        try
+        {
+            json                 = new JSONArray(reponse);
+            JSONObject machine   = json.getJSONObject(0);
+            int        idMachine = machine.getInt("idMachine");
+            String     couleur   = machine.getString("couleur");
+            Boolean    etat      = machine.getBoolean("etat");
+            Boolean    actif     = machine.getBoolean("actif");
+            Log.d(TAG,
+                  "validerAjoutMachine() idMachine = " + idMachine + " couleur = " + couleur +
+                    " etat = " + etat + " actif = " + actif);
+            Module module = new Module(idMachine,
+                                       nomAjoutModule,
+                                       Module.TypeModule.Machine,
+                                       actif,
+                                       etat,
+                                       couleur,
+                                       baseDeDonnees);
+            modulesMachines.add(module);
+            baseDeDonnees.insererModule(module.getIdModule(),
+                                        module.getTypeModule().ordinal() + 1,
+                                        module.getNomModule(),
+                                        module.estActif(),
+                                        module.getCouleur());
+            afficherMachine(nbModulesMachines);
+            int numeroMachine = getNumeroMachine(module.getIdModule());
+            mettreAJourModule(numeroMachine);
+            nomAjoutModule    = "";
+            nbModulesMachines = modulesMachines.size();
+            Log.d(TAG, "validerAjoutMachine() nbModulesMachines = " + nbModulesMachines);
+        }
+        catch(JSONException e)
+        {
+            e.printStackTrace();
+        }
+!!!157866.java!!!	validerSuppressionMachine(in reponse : String) : void
+        Log.d(TAG, "validerSuppressionMachine() reponse = " + reponse);
+        /*
+            Exemple de réponse : pour la requête DELETE
+            body =
+            [
+                {"idMachine":5}
+            ]
+        */
+        JSONArray json = null;
+
+        try
+        {
+            json                 = new JSONArray(reponse);
+            JSONObject machines  = json.getJSONObject(0);
+            int        idMachine = machines.getInt("idMachine");
+            Log.d(TAG, "validerSuppressionMachine() idMachine = " + idMachine);
+            int numeroMachine = getNumeroMachine(idMachine);
+            if(numeroMachine == -1)
+            {
+                Log.d(TAG, "validerSuppressionMachine() idMachine introuvable !");
+                return;
+            }
+            Module module = modulesMachines.get(numeroMachine);
+            baseDeDonnees.supprimerModule(idMachine, module.getTypeModule().ordinal() + 1);
+            modulesMachines.remove(module);
+            cacherMachine(numeroMachine);
+            nbModulesMachines = modulesMachines.size();
+            Log.d(TAG, "validerSuppressionMachine() nbModulesMachines = " + nbModulesMachines);
+        }
+        catch(JSONException e)
+        {
+            e.printStackTrace();
+        }
+!!!157994.java!!!	enregistrerAcquittementNotification(in reponse : String) : void
+        if(numeroMachineAcquittement == -1)
+        {
+            return;
+        }
+        if(modulesMachines.get(numeroMachineAcquittement) == null)
+        {
+            Log.e(TAG, "enregistrerAcquittementNotification() : Aucune machine !");
+            return;
+        }
+        Log.d(TAG, "enregistrerAcquittementNotification() reponse = " + reponse);
+        /*
+            Exemple de réponsee : pour la requête PATCH /machines/3
+            body =
+            [
+                {"idMachine":1,"couleur":"#FF0000","etat":false,"actif":true}
+            ]
+        */
+        JSONArray json = null;
+
+        try
+        {
+            json = new JSONArray(reponse);
+            if(json.length() > 0)
+            {
+                JSONObject machines  = json.getJSONObject(0);
+                int        idMachine = machines.getInt("idMachine");
+                String     couleur   = machines.getString("couleur");
+                Boolean    etat      = machines.getBoolean("etat");
+                Boolean    actif     = machines.getBoolean("actif");
+                Log.d(TAG,
+                      "enregistrerAcquittementNotification() idMachine = " + idMachine +
+                        " couleur = " + couleur + " etat = " + etat + " actif = " + actif);
+
+                Module module = modulesMachines.get(numeroMachineAcquittement);
+                if(module.getIdModule() == idMachine &&
+                   module.getTypeModule() == Module.TypeModule.Machine && !etat)
+                {
+                    baseDeDonnees.enregistrerAcquittementNotification(
+                      module.getIdModule(),
+                      module.getTypeModule().ordinal(),
+                      true);
+                    numeroMachineAcquittement = -1;
+                }
+            }
+        }
+        catch(JSONException e)
+        {
+            e.printStackTrace();
+        }
+!!!158122.java!!!	mettreAJourModule(in numeroMachine : int) : void
+        if(modulesMachines.get(numeroMachine) == null)
+        {
+            Log.e(TAG, "Aucune machine");
+            return;
+        }
+
+        Module module    = modulesMachines.get(numeroMachine);
+        int    idMachine = module.getIdModule();
+
+        if(module.estActif())
+        {
+            if(module.estNotifie())
+            {
+                imagesNotificationMachines[numeroMachine].setVisibility(View.VISIBLE);
+                Boolean notificationEnvoyee = notificationsEnvoyees.get(idMachine);
+                if(notificationEnvoyee == null || !notificationEnvoyee)
+                {
+                    // On signale une notification sur la tablette Android
+                    creerNotification("Le module " + module.getNomModule() +
+                                      " a une notification.");
+                    notificationsEnvoyees.put(idMachine, true);
+                }
+            }
+            else
+            {
+                imagesNotificationMachines[numeroMachine].setVisibility(View.INVISIBLE);
+                notificationsEnvoyees.put(idMachine, false);
+            }
+
+            boutonsActivation[numeroMachine].setChecked(true);
+            imagesNotificationMachines[numeroMachine].setEnabled(true);
+            imagesMachines[numeroMachine].setEnabled(true);
+
+            // Toast.makeText(getApplicationContext(), "Module activé", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            boutonsActivation[numeroMachine].setChecked(false);
+            imagesNotificationMachines[numeroMachine].setEnabled(false);
+            imagesMachines[numeroMachine].setEnabled(false);
+
+            // Toast.makeText(getApplicationContext(), "Module désactivé",
+            // Toast.LENGTH_SHORT).show();
+        }
+!!!158250.java!!!	creerNotification(in message : String) : void
+        String titreNotification = getNomApplication(getApplicationContext());
+        String texteNotification = message;
+
+        NotificationManager notificationManager =
+          (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Si >= API26, obligation de créer un canal de notifications
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            CharSequence        name        = getString(R.string.app_name);
+            String              description = "Notification domotifications";
+            int                 importance  = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel =
+              new NotificationChannel("domotifications_id", name, importance);
+            channel.setDescription(description);
+            channel.setImportance(NotificationManager.IMPORTANCE_DEFAULT);
+            notificationManager = (NotificationManager)getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        NotificationCompat.Builder notification =
+          new NotificationCompat.Builder(this, "domotifications_id")
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle(titreNotification)
+            .setContentText(texteNotification)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        // On pourrait ici crée une autre activité
+        PendingIntent pendingIntent =
+          PendingIntent.getActivity(this, 0, new Intent(), PendingIntent.FLAG_IMMUTABLE);
+
+        notification.setContentIntent(pendingIntent);
+        notification.setAutoCancel(true);
+        notification.setVibrate(new long[] { 0, 200, 100, 200, 100, 200 });
+
+        // Si >= API26
+        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
+        {
+            notificationManager.notify(idNotification, notification.build());
+        }
+        else
+        {
+            NotificationManagerCompat.from(this).notify(idNotification, notification.build());
+        }
+!!!158378.java!!!	getNomApplication(inout context : Context) : String
+        int stringId = context.getApplicationInfo().labelRes;
+        return context.getString(stringId);
+!!!158506.java!!!	afficherErreur(in message : String) : void
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+!!!158634.java!!!	verifierPermissionNotification() : boolean
+        if(ContextCompat.checkSelfPermission(this,
+                                             android.Manifest.permission.POST_NOTIFICATIONS) ==
+           PackageManager.PERMISSION_GRANTED)
+        {
+            Log.d(TAG,
+                  "verifierPermissionNotification() permission notification = PERMISSION_GRANTED");
+            return true;
+        }
+        else
+        {
+            Log.d(TAG,
+                  "verifierPermissionNotification() permission notification = PERMISSION_DENIED");
+            ActivityCompat.requestPermissions(
+              this,
+              new String[] { Manifest.permission.POST_NOTIFICATIONS },
+              101);
+        }
+        return false;
+!!!158762.java!!!	onActivityResult(in requestCode : int, in resultCode : int, inout data : Intent) : void
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG,
+              "onActivityResult() requestCode = " + requestCode + " - resultCode = " + resultCode);
+        if(requestCode == PARAMETRAGE_MODULE)
+        {
+            if(resultCode == RESULT_OK)
+            {
+                if(data != null)
+                {
+                    int    idModule      = data.getIntExtra("idModule", -1);
+                    String nomModule     = data.getStringExtra("nom");
+                    String couleurModule = data.getStringExtra("couleur");
+                    Log.d(TAG,
+                          "onActivityResult() idModule = " + idModule +
+                            " - nomModule : " + nomModule + " - couleurModule = " + couleurModule);
+
+                    if(idModule != -1)
+                    {
+                        int    numeroModule = getNumeroMachine(idModule);
+                        Module module       = modulesMachines.get(numeroModule);
+                        if(module != null)
+                        {
+                            if(!module.getNomModule().equals(nomModule))
+                            {
+                                module.setNomModule(nomModule);
+                                baseDeDonnees.modifierNomModule(module.getIdModule(),
+                                                                module.getTypeModule().ordinal() +
+                                                                  1,
+                                                                nomModule);
+                            }
+                            module.setCouleur(couleurModule);
+                        }
+                    }
+
+                    String api  = API_PATCH_MACHINES + "/" + idModule;
+                    String json = "{\"idMachine\": \"" + idModule + "\",\"couleur\": \"" +
+                                  couleurModule + "\"}";
+                    communication.emettreRequetePATCH(api, json, handler);
+                }
+            }
+        }
+!!!158890.java!!!	afficherBoiteDialogueAjoutModule() : void
+        Log.d(TAG, "afficherBoiteDialogueAjoutModule()");
+        AlertDialog.Builder ajoutModule     = new AlertDialog.Builder(this);
+        LayoutInflater      factory         = LayoutInflater.from(this);
+        final View          ajoutModuleView = factory.inflate(R.layout.ajout_module, null);
+        ajoutModule.setView(ajoutModuleView);
+        ajoutModule.setTitle("Ajouter un nouveau module");
+        ajoutModule.setPositiveButton("Valider", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                // Lorsque l'on cliquera sur le bouton "OK", on récupère l'EditText correspondant à
+                // la vue personnalisée (cad à ajoutModuleView)
+                EditText nomModule = (EditText)ajoutModuleView.findViewById(R.id.editTextNom);
+                if(!nomModule.getText().toString().isEmpty())
+                    nomAjoutModule = nomModule.getText().toString().trim();
+                else
+                    nomAjoutModule = "machine";
+                Log.d(TAG, "afficherBoiteDialogueAjoutModule() nomModule = " + nomAjoutModule);
+                TextInputEditText couleurModule =
+                  (TextInputEditText)ajoutModuleView.findViewById(R.id.editTextCouleurHTML);
+                String couleurAjoutModule = "#00FF00";
+                if(!couleurModule.getText().toString().trim().isEmpty())
+                    couleurAjoutModule = couleurModule.getText().toString().trim();
+                Log.d(TAG,
+                      "afficherBoiteDialogueAjoutModule() couleurAjoutModule = " +
+                        couleurAjoutModule);
+
+                // Préparer et émettre la requête POST à la station
+                int idMachine = rechercherIdDisponible();
+                Log.d(TAG, "afficherBoiteDialogueAjoutModule() idMachine = " + idMachine);
+                // si idMachine = 0 alors la station choisira l'idMachine à ajouter sinon c'est
+                // l'application qui le détermine
+
+                // Mode démo
+                if(idMachine > 0)
+                {
+                    String api  = API_PATCH_MACHINES;
+                    String json = "{\"idMachine\": " + idMachine + ", \"couleur\": \"" +
+                                  couleurAjoutModule + "\", \"actif\": true"
+                                  + "}";
+                    communication.emettreRequetePOST(api, json, handler);
+
+                    // Notifier l'utilisateur
+                    Toast
+                      .makeText(getApplicationContext(),
+                                "Demande d'ajout du module '" + nomAjoutModule + "' envoyée",
+                                Toast.LENGTH_SHORT)
+                      .show();
+
+                    // Mode démo
+                    String reponseJson = "{\"idMachine\": " + idMachine + ", \"couleur\": \"" +
+                                         couleurAjoutModule + "\", \"etat\": false, \"actif\": true"
+                                         + "}";
+                    validerAjoutMachine("[" + reponseJson + "]");
+                }
+            }
+        });
+        ajoutModule.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which)
+            {
+            }
+        });
+
+        AlertDialog alert = ajoutModule.create();
+        alert.setCanceledOnTouchOutside(false);
+        alert.show();
+!!!159018.java!!!	afficherBoiteDialogueSuppressionModule(in numeroMachine : int) : void
+        if(modulesMachines.get(numeroMachine) == null)
+        {
+            Log.e(TAG, "afficherBoiteDialogueSuppressionModule() Aucune machine !");
+            return;
+        }
+
+        String nomModule = modulesMachines.get(numeroMachine).getNomModule();
+
+        AlertDialog.Builder boiteSuppression = new AlertDialog.Builder(this);
+        boiteSuppression.setMessage("Vous êtes sur le point de supprimer le module '" + nomModule +
+                                    "'.");
+        boiteSuppression.setPositiveButton("SUPPRIMER", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                // Emettre la requête DELETE à la station
+                String api =
+                  API_PATCH_MACHINES + "/" + modulesMachines.get(numeroMachine).getIdModule();
+                String json =
+                  "{\"idMachine\": " + modulesMachines.get(numeroMachine).getIdModule() + "}";
+                communication.emettreRequeteDELETE(api, json, handler);
+
+                // Notifier l'utilisateur
+                Toast
+                  .makeText(getApplicationContext(),
+                            "Demande de suppression du module '" + nomModule + "' envoyée",
+                            Toast.LENGTH_SHORT)
+                  .show();
+
+                // Mode démo
+                validerSuppressionMachine("[" + json + "]");
+            }
+        });
+        boiteSuppression.setNegativeButton("ANNULER", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which)
+            {
+            }
+        });
+
+        AlertDialog alert = boiteSuppression.create();
+        alert.setCanceledOnTouchOutside(false);
+        alert.show();
+!!!159146.java!!!	cacherMachine(in numeroMachine : int) : void
+        imagesMachines[numeroMachine].setVisibility(View.INVISIBLE);
+        imagesNotificationMachines[numeroMachine].setVisibility(View.INVISIBLE);
+        boutonsActivation[numeroMachine].setVisibility(View.INVISIBLE);
+        imagesParametres[numeroMachine].setVisibility(View.INVISIBLE);
+        boutonSupprimerModule[numeroMachine].setVisibility(View.INVISIBLE);
+!!!159274.java!!!	afficherMachine(in numeroMachine : int) : void
+        imagesMachines[numeroMachine].setVisibility(View.VISIBLE);
+        imagesNotificationMachines[numeroMachine].setVisibility(View.VISIBLE);
+        boutonsActivation[numeroMachine].setVisibility(View.VISIBLE);
+        imagesParametres[numeroMachine].setVisibility(View.VISIBLE);
+        boutonSupprimerModule[numeroMachine].setVisibility(View.VISIBLE);
+!!!159402.java!!!	getNumeroMachine(in idMachine : int) : int
+        for(int i = 0; i < modulesMachines.size(); ++i)
+        {
+            Module module = modulesMachines.get(i);
+            if(module.getIdModule() == idMachine)
+            {
+                return i;
+            }
+        }
+        return -1;
+!!!159530.java!!!	rechercherIdDisponible() : int
+        for(int id = 1; id <= NB_MACHINES_MAX; id++)
+        {
+            if(!estPresent(id))
+                return id;
+        }
+        return 0; // pas d'id de disponible
+!!!159658.java!!!	estPresent(in id : int) : boolean
+        for(int i = 0; i < modulesMachines.size(); i++)
+        {
+            if(id == modulesMachines.get(i).getIdModule())
+                return true;
+        }
+        return false;

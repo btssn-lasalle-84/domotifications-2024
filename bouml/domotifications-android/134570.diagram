@@ -1,0 +1,54 @@
+format 224
+
+classcanvas 128042 class_ref 128535 // IHM
+  classdiagramsettings member_max_width 0 end
+  color lightmediumblue
+  xyz 41 37 2000
+end
+classcanvas 128170 class_ref 128151 // Communication
+  classdiagramsettings member_max_width 0 end
+  xyz 185 1000 3005
+end
+classcanvas 128938 class_ref 128407 // Module
+  classdiagramsettings member_max_width 0 end
+  xyz 961 36 2000
+end
+classcanvas 129066 class_ref 141354 // BaseDeDonnees
+  classdiagramsettings member_max_width 0 end
+  xyz 1312 591 3011
+end
+relationcanvas 128298 relation_ref 148522 // <unidirectional association>
+  from ref 128170 z 3006 to point 155 1000
+  line 128426 z 3006 to point 155 1030
+  line 128554 z 3006 to ref 128170
+  role_a_pos 51 1034 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 128682 relation_ref 149802 // <unidirectional association>
+  from ref 128042 z 3006 to ref 128170
+  role_a_pos 501 974 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129194 relation_ref 141610 // <unidirectional association>
+  from ref 129066 z 3012 to point 1282 591
+  line 129322 z 3012 to point 1282 621
+  line 129450 z 3012 to ref 129066
+  role_a_pos 1165 619 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129578 relation_ref 141866 // <unidirectional association>
+  from ref 128042 z 3012 to ref 129066
+  role_a_pos 1165 733 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129706 relation_ref 148650 // <unidirectional association>
+  from ref 128170 z 3012 to ref 129066
+  role_a_pos 1165 1067 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129834 relation_ref 149930 // <unidirectional association>
+  from ref 128938 z 3012 to ref 129066
+  role_a_pos 1813 565 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+end
