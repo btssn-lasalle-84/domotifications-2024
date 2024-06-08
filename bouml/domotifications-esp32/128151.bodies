@@ -1,18 +1,18 @@
-class Poubelle
-!!!137386.cpp!!!	getId() : int
+class Boite
+!!!134570.cpp!!!	getId() : int
     return id;
-!!!137514.cpp!!!	getCouleurLed() : uint32_t
+!!!134698.cpp!!!	getCouleurLed() : uint32_t
     return couleurLed;
-!!!128535.cpp!!!	getActivation() : bool
+!!!134826.cpp!!!	getActivation() : bool
     return activation;
-!!!128663.cpp!!!	setActivation(in etat : bool) : void
+!!!134954.cpp!!!	setActivation(in etat : bool) : void
     if(etat != activation)
     {
         activation = etat;
     }
-!!!128791.cpp!!!	getEtatNotification() : bool
+!!!135082.cpp!!!	getEtatNotification() : bool
     return notification;
-!!!128919.cpp!!!	setEtatNotification(in etat : bool) : void
+!!!135210.cpp!!!	setEtatNotification(in etat : bool) : void
     if(etat != notification)
     {
         notification = etat;
@@ -25,24 +25,24 @@ class Poubelle
             eteindreNotification();
         }
     }
-!!!129047.cpp!!!	resetEtatNotification() : void
+!!!135338.cpp!!!	resetEtatNotification() : void
     setEtatNotification(false);
-!!!129175.cpp!!!	allumerNotification() : void
+!!!135466.cpp!!!	allumerNotification() : void
     if(activation)
     {
-        leds.setPixelColor(INDEX_LEDS_NOTIFICATION_POUBELLES + numeroLed,
+        leds.setPixelColor(INDEX_LEDS_NOTIFICATION_BOITE + numeroLed,
                            couleurLed); // Appliquer la couleur correspondante
         leds.show();
     }
-!!!129303.cpp!!!	eteindreNotification() : void
+!!!135594.cpp!!!	eteindreNotification() : void
     if(activation)
     {
-        leds.setPixelColor(INDEX_LEDS_NOTIFICATION_POUBELLES + numeroLed, leds.Color(0, 0, 0));
+        leds.setPixelColor(INDEX_LEDS_NOTIFICATION_BOITE + numeroLed, leds.Color(0, 0, 0));
         leds.show();
     }
-!!!137642.cpp!!!	getCouleur() : String
+!!!135722.cpp!!!	getCouleur() : String
     return StationLumineuse::getCouleurToString(couleurLed);
-!!!137770.cpp!!!	setCouleurLed(in couleur : String) : void
+!!!135850.cpp!!!	setCouleurLed(in couleur : String) : void
     uint32_t couleurLed = StationLumineuse::getCouleurToRGB(couleur);
     if(couleurLed != this->couleurLed && couleurLed != 0)
     {
