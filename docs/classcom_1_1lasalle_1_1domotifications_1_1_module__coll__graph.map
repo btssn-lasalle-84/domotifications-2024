@@ -1,0 +1,5 @@
+<map id="com.lasalle.domotifications.Module" name="com.lasalle.domotifications.Module">
+<area shape="rect" id="node1" title=" " alt="" coords="101,424,308,765"/>
+<area shape="rect" id="node2" href="$enumcom_1_1lasalle_1_1domotifications_1_1_module_1_1_type_module.html" title=" " alt="" coords="5,115,212,251"/>
+<area shape="rect" id="node3" href="$classcom_1_1lasalle_1_1domotifications_1_1_base_de_donnees.html" title="La classe assurant la gestion de la base de données SQLite &quot;domotifications.db&quot;." alt="" coords="236,5,517,361"/>
+</map>

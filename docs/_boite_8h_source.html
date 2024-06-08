@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Projet domotifications:  Fichier source de Boite.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="customdoxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="projet-logo.png"/></td>
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Projet domotifications
+   &#160;<span id="projectnumber">1.0</span>
+   </div>
+   <div id="projectbrief">BTS SNIR LaSalle Avignon 2024</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.9.1 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Recherche','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','Recherche');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_boite_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="headertitle">
+<div class="title">Boite.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_boite_8h.html">Aller à la documentation de ce fichier.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef BOITE_H</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define BOITE_H</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;Arduino.h&gt;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;Adafruit_NeoPixel.h&gt;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
+<div class="line"><a name="l00007"></a><span class="lineno"><a class="line" href="class_boite.html">    7</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_boite.html">Boite</a></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;{</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="class_boite.html#ae613a56ef3e9a7a809c5aac5b234d4c0">   10</a></span>&#160;    <span class="keywordtype">int</span>                <a class="code" href="class_boite.html#ae613a56ef3e9a7a809c5aac5b234d4c0">id</a>;</div>
+<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="class_boite.html#aba4b86299bae740cefd3e050f57de3b6">   11</a></span>&#160;    <span class="keywordtype">int</span>                <a class="code" href="class_boite.html#aba4b86299bae740cefd3e050f57de3b6">numeroLed</a>;</div>
+<div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="class_boite.html#aae70e531c54056dbbe787a9cb4868922">   12</a></span>&#160;    uint32_t           <a class="code" href="class_boite.html#aae70e531c54056dbbe787a9cb4868922">couleurLed</a>;</div>
+<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="class_boite.html#a8636de9265f742fcf3cf47d41bf9c9e6">   13</a></span>&#160;    <span class="keywordtype">bool</span>               <a class="code" href="class_boite.html#a8636de9265f742fcf3cf47d41bf9c9e6">activation</a>;</div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="class_boite.html#a4e97bf613e80957f1e5abcc80d9f08ab">   14</a></span>&#160;    <span class="keywordtype">bool</span>               <a class="code" href="class_boite.html#a4e97bf613e80957f1e5abcc80d9f08ab">notification</a>;</div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="class_boite.html#ac4638bfd1c85fcfe00372786432ac799">   15</a></span>&#160;    Adafruit_NeoPixel&amp; <a class="code" href="class_boite.html#ac4638bfd1c85fcfe00372786432ac799">leds</a>; </div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <a class="code" href="class_boite.html#a6cf507167dc122486fd5e7b8f3bcb704">Boite</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>, <span class="keywordtype">int</span> <a class="code" href="class_boite.html#aba4b86299bae740cefd3e050f57de3b6">numeroLed</a>, uint32_t <a class="code" href="class_boite.html#aae70e531c54056dbbe787a9cb4868922">couleurLed</a>, Adafruit_NeoPixel&amp; <a class="code" href="class_boite.html#ac4638bfd1c85fcfe00372786432ac799">leds</a>);</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="keywordtype">int</span>      <a class="code" href="class_boite.html#a18647787b08d356726e8e9bf5067f6d6">getId</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    uint32_t <a class="code" href="class_boite.html#a2eb2e7e4dacaa4f27bbb26a84e1ee8cf">getCouleurLed</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="keywordtype">bool</span>     <a class="code" href="class_boite.html#af81b19a589803fadef3b60fc7f478b42">getActivation</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="keywordtype">void</span>     <a class="code" href="class_boite.html#abab74190cc21cfbec4c8ec45b5a6354d">setActivation</a>(<span class="keywordtype">bool</span> etat);</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keywordtype">bool</span>     <a class="code" href="class_boite.html#a84a0d6075872d58c16b099c268a8f81c">getEtatNotification</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keywordtype">void</span>     <a class="code" href="class_boite.html#ad94ab1caf2b5d4c80b6319f2997184c6">setEtatNotification</a>(<span class="keywordtype">bool</span> etat);</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keywordtype">void</span>     <a class="code" href="class_boite.html#a4a3a50dc870c13db64f3dd7e2e094d15">resetEtatNotification</a>();</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keywordtype">void</span>     <a class="code" href="class_boite.html#a652fcfe0104ed920ea74e0ccc8da70d5">allumerNotification</a>();</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keywordtype">void</span>     <a class="code" href="class_boite.html#a0d9c6efe9bb9ed832f2103f215a9b3e8">eteindreNotification</a>();</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    String   <a class="code" href="class_boite.html#ac1cc4dab6f4c577b01af2a2518d20b06">getCouleur</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keywordtype">void</span>     <a class="code" href="class_boite.html#a2ea656957343f7b9cd16f475a8108574">setCouleurLed</a>(String couleur);</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;};</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// BOITE_H</span></div>
+<div class="ttc" id="aclass_boite_html"><div class="ttname"><a href="class_boite.html">Boite</a></div><div class="ttdef"><b>Definition:</b> <a href="_boite_8h_source.html#l00007">Boite.h:8</a></div></div>
+<div class="ttc" id="aclass_boite_html_a0d9c6efe9bb9ed832f2103f215a9b3e8"><div class="ttname"><a href="class_boite.html#a0d9c6efe9bb9ed832f2103f215a9b3e8">Boite::eteindreNotification</a></div><div class="ttdeci">void eteindreNotification()</div><div class="ttdef"><b>Definition:</b> <a href="_boite_8cpp_source.html#l00070">Boite.cpp:70</a></div></div>
+<div class="ttc" id="aclass_boite_html_a18647787b08d356726e8e9bf5067f6d6"><div class="ttname"><a href="class_boite.html#a18647787b08d356726e8e9bf5067f6d6">Boite::getId</a></div><div class="ttdeci">int getId() const</div><div class="ttdef"><b>Definition:</b> <a href="_boite_8cpp_source.html#l00011">Boite.cpp:11</a></div></div>
+<div class="ttc" id="aclass_boite_html_a2ea656957343f7b9cd16f475a8108574"><div class="ttname"><a href="class_boite.html#a2ea656957343f7b9cd16f475a8108574">Boite::setCouleurLed</a></div><div class="ttdeci">void setCouleurLed(String couleur)</div><div class="ttdef"><b>Definition:</b> <a href="_boite_8cpp_source.html#l00084">Boite.cpp:84</a></div></div>
+<div class="ttc" id="aclass_boite_html_a2eb2e7e4dacaa4f27bbb26a84e1ee8cf"><div class="ttname"><a href="class_boite.html#a2eb2e7e4dacaa4f27bbb26a84e1ee8cf">Boite::getCouleurLed</a></div><div class="ttdeci">uint32_t getCouleurLed() const</div><div class="ttdef"><b>Definition:</b> <a href="_boite_8cpp_source.html#l00016">Boite.cpp:16</a></div></div>
+<div class="ttc" id="aclass_boite_html_a4a3a50dc870c13db64f3dd7e2e094d15"><div class="ttname"><a href="class_boite.html#a4a3a50dc870c13db64f3dd7e2e094d15">Boite::resetEtatNotification</a></div><div class="ttdeci">void resetEtatNotification()</div><div class="ttdef"><b>Definition:</b> <a href="_boite_8cpp_source.html#l00055">Boite.cpp:55</a></div></div>
+<div class="ttc" id="aclass_boite_html_a4e97bf613e80957f1e5abcc80d9f08ab"><div class="ttname"><a href="class_boite.html#a4e97bf613e80957f1e5abcc80d9f08ab">Boite::notification</a></div><div class="ttdeci">bool notification</div><div class="ttdef"><b>Definition:</b> <a href="_boite_8h_source.html#l00014">Boite.h:14</a></div></div>
+<div class="ttc" id="aclass_boite_html_a652fcfe0104ed920ea74e0ccc8da70d5"><div class="ttname"><a href="class_boite.html#a652fcfe0104ed920ea74e0ccc8da70d5">Boite::allumerNotification</a></div><div class="ttdeci">void allumerNotification()</div><div class="ttdef"><b>Definition:</b> <a href="_boite_8cpp_source.html#l00060">Boite.cpp:60</a></div></div>
+<div class="ttc" id="aclass_boite_html_a6cf507167dc122486fd5e7b8f3bcb704"><div class="ttname"><a href="class_boite.html#a6cf507167dc122486fd5e7b8f3bcb704">Boite::Boite</a></div><div class="ttdeci">Boite(int id, int numeroLed, uint32_t couleurLed, Adafruit_NeoPixel &amp;leds)</div><div class="ttdef"><b>Definition:</b> <a href="_boite_8cpp_source.html#l00005">Boite.cpp:5</a></div></div>
+<div class="ttc" id="aclass_boite_html_a84a0d6075872d58c16b099c268a8f81c"><div class="ttname"><a href="class_boite.html#a84a0d6075872d58c16b099c268a8f81c">Boite::getEtatNotification</a></div><div class="ttdeci">bool getEtatNotification() const</div><div class="ttdef"><b>Definition:</b> <a href="_boite_8cpp_source.html#l00034">Boite.cpp:34</a></div></div>
+<div class="ttc" id="aclass_boite_html_a8636de9265f742fcf3cf47d41bf9c9e6"><div class="ttname"><a href="class_boite.html#a8636de9265f742fcf3cf47d41bf9c9e6">Boite::activation</a></div><div class="ttdeci">bool activation</div><div class="ttdef"><b>Definition:</b> <a href="_boite_8h_source.html#l00013">Boite.h:13</a></div></div>
+<div class="ttc" id="aclass_boite_html_aae70e531c54056dbbe787a9cb4868922"><div class="ttname"><a href="class_boite.html#aae70e531c54056dbbe787a9cb4868922">Boite::couleurLed</a></div><div class="ttdeci">uint32_t couleurLed</div><div class="ttdef"><b>Definition:</b> <a href="_boite_8h_source.html#l00012">Boite.h:12</a></div></div>
+<div class="ttc" id="aclass_boite_html_aba4b86299bae740cefd3e050f57de3b6"><div class="ttname"><a href="class_boite.html#aba4b86299bae740cefd3e050f57de3b6">Boite::numeroLed</a></div><div class="ttdeci">int numeroLed</div><div class="ttdef"><b>Definition:</b> <a href="_boite_8h_source.html#l00011">Boite.h:11</a></div></div>
+<div class="ttc" id="aclass_boite_html_abab74190cc21cfbec4c8ec45b5a6354d"><div class="ttname"><a href="class_boite.html#abab74190cc21cfbec4c8ec45b5a6354d">Boite::setActivation</a></div><div class="ttdeci">void setActivation(bool etat)</div><div class="ttdef"><b>Definition:</b> <a href="_boite_8cpp_source.html#l00026">Boite.cpp:26</a></div></div>
+<div class="ttc" id="aclass_boite_html_ac1cc4dab6f4c577b01af2a2518d20b06"><div class="ttname"><a href="class_boite.html#ac1cc4dab6f4c577b01af2a2518d20b06">Boite::getCouleur</a></div><div class="ttdeci">String getCouleur() const</div><div class="ttdef"><b>Definition:</b> <a href="_boite_8cpp_source.html#l00079">Boite.cpp:79</a></div></div>
+<div class="ttc" id="aclass_boite_html_ac4638bfd1c85fcfe00372786432ac799"><div class="ttname"><a href="class_boite.html#ac4638bfd1c85fcfe00372786432ac799">Boite::leds</a></div><div class="ttdeci">Adafruit_NeoPixel &amp; leds</div><div class="ttdoc">le bandeau à leds multi-couleurs</div><div class="ttdef"><b>Definition:</b> <a href="_boite_8h_source.html#l00015">Boite.h:15</a></div></div>
+<div class="ttc" id="aclass_boite_html_ad94ab1caf2b5d4c80b6319f2997184c6"><div class="ttname"><a href="class_boite.html#ad94ab1caf2b5d4c80b6319f2997184c6">Boite::setEtatNotification</a></div><div class="ttdeci">void setEtatNotification(bool etat)</div><div class="ttdef"><b>Definition:</b> <a href="_boite_8cpp_source.html#l00039">Boite.cpp:39</a></div></div>
+<div class="ttc" id="aclass_boite_html_ae613a56ef3e9a7a809c5aac5b234d4c0"><div class="ttname"><a href="class_boite.html#ae613a56ef3e9a7a809c5aac5b234d4c0">Boite::id</a></div><div class="ttdeci">int id</div><div class="ttdef"><b>Definition:</b> <a href="_boite_8h_source.html#l00010">Boite.h:10</a></div></div>
+<div class="ttc" id="aclass_boite_html_af81b19a589803fadef3b60fc7f478b42"><div class="ttname"><a href="class_boite.html#af81b19a589803fadef3b60fc7f478b42">Boite::getActivation</a></div><div class="ttdeci">bool getActivation() const</div><div class="ttdef"><b>Definition:</b> <a href="_boite_8cpp_source.html#l00021">Boite.cpp:21</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.1-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_8a6b28a2de8f5454d633fd89588b20ee.html">domotifications-esp32</a></li><li class="navelem"><a class="el" href="dir_7190b8d59f9b5cb005bcf0bfc78ab91e.html">lib</a></li><li class="navelem"><a class="el" href="dir_6cf2175655a5ec7aa078b86db4d7d27a.html">Boite</a></li><li class="navelem"><a class="el" href="_boite_8h.html">Boite.h</a></li>
+    <li class="footer"><img class="footer" src="lasalle-logo.png" height="31" alt="La Salle Avignon"/>&nbsp;<b>Campus La Salle Avignon</b>&nbsp;-&nbsp;9 Rue Notre Dame des 7 douleurs&nbsp;-&nbsp;BP 50165&nbsp;-&nbsp;84008 Avignon&nbsp;-&nbsp;Généré le Samedi 8 Juin 2024 23:47:14 pour Projet domotifications par&nbsp;<a href="https://www.doxygen.org/index.html">doxygen</a>&nbsp;1.9.1&nbsp;</li>
+  </ul>
+</div>
+</body>
+</html>
