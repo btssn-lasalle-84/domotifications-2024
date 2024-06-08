@@ -32,6 +32,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -83,12 +85,12 @@ public class FenetreMachine extends AppCompatActivity
     public static final int[] IMAGE_MACHINES = {
         R.drawable.machine, R.drawable.lavevaisselle, R.drawable.machine,
         R.drawable.machine, R.drawable.machine,       R.drawable.machine
-    }; //!< Id de l'image de la machine dans les ressources Android
-    private ImageView[] imagesMachines;             //!< Images des machines
+    };                                  //!< Id de l'image de la machine dans les ressources Android
+    private ImageView[] imagesMachines; //!< Images des machines
     private ImageView[] imagesNotificationMachines; //!< Images des notifications des machines
-    private Switch[]    boutonsActivation; //!< Boutons d'activation/désactivation des modules
+    private Switch[] boutonsActivation; //!< Boutons d'activation/désactivation des modules
     //!< machines
-    private ImageView   boutonAjouterModule;   //!< Bouton pour ajouter les modules machines
+    private ImageView boutonAjouterModule;     //!< Bouton pour ajouter les modules machines
     private ImageView[] boutonSupprimerModule; //!< Boutons pour supprimer les modules machines
     private ImageView[] imagesParametres;      //!< Images des couleurs des modules
     //!< machines
@@ -300,7 +302,7 @@ public class FenetreMachine extends AppCompatActivity
                 switch(message.what)
                 {
                     case Communication.CODE_HTTP_REPONSE_JSON:
-                        Log.d(TAG, "[Handler] REPONSE JSON");
+                        //Log.d(TAG, "[Handler] REPONSE JSON");
                         traiterReponseJSON(message.obj.toString());
                         erreurCommunication = false;
                         break;
@@ -758,19 +760,21 @@ public class FenetreMachine extends AppCompatActivity
                     String nomModule     = data.getStringExtra("nom");
                     String couleurModule = data.getStringExtra("couleur");
                     Log.d(TAG,
-                          "onActivityResult() idModule = " + idModule + " - nomModule : " +
-                            nomModule + " - couleurModule = " + couleurModule);
+                          "onActivityResult() idModule = " + idModule +
+                            " - nomModule : " + nomModule + " - couleurModule = " + couleurModule);
 
                     if(idModule != -1)
                     {
-                        Module module = modulesMachines.get(idModule);
+                        int    numeroModule = getNumeroMachine(idModule);
+                        Module module       = modulesMachines.get(numeroModule);
                         if(module != null)
                         {
                             if(!module.getNomModule().equals(nomModule))
                             {
                                 module.setNomModule(nomModule);
                                 baseDeDonnees.modifierNomModule(module.getIdModule(),
-                                                                module.getTypeModule().ordinal(),
+                                                                module.getTypeModule().ordinal() +
+                                                                  1,
                                                                 nomModule);
                             }
                             module.setCouleur(couleurModule);
@@ -805,34 +809,43 @@ public class FenetreMachine extends AppCompatActivity
                 else
                     nomAjoutModule = "machine";
                 Log.d(TAG, "afficherBoiteDialogueAjoutModule() nomModule = " + nomAjoutModule);
+                TextInputEditText couleurModule =
+                  (TextInputEditText)ajoutModuleView.findViewById(R.id.editTextCouleurHTML);
+                String couleurAjoutModule = "#00FF00";
+                if(!couleurModule.getText().toString().trim().isEmpty())
+                    couleurAjoutModule = couleurModule.getText().toString().trim();
+                Log.d(TAG,
+                      "afficherBoiteDialogueAjoutModule() couleurAjoutModule = " +
+                        couleurAjoutModule);
 
-                // @todo ajouter le choix de la couleur (cf. R.layout.ajout_module)
-
-                // Emettre la requête POST à la station
-
+                // Préparer et émettre la requête POST à la station
                 int idMachine = rechercherIdDisponible();
                 Log.d(TAG, "afficherBoiteDialogueAjoutModule() idMachine = " + idMachine);
                 // si idMachine = 0 alors la station choisira l'idMachine à ajouter sinon c'est
                 // l'application qui le détermine
-                String api  = API_PATCH_MACHINES;
-                String json = "{\"idMachine\": " + idMachine +
-                              ", \"couleur\" \"#00FF00\":, \"actif\": true"
-                              + "}";
-                communication.emettreRequetePOST(api, json, handler);
-
-                // Notifier l'utilisateur
-                Toast
-                  .makeText(getApplicationContext(),
-                            "Demande d'ajout du module '" + nomAjoutModule + "' envoyée",
-                            Toast.LENGTH_SHORT)
-                  .show();
 
                 // Mode démo
-                String reponseJson =
-                  "{\"idMachine\": " + idMachine +
-                  ", \"couleur\": \"#00FF00\", \"etat\": false, \"actif\": true"
-                  + "}";
-                validerAjoutMachine("[" + reponseJson + "]");
+                if(idMachine > 0)
+                {
+                    String api  = API_PATCH_MACHINES;
+                    String json = "{\"idMachine\": " + idMachine + ", \"couleur\": \"" +
+                                  couleurAjoutModule + "\", \"actif\": true"
+                                  + "}";
+                    communication.emettreRequetePOST(api, json, handler);
+
+                    // Notifier l'utilisateur
+                    Toast
+                      .makeText(getApplicationContext(),
+                                "Demande d'ajout du module '" + nomAjoutModule + "' envoyée",
+                                Toast.LENGTH_SHORT)
+                      .show();
+
+                    // Mode démo
+                    String reponseJson = "{\"idMachine\": " + idMachine + ", \"couleur\": \"" +
+                                         couleurAjoutModule + "\", \"etat\": false, \"actif\": true"
+                                         + "}";
+                    validerAjoutMachine("[" + reponseJson + "]");
+                }
             }
         });
         ajoutModule.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
@@ -841,7 +854,9 @@ public class FenetreMachine extends AppCompatActivity
             }
         });
 
-        ajoutModule.show();
+        AlertDialog alert = ajoutModule.create();
+        alert.setCanceledOnTouchOutside(false);
+        alert.show();
     }
 
     /**

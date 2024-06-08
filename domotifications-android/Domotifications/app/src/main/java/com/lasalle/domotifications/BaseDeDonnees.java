@@ -29,7 +29,7 @@ public class BaseDeDonnees extends SQLiteOpenHelper
     private static final String TAG = "_BaseDeDonnees"; //!< TAG pour les logs
     private static final String DOMOTIFICATIONS_BDD =
       "domotifications.db";                                   //!< Nom de la base de données
-    private static final int VERSION_DOMOTIFICATIONS_BDD = 2; //!< Version de la base de données
+    private static final int VERSION_DOMOTIFICATIONS_BDD = 3; //!< Version de la base de données
     public static final int  ID_DOMOTIFICATIONS          = 1;
 
     /**

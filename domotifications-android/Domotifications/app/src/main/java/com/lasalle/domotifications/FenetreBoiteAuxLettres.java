@@ -90,7 +90,7 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
     //!< boitesAuxLettres
     private ImageButton boutonAccueil;         //!< Boutons d'activation/désactivation des modules
                                                //!< boites
-    private ImageView   boutonAjouterModule;   //!!< Boutons d'ajout des modules
+    private ImageView boutonAjouterModule;     //!!< Boutons d'ajout des modules
     private ImageView[] boutonSupprimerModule; //!!< Boutons de suppression des modules
     private ImageView[] imagesParametres;      //!< Images des couleurs des modules
 
@@ -295,7 +295,7 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                 switch(message.what)
                 {
                     case Communication.CODE_HTTP_REPONSE_JSON:
-                        Log.d(TAG, "[Handler] REPONSE JSON");
+                        //Log.d(TAG, "[Handler] REPONSE JSON");
                         traiterReponseJSON(message.obj.toString());
                         erreurCommunication = false;
                         break;
@@ -316,9 +316,9 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                         erreurCommunication = false;
                         break;
                     case Communication.CODE_HTTP_ERREUR:
-                        Log.d(TAG, "[Handler] ERREUR HTTP");
                         if(!erreurCommunication)
                         {
+                            Log.d(TAG, "[Handler] ERREUR HTTP");
                             afficherErreur("Impossible de communiquer avec la station !");
                             erreurCommunication = true;
                         }
@@ -759,14 +759,15 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                     String nomModule     = data.getStringExtra("nom");
                     String couleurModule = data.getStringExtra("couleur");
                     Log.d(TAG,
-                          "onActivityResult() idModule = " + idModule + " - nomModule : " +
-                            nomModule + " - couleurModule = " + couleurModule);
+                          "onActivityResult() idModule = " + idModule +
+                            " - nomModule : " + nomModule + " - couleurModule = " + couleurModule);
 
                     if(idModule != -1)
                     {
                         if(idModule >= 0 && idModule < modulesBoitesAuxLettres.size())
                         {
-                            Module module = modulesBoitesAuxLettres.get(idModule);
+                            int    numeroModule = getNumeroBoite(idModule);
+                            Module module = modulesBoitesAuxLettres.get(numeroModule);
                             if(!module.getNomModule().equals(nomModule))
                             {
                                 module.setNomModule(nomModule);
@@ -815,25 +816,30 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                 Log.d(TAG, "afficherBoiteDialogueAjoutModule() idBoite = " + idBoite);
                 // si idBoite= 0 alors la station choisira l'idBoite à ajouter sinon c'est
                 // l'application qui le détermine
-                String api  = API_PATCH_BOITES;
-                String json = "{\"idBoite\": " + idBoite +
-                              ", \"couleur\" \"#00FF00\":, \"actif\": true"
-                              + "}";
-                communication.emettreRequetePOST(api, json, handler);
-
-                // Notifier l'utilisateur
-                Toast
-                  .makeText(getApplicationContext(),
-                            "Demande d'ajout du module '" + nomAjoutModule + "' envoyée",
-                            Toast.LENGTH_SHORT)
-                  .show();
 
                 // Mode démo
-                String reponseJson =
-                  "{\"idBoite\": " + idBoite +
-                  ", \"couleur\": \"#00FF00\", \"etat\": false, \"actif\": true"
-                  + "}";
-                validerAjoutBoite("[" + reponseJson + "]");
+                if(idBoite > 0)
+                {
+                    String api  = API_PATCH_BOITES;
+                    String json = "{\"idBoite\": " + idBoite +
+                                  ", \"couleur\": \"#00FF00\", \"actif\": true"
+                                  + "}";
+                    communication.emettreRequetePOST(api, json, handler);
+
+                    // Notifier l'utilisateur
+                    Toast
+                      .makeText(getApplicationContext(),
+                                "Demande d'ajout du module '" + nomAjoutModule + "' envoyée",
+                                Toast.LENGTH_SHORT)
+                      .show();
+
+                    // Mode démo
+                    String reponseJson =
+                      "{\"idBoite\": " + idBoite +
+                      ", \"couleur\": \"#00FF00\", \"etat\": false, \"actif\": true"
+                      + "}";
+                    validerAjoutBoite("[" + reponseJson + "]");
+                }
             }
         });
         ajoutModule.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {

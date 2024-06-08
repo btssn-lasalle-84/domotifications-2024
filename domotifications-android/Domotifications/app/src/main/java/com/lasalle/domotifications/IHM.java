@@ -179,7 +179,7 @@ public class IHM extends AppCompatActivity
                 switch(message.what)
                 {
                     case Communication.CODE_HTTP_REPONSE_JSON:
-                        Log.d(TAG, "[Handler] REPONSE JSON");
+                        //Log.d(TAG, "[Handler] REPONSE JSON");
                         traiterReponseJSON(message.obj.toString());
                         erreurCommunication = false;
                         break;
@@ -209,7 +209,7 @@ public class IHM extends AppCompatActivity
 
     private void recupererNotifications()
     {
-        Log.d(TAG, "recupererNotifications()");
+        //Log.d(TAG, "recupererNotifications()");
         nbNotificationsPoubelles = 0;
         nbNotificationsMachines  = 0;
         nbNotificationsBoites    = 0;
@@ -242,7 +242,7 @@ public class IHM extends AppCompatActivity
 
     public void traiterReponseJSON(String reponse)
     {
-        Log.d(TAG, "traiterReponseJSON() reponse = " + reponse);
+        //Log.d(TAG, "traiterReponseJSON() reponse = " + reponse);
 
         int     nouvellesNotificationsPoubelles = 0;
         boolean estModulesPoubelles             = false;
@@ -315,11 +315,13 @@ public class IHM extends AppCompatActivity
             e.printStackTrace();
         }
 
+        /*
         Log.d(TAG,
               "traiterReponseJSON() nouvellesNotificationsPoubelles = " +
                 nouvellesNotificationsPoubelles +
                 " nouvellesNotificationsMachines = " + nouvellesNotificationsMachines +
                 " nouvellesNotificationsBoites = " + nouvellesNotificationsBoites);
+         */
 
         if(estModulesPoubelles && nouvellesNotificationsPoubelles != nbNotificationsPoubelles)
         {
@@ -342,9 +344,7 @@ public class IHM extends AppCompatActivity
     {
         if(nbNotificationsPoubelles > 0)
         {
-            Log.d(TAG,
-                  "mettreAJourNotificationsPoubelles() nbNotificationsPoubelles = " +
-                    nbNotificationsPoubelles);
+            //Log.d(TAG, "mettreAJourNotificationsPoubelles() nbNotificationsPoubelles = " + nbNotificationsPoubelles);
             notificationPoubelle.setVisibility(View.VISIBLE);
             notificationPoubelle.setText(String.valueOf(nbNotificationsPoubelles));
         }
@@ -358,9 +358,7 @@ public class IHM extends AppCompatActivity
     {
         if(nbNotificationsMachines > 0)
         {
-            Log.d(TAG,
-                  "mettreAJourNotificationsMachines() nbNotificationsMachines = " +
-                    nbNotificationsMachines);
+            //Log.d(TAG, "mettreAJourNotificationsMachines() nbNotificationsMachines = " + nbNotificationsMachines);
             notificationMachine.setVisibility(View.VISIBLE);
             notificationMachine.setText(String.valueOf(nbNotificationsMachines));
         }
@@ -374,9 +372,7 @@ public class IHM extends AppCompatActivity
     {
         if(nbNotificationsBoites > 0)
         {
-            Log.d(TAG,
-                  "mettreAJourNotificationsBoites nbNotificationsBoites = " +
-                    nbNotificationsBoites);
+            //Log.d(TAG,"mettreAJourNotificationsBoites nbNotificationsBoites = " + nbNotificationsBoites);
             notificationBoiteAuxLettres.setVisibility(View.VISIBLE);
             notificationBoiteAuxLettres.setText(String.valueOf(nbNotificationsBoites));
         }
