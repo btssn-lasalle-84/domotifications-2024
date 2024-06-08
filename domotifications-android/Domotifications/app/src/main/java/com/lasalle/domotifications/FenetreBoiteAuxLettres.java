@@ -32,6 +32,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -90,7 +92,7 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
     //!< boitesAuxLettres
     private ImageButton boutonAccueil;         //!< Boutons d'activation/désactivation des modules
                                                //!< boites
-    private ImageView boutonAjouterModule;     //!!< Boutons d'ajout des modules
+    private ImageView   boutonAjouterModule;   //!!< Boutons d'ajout des modules
     private ImageView[] boutonSupprimerModule; //!!< Boutons de suppression des modules
     private ImageView[] imagesParametres;      //!< Images des couleurs des modules
 
@@ -295,7 +297,7 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                 switch(message.what)
                 {
                     case Communication.CODE_HTTP_REPONSE_JSON:
-                        //Log.d(TAG, "[Handler] REPONSE JSON");
+                        // Log.d(TAG, "[Handler] REPONSE JSON");
                         traiterReponseJSON(message.obj.toString());
                         erreurCommunication = false;
                         break;
@@ -759,21 +761,22 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                     String nomModule     = data.getStringExtra("nom");
                     String couleurModule = data.getStringExtra("couleur");
                     Log.d(TAG,
-                          "onActivityResult() idModule = " + idModule +
-                            " - nomModule : " + nomModule + " - couleurModule = " + couleurModule);
+                          "onActivityResult() idModule = " + idModule + " - nomModule : " +
+                            nomModule + " - couleurModule = " + couleurModule);
 
                     if(idModule != -1)
                     {
-                        if(idModule >= 0 && idModule < modulesBoitesAuxLettres.size())
+                        int    numeroModule = getNumeroBoite(idModule);
+                        Module module       = modulesBoitesAuxLettres.get(numeroModule);
+                        if(module != null)
                         {
-                            int    numeroModule = getNumeroBoite(idModule);
-                            Module module = modulesBoitesAuxLettres.get(numeroModule);
                             if(!module.getNomModule().equals(nomModule))
                             {
                                 module.setNomModule(nomModule);
                                 baseDeDonnees.modifierNomModule(module.getIdModule(),
-                                                                module.getTypeModule().ordinal(),
-                                                                nomModule);
+                                        module.getTypeModule().ordinal() +
+                                                1,
+                                        nomModule);
                             }
                             module.setCouleur(couleurModule);
                         }
@@ -807,9 +810,14 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                 else
                     nomAjoutModule = "boite";
                 Log.d(TAG, "afficherBoiteDialogueAjoutModule() nomModule = " + nomAjoutModule);
-
-                // @todo ajouter le choix de la couleur (cf. R.layout.ajout_module)
-
+                TextInputEditText couleurModule =
+                  (TextInputEditText)ajoutModuleView.findViewById(R.id.editTextCouleurHTML);
+                String couleurAjoutModule = "#00FF00";
+                if(!couleurModule.getText().toString().trim().isEmpty())
+                    couleurAjoutModule = couleurModule.getText().toString().trim();
+                Log.d(TAG,
+                      "afficherBoiteDialogueAjoutModule() couleurAjoutModule = " +
+                        couleurAjoutModule);
                 // Emettre la requête POST à la station
 
                 int idBoite = rechercherIdDisponible();
@@ -848,7 +856,9 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
             }
         });
 
-        ajoutModule.show();
+        AlertDialog alert = ajoutModule.create();
+        alert.setCanceledOnTouchOutside(false);
+        alert.show();
     }
 
     private void afficherBoiteDialogueSuppressionModule(int numeroBoite)
