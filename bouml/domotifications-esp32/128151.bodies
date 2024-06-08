@@ -1,0 +1,50 @@
+class Boite
+!!!134570.cpp!!!	getId() : int
+    return id;
+!!!134698.cpp!!!	getCouleurLed() : uint32_t
+    return couleurLed;
+!!!134826.cpp!!!	getActivation() : bool
+    return activation;
+!!!134954.cpp!!!	setActivation(in etat : bool) : void
+    if(etat != activation)
+    {
+        activation = etat;
+    }
+!!!135082.cpp!!!	getEtatNotification() : bool
+    return notification;
+!!!135210.cpp!!!	setEtatNotification(in etat : bool) : void
+    if(etat != notification)
+    {
+        notification = etat;
+        if(notification)
+        {
+            allumerNotification();
+        }
+        else
+        {
+            eteindreNotification();
+        }
+    }
+!!!135338.cpp!!!	resetEtatNotification() : void
+    setEtatNotification(false);
+!!!135466.cpp!!!	allumerNotification() : void
+    if(activation)
+    {
+        leds.setPixelColor(INDEX_LEDS_NOTIFICATION_BOITE + numeroLed,
+                           couleurLed); // Appliquer la couleur correspondante
+        leds.show();
+    }
+!!!135594.cpp!!!	eteindreNotification() : void
+    if(activation)
+    {
+        leds.setPixelColor(INDEX_LEDS_NOTIFICATION_BOITE + numeroLed, leds.Color(0, 0, 0));
+        leds.show();
+    }
+!!!135722.cpp!!!	getCouleur() : String
+    return StationLumineuse::getCouleurToString(couleurLed);
+!!!135850.cpp!!!	setCouleurLed(in couleur : String) : void
+    uint32_t couleurLed = StationLumineuse::getCouleurToRGB(couleur);
+    if(couleurLed != this->couleurLed && couleurLed != 0)
+    {
+        this->couleurLed = couleurLed;
+    }

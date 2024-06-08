@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Projet domotifications:  Fichier source de StationLumineuse.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="customdoxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="projet-logo.png"/></td>
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Projet domotifications
+   &#160;<span id="projectnumber">1.0</span>
+   </div>
+   <div id="projectbrief">BTS SNIR LaSalle Avignon 2024</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.9.1 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Recherche','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','Recherche');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_station_lumineuse_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="headertitle">
+<div class="title">StationLumineuse.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_station_lumineuse_8h.html">Aller à la documentation de ce fichier.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; </div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#ifndef STATIONLUMINEUSE_H</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#define STATIONLUMINEUSE_H</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;Arduino.h&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;Preferences.h&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;Adafruit_NeoPixel.h&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_bandeau_leds_8h.html">BandeauLeds.h</a>&quot;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="_station_lumineuse_8h.html#a1b5f6e32208d4420440542f41686f705">   17</a></span>&#160;<span class="preprocessor">#define DEBUG_STATION_LUMINEUSE</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="_station_lumineuse_8h.html#ae91774f3bdf72a1a2109218b715848c9">   19</a></span>&#160;<span class="preprocessor">#define TEST_TEMPORISATION 2000 </span><span class="comment">// en ms</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">class </span><a class="code" href="class_serveur_web.html">ServeurWeb</a>;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">class </span><a class="code" href="class_boite.html">Boite</a>;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">class </span><a class="code" href="class_machine.html">Machine</a>;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">class </span><a class="code" href="class_poubelle.html">Poubelle</a>;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="class_station_lumineuse.html">   30</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_station_lumineuse.html">StationLumineuse</a></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="class_station_lumineuse.html#a9373c6212f65008b3f2376d8aec0adbf">   33</a></span>&#160;    <a class="code" href="class_serveur_web.html">ServeurWeb</a>*            <a class="code" href="class_station_lumineuse.html#a9373c6212f65008b3f2376d8aec0adbf">serveurWeb</a>;  </div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="class_station_lumineuse.html#ab64077d4d3a614d5c33a53643febccbc">   34</a></span>&#160;    Adafruit_NeoPixel      <a class="code" href="class_station_lumineuse.html#ab64077d4d3a614d5c33a53643febccbc">leds</a>;        </div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="class_station_lumineuse.html#a4a0547fddad1c6d91698c464272e796e">   35</a></span>&#160;    Preferences            <a class="code" href="class_station_lumineuse.html#a4a0547fddad1c6d91698c464272e796e">preferences</a>; </div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="class_station_lumineuse.html#aefe037f43200a80c6823e7e78b5ec072">   36</a></span>&#160;    std::vector&lt;Boite*&gt;    <a class="code" href="class_station_lumineuse.html#aefe037f43200a80c6823e7e78b5ec072">boites</a>;      </div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="class_station_lumineuse.html#a480df3c6cb4ecb314479db5311725e55">   37</a></span>&#160;    std::vector&lt;Machine*&gt;  <a class="code" href="class_station_lumineuse.html#a480df3c6cb4ecb314479db5311725e55">machines</a>;    </div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="class_station_lumineuse.html#ab883a8bb40f7c2f94001fb90fc27ebab">   38</a></span>&#160;    std::vector&lt;Poubelle*&gt; <a class="code" href="class_station_lumineuse.html#ab883a8bb40f7c2f94001fb90fc27ebab">poubelles</a>;   </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">static</span> uint32_t</div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="class_station_lumineuse.html#aab9f12052f01baa55bf0a94f7a5c381f">   40</a></span>&#160;      <a class="code" href="class_station_lumineuse.html#aab9f12052f01baa55bf0a94f7a5c381f">couleursPoubelles</a>[<a class="code" href="_bandeau_leds_8h.html#ae5598b0513d99829f679ebfca011e485">NB_LEDS_NOTIFICATION_POUBELLES</a>]; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_station_lumineuse.html#af600af72b4d0cd355620474b919924dc">restaurerEtats</a>();</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_station_lumineuse.html#a27d528b0bcca219cc67bc6903bfc6a8d">sauvegarderCouleurPoubelle</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_station_lumineuse.html#ae3bf3bd7797ba07957a30fd3632f4fa5">restaurerCouleurPoubelle</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_station_lumineuse.html#aad95f31845cfcb0d9da7ae8b0617ba78">sauvegarderCouleurBoite</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_station_lumineuse.html#a0aee2e0323ef8696735f7553ce655c0a">restaurerCouleurBoite</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_station_lumineuse.html#a620c2347389cfa917365675a90b51d90">sauvegarderCouleurMachine</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_station_lumineuse.html#a92d186a88e0d9e859f9f44fe00683117">restaurerCouleurMachine</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <a class="code" href="class_station_lumineuse.html#adb908fdd923e8dc0b56a92b1bfef7602">StationLumineuse</a>();</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_station_lumineuse.html#a08cd83eb12c931114c72827cf5bf9a0c">demarrer</a>();</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_station_lumineuse.html#a8e4ba691bb2dfb492e893ff6b06d1764">traiterRequetes</a>();</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_station_lumineuse.html#ae30959f37ffab5201b9888069764af6f">testerBandeau</a>();</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="comment">// Méthodes statiques</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keyword">static</span> uint32_t <a class="code" href="class_station_lumineuse.html#aba03bf527ca126f07fdb9232ba4e8272">convertirCouleurRGB</a>(uint8_t r, uint8_t g, uint8_t b);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keyword">static</span> String   <a class="code" href="class_station_lumineuse.html#a4371635405995ffee9bf286ef5990955">getCouleurToString</a>(uint32_t couleur);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keyword">static</span> uint32_t <a class="code" href="class_station_lumineuse.html#a5a2431d4c05f79c502357630163c3a26">getCouleurToRGB</a>(String couleur);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="comment">// pour les modules Poubelle</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    std::size_t <a class="code" href="class_station_lumineuse.html#a2e301396a57015a70ab79428e7221f0a">getNbPoubelles</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <a class="code" href="class_poubelle.html">Poubelle</a>*   <a class="code" href="class_station_lumineuse.html#a9ccb16773c0d336588182daaeaa5d6c2">getPoubelle</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">void</span>        <a class="code" href="class_station_lumineuse.html#a7c61d3bfe03c1775b6ed0b51651cc013">sauvegarderEtatsPoubelle</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="comment">// pour les modules Boite</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    std::size_t <a class="code" href="class_station_lumineuse.html#a0a0992653fc4eb8214ff3cf8fc069cff">getNbBoites</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <a class="code" href="class_boite.html">Boite</a>*      <a class="code" href="class_station_lumineuse.html#ada308cc40622b3cccb95fa862b12b325">getBoite</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordtype">void</span>        <a class="code" href="class_station_lumineuse.html#adf965f7f649f954775174ab65f5890c1">sauvegarderEtatsBoite</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="comment">// pour les modules Machine</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    std::size_t <a class="code" href="class_station_lumineuse.html#ad40d7bbd1e91e3e469413bc1ee64e01d">getNbMachines</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <a class="code" href="class_machine.html">Machine</a>*    <a class="code" href="class_station_lumineuse.html#a21dbd081c96a9b8598c6d01ae5b40c2c">getMachine</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordtype">void</span>        <a class="code" href="class_station_lumineuse.html#ab8eb22cf1699336c56f08dd4f8e95a58">sauvegarderEtatsMachine</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;};</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// STATIONLUMINEUSE_H</span></div>
+<div class="ttc" id="a_bandeau_leds_8h_html"><div class="ttname"><a href="_bandeau_leds_8h.html">BandeauLeds.h</a></div></div>
+<div class="ttc" id="a_bandeau_leds_8h_html_ae5598b0513d99829f679ebfca011e485"><div class="ttname"><a href="_bandeau_leds_8h.html#ae5598b0513d99829f679ebfca011e485">NB_LEDS_NOTIFICATION_POUBELLES</a></div><div class="ttdeci">#define NB_LEDS_NOTIFICATION_POUBELLES</div><div class="ttdoc">Le nombre de leds pour les notifications poubelle.</div><div class="ttdef"><b>Definition:</b> <a href="_bandeau_leds_8h_source.html#l00027">BandeauLeds.h:27</a></div></div>
+<div class="ttc" id="aclass_boite_html"><div class="ttname"><a href="class_boite.html">Boite</a></div><div class="ttdef"><b>Definition:</b> <a href="_boite_8h_source.html#l00007">Boite.h:8</a></div></div>
+<div class="ttc" id="aclass_machine_html"><div class="ttname"><a href="class_machine.html">Machine</a></div><div class="ttdef"><b>Definition:</b> <a href="_machine_8h_source.html#l00007">Machine.h:8</a></div></div>
+<div class="ttc" id="aclass_poubelle_html"><div class="ttname"><a href="class_poubelle.html">Poubelle</a></div><div class="ttdef"><b>Definition:</b> <a href="_poubelle_8h_source.html#l00007">Poubelle.h:8</a></div></div>
+<div class="ttc" id="aclass_serveur_web_html"><div class="ttname"><a href="class_serveur_web.html">ServeurWeb</a></div><div class="ttdoc">Déclaration de la classe ServeurWeb.</div><div class="ttdef"><b>Definition:</b> <a href="_serveur_web_8h_source.html#l00046">ServeurWeb.h:47</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html"><div class="ttname"><a href="class_station_lumineuse.html">StationLumineuse</a></div><div class="ttdoc">Déclaration de la classe StationLumineuse.</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8h_source.html#l00030">StationLumineuse.h:31</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_a08cd83eb12c931114c72827cf5bf9a0c"><div class="ttname"><a href="class_station_lumineuse.html#a08cd83eb12c931114c72827cf5bf9a0c">StationLumineuse::demarrer</a></div><div class="ttdeci">void demarrer()</div><div class="ttdoc">Démarre la station lumineuse.</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8cpp_source.html#l00057">StationLumineuse.cpp:57</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_a0a0992653fc4eb8214ff3cf8fc069cff"><div class="ttname"><a href="class_station_lumineuse.html#a0a0992653fc4eb8214ff3cf8fc069cff">StationLumineuse::getNbBoites</a></div><div class="ttdeci">std::size_t getNbBoites() const</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8cpp_source.html#l00193">StationLumineuse.cpp:193</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_a0aee2e0323ef8696735f7553ce655c0a"><div class="ttname"><a href="class_station_lumineuse.html#a0aee2e0323ef8696735f7553ce655c0a">StationLumineuse::restaurerCouleurBoite</a></div><div class="ttdeci">void restaurerCouleurBoite(int id)</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8cpp_source.html#l00297">StationLumineuse.cpp:297</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_a21dbd081c96a9b8598c6d01ae5b40c2c"><div class="ttname"><a href="class_station_lumineuse.html#a21dbd081c96a9b8598c6d01ae5b40c2c">StationLumineuse::getMachine</a></div><div class="ttdeci">Machine * getMachine(int id)</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8cpp_source.html#l00229">StationLumineuse.cpp:229</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_a27d528b0bcca219cc67bc6903bfc6a8d"><div class="ttname"><a href="class_station_lumineuse.html#a27d528b0bcca219cc67bc6903bfc6a8d">StationLumineuse::sauvegarderCouleurPoubelle</a></div><div class="ttdeci">void sauvegarderCouleurPoubelle(int id)</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8cpp_source.html#l00261">StationLumineuse.cpp:261</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_a2e301396a57015a70ab79428e7221f0a"><div class="ttname"><a href="class_station_lumineuse.html#a2e301396a57015a70ab79428e7221f0a">StationLumineuse::getNbPoubelles</a></div><div class="ttdeci">std::size_t getNbPoubelles() const</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8cpp_source.html#l00161">StationLumineuse.cpp:161</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_a4371635405995ffee9bf286ef5990955"><div class="ttname"><a href="class_station_lumineuse.html#a4371635405995ffee9bf286ef5990955">StationLumineuse::getCouleurToString</a></div><div class="ttdeci">static String getCouleurToString(uint32_t couleur)</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8cpp_source.html#l00137">StationLumineuse.cpp:137</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_a480df3c6cb4ecb314479db5311725e55"><div class="ttname"><a href="class_station_lumineuse.html#a480df3c6cb4ecb314479db5311725e55">StationLumineuse::machines</a></div><div class="ttdeci">std::vector&lt; Machine * &gt; machines</div><div class="ttdoc">les machines de la station lumineuse</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8h_source.html#l00037">StationLumineuse.h:37</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_a4a0547fddad1c6d91698c464272e796e"><div class="ttname"><a href="class_station_lumineuse.html#a4a0547fddad1c6d91698c464272e796e">StationLumineuse::preferences</a></div><div class="ttdeci">Preferences preferences</div><div class="ttdoc">pour le stockage interne</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8h_source.html#l00035">StationLumineuse.h:35</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_a5a2431d4c05f79c502357630163c3a26"><div class="ttname"><a href="class_station_lumineuse.html#a5a2431d4c05f79c502357630163c3a26">StationLumineuse::getCouleurToRGB</a></div><div class="ttdeci">static uint32_t getCouleurToRGB(String couleur)</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8cpp_source.html#l00149">StationLumineuse.cpp:149</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_a620c2347389cfa917365675a90b51d90"><div class="ttname"><a href="class_station_lumineuse.html#a620c2347389cfa917365675a90b51d90">StationLumineuse::sauvegarderCouleurMachine</a></div><div class="ttdeci">void sauvegarderCouleurMachine(int id)</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8cpp_source.html#l00310">StationLumineuse.cpp:310</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_a7c61d3bfe03c1775b6ed0b51651cc013"><div class="ttname"><a href="class_station_lumineuse.html#a7c61d3bfe03c1775b6ed0b51651cc013">StationLumineuse::sauvegarderEtatsPoubelle</a></div><div class="ttdeci">void sauvegarderEtatsPoubelle(int id)</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8cpp_source.html#l00176">StationLumineuse.cpp:176</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_a8e4ba691bb2dfb492e893ff6b06d1764"><div class="ttname"><a href="class_station_lumineuse.html#a8e4ba691bb2dfb492e893ff6b06d1764">StationLumineuse::traiterRequetes</a></div><div class="ttdeci">void traiterRequetes()</div><div class="ttdoc">Demande le traitement des requêtes web au serveur.</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8cpp_source.html#l00094">StationLumineuse.cpp:94</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_a92d186a88e0d9e859f9f44fe00683117"><div class="ttname"><a href="class_station_lumineuse.html#a92d186a88e0d9e859f9f44fe00683117">StationLumineuse::restaurerCouleurMachine</a></div><div class="ttdeci">void restaurerCouleurMachine(int id)</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8cpp_source.html#l00321">StationLumineuse.cpp:321</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_a9373c6212f65008b3f2376d8aec0adbf"><div class="ttname"><a href="class_station_lumineuse.html#a9373c6212f65008b3f2376d8aec0adbf">StationLumineuse::serveurWeb</a></div><div class="ttdeci">ServeurWeb * serveurWeb</div><div class="ttdoc">le serveur web (HTTP API REST)</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8h_source.html#l00033">StationLumineuse.h:33</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_a9ccb16773c0d336588182daaeaa5d6c2"><div class="ttname"><a href="class_station_lumineuse.html#a9ccb16773c0d336588182daaeaa5d6c2">StationLumineuse::getPoubelle</a></div><div class="ttdeci">Poubelle * getPoubelle(int id)</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8cpp_source.html#l00166">StationLumineuse.cpp:166</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_aab9f12052f01baa55bf0a94f7a5c381f"><div class="ttname"><a href="class_station_lumineuse.html#aab9f12052f01baa55bf0a94f7a5c381f">StationLumineuse::couleursPoubelles</a></div><div class="ttdeci">static uint32_t couleursPoubelles[NB_LEDS_NOTIFICATION_POUBELLES]</div><div class="ttdoc">les couleurs par défaut des poubelles</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8h_source.html#l00040">StationLumineuse.h:40</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_aad95f31845cfcb0d9da7ae8b0617ba78"><div class="ttname"><a href="class_station_lumineuse.html#aad95f31845cfcb0d9da7ae8b0617ba78">StationLumineuse::sauvegarderCouleurBoite</a></div><div class="ttdeci">void sauvegarderCouleurBoite(int id)</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8cpp_source.html#l00286">StationLumineuse.cpp:286</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_ab64077d4d3a614d5c33a53643febccbc"><div class="ttname"><a href="class_station_lumineuse.html#ab64077d4d3a614d5c33a53643febccbc">StationLumineuse::leds</a></div><div class="ttdeci">Adafruit_NeoPixel leds</div><div class="ttdoc">le bandeau à leds multi-couleurs</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8h_source.html#l00034">StationLumineuse.h:34</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_ab883a8bb40f7c2f94001fb90fc27ebab"><div class="ttname"><a href="class_station_lumineuse.html#ab883a8bb40f7c2f94001fb90fc27ebab">StationLumineuse::poubelles</a></div><div class="ttdeci">std::vector&lt; Poubelle * &gt; poubelles</div><div class="ttdoc">les poubelles de la station lumineuse</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8h_source.html#l00038">StationLumineuse.h:38</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_ab8eb22cf1699336c56f08dd4f8e95a58"><div class="ttname"><a href="class_station_lumineuse.html#ab8eb22cf1699336c56f08dd4f8e95a58">StationLumineuse::sauvegarderEtatsMachine</a></div><div class="ttdeci">void sauvegarderEtatsMachine(int id)</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8cpp_source.html#l00238">StationLumineuse.cpp:238</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_aba03bf527ca126f07fdb9232ba4e8272"><div class="ttname"><a href="class_station_lumineuse.html#aba03bf527ca126f07fdb9232ba4e8272">StationLumineuse::convertirCouleurRGB</a></div><div class="ttdeci">static uint32_t convertirCouleurRGB(uint8_t r, uint8_t g, uint8_t b)</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8cpp_source.html#l00256">StationLumineuse.cpp:256</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_ad40d7bbd1e91e3e469413bc1ee64e01d"><div class="ttname"><a href="class_station_lumineuse.html#ad40d7bbd1e91e3e469413bc1ee64e01d">StationLumineuse::getNbMachines</a></div><div class="ttdeci">std::size_t getNbMachines() const</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8cpp_source.html#l00224">StationLumineuse.cpp:224</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_ada308cc40622b3cccb95fa862b12b325"><div class="ttname"><a href="class_station_lumineuse.html#ada308cc40622b3cccb95fa862b12b325">StationLumineuse::getBoite</a></div><div class="ttdeci">Boite * getBoite(int id)</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8cpp_source.html#l00198">StationLumineuse.cpp:198</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_adb908fdd923e8dc0b56a92b1bfef7602"><div class="ttname"><a href="class_station_lumineuse.html#adb908fdd923e8dc0b56a92b1bfef7602">StationLumineuse::StationLumineuse</a></div><div class="ttdeci">StationLumineuse()</div><div class="ttdoc">Constructeur de la classe StationLumineuse.</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8cpp_source.html#l00029">StationLumineuse.cpp:29</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_adf965f7f649f954775174ab65f5890c1"><div class="ttname"><a href="class_station_lumineuse.html#adf965f7f649f954775174ab65f5890c1">StationLumineuse::sauvegarderEtatsBoite</a></div><div class="ttdeci">void sauvegarderEtatsBoite(int id)</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8cpp_source.html#l00207">StationLumineuse.cpp:207</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_ae30959f37ffab5201b9888069764af6f"><div class="ttname"><a href="class_station_lumineuse.html#ae30959f37ffab5201b9888069764af6f">StationLumineuse::testerBandeau</a></div><div class="ttdeci">void testerBandeau()</div><div class="ttdoc">Assure un test des leds du bandeau.</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8cpp_source.html#l00103">StationLumineuse.cpp:103</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_ae3bf3bd7797ba07957a30fd3632f4fa5"><div class="ttname"><a href="class_station_lumineuse.html#ae3bf3bd7797ba07957a30fd3632f4fa5">StationLumineuse::restaurerCouleurPoubelle</a></div><div class="ttdeci">void restaurerCouleurPoubelle(int id)</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8cpp_source.html#l00272">StationLumineuse.cpp:272</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_aefe037f43200a80c6823e7e78b5ec072"><div class="ttname"><a href="class_station_lumineuse.html#aefe037f43200a80c6823e7e78b5ec072">StationLumineuse::boites</a></div><div class="ttdeci">std::vector&lt; Boite * &gt; boites</div><div class="ttdoc">les boites de la station lumineuse</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8h_source.html#l00036">StationLumineuse.h:36</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html_af600af72b4d0cd355620474b919924dc"><div class="ttname"><a href="class_station_lumineuse.html#af600af72b4d0cd355620474b919924dc">StationLumineuse::restaurerEtats</a></div><div class="ttdeci">void restaurerEtats()</div><div class="ttdoc">Restaure les états de la station.</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8cpp_source.html#l00339">StationLumineuse.cpp:339</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.1-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_8a6b28a2de8f5454d633fd89588b20ee.html">domotifications-esp32</a></li><li class="navelem"><a class="el" href="dir_7190b8d59f9b5cb005bcf0bfc78ab91e.html">lib</a></li><li class="navelem"><a class="el" href="dir_c744637658a30b0f6b524361927e4e86.html">StationLumineuse</a></li><li class="navelem"><a class="el" href="_station_lumineuse_8h.html">StationLumineuse.h</a></li>
+    <li class="footer"><img class="footer" src="lasalle-logo.png" height="31" alt="La Salle Avignon"/>&nbsp;<b>Campus La Salle Avignon</b>&nbsp;-&nbsp;9 Rue Notre Dame des 7 douleurs&nbsp;-&nbsp;BP 50165&nbsp;-&nbsp;84008 Avignon&nbsp;-&nbsp;Généré le Samedi 8 Juin 2024 23:47:14 pour Projet domotifications par&nbsp;<a href="https://www.doxygen.org/index.html">doxygen</a>&nbsp;1.9.1&nbsp;</li>
+  </ul>
+</div>
+</body>
+</html>

@@ -1,14 +1,22 @@
 package com.lasalle.domotifications;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -16,10 +24,15 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +51,12 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
      */
     private static final String TAG              = "_FenetreBoiteAuxLettres"; //!< TAG pour les logs
     private static final String API_PATCH_BOITES = "/boites"; //!< Pour une requête PATCH
-    private static final int    INTERVALLE       = 1000;      //!< Intervalle d'interrogation en ms
+    private static final String API_POST_BOITES  = "/boites"; //!< Pour une requête POST
+
+    private static final int INTERVALLE            = 1000; //!< Intervalle d'interrogation en ms
+    private static final int NB_MODULES_BOITES_MAX = 4;
+    private static final int PARAMETRAGE_MODULE =
+      1; //!< Code pour l'activité de paramètrage du module
 
     /**
      * Attributs
@@ -54,23 +72,29 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
       null; //!< Pour gérer la récupération des états des modules boites aux lettres
     private TimerTask tacheRecuperationEtats =
       null; //!< Pour effectuer la récupération des états des modules boites aux lettres
-    private boolean erreurCommunication = false;
+    private boolean               erreurCommunication = false;
     private Map<Integer, Boolean> notificationsEnvoyees =
-            new HashMap<>(); //<! Pour la signalisation des notifications
-    private int numeroBoiteAcquittement = -1;
+      new HashMap<>(); //<! Pour la signalisation des notifications
+    private int    numeroBoiteAcquittement = -1;
+    private String nomAjoutModule;
+
     /**
      * GUI
      */
 
-    public static final int[] IMAGE_BOITES = {
-        R.drawable.boite_aux_lettres,
-    }; //!< Id de l'image de la boîte au lettre dans les ressources Android
+    public static final int IMAGE_BOITES =
+      R.drawable
+        .boite_aux_lettres; //!< Id de l'image de la boîte au lettre dans les ressources Android
     private ImageView[] imagesBoites;             //!< Images des boites aux lettres
     private ImageView[] imagesNotificationBoites; //!< Images des notifications des boites aux
-                                                  //!< lettres
+    //!< lettres
     private Switch[] boutonsActivation; //!< Boutons d'activation/désactivation des modules
     //!< boitesAuxLettres
-    private ImageButton boutonAccueil;
+    private ImageButton boutonAccueil;         //!< Boutons d'activation/désactivation des modules
+                                               //!< boites
+    private ImageView boutonAjouterModule;     //!!< Boutons d'ajout des modules
+    private ImageView[] boutonSupprimerModule; //!!< Boutons de suppression des modules
+    private ImageView[] imagesParametres;      //!< Images des couleurs des modules
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -117,19 +141,58 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
 
         boutonAccueil = (ImageButton)findViewById(R.id.boutonAccueil);
 
-        imagesBoites    = new ImageView[nbModulesBoitesAuxLettres];
+        imagesBoites    = new ImageView[NB_MODULES_BOITES_MAX];
         imagesBoites[0] = (ImageView)findViewById(R.id.boiteAuxLettres0);
+        imagesBoites[1] = (ImageView)findViewById(R.id.boiteAuxLettres1);
+        imagesBoites[2] = (ImageView)findViewById(R.id.boiteAuxLettres2);
+        imagesBoites[3] = (ImageView)findViewById(R.id.boiteAuxLettres3);
 
-        imagesNotificationBoites    = new ImageView[nbModulesBoitesAuxLettres];
+        imagesNotificationBoites    = new ImageView[NB_MODULES_BOITES_MAX];
         imagesNotificationBoites[0] = (ImageView)findViewById(R.id.notificationBoite0);
+        imagesNotificationBoites[1] = (ImageView)findViewById(R.id.notificationBoite1);
+        imagesNotificationBoites[2] = (ImageView)findViewById(R.id.notificationBoite2);
+        imagesNotificationBoites[3] = (ImageView)findViewById(R.id.notificationBoite3);
 
-        boutonsActivation    = new Switch[nbModulesBoitesAuxLettres];
+        boutonsActivation    = new Switch[NB_MODULES_BOITES_MAX];
         boutonsActivation[0] = (Switch)findViewById(R.id.activationBoite0);
+        boutonsActivation[1] = (Switch)findViewById(R.id.activationBoite1);
+        boutonsActivation[2] = (Switch)findViewById(R.id.activationBoite2);
+        boutonsActivation[3] = (Switch)findViewById(R.id.activationBoite3);
 
-        for(int i = 0; i < nbModulesBoitesAuxLettres; ++i)
+        imagesParametres    = new ImageView[NB_MODULES_BOITES_MAX];
+        imagesParametres[0] = (ImageView)findViewById(R.id.couleurBoite0);
+        imagesParametres[1] = (ImageView)findViewById(R.id.couleurBoite1);
+        imagesParametres[2] = (ImageView)findViewById(R.id.couleurBoite2);
+        imagesParametres[3] = (ImageView)findViewById(R.id.couleurBoite3);
+
+        boutonSupprimerModule    = new ImageView[NB_MODULES_BOITES_MAX];
+        boutonSupprimerModule[0] = (ImageView)findViewById(R.id.boutonSupprimerBoite0);
+        boutonSupprimerModule[1] = (ImageView)findViewById(R.id.boutonSupprimerBoite1);
+        boutonSupprimerModule[2] = (ImageView)findViewById(R.id.boutonSupprimerBoite2);
+        boutonSupprimerModule[3] = (ImageView)findViewById(R.id.boutonSupprimerBoite3);
+
+        boutonAjouterModule = (ImageView)findViewById(R.id.boutonAjouterModule);
+
+        for(int i = 0; i < NB_MODULES_BOITES_MAX; ++i)
         {
-            imagesBoites[i].setImageResource(IMAGE_BOITES[i]);
             final int numeroBoite = i;
+
+            imagesParametres[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    Intent intent = new Intent(FenetreBoiteAuxLettres.this, ParametresModule.class);
+                    intent.putExtra("idModule",
+                                    modulesBoitesAuxLettres.get(numeroBoite).getIdModule());
+                    intent.putExtra("nom", modulesBoitesAuxLettres.get(numeroBoite).getNomModule());
+                    intent.putExtra("couleur",
+                                    modulesBoitesAuxLettres.get(numeroBoite).getCouleur());
+                    startActivityForResult(intent, PARAMETRAGE_MODULE);
+                }
+            });
+
+            imagesBoites[i].setImageResource(IMAGE_BOITES);
+
             imagesNotificationBoites[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v)
@@ -144,17 +207,31 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                     gererClicBoutonNotification(numeroBoite);
                 }
             });
+
+            boutonSupprimerModule[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    Log.d(TAG, "afficherBoiteDialogueSuppressionModule()");
+                    afficherBoiteDialogueSuppressionModule(numeroBoite);
+                }
+            });
+        }
+
+        for(int i = 0; i < NB_MODULES_BOITES_MAX; ++i)
+        {
+            cacherBoiteAuxLettres(i);
         }
 
         for(int i = 0; i < nbModulesBoitesAuxLettres; ++i)
         {
-            imagesBoites[i].setVisibility(View.VISIBLE);
-            boutonsActivation[i].setVisibility(View.VISIBLE);
+            afficherBoiteAuxLettres(i);
         }
 
         for(int i = 0; i < nbModulesBoitesAuxLettres; i++)
         {
             final int numeroBoite = i;
+
             // initialise la GUI en fonction de l'état de notification
             if(modulesBoitesAuxLettres.get(i).estNotifie())
             {
@@ -164,6 +241,7 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
             {
                 imagesNotificationBoites[i].setVisibility(View.INVISIBLE);
             }
+
             // initialise la GUI en fonction de l'état d'activation
             if(modulesBoitesAuxLettres.get(i).estActif())
             {
@@ -185,16 +263,25 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                     gererClicBoutonActivation(numeroBoite);
                 }
             });
-            boutonAccueil.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v)
-                {
-                    Log.d(TAG, "clic boutonAccueil");
-                    if(minuteur != null)
-                        minuteur.cancel();
-                    finish();
-                }
-            });
         }
+
+        boutonAccueil.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)
+            {
+                Log.d(TAG, "clic boutonAccueil");
+                if(minuteur != null)
+                    minuteur.cancel();
+                finish();
+            }
+        });
+
+        boutonAjouterModule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                afficherBoiteDialogueAjoutModule();
+            }
+        });
     }
 
     private void initialiserHandler()
@@ -210,7 +297,7 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                 switch(message.what)
                 {
                     case Communication.CODE_HTTP_REPONSE_JSON:
-                        Log.d(TAG, "[Handler] REPONSE JSON");
+                        // Log.d(TAG, "[Handler] REPONSE JSON");
                         traiterReponseJSON(message.obj.toString());
                         erreurCommunication = false;
                         break;
@@ -220,10 +307,20 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                         enregistrerAcquittementNotification(message.obj.toString());
                         erreurCommunication = false;
                         break;
+                    case Communication.CODE_HTTP_REPONSE_POST:
+                        Log.d(TAG, "[Handler] REPONSE POST");
+                        validerAjoutBoite(message.obj.toString());
+                        erreurCommunication = false;
+                        break;
+                    case Communication.CODE_HTTP_REPONSE_DELETE:
+                        Log.d(TAG, "[Handler] REPONSE POST");
+                        validerSuppressionBoite(message.obj.toString());
+                        erreurCommunication = false;
+                        break;
                     case Communication.CODE_HTTP_ERREUR:
-                        Log.d(TAG, "[Handler] ERREUR HTTP");
                         if(!erreurCommunication)
                         {
+                            Log.d(TAG, "[Handler] ERREUR HTTP");
                             afficherErreur("Impossible de communiquer avec la station !");
                             erreurCommunication = true;
                         }
@@ -292,11 +389,11 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
               "gererClicBoutonActivation() numeroBoite = " + numeroBoite +
                 " activation = " + boutonsActivation[numeroBoite].isChecked());
 
-        String api = API_PATCH_BOITES + "/" + modulesBoitesAuxLettres.get(numeroBoite).getIdModule();
+        String api =
+          API_PATCH_BOITES + "/" + modulesBoitesAuxLettres.get(numeroBoite).getIdModule();
 
-        String json = "{\"idBoite\": \"" +
-                modulesBoitesAuxLettres.get(numeroBoite).getIdModule() +
-                "\",\"actif\": " + boutonsActivation[numeroBoite].isChecked() + "}";
+        String json = "{\"idBoite\": \"" + modulesBoitesAuxLettres.get(numeroBoite).getIdModule() +
+                      "\",\"actif\": " + boutonsActivation[numeroBoite].isChecked() + "}";
 
         communication.emettreRequetePATCH(api, json, handler);
 
@@ -331,15 +428,15 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
 
     public void traiterReponseJSON(String reponse)
     {
-        //Log.d(TAG, "traiterReponseJSON() reponse = " + reponse);
+        // Log.d(TAG, "traiterReponseJSON() reponse = " + reponse);
         /*
             Exemple de réponsee : pour la requête GET /boites
             body =
             [
-                {"idBoite":1,"couleur":"rouge","etat":false,"actif":true},
-                {"idBoite":2,"couleur":"jaune","etat":false,"actif":true},
-                {"idBoite":3,"couleur":"bleu","etat":false,"actif":true},
-                {"idBoite":4,"couleur":"gris","etat":false,"actif":true},
+                {"idBoite":1,"couleur":"#FF0000","etat":false,"actif":true},
+                {"idBoite":2,"couleur":"#FFFF00","etat":false,"actif":true},
+                {"idBoite":3,"couleur":"#0000FF","etat":false,"actif":true},
+                {"idBoite":4,"couleur":"#F0F0F2","etat":false,"actif":true},
             ]
         */
         JSONArray json = null;
@@ -378,6 +475,95 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
         }
     }
 
+    public void validerAjoutBoite(String reponse)
+    {
+        Log.d(TAG, "validerAjoutBoite() reponse = " + reponse);
+        /*
+            Exemple de réponse : pour la requête POST
+            body =
+            [
+                {"idBoite":5,"couleur":"#FF0000","etat":false,"actif":false}
+            ]
+        */
+        JSONArray json = null;
+
+        try
+        {
+            json               = new JSONArray(reponse);
+            JSONObject boite   = json.getJSONObject(0);
+            int        idBoite = boite.getInt("idBoite");
+            String     couleur = boite.getString("couleur");
+            Boolean    etat    = boite.getBoolean("etat");
+            Boolean    actif   = boite.getBoolean("actif");
+            Log.d(TAG,
+                  "validerAjoutBoite() idBoite = " + idBoite + " couleur = " + couleur +
+                    " etat = " + etat + " actif = " + actif);
+            Module module = new Module(idBoite,
+                                       nomAjoutModule,
+                                       Module.TypeModule.BoiteAuxLettres,
+                                       actif,
+                                       etat,
+                                       couleur,
+                                       baseDeDonnees);
+            modulesBoitesAuxLettres.add(module);
+            baseDeDonnees.insererModule(module.getIdModule(),
+                                        module.getTypeModule().ordinal() + 1,
+                                        module.getNomModule(),
+                                        module.estActif(),
+                                        module.getCouleur());
+            afficherBoiteAuxLettres(nbModulesBoitesAuxLettres);
+            int numeroBoite = getNumeroBoite(module.getIdModule());
+            mettreAJourModule(numeroBoite);
+            nomAjoutModule            = "";
+            nbModulesBoitesAuxLettres = modulesBoitesAuxLettres.size();
+            Log.d(TAG,
+                  "validerAjoutBoite() nbModulesBoitesAuxLettres = " + nbModulesBoitesAuxLettres);
+        }
+        catch(JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void validerSuppressionBoite(String reponse)
+    {
+        Log.d(TAG, "validerSuppressionBoite() reponse = " + reponse);
+        /*
+            Exemple de réponse : pour la requête DELETE
+            body =
+            [
+                {"idBoite":5}
+            ]
+        */
+        JSONArray json = null;
+
+        try
+        {
+            json               = new JSONArray(reponse);
+            JSONObject boites  = json.getJSONObject(0);
+            int        idBoite = boites.getInt("idBoite");
+            Log.d(TAG, "validerSuppressionBoite() idBoite = " + idBoite);
+            int numeroBoite = getNumeroBoite(idBoite);
+            if(numeroBoite == -1)
+            {
+                Log.d(TAG, "validerSuppressionBoite() idBoite introuvable !");
+                return;
+            }
+            Module module = modulesBoitesAuxLettres.get(numeroBoite);
+            baseDeDonnees.supprimerModule(idBoite, module.getTypeModule().ordinal() + 1);
+            modulesBoitesAuxLettres.remove(module);
+            cacherBoiteAuxLettres(numeroBoite);
+            nbModulesBoitesAuxLettres = modulesBoitesAuxLettres.size();
+            Log.d(TAG,
+                  "validerSuppressionBoite() nbModulesBoitesAuxLettres = " +
+                    nbModulesBoitesAuxLettres);
+        }
+        catch(JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     public void enregistrerAcquittementNotification(String reponse)
     {
         if(numeroBoiteAcquittement == -1)
@@ -394,7 +580,7 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
             Exemple de réponsee : pour la requête PATCH /boites/1
             body =
             [
-                {"idBoite":1,"couleur":"rouge","etat":false,"actif":true}
+                {"idBoite":1,"couleur":"#FF0000","etat":false,"actif":true}
             ]
         */
         JSONArray json = null;
@@ -413,17 +599,16 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                       "enregistrerAcquittementNotification() idBoitesAuxLettres = " + idBoite +
                         " couleur = " + couleur + " etat = " + etat + " actif = " + actif);
 
-                    Module module = modulesBoitesAuxLettres.get(numeroBoiteAcquittement);
-                    if(module.getIdModule() == idBoite &&
-                       module.getTypeModule() == Module.TypeModule.BoiteAuxLettres && !etat)
-                    {
-                        baseDeDonnees.enregistrerAcquittementNotification(
-                          module.getIdModule(),
-                          module.getTypeModule().ordinal(),
-                          true);
-                        numeroBoiteAcquittement = -1;
-                    }
-
+                Module module = modulesBoitesAuxLettres.get(numeroBoiteAcquittement);
+                if(module.getIdModule() == idBoite &&
+                   module.getTypeModule() == Module.TypeModule.BoiteAuxLettres && !etat)
+                {
+                    baseDeDonnees.enregistrerAcquittementNotification(
+                      module.getIdModule(),
+                      module.getTypeModule().ordinal(),
+                      true);
+                    numeroBoiteAcquittement = -1;
+                }
             }
         }
         catch(JSONException e)
@@ -440,8 +625,8 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
             return;
         }
 
-        Module module = modulesBoitesAuxLettres.get(numeroBoite);
-        int idBoite = module.getIdModule();
+        Module module  = modulesBoitesAuxLettres.get(numeroBoite);
+        int    idBoite = module.getIdModule();
 
         if(module.estActif())
         {
@@ -452,7 +637,8 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
                 if(notificationEnvoyee == null || !notificationEnvoyee)
                 {
                     // On signale une notification sur la tablette Android
-                    creerNotification("Le module " + module.getNomModule() + " a une notification.");
+                    creerNotification("Le module " + module.getNomModule() +
+                                      " a une notification.");
                     notificationsEnvoyees.put(idBoite, true);
                 }
             }
@@ -481,28 +667,50 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
 
     private void creerNotification(String message)
     {
-        NotificationManager notificationManager =
-          (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-
         String titreNotification = getNomApplication(getApplicationContext());
         String texteNotification = message;
 
-        NotificationCompat.Builder notification = new NotificationCompat.Builder(this)
-                                                    .setSmallIcon(R.mipmap.ic_launcher)
-                                                    .setContentTitle(titreNotification)
-                                                    .setContentText(texteNotification);
+        NotificationManager notificationManager =
+          (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Si >= API26, obligation de créer un canal de notifications
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            CharSequence        name        = getString(R.string.app_name);
+            String              description = "Notification domotifications";
+            int                 importance  = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel =
+              new NotificationChannel("domotifications_id", name, importance);
+            channel.setDescription(description);
+            channel.setImportance(NotificationManager.IMPORTANCE_DEFAULT);
+            notificationManager = (NotificationManager)getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        NotificationCompat.Builder notification =
+          new NotificationCompat.Builder(this, "domotifications_id")
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle(titreNotification)
+            .setContentText(texteNotification)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         // On pourrait ici crée une autre activité
         PendingIntent pendingIntent =
-          PendingIntent.getActivity(this, 0, new Intent(), PendingIntent.FLAG_UPDATE_CURRENT);
+          PendingIntent.getActivity(this, 0, new Intent(), PendingIntent.FLAG_IMMUTABLE);
 
         notification.setContentIntent(pendingIntent);
-
         notification.setAutoCancel(true);
-
         notification.setVibrate(new long[] { 0, 200, 100, 200, 100, 200 });
 
-        notificationManager.notify(idNotification++, notification.build());
+        // Si >= API26
+        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
+        {
+            notificationManager.notify(idNotification, notification.build());
+        }
+        else
+        {
+            NotificationManagerCompat.from(this).notify(idNotification, notification.build());
+        }
     }
 
     public static String getNomApplication(Context context)
@@ -514,5 +722,236 @@ public class FenetreBoiteAuxLettres extends AppCompatActivity
     private void afficherErreur(String message)
     {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    private boolean verifierPermissionNotification()
+    {
+        if(ContextCompat.checkSelfPermission(this,
+                                             android.Manifest.permission.POST_NOTIFICATIONS) ==
+           PackageManager.PERMISSION_GRANTED)
+        {
+            Log.d(TAG,
+                  "verifierPermissionNotification() permission notification = PERMISSION_GRANTED");
+            return true;
+        }
+        else
+        {
+            Log.d(TAG,
+                  "verifierPermissionNotification() permission notification = PERMISSION_DENIED");
+            ActivityCompat.requestPermissions(
+              this,
+              new String[] { Manifest.permission.POST_NOTIFICATIONS },
+              101);
+        }
+        return false;
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG,
+              "onActivityResult() requestCode = " + requestCode + " - resultCode = " + resultCode);
+        if(requestCode == PARAMETRAGE_MODULE)
+        {
+            if(resultCode == RESULT_OK)
+            {
+                if(data != null)
+                {
+                    int    idModule      = data.getIntExtra("idModule", -1);
+                    String nomModule     = data.getStringExtra("nom");
+                    String couleurModule = data.getStringExtra("couleur");
+                    Log.d(TAG,
+                          "onActivityResult() idModule = " + idModule +
+                            " - nomModule : " + nomModule + " - couleurModule = " + couleurModule);
+
+                    if(idModule != -1)
+                    {
+                        int    numeroModule = getNumeroBoite(idModule);
+                        Module module       = modulesBoitesAuxLettres.get(numeroModule);
+                        if(module != null)
+                        {
+                            if(!module.getNomModule().equals(nomModule))
+                            {
+                                module.setNomModule(nomModule);
+                                baseDeDonnees.modifierNomModule(module.getIdModule(),
+                                                                module.getTypeModule().ordinal() +
+                                                                  1,
+                                                                nomModule);
+                            }
+                            module.setCouleur(couleurModule);
+                        }
+                    }
+                    String api = API_PATCH_BOITES + "/" + idModule;
+                    String json =
+                      "{\"idBoite\": \"" + idModule + "\",\"couleur\": \"" + couleurModule + "\"}";
+                    communication.emettreRequetePATCH(api, json, handler);
+                }
+            }
+        }
+    }
+
+    private void afficherBoiteDialogueAjoutModule()
+    {
+        Log.d(TAG, "afficherBoiteDialogueAjoutModule()");
+        Log.d(TAG, "afficherBoiteDialogueAjoutModule()");
+        AlertDialog.Builder ajoutModule     = new AlertDialog.Builder(this);
+        LayoutInflater      factory         = LayoutInflater.from(this);
+        final View          ajoutModuleView = factory.inflate(R.layout.ajout_module, null);
+        ajoutModule.setView(ajoutModuleView);
+        ajoutModule.setTitle("Ajouter un nouveau module");
+        ajoutModule.setPositiveButton("Valider", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                // Lorsque l'on cliquera sur le bouton "OK", on récupère l'EditText correspondant à
+                // la vue personnalisée (cad à ajoutModuleView)
+                EditText nomModule = (EditText)ajoutModuleView.findViewById(R.id.editTextNom);
+                if(!nomModule.getText().toString().isEmpty())
+                    nomAjoutModule = nomModule.getText().toString().trim();
+                else
+                    nomAjoutModule = "boite";
+                Log.d(TAG, "afficherBoiteDialogueAjoutModule() nomModule = " + nomAjoutModule);
+                TextInputEditText couleurModule =
+                  (TextInputEditText)ajoutModuleView.findViewById(R.id.editTextCouleurHTML);
+                String couleurAjoutModule = "#FF0000";
+                if(!couleurModule.getText().toString().trim().isEmpty())
+                    couleurAjoutModule = couleurModule.getText().toString().trim();
+                Log.d(TAG,
+                      "afficherBoiteDialogueAjoutModule() couleurAjoutModule = " +
+                        couleurAjoutModule);
+
+                // Préparer et émettre la requête POST à la station
+                int idBoite = rechercherIdDisponible();
+                Log.d(TAG, "afficherBoiteDialogueAjoutModule() idBoite = " + idBoite);
+                // si idBoite= 0 alors la station choisira l'idBoite à ajouter sinon c'est
+                // l'application qui le détermine
+
+                // Mode démo
+                if(idBoite > 0)
+                {
+                    String api  = API_PATCH_BOITES;
+                    String json = "{\"idBoite\": " + idBoite + ", \"couleur\": \"" +
+                                  couleurAjoutModule + "\", \"actif\": true"
+                                  + "}";
+                    communication.emettreRequetePOST(api, json, handler);
+
+                    // Notifier l'utilisateur
+                    Toast
+                      .makeText(getApplicationContext(),
+                                "Demande d'ajout du module '" + nomAjoutModule + "' envoyée",
+                                Toast.LENGTH_SHORT)
+                      .show();
+
+                    // Mode démo
+                    String reponseJson = "{\"idBoite\": " + idBoite + ", \"couleur\": \"" +
+                                         couleurAjoutModule + "\", \"etat\": false, \"actif\": true"
+                                         + "}";
+                    validerAjoutBoite("[" + reponseJson + "]");
+                }
+            }
+        });
+        ajoutModule.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which)
+            {
+            }
+        });
+
+        AlertDialog alert = ajoutModule.create();
+        alert.setCanceledOnTouchOutside(false);
+        alert.show();
+    }
+
+    private void afficherBoiteDialogueSuppressionModule(int numeroBoite)
+    {
+        if(modulesBoitesAuxLettres.get(numeroBoite) == null)
+        {
+            Log.e(TAG, "afficherBoiteDialogueSuppressionModule() Aucune boîte aux lettres !");
+            return;
+        }
+        String nomModule = modulesBoitesAuxLettres.get(numeroBoite).getNomModule();
+
+        AlertDialog.Builder boiteSuppression = new AlertDialog.Builder(this);
+        boiteSuppression.setMessage("Vous êtes sur le point de supprimer le module '" + nomModule +
+                                    "'.");
+        boiteSuppression.setPositiveButton("SUPPRIMER", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                // Emettre la requête DELETE à la station
+                String api =
+                  API_PATCH_BOITES + "/" + modulesBoitesAuxLettres.get(numeroBoite).getIdModule();
+                String json =
+                  "{\"idBoite\": " + modulesBoitesAuxLettres.get(numeroBoite).getIdModule() + "}";
+                communication.emettreRequeteDELETE(api, json, handler);
+
+                // Notifier l'utilisateur
+                Toast
+                  .makeText(getApplicationContext(),
+                            "Demande de suppression du module '" + nomModule + "' envoyée",
+                            Toast.LENGTH_SHORT)
+                  .show();
+
+                // Mode démo
+                validerSuppressionBoite("[" + json + "]");
+            }
+        });
+        boiteSuppression.setNegativeButton("ANNULER", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which)
+            {
+            }
+        });
+
+        AlertDialog alert = boiteSuppression.create();
+        alert.setCanceledOnTouchOutside(false);
+        alert.show();
+    }
+
+    private void cacherBoiteAuxLettres(int numeroBoite)
+    {
+        imagesBoites[numeroBoite].setVisibility(View.INVISIBLE);
+        imagesNotificationBoites[numeroBoite].setVisibility(View.INVISIBLE);
+        boutonsActivation[numeroBoite].setVisibility(View.INVISIBLE);
+        imagesParametres[numeroBoite].setVisibility(View.INVISIBLE);
+        boutonSupprimerModule[numeroBoite].setVisibility(View.INVISIBLE);
+    }
+
+    private void afficherBoiteAuxLettres(int numeroBoite)
+    {
+        imagesBoites[numeroBoite].setVisibility(View.VISIBLE);
+        imagesNotificationBoites[numeroBoite].setVisibility(View.VISIBLE);
+        boutonsActivation[numeroBoite].setVisibility(View.VISIBLE);
+        imagesParametres[numeroBoite].setVisibility(View.VISIBLE);
+        boutonSupprimerModule[numeroBoite].setVisibility(View.VISIBLE);
+    }
+
+    private int getNumeroBoite(int idBoite)
+    {
+        for(int i = 0; i < modulesBoitesAuxLettres.size(); ++i)
+        {
+            Module module = modulesBoitesAuxLettres.get(i);
+            if(module.getIdModule() == idBoite)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private int rechercherIdDisponible()
+    {
+        for(int id = 1; id <= NB_MODULES_BOITES_MAX; id++)
+        {
+            if(!estPresent(id))
+                return id;
+        }
+        return 0; // pas d'id de disponible
+    }
+
+    private boolean estPresent(int id)
+    {
+        for(int i = 0; i < modulesBoitesAuxLettres.size(); i++)
+        {
+            if(id == modulesBoitesAuxLettres.get(i).getIdModule())
+                return true;
+        }
+        return false;
     }
 }

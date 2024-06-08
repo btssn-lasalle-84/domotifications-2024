@@ -1,11 +1,14 @@
 class Poubelle
+!!!137386.cpp!!!	getId() : int
+    return id;
+!!!137514.cpp!!!	getCouleurLed() : uint32_t
+    return couleurLed;
 !!!128535.cpp!!!	getActivation() : bool
     return activation;
 !!!128663.cpp!!!	setActivation(in etat : bool) : void
     if(etat != activation)
     {
         activation = etat;
-        // @todo Sauvegarder le nouvel état dans Preferences
     }
 !!!128791.cpp!!!	getEtatNotification() : bool
     return notification;
@@ -13,7 +16,6 @@ class Poubelle
     if(etat != notification)
     {
         notification = etat;
-        // @todo Sauvegarder le nouvel état dans Preferences
         if(notification)
         {
             allumerNotification();
@@ -26,9 +28,23 @@ class Poubelle
 !!!129047.cpp!!!	resetEtatNotification() : void
     setEtatNotification(false);
 !!!129175.cpp!!!	allumerNotification() : void
-    leds.setPixelColor(INDEX_LEDS_NOTIFICATION_POUBELLES + numeroLed,
-                       couleur); // Appliquer la couleur correspondante
-    leds.show();
+    if(activation)
+    {
+        leds.setPixelColor(INDEX_LEDS_NOTIFICATION_POUBELLES + numeroLed,
+                           couleurLed); // Appliquer la couleur correspondante
+        leds.show();
+    }
 !!!129303.cpp!!!	eteindreNotification() : void
-    leds.setPixelColor(INDEX_LEDS_NOTIFICATION_POUBELLES + numeroLed, leds.Color(0, 0, 0));
-    leds.show();
+    if(activation)
+    {
+        leds.setPixelColor(INDEX_LEDS_NOTIFICATION_POUBELLES + numeroLed, leds.Color(0, 0, 0));
+        leds.show();
+    }
+!!!137642.cpp!!!	getCouleur() : String
+    return StationLumineuse::getCouleurToString(couleurLed);
+!!!137770.cpp!!!	setCouleurLed(in couleur : String) : void
+    uint32_t couleurLed = StationLumineuse::getCouleurToRGB(couleur);
+    if(couleurLed != this->couleurLed && couleurLed != 0)
+    {
+        this->couleurLed = couleurLed;
+    }

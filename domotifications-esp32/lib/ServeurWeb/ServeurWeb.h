@@ -2,7 +2,7 @@
  * @file ServeurWeb.h
  * @brief Déclaration de la classe ServeurWeb
  * @author Corentin MOUTTE
- * @version 0.1
+ * @version 1.0
  */
 
 #ifndef SERVEURWEB_H

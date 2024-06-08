@@ -60,6 +60,25 @@
                 android:background="@android:color/transparent"
                 android:scaleType="fitXY"
                 tools:ignore="MissingConstraints" />
+
+
+            <ImageView
+                android:id="@+id/couleurPoubelle0"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="25dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/parametres"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/boutonSupprimerPoubelle0"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/boutonsupprimermodule" />
         </LinearLayout>
 
         <LinearLayout
@@ -96,6 +115,24 @@
                 android:background="@android:color/transparent"
                 android:scaleType="fitXY"
                 tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/couleurPoubelle1"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="25dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/parametres"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/boutonSupprimerPoubelle1"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/boutonsupprimermodule" />
         </LinearLayout>
 
         <LinearLayout
@@ -132,6 +169,24 @@
                 android:background="@android:color/transparent"
                 android:scaleType="fitXY"
                 tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/couleurPoubelle2"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="25dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/parametres"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/boutonSupprimerPoubelle2"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/boutonsupprimermodule" />
         </LinearLayout>
 
         <LinearLayout
@@ -168,6 +223,24 @@
                 android:background="@android:color/transparent"
                 android:scaleType="fitXY"
                 tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/couleurPoubelle3"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="25dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/parametres"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/boutonSupprimerPoubelle3"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/boutonsupprimermodule" />
         </LinearLayout>
 
         <LinearLayout
@@ -204,6 +277,24 @@
                 android:background="@android:color/transparent"
                 android:scaleType="fitXY"
                 tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/couleurPoubelle4"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="25dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/parametres"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/boutonSupprimerPoubelle4"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/boutonsupprimermodule" />
         </LinearLayout>
 
     </LinearLayout>
@@ -221,4 +312,20 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/boutonAjouterModule"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="24dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitXY"
+        app:layout_constraintBaseline_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/boutonajoutermodule">
+
+    </ImageView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

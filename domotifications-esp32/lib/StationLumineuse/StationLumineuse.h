@@ -2,7 +2,7 @@
  * @file StationLumineuse.h
  * @brief Déclaration de la classe StationLumineuse
  * @author Corentin MOUTTE
- * @version 0.1
+ * @version 1.0
  */
 
 #ifndef STATIONLUMINEUSE_H
@@ -40,6 +40,12 @@ class StationLumineuse
       couleursPoubelles[NB_LEDS_NOTIFICATION_POUBELLES]; //!< les couleurs par défaut des poubelles
 
     void restaurerEtats();
+    void sauvegarderCouleurPoubelle(int id);
+    void restaurerCouleurPoubelle(int id);
+    void sauvegarderCouleurBoite(int id);
+    void restaurerCouleurBoite(int id);
+    void sauvegarderCouleurMachine(int id);
+    void restaurerCouleurMachine(int id);
 
   public:
     StationLumineuse();
@@ -58,12 +64,12 @@ class StationLumineuse
     Poubelle*   getPoubelle(int id);
     void        sauvegarderEtatsPoubelle(int id);
 
-    // @todo idem pour les modules Boite
+    // pour les modules Boite
     std::size_t getNbBoites() const;
     Boite*      getBoite(int id);
     void        sauvegarderEtatsBoite(int id);
 
-    // @todo idem pour les modules Machine
+    // pour les modules Machine
     std::size_t getNbMachines() const;
     Machine*    getMachine(int id);
     void        sauvegarderEtatsMachine(int id);

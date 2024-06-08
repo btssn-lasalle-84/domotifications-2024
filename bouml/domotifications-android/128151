@@ -1,6 +1,6 @@
 format 224
 "domotifications" // domotifications
-  revision 3
+  revision 4
   modified_by 42 "tv"
   // class settings
   
@@ -64,8 +64,259 @@ ${members}}
       explicit_switch_type ""
       mysql_decl ""
       
-      attribute 128151 "adresseIP"
-	private explicit_type "InetAddress"
+      attribute 150442 "TAG"
+	class_attribute const_attribute private explicit_type "String"
+	init_value " \"_Communication\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "Constantes
+a
+
+!< TAG pour les logs"
+      end
+
+      attribute 150570 "ADRESSE_STATION"
+	class_attribute const_attribute private explicit_type "String"
+	init_value " \"station-lumineuse.local\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 150698 "ADRESSE_IP_STATION"
+	class_attribute const_attribute public explicit_type "String"
+	init_value " \"192.168.52.218\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " Simulateur station"
+      end
+
+      attribute 150826 "PORT_HTTP"
+	class_attribute const_attribute private explicit_type "int"
+	init_value " 80"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 150954 "CODE_HTTP_REPONSE_JSON"
+	class_attribute const_attribute public explicit_type "int"
+	init_value "
+      0"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Code indicatif de l'handler pour les requêtes qui retournent des réponses au format"
+      end
+
+      attribute 151082 "CODE_HTTP_REPONSE_PATCH"
+	class_attribute const_attribute public explicit_type "int"
+	init_value "
+      1"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< JSON
+!< Code indicatif de l'handler pour les retours des requêtes PATCH"
+      end
+
+      attribute 151210 "CODE_HTTP_ERREUR"
+	class_attribute const_attribute public explicit_type "int"
+	init_value "
+      2"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Code indicatif de l'handler pour signaler des requêtes qui ont échouées (onFailure)"
+      end
+
+      attribute 151338 "CODE_HTTP_REPONSE_POST"
+	class_attribute const_attribute public explicit_type "int"
+	init_value "
+      3"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Code indicatif de l'handler pour les retours des requêtes POST"
+      end
+
+      attribute 151466 "CODE_HTTP_REPONSE_DELETE"
+	class_attribute const_attribute public explicit_type "int"
+	init_value "
+            4"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Code indicatif de l'handler pour les retours des requêtes DELETE"
+      end
+
+      attribute 151594 "JSON"
+	class_attribute const_attribute public explicit_type "MediaType"
+	init_value " MediaType.get(\"application/json; charset=utf-8\")"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 151722 "API_GET_POUBELLES"
+	class_attribute const_attribute public explicit_type "String"
+	init_value " \"/poubelles\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Pour une requête GET"
+      end
+
+      attribute 151850 "API_GET_BOITES"
+	class_attribute const_attribute public explicit_type "String"
+	init_value " \"/boites\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Pour une requête GET"
+      end
+
+      attribute 151978 "API_GET_MACHINES"
+	class_attribute const_attribute public explicit_type "String"
+	init_value " \"/machines\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Pour une requête GET"
+      end
+
+      classrelation 148522 // communication (<unidirectional association>)
+	relation 148522 --->
+	  a role_name "communication" init_value "
+      null" class_relation private
+	    comment "
+Attributs
+
+!< Instance unique de Communication (singleton)"
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 148522 // communication (<unidirectional association>)
+	  b parent class_ref 128151 // Communication
+      end
+
+      attribute 152106 "clientOkHttp"
+	private explicit_type "OkHttpClient"
+	init_value " null"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 148650 // baseDeDonnees (<unidirectional association>)
+	relation 148650 --->
+	  a role_name "baseDeDonnees" private
+	    comment "!< Association avec la base de donnees"
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 148650 // baseDeDonnees (<unidirectional association>)
+	  b parent class_ref 141354 // BaseDeDonnees
+      end
+
+      attribute 152234 "adresseStation"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 152362 "numeroPort"
+	private explicit_type "int"
+	init_value " PORT_HTTP"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 152490 "url"
+	private explicit_type "String"
+	init_value " null"
 	cpp_decl ""
 	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
@@ -77,16 +328,168 @@ ${members}}
       end
 
       operation 128151 "Communication"
-	public explicit_return_type ""
-	nparams 0
+	private explicit_return_type ""
+	nparams 1
+	  param inout name "context" explicit_type "Context"
 	
-	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${)}${throws}${staticnl}{
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
   ${body}}
 "
 	
 	
 	
       end
+
+      operation 151850 "Communication"
+	private explicit_return_type ""
+	nparams 2
+	  param in name "adresseStation" explicit_type "String"
+	  param inout name "context" explicit_type "Context"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 151978 "getInstance"
+	class_operation public return_type class_ref 128151 // Communication
+	nparams 1
+	  param inout name "context" explicit_type "Context"
+	
+	preserve_java_body_indent synchronized java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 152106 "getInstance"
+	class_operation public return_type class_ref 128151 // Communication
+	nparams 2
+	  param in name "adresseStation" explicit_type "String"
+	  param inout name "context" explicit_type "Context"
+	
+	preserve_java_body_indent synchronized java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 152234 "getAdresseStation"
+	public explicit_return_type "String"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 152362 "setAdresseStation"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "adresseStation" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 152490 "emettreRequeteGET"
+	public explicit_return_type "void"
+	nparams 2
+	  param in name "api" explicit_type "String"
+	  param inout name "handler" explicit_type "Handler"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 152618 "emettreRequetePATCH"
+	public explicit_return_type "void"
+	nparams 3
+	  param in name "api" explicit_type "String"
+	  param in name "json" explicit_type "String"
+	  param inout name "handler" explicit_type "Handler"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 152746 "emettreRequetePOST"
+	public explicit_return_type "void"
+	nparams 3
+	  param in name "api" explicit_type "String"
+	  param in name "json" explicit_type "String"
+	  param inout name "handler" explicit_type "Handler"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 152874 "emettreRequeteDELETE"
+	public explicit_return_type "void"
+	nparams 3
+	  param in name "api" explicit_type "String"
+	  param in name "json" explicit_type "String"
+	  param inout name "handler" explicit_type "Handler"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 153002 "recupererURLStation"
+	private explicit_return_type "String"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 153130 "estConnecteReseau"
+	private explicit_return_type "boolean"
+	nparams 1
+	  param inout name "context" explicit_type "Context"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
     end
 
     class 128279 "Domotifications"
@@ -111,15 +514,6 @@ ${members}}
 	  b parent class_ref 128407 // Module
       end
 
-      classrelation 128663 // communication (<unidirectional association>)
-	relation 128663 --->
-	  a role_name "communication" private
-	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
-"
-	    classrelation_ref 128663 // communication (<unidirectional association>)
-	  b parent class_ref 128151 // Communication
-      end
-
       operation 128279 "Domotifications"
 	public explicit_return_type ""
 	nparams 0
@@ -131,6 +525,7 @@ ${members}}
 	
 	
       end
+
     end
 
     class 128407 "Module"
@@ -145,6 +540,20 @@ ${members}}
       explicit_switch_type ""
       mysql_decl ""
       
+      attribute 161578 "TAG"
+	class_attribute const_attribute private explicit_type "String"
+	init_value " \"_Module\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< TAG pour les logs"
+      end
+
       attribute 128663 "idModule"
 	private explicit_type "int"
 	cpp_decl ""
@@ -190,7 +599,7 @@ ${members}}
 	MysqlColumn
       end
 
-      attribute 129047 "etatModification"
+      attribute 161706 "etatNotification"
 	private explicit_type "boolean"
 	cpp_decl ""
 	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
@@ -200,6 +609,28 @@ ${members}}
 	idl_decl ""
 	mysql_decl ""
 	MysqlColumn
+      end
+
+      attribute 161834 "couleur"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 149930 // baseDeDonnees (<unidirectional association>)
+	relation 149930 --->
+	  a role_name "baseDeDonnees" private
+	    comment "!< Association avec la base de donnees"
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 149930 // baseDeDonnees (<unidirectional association>)
+	  b parent class_ref 141354 // BaseDeDonnees
       end
 
       class 128791 "TypeModule"
@@ -226,6 +657,17 @@ ${members}}
 	  MysqlColumn
 	end
 
+	attribute 129431 "Poubelle"
+	  public type class_ref 128791 // TypeModule
+	  cpp_decl ""
+	  java_decl "  ${@}${name}${value},${comment}"
+	  php_decl ""
+	  python_decl ""
+	  idl_decl ""
+	  mysql_decl ""
+	  MysqlColumn
+	end
+
 	attribute 129303 "Machine"
 	  public type class_ref 128791 // TypeModule
 	  cpp_decl ""
@@ -237,7 +679,7 @@ ${members}}
 	  MysqlColumn
 	end
 
-	attribute 129431 "Poubelle"
+	attribute 161962 "NbTypes"
 	  public type class_ref 128791 // TypeModule
 	  cpp_decl ""
 	  java_decl "  ${@}${name}${value},${comment}"
@@ -251,14 +693,16 @@ ${members}}
 
       operation 129175 "Module"
 	public explicit_return_type ""
-	nparams 5
+	nparams 7
 	  param in name "idModule" explicit_type "int"
 	  param in name "nomModule" explicit_type "String"
 	  param inout name "typeModule" type class_ref 128791 // TypeModule
 	  param inout name "etatActivation" explicit_type "boolean"
-	  param inout name "etatModification" explicit_type "boolean"
+	  param inout name "etatNotification" explicit_type "boolean"
+	  param in name "couleur" explicit_type "String"
+	  param inout name "baseDeDonnees" type class_ref 141354 // BaseDeDonnees
 	
-	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}, ${t4} ${p4}${)}${throws}${staticnl}{
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}, ${t4} ${p4}, ${t5} ${p5}, ${t6} ${p6}${)}${throws}${staticnl}{
   ${body}}
 "
 	
@@ -267,11 +711,9 @@ ${members}}
 	comment " Constructeur"
       end
 
-      operation 129303 "finalize"
-	protected explicit_return_type "void"
+      operation 164266 "getIdModule"
+	public explicit_return_type "int"
 	nparams 0
-	nexceptions 1
-	  explicit_exception "Throwable"
 	
 	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
   ${body}}
@@ -279,8 +721,146 @@ ${members}}
 	
 	
 	
-	comment " Destructeur"
       end
+
+      operation 164394 "getNomModule"
+	public explicit_return_type "String"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 164522 "getTypeModule"
+	public return_type class_ref 128791 // TypeModule
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 164650 "estActif"
+	public explicit_return_type "boolean"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 164778 "estNotifie"
+	public explicit_return_type "boolean"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 164906 "getCouleur"
+	public explicit_return_type "String"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 165034 "setNomModule"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "nomModule" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 165162 "setTypeModule"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "typeModule" type class_ref 128791 // TypeModule
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 165290 "setEtatActivation"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "etat" explicit_type "boolean"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 165418 "setActif"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "actif" explicit_type "boolean"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 165546 "setEtatNotification"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "etat" explicit_type "boolean"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 165674 "setCouleur"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "couleur" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
     end
 
     class 128535 "IHM"
@@ -331,66 +911,119 @@ ${members}};
 !< TAG pour les logs (cf. Logcat)"
       end
 
-      classrelation 134954 // domotifications (<unidirectional association>)
-	relation 134954 --->
-	  a role_name "domotifications" private
-	    comment "
-Attributs
-
+      attribute 160298 "INTERVALLE"
+	class_attribute const_attribute private explicit_type "int"
+	init_value " 1000"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Intervalle d'interrogation en ms"
+      end
+
+      attribute 160426 "handler"
+	private explicit_type "Handler"
+	init_value "
+      null"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Handler permettant la communication entre la classe Communication et les activités"
+      end
+
+      attribute 160554 "minuteur"
+	private explicit_type "Timer"
+	init_value " null"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Pour gérer la récupération des états des différents modules"
+      end
+
+      classrelation 149802 // communication (<unidirectional association>)
+	relation 149802 --->
+	  a role_name "communication" private
+	    comment "!< Association avec la classe Communication"
 	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
-	    classrelation_ref 134954 // domotifications (<unidirectional association>)
-	  b parent class_ref 128279 // Domotifications
-      end
-
-      attribute 128407 "nomInterface"
-	private explicit_type "String"
-	cpp_decl ""
-	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
-"
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-	mysql_decl ""
-	MysqlColumn
-      end
-
-      attribute 128535 "adresseIP"
-	private explicit_type "String"
-	cpp_decl ""
-	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
-"
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-	mysql_decl ""
-	MysqlColumn
+	    classrelation_ref 149802 // communication (<unidirectional association>)
+	  b parent class_ref 128151 // Communication
       end
 
       classrelation 141866 // baseDeDonnees (<unidirectional association>)
 	relation 141866 --->
 	  a role_name "baseDeDonnees" private
-	    comment " Exemple d'accès à la base de données
-!< Association avec la base de donnees"
+	    comment "!< Association avec la classe BaseDeDonnee"
 	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
 	    classrelation_ref 141866 // baseDeDonnees (<unidirectional association>)
 	  b parent class_ref 141354 // BaseDeDonnees
       end
 
-      attribute 143786 "nomsModules"
-	private explicit_type "String"
-	stereotype "Vector"
+      attribute 160682 "nbNotificationsPoubelles"
+	private explicit_type "int"
 	cpp_decl ""
-	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
 	php_decl ""
 	python_decl ""
 	idl_decl ""
 	mysql_decl ""
 	MysqlColumn
-	comment " test"
+	comment "Attributs
+
+"
+      end
+
+      attribute 160810 "nbNotificationsMachines"
+	private explicit_type "int"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 160938 "nbNotificationsBoites"
+	private explicit_type "int"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 161066 "erreurCommunication"
+	private explicit_type "boolean"
+	init_value " false"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
       end
 
       attribute 135082 "boutonPoubelle"
@@ -422,6 +1055,42 @@ Attributs
 
       attribute 135338 "boutonBoiteAuxLettres"
 	private explicit_type "ImageButton"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 161194 "notificationPoubelle"
+	private explicit_type "TextView"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 161322 "notificationMachine"
+	private explicit_type "TextView"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 161450 "notificationBoiteAuxLettres"
+	private explicit_type "TextView"
 	cpp_decl ""
 	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
@@ -546,6 +1215,129 @@ et détruite par le système Android)
 "
       end
 
+      operation 162986 "initialiserBouton"
+	public explicit_return_type "void"
+	nparams 2
+	  param inout name "bouton" explicit_type "ImageButton"
+	  param inout name "typeDeClasse" explicit_type "Class<?>"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 163114 "initialiserBaseDeDonnees"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 163242 "initialiserHandler"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 163370 "initialiserMinuteur"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 163498 "initialiserCommunication"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 163626 "recupererNotifications"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 163754 "traiterReponseJSON"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "reponse" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 163882 "mettreAJourNotificationsPoubelles"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 164010 "mettreAJourNotificationsMachines"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 164138 "mettreAJourNotificationsBoites"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
       classrelation 141994 // <dependency>
 	relation 141994 -_->
 	  a public
@@ -604,8 +1396,241 @@ ${members}};
 !< TAG pour les logs"
       end
 
-      attribute 134698 "boutonAccueil"
-	private explicit_type "ImageButton"
+      attribute 152618 "API_PATCH_BOITES"
+	class_attribute const_attribute private explicit_type "String"
+	init_value " \"/boites\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Pour une requête PATCH"
+      end
+
+      attribute 152746 "API_POST_BOITES"
+	class_attribute const_attribute private explicit_type "String"
+	init_value " \"/boites\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Pour une requête POST"
+      end
+
+      attribute 152874 "INTERVALLE"
+	class_attribute const_attribute private explicit_type "int"
+	init_value " 1000"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Intervalle d'interrogation en ms"
+      end
+
+      attribute 153002 "NB_MODULES_BOITES_MAX"
+	class_attribute const_attribute private explicit_type "int"
+	init_value " 4"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 153130 "PARAMETRAGE_MODULE"
+	class_attribute const_attribute private explicit_type "int"
+	init_value "
+      1"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Code pour l'activité de paramètrage du module"
+      end
+
+      classrelation 148778 // baseDeDonnees (<unidirectional association>)
+	relation 148778 --->
+	  a role_name "baseDeDonnees" private
+	    comment "
+Attributs
+
+!< Association avec la base de donnees"
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 148778 // baseDeDonnees (<unidirectional association>)
+	  b parent class_ref 141354 // BaseDeDonnees
+      end
+
+      classrelation 148906 // modulesBoitesAuxLettres (<unidirectional association>)
+	relation 148906 --->
+	  stereotype "Vector"
+	  a role_name "modulesBoitesAuxLettres" private
+	    comment "!< Conteneur des modules boites aux Lettres"
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 148906 // modulesBoitesAuxLettres (<unidirectional association>)
+	  b parent class_ref 128407 // Module
+      end
+
+      attribute 153258 "nbModulesBoitesAuxLettres"
+	private explicit_type "int"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< le nombre de boites gérées"
+      end
+
+      attribute 153386 "idNotification"
+	private explicit_type "int"
+	init_value " 0"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Identifiant unique pour chaque notification"
+      end
+
+      classrelation 149034 // communication (<unidirectional association>)
+	relation 149034 --->
+	  a role_name "communication" private
+	    comment "!< Association avec la classe Communication"
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 149034 // communication (<unidirectional association>)
+	  b parent class_ref 128151 // Communication
+      end
+
+      attribute 153514 "handler"
+	private explicit_type "Handler"
+	init_value "
+      null"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Handler permettant la communication entre la classe Communication et l'activité"
+      end
+
+      attribute 153642 "minuteur"
+	private explicit_type "Timer"
+	init_value "
+      null"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Pour gérer la récupération des états des modules boites aux lettres"
+      end
+
+      attribute 153770 "tacheRecuperationEtats"
+	private explicit_type "TimerTask"
+	init_value "
+      null"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Pour effectuer la récupération des états des modules boites aux lettres"
+      end
+
+      attribute 153898 "erreurCommunication"
+	private explicit_type "boolean"
+	init_value " false"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 154026 "notificationsEnvoyees"
+	private explicit_type "Integer, Boolean"
+	init_value "
+      new HashMap<>()"
+	stereotype "Map"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "<! Pour la signalisation des notifications"
+      end
+
+      attribute 154154 "numeroBoiteAcquittement"
+	private explicit_type "int"
+	init_value " -1"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 154282 "nomAjoutModule"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 154410 "IMAGE_BOITES"
+	class_attribute const_attribute public explicit_type "int"
+	init_value "
+      R.drawable
+        .boite_aux_lettres"
 	cpp_decl ""
 	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
@@ -616,7 +1641,106 @@ ${members}};
 	MysqlColumn
 	comment "GUI
 
+!< Id de l'image de la boîte au lettre dans les ressources Android"
+      end
+
+      attribute 154538 "imagesBoites"
+	private explicit_type "ImageView"
+	multiplicity "[]"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};
 "
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Images des boites aux lettres"
+      end
+
+      attribute 154666 "imagesNotificationBoites"
+	private explicit_type "ImageView"
+	multiplicity "[]"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Images des notifications des boites aux"
+      end
+
+      attribute 154794 "boutonsActivation"
+	private explicit_type "Switch"
+	multiplicity "[]"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< lettres
+!< Boutons d'activation/désactivation des modules"
+      end
+
+      attribute 134698 "boutonAccueil"
+	private explicit_type "ImageButton"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< boitesAuxLettres
+!< Boutons d'activation/désactivation des modules"
+      end
+
+      attribute 154922 "boutonAjouterModule"
+	private explicit_type "ImageView"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< boites
+!!< Boutons d'ajout des modules"
+      end
+
+      attribute 155050 "boutonSupprimerModule"
+	private explicit_type "ImageView"
+	multiplicity "[]"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!!< Boutons de suppression des modules"
+      end
+
+      attribute 155178 "imagesParametres"
+	private explicit_type "ImageView"
+	multiplicity "[]"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Images des couleurs des modules"
       end
 
       operation 134570 "onCreate"
@@ -628,6 +1752,30 @@ ${members}};
   ${body}}
 "
 	java_annotation "@Override
+"
+	
+	
+	
+      end
+
+      operation 153258 "initialiserBaseDeDonnees"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 153386 "initialiserModulesBoites"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
 "
 	
 	
@@ -646,6 +1794,300 @@ ${members}};
 	
 	comment "@brief Initialise les ressources graphiques de l'activité
 "
+      end
+
+      operation 153514 "initialiserHandler"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 153642 "initialiserMinuteur"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 153770 "initialiserCommunication"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 153898 "gererClicBoutonNotification"
+	private explicit_return_type "void"
+	nparams 1
+	  param in name "numeroBoite" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 154026 "gererClicBoutonActivation"
+	private explicit_return_type "void"
+	nparams 1
+	  param in name "numeroBoite" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 154154 "recupererEtats"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 154282 "traiterReponseJSON"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "reponse" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 154410 "validerAjoutBoite"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "reponse" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 154538 "validerSuppressionBoite"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "reponse" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 154666 "enregistrerAcquittementNotification"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "reponse" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 154794 "mettreAJourModule"
+	private explicit_return_type "void"
+	nparams 1
+	  param in name "numeroBoite" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 154922 "creerNotification"
+	private explicit_return_type "void"
+	nparams 1
+	  param in name "message" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 155050 "getNomApplication"
+	class_operation public explicit_return_type "String"
+	nparams 1
+	  param inout name "context" explicit_type "Context"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 155178 "afficherErreur"
+	private explicit_return_type "void"
+	nparams 1
+	  param in name "message" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 155306 "verifierPermissionNotification"
+	private explicit_return_type "boolean"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 155434 "onActivityResult"
+	protected explicit_return_type "void"
+	nparams 3
+	  param in name "requestCode" explicit_type "int"
+	  param in name "resultCode" explicit_type "int"
+	  param inout name "data" explicit_type "Intent"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 155562 "afficherBoiteDialogueAjoutModule"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 155690 "afficherBoiteDialogueSuppressionModule"
+	private explicit_return_type "void"
+	nparams 1
+	  param in name "numeroBoite" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 155818 "cacherBoiteAuxLettres"
+	private explicit_return_type "void"
+	nparams 1
+	  param in name "numeroBoite" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 155946 "afficherBoiteAuxLettres"
+	private explicit_return_type "void"
+	nparams 1
+	  param in name "numeroBoite" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 156074 "getNumeroBoite"
+	private explicit_return_type "int"
+	nparams 1
+	  param in name "idBoite" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 156202 "rechercherIdDisponible"
+	private explicit_return_type "int"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 156330 "estPresent"
+	private explicit_return_type "boolean"
+	nparams 1
+	  param in name "id" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
       end
     end
 
@@ -694,6 +2136,236 @@ ${members}};
 !< TAG pour les logs"
       end
 
+      attribute 155306 "API_PATCH_MACHINES"
+	class_attribute const_attribute private explicit_type "String"
+	init_value " \"/machines\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Pour une requête PATCH"
+      end
+
+      attribute 155434 "API_POST_MACHINES"
+	class_attribute const_attribute private explicit_type "String"
+	init_value " \"/machines\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Pour une requête POST"
+      end
+
+      attribute 155562 "INTERVALLE"
+	class_attribute const_attribute private explicit_type "int"
+	init_value " 1000"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Intervalle d'interrogation en ms"
+      end
+
+      attribute 155690 "NB_MACHINES_MAX"
+	class_attribute const_attribute public explicit_type "int"
+	init_value " 6"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Nombre max de machines"
+      end
+
+      attribute 155818 "PARAMETRAGE_MODULE"
+	class_attribute const_attribute private explicit_type "int"
+	init_value "
+      1"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Code pour l'activité de paramètrage du module"
+      end
+
+      classrelation 149162 // baseDeDonnees (<unidirectional association>)
+	relation 149162 --->
+	  a role_name "baseDeDonnees" private
+	    comment "
+Attributs
+
+!< Association avec la base de donnees"
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 149162 // baseDeDonnees (<unidirectional association>)
+	  b parent class_ref 141354 // BaseDeDonnees
+      end
+
+      classrelation 149290 // modulesMachines (<unidirectional association>)
+	relation 149290 --->
+	  stereotype "Vector"
+	  a role_name "modulesMachines" protected
+	    comment "!< Conteneur des modules machines"
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 149290 // modulesMachines (<unidirectional association>)
+	  b parent class_ref 128407 // Module
+      end
+
+      attribute 155946 "nbModulesMachines"
+	private explicit_type "int"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< le nombre de machines gérées"
+      end
+
+      attribute 156074 "idNotification"
+	private explicit_type "int"
+	init_value " 0"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Identifiant unique pour chaque notification"
+      end
+
+      classrelation 149418 // communication (<unidirectional association>)
+	relation 149418 --->
+	  a role_name "communication" private
+	    comment "!< Association avec la classe Communication"
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 149418 // communication (<unidirectional association>)
+	  b parent class_ref 128151 // Communication
+      end
+
+      attribute 156202 "handler"
+	private explicit_type "Handler"
+	init_value "
+      null"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Handler permettant la communication entre la classe Communication et l'activité"
+      end
+
+      attribute 156330 "minuteur"
+	private explicit_type "Timer"
+	init_value " null"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Pour gérer la récupération des états des modules machines"
+      end
+
+      attribute 156458 "tacheRecuperationEtats"
+	private explicit_type "TimerTask"
+	init_value "
+      null"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Pour effectuer la récupération des états des modules machines"
+      end
+
+      attribute 156586 "erreurCommunication"
+	private explicit_type "boolean"
+	init_value " false"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 156714 "notificationsEnvoyees"
+	private explicit_type "Integer, Boolean"
+	init_value "
+      new HashMap<>()"
+	stereotype "Map"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "<! Pour la signalisation des notifications"
+      end
+
+      attribute 156842 "numeroMachineAcquittement"
+	private explicit_type "int"
+	init_value " -1"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 156970 "nomAjoutModule"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
       attribute 142378 "boutonAccueil"
 	private explicit_type "ImageButton"
 	cpp_decl ""
@@ -709,6 +2381,108 @@ ${members}};
 "
       end
 
+      attribute 157098 "IMAGE_MACHINES"
+	class_attribute const_attribute public explicit_type "int"
+	multiplicity "[]"
+	init_value " {
+        R.drawable.machine, R.drawable.lavevaisselle, R.drawable.machine,
+        R.drawable.machine, R.drawable.machine,       R.drawable.machine
+    }"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Id de l'image de la machine dans les ressources Android"
+      end
+
+      attribute 157226 "imagesMachines"
+	private explicit_type "ImageView"
+	multiplicity "[]"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Images des machines"
+      end
+
+      attribute 157354 "imagesNotificationMachines"
+	private explicit_type "ImageView"
+	multiplicity "[]"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Images des notifications des machines"
+      end
+
+      attribute 157482 "boutonsActivation"
+	private explicit_type "Switch"
+	multiplicity "[]"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Boutons d'activation/désactivation des modules"
+      end
+
+      attribute 157610 "boutonAjouterModule"
+	private explicit_type "ImageView"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< machines
+!< Bouton pour ajouter les modules machines"
+      end
+
+      attribute 157738 "boutonSupprimerModule"
+	private explicit_type "ImageView"
+	multiplicity "[]"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Boutons pour supprimer les modules machines"
+      end
+
+      attribute 157866 "imagesParametres"
+	private explicit_type "ImageView"
+	multiplicity "[]"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Images des couleurs des modules"
+      end
+
       operation 134826 "onCreate"
 	protected explicit_return_type "void"
 	nparams 1
@@ -722,6 +2496,346 @@ ${members}};
 	
 	
 	
+	comment "!< machines"
+      end
+
+      operation 156458 "initialiserBaseDeDonnees"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 156586 "initialiserModulesMachines"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 156714 "initialiserGUI"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 156842 "initialiserHandler"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 156970 "initialiserMinuteur"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 157098 "initialiserCommunication"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 157226 "gererClicBoutonNotification"
+	private explicit_return_type "void"
+	nparams 1
+	  param in name "numeroMachine" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 157354 "gererClicBoutonActivation"
+	private explicit_return_type "void"
+	nparams 1
+	  param in name "numeroMachine" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 157482 "recupererEtats"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 157610 "traiterReponseJSON"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "reponse" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 157738 "validerAjoutMachine"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "reponse" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 157866 "validerSuppressionMachine"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "reponse" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 157994 "enregistrerAcquittementNotification"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "reponse" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 158122 "mettreAJourModule"
+	private explicit_return_type "void"
+	nparams 1
+	  param in name "numeroMachine" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 158250 "creerNotification"
+	private explicit_return_type "void"
+	nparams 1
+	  param in name "message" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 158378 "getNomApplication"
+	class_operation public explicit_return_type "String"
+	nparams 1
+	  param inout name "context" explicit_type "Context"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 158506 "afficherErreur"
+	private explicit_return_type "void"
+	nparams 1
+	  param in name "message" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 158634 "verifierPermissionNotification"
+	private explicit_return_type "boolean"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 158762 "onActivityResult"
+	protected explicit_return_type "void"
+	nparams 3
+	  param in name "requestCode" explicit_type "int"
+	  param in name "resultCode" explicit_type "int"
+	  param inout name "data" explicit_type "Intent"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 158890 "afficherBoiteDialogueAjoutModule"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 159018 "afficherBoiteDialogueSuppressionModule"
+	private explicit_return_type "void"
+	nparams 1
+	  param in name "numeroMachine" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "@brief Méthode pour afficher la boîte de dialogue de suppression de module
+"
+      end
+
+      operation 159146 "cacherMachine"
+	private explicit_return_type "void"
+	nparams 1
+	  param in name "numeroMachine" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 159274 "afficherMachine"
+	private explicit_return_type "void"
+	nparams 1
+	  param in name "numeroMachine" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 159402 "getNumeroMachine"
+	private explicit_return_type "int"
+	nparams 1
+	  param in name "idMachine" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 159530 "rechercherIdDisponible"
+	private explicit_return_type "int"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 159658 "estPresent"
+	private explicit_return_type "boolean"
+	nparams 1
+	  param in name "id" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      classrelation 150186 // <dependency>
+	relation 150186 -_->
+	  a public
+	    classrelation_ref 150186 // <dependency>
+	  b parent class_ref 148010 // ParametresModule
       end
     end
 
@@ -761,18 +2875,98 @@ ${members}}
 !< TAG pour les logs"
       end
 
+      attribute 157994 "API_PATCH_POUBELLES"
+	class_attribute const_attribute private explicit_type "String"
+	init_value " \"/poubelles\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Pour une requête PATCH"
+      end
+
+      attribute 158122 "API_POST_POUBELLES"
+	class_attribute const_attribute private explicit_type "String"
+	init_value " \"/poubelles\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Pour une requête PATCH"
+      end
+
+      attribute 158250 "INTERVALLE"
+	class_attribute const_attribute private explicit_type "int"
+	init_value " 1000"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Intervalle d'interrogation en ms"
+      end
+
+      attribute 158378 "NB_POUBELLES_MAX"
+	class_attribute const_attribute public explicit_type "int"
+	init_value " 5"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Nombre max de poubelles"
+      end
+
+      attribute 158506 "PARAMETRAGE_MODULE"
+	class_attribute const_attribute private explicit_type "int"
+	init_value "
+      1"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Code pour l'activité de paramètrage du module"
+      end
+
       classrelation 141738 // baseDeDonnees (<unidirectional association>)
 	relation 141738 --->
 	  a role_name "baseDeDonnees" private
-	    comment "
-Attributs
+	    comment "Attributs
 
- Exemple d'accès à la base de données
 !< Association avec la base de donnees"
 	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
 	    classrelation_ref 141738 // baseDeDonnees (<unidirectional association>)
 	  b parent class_ref 141354 // BaseDeDonnees
+      end
+
+      classrelation 149546 // modulesPoubelles (<unidirectional association>)
+	relation 149546 --->
+	  stereotype "Vector"
+	  a role_name "modulesPoubelles" private
+	    comment "!< Conteneur des modules poubelles"
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 149546 // modulesPoubelles (<unidirectional association>)
+	  b parent class_ref 128407 // Module
       end
 
       attribute 142506 "nbModulesPoubelles"
@@ -786,6 +2980,128 @@ Attributs
 	mysql_decl ""
 	MysqlColumn
 	comment "!< le nombre de poubelles gérées"
+      end
+
+      attribute 158634 "idNotification"
+	private explicit_type "int"
+	init_value " 0"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Identifiant unique pour chaque notification"
+      end
+
+      classrelation 149674 // communication (<unidirectional association>)
+	relation 149674 --->
+	  a role_name "communication" private
+	    comment "!< Association avec la classe Communication"
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 149674 // communication (<unidirectional association>)
+	  b parent class_ref 128151 // Communication
+      end
+
+      attribute 158762 "handler"
+	private explicit_type "Handler"
+	init_value "
+      null"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Handler permettant la communication entre la classe Communication et l'activité"
+      end
+
+      attribute 158890 "minuteur"
+	private explicit_type "Timer"
+	init_value " null"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Pour gérer la récupération des états des modules poubelles"
+      end
+
+      attribute 159018 "tacheRecuperationEtats"
+	private explicit_type "TimerTask"
+	init_value "
+      null"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Pour effectuer la récupération des états des modules poubelles"
+      end
+
+      attribute 159146 "erreurCommunication"
+	private explicit_type "boolean"
+	init_value " false"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 159274 "notificationsEnvoyees"
+	private explicit_type "Integer, Boolean"
+	init_value "
+      new HashMap<>()"
+	stereotype "Map"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "<! Pour la signalisation des notifications"
+      end
+
+      attribute 159402 "numeroPoubelleAcquittement"
+	package explicit_type "int"
+	init_value " -1"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 159530 "nomAjoutModule"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
       end
 
       attribute 142634 "BLEUE"
@@ -871,19 +3187,18 @@ Attributs
 	idl_decl ""
 	mysql_decl ""
 	MysqlColumn
-	comment " pour les tests (cf. todo ci-dessous)
-!< Nombre de couleurs max pour les poubelles"
+	comment "!< Nombre de couleurs max pour les poubelles"
       end
 
       attribute 143402 "IMAGES_POUBELLES"
 	class_attribute const_attribute public explicit_type "int"
 	multiplicity "[]"
 	init_value " {
-          R.drawable.poubelle,
-          R.drawable.poubelle,
-          R.drawable.poubelle,
-          R.drawable.poubelle,
-          R.drawable.poubelle
+          R.drawable.poubelle_bleue,
+          R.drawable.poubelle_verte,
+          R.drawable.poubelle_jaune,
+          R.drawable.poubelle_grise,
+          R.drawable.poubelle_rouge
     }"
 	cpp_decl ""
 	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};
@@ -907,17 +3222,7 @@ Attributs
 	idl_decl ""
 	mysql_decl ""
 	MysqlColumn
-	comment " @todo jusqu'à 5 poubelles en couleurs
-
-public static final int[] IMAGES_POUBELLES   = {
-R.drawable.poubelle_bleue,
-R.drawable.poubelle_verte,
-R.drawable.poubelle_jaune,
-R.drawable.poubelle_grise,
-R.drawable.poubelle_rouge
-}; //!< Id des images des poubelles dans les ressources Android
-
-!< Images des poubelles de couleur"
+	comment "!< Images des poubelles de couleur"
       end
 
       attribute 143658 "boutonAccueil"
@@ -930,6 +3235,77 @@ R.drawable.poubelle_rouge
 	idl_decl ""
 	mysql_decl ""
 	MysqlColumn
+	comment "!< Bouton pour revenir à l'accueil"
+      end
+
+      attribute 159658 "imagesNotificationPoubelles"
+	private explicit_type "ImageView"
+	multiplicity "[]"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Images des notifications des poubelles"
+      end
+
+      attribute 159786 "boutonsActivation"
+	private explicit_type "Switch"
+	multiplicity "[]"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Boutons d'activation/désactivation des modules"
+      end
+
+      attribute 159914 "boutonAjouterModule"
+	private explicit_type "ImageView"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< poubelles
+!< Bouton pour ajouter les modules poubelles"
+      end
+
+      attribute 160042 "boutonSupprimerModule"
+	private explicit_type "ImageView"
+	multiplicity "[]"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Bouton pour supprimer les modules poubelles"
+      end
+
+      attribute 160170 "imagesParametres"
+	private explicit_type "ImageView"
+	multiplicity "[]"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "!< Images des couleurs des modules"
       end
 
       operation 134954 "onCreate"
@@ -941,6 +3317,30 @@ R.drawable.poubelle_rouge
   ${body}}
 "
 	java_annotation "@Override
+"
+	
+	
+	
+      end
+
+      operation 159786 "initialiserBaseDeDonnees"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 159914 "initialiserModulesPoubelles"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
 "
 	
 	
@@ -959,6 +3359,300 @@ R.drawable.poubelle_rouge
 	
 	comment "@brief Initialise les ressources graphiques de l'activité
 "
+      end
+
+      operation 160042 "initialiserHandler"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 160170 "initialiserMinuteur"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 160298 "initialiserCommunication"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 160426 "gererClicBoutonActivation"
+	private explicit_return_type "void"
+	nparams 1
+	  param in name "numeroPoubelle" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 160554 "gererClicBoutonNotification"
+	private explicit_return_type "void"
+	nparams 1
+	  param in name "numeroPoubelle" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 160682 "recupererEtats"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 160810 "traiterReponseJSON"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "reponse" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 160938 "validerAjoutPoubelle"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "reponse" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 161066 "validerSuppressionPoubelle"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "reponse" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 161194 "enregistrerAcquittementNotification"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "reponse" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 161322 "mettreAJourModule"
+	private explicit_return_type "void"
+	nparams 1
+	  param in name "numeroPoubelle" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 161450 "creerNotification"
+	private explicit_return_type "void"
+	nparams 1
+	  param in name "message" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 161578 "getNomApplication"
+	class_operation public explicit_return_type "String"
+	nparams 1
+	  param inout name "context" explicit_type "Context"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 161706 "afficherErreur"
+	private explicit_return_type "void"
+	nparams 1
+	  param in name "message" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 161834 "verifierPermissionNotification"
+	private explicit_return_type "boolean"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 161962 "onActivityResult"
+	protected explicit_return_type "void"
+	nparams 3
+	  param in name "requestCode" explicit_type "int"
+	  param in name "resultCode" explicit_type "int"
+	  param inout name "data" explicit_type "Intent"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 162090 "afficherBoiteDialogueAjoutModule"
+	private explicit_return_type "void"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 162218 "afficherBoiteDialogueSuppressionModule"
+	private explicit_return_type "void"
+	nparams 1
+	  param in name "numeroPoubelle" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 162346 "cacherPoubelle"
+	private explicit_return_type "void"
+	nparams 1
+	  param in name "numeroPoubelle" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 162474 "afficherPoubelle"
+	private explicit_return_type "void"
+	nparams 1
+	  param in name "numeroPoubelle" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 162602 "getNumeroPoubelle"
+	private explicit_return_type "int"
+	nparams 1
+	  param in name "idPoubelle" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 162730 "rechercherIdDisponible"
+	private explicit_return_type "int"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 162858 "estPresent"
+	private explicit_return_type "boolean"
+	nparams 1
+	  param in name "id" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
       end
     end
 
@@ -1018,7 +3712,7 @@ ${members}}
 
       attribute 142122 "VERSION_DOMOTIFICATIONS_BDD"
 	class_attribute const_attribute private explicit_type "int"
-	init_value " 1"
+	init_value " 3"
 	cpp_decl ""
 	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
@@ -1028,6 +3722,19 @@ ${members}}
 	mysql_decl ""
 	MysqlColumn
 	comment "!< Version de la base de données"
+      end
+
+      attribute 150314 "ID_DOMOTIFICATIONS"
+	class_attribute const_attribute public explicit_type "int"
+	init_value " 1"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
       end
 
       classrelation 141610 // baseDeDonnees (<unidirectional association>)
@@ -1089,8 +3796,8 @@ Attributs
 "
       end
 
-      operation 141866 "getNomModules"
-	public explicit_return_type "Vector<String>"
+      operation 149802 "getURLServeurWeb"
+	public explicit_return_type "String"
 	nparams 0
 	
 	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
@@ -1101,7 +3808,63 @@ Attributs
 	
 	comment " Exemples de requêtes SQL
 
-@brief Renvoie un vecteur de string contenant le noms des participants enregistrés
+@brief Renvoie l'url du serveur web
+"
+      end
+
+      operation 141866 "getNomModules"
+	public explicit_return_type "Vector<String>"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "@brief Renvoie un vecteur de string contenant le noms des modules
+"
+      end
+
+      operation 149930 "getPoubelles"
+	public return_type class_ref 128407 // Module
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}Vector<${type}> ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "@brief Renvoie un vecteur de Module contenant le poubelles
+"
+      end
+
+      operation 150058 "getBoites"
+	public return_type class_ref 128407 // Module
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}Vector<${type}> ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "@brief Renvoie un vecteur de Module contenant les boîtes
+"
+      end
+
+      operation 150186 "getMachines"
+	public return_type class_ref 128407 // Module
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}Vector<${type}> ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "@brief Renvoie un vecteur de Module contenant les machines
 "
       end
 
@@ -1119,6 +3882,34 @@ Attributs
 "
       end
 
+      operation 150314 "getNbMaxModulesBoites"
+	public explicit_return_type "int"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "@brief Renvoie le nombre max de modules de type Boîte
+"
+      end
+
+      operation 150442 "getNbMaxModulesMachines"
+	public explicit_return_type "int"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "@brief Renvoie le nombre max de modules de type Machines
+"
+      end
+
       operation 142122 "getNbModulesPoubelles"
 	public explicit_return_type "int"
 	nparams 0
@@ -1130,6 +3921,34 @@ Attributs
 	
 	
 	comment "@brief Renvoie le nombre de modules installés de type Poubelle
+"
+      end
+
+      operation 150570 "getNbModulesBoites"
+	public explicit_return_type "int"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "@brief Renvoie le nombre de modules installés de type Boîtes
+"
+      end
+
+      operation 150698 "getNbModulesMachines"
+	public explicit_return_type "int"
+	nparams 0
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "@brief Renvoie le nombre de modules installés de type Machines
 "
       end
 
@@ -1145,22 +3964,6 @@ Attributs
 	
 	
 	comment "@brief Inserer un enregistrement dans une table
-"
-      end
-
-      operation 142378 "actualiser"
-	private explicit_return_type "void"
-	nparams 2
-	  param in name "id" explicit_type "String"
-	  param in name "data" explicit_type "String"
-	
-	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
-  ${body}}
-"
-	
-	
-	
-	comment "@brief Actualiser les données d'un enregistrement
 "
       end
 
@@ -1259,6 +4062,295 @@ Attributs
 @warning le plus simple est de supprimer l'application puis de la réinstaller !
 "
       end
+
+      operation 150826 "sauvegarderURLServeurWeb"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "urlServeurWeb" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 150954 "mettreAJourEtatActivationModule"
+	public explicit_return_type "void"
+	nparams 3
+	  param in name "idModule" explicit_type "int"
+	  param in name "idTypesModules" explicit_type "int"
+	  param inout name "actif" explicit_type "boolean"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "@brief Met à jour l'état d'activation du module dans la base de données
+"
+      end
+
+      operation 151082 "mettreAJourEtatNotificationModule"
+	public explicit_return_type "void"
+	nparams 3
+	  param in name "idModule" explicit_type "int"
+	  param in name "idTypesModules" explicit_type "int"
+	  param inout name "etat" explicit_type "boolean"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "@brief Met à jour l'état de notification du module dans la base de données
+"
+      end
+
+      operation 151210 "mettreAJourCouleurModule"
+	public explicit_return_type "void"
+	nparams 3
+	  param in name "idModule" explicit_type "int"
+	  param in name "idTypesModules" explicit_type "int"
+	  param in name "couleur" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "@brief Met à jour l'état de la couleur du module dans la base de données
+"
+      end
+
+      operation 151338 "enregistrerAcquittementNotification"
+	public explicit_return_type "void"
+	nparams 3
+	  param in name "idModule" explicit_type "int"
+	  param in name "idTypesModules" explicit_type "int"
+	  param inout name "acquittement" explicit_type "boolean"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "@brief Enregistre l'acquittement de la notification dans la base de données
+"
+      end
+
+      operation 151466 "modifierNomModule"
+	public explicit_return_type "void"
+	nparams 3
+	  param in name "idModule" explicit_type "int"
+	  param in name "idTypesModules" explicit_type "int"
+	  param in name "nouveauNomModule" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "@brief Enregistre la modification du nom du module dans la base de données
+"
+      end
+
+      operation 151594 "insererModule"
+	public explicit_return_type "void"
+	nparams 5
+	  param in name "idModule" explicit_type "int"
+	  param in name "idTypesModules" explicit_type "int"
+	  param in name "nom" explicit_type "String"
+	  param inout name "actif" explicit_type "boolean"
+	  param in name "couleur" explicit_type "String"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}, ${t4} ${p4}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 151722 "supprimerModule"
+	public explicit_return_type "void"
+	nparams 2
+	  param in name "idModule" explicit_type "int"
+	  param in name "idTypesModules" explicit_type "int"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+    end
+
+    class 148010 "ParametresModule"
+      visibility public stereotype "activity"
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl "${comment}${@}${visibility}${static}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl "${comment}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl "${comment}${abstract}${custom}valuetype ${name}${inherit} {
+${members}};
+"
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 150058 // <generalisation>
+	relation 150058 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 150058 // <generalisation>
+	  b parent class_ref 128663 // AppCompatActivity
+      end
+
+      attribute 162090 "TAG"
+	class_attribute const_attribute private explicit_type "String"
+	init_value " \"_ParametresModule\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "Constantes
+
+"
+      end
+
+      attribute 162218 "idModule"
+	private explicit_type "int"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "Attributs
+
+"
+      end
+
+      attribute 162346 "nomModule"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 162474 "couleurModule"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 162602 "selecteur"
+	private explicit_type "ImageView"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 162730 "image"
+	private explicit_type "Bitmap"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 162858 "nom"
+	private explicit_type "TextInputEditText"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 162986 "couleur"
+	private explicit_type "TextInputEditText"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      operation 165802 "onCreate"
+	protected explicit_return_type "void"
+	nparams 1
+	  param inout name "savedInstanceState" explicit_type "Bundle"
+	
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	java_annotation "@Override
+@SuppressLint(\"ClickableViewAccessibility\")
+"
+	
+	
+	
+      end
+    end
+
+    classdiagram 134570 "dc-ihm"
+      classdiagramsettings show_members_full_definition yes show_members_visibility yes member_max_width 0 end
+      size A0
+    end
+
+    classdiagram 134698 "dc-machine"
+      classdiagramsettings show_members_full_definition yes show_members_visibility yes member_max_width 0 end
+      size A0
     end
   end
 
@@ -1271,7 +4363,23 @@ Attributs
       java_src "${comment}
 ${package}
 ${imports}
-import java.net.InetAddress;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+import static android.content.Context.CONNECTIVITY_SERVICE;
 ${definition}"
       associated_elems
 	class_ref 128151 // Communication
@@ -1314,10 +4422,17 @@ ${imports}
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.TextView;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 ${definition}"
       php_src "<?php
@@ -1355,6 +4470,9 @@ ${module_end}
       java_src "${comment}
 ${package}
 ${imports}
+import android.content.Context;
+import android.util.Log;
+import java.lang.reflect.Type;
 ${definition}"
       associated_elems
 	class_ref 128407 // Module
@@ -1382,17 +4500,45 @@ ${namespace_end}"
       java_src "${comment}
 ${package}
 ${imports}
+import android.Manifest;
+import android.app.AlertDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.Switch;
+import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import com.lasalle.domotifications.R;
+import com.google.android.material.textfield.TextInputEditText;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.Vector;
 ${definition}"
       php_src "<?php
 ${comment}
@@ -1441,15 +4587,46 @@ ${namespace_end}"
       java_src "${comment}
 ${package}
 ${imports}
+import android.Manifest;
+import android.app.AlertDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.Switch;
+import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import com.lasalle.domotifications.R;
+import com.google.android.material.textfield.TextInputEditText;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.Vector;
 ${definition}"
       php_src "<?php
 ${comment}
@@ -1482,18 +4659,44 @@ ${module_end}
       java_src "${comment}
 ${package}
 ${imports}
+import android.app.AlertDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Switch;
+import android.widget.Toast;
+import android.Manifest;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import com.lasalle.domotifications.R;
+import com.google.android.material.textfield.TextInputEditText;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 ${definition}"
       associated_elems
@@ -1506,18 +4709,50 @@ ${definition}"
       java_src "${comment}
 ${package}
 ${imports}
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import java.util.ArrayList;
 import java.util.Vector;
-import static android.provider.MediaStore.getVersion;
 ${definition}"
       associated_elems
 	class_ref 141354 // BaseDeDonnees
+      end
+      comment "@author Thierry VAIRA
+@author LATYAOUI Othman
+@file BaseDeDonnees.java
+@brief La classe assurant la gestion de la base de données SQLite
+"
+    end
+
+    artifact 147882 "ParametresModule"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import com.google.android.material.textfield.TextInputEditText;
+${definition}"
+      associated_elems
+	class_ref 148010 // ParametresModule
       end
     end
   end

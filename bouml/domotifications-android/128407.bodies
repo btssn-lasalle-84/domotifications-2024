@@ -1,7 +1,52 @@
 class Module
-!!!129175.java!!!	Module(in idModule : int, in nomModule : String, inout typeModule : Module::TypeModule, inout etatActivation : boolean, inout etatModification : boolean)
+!!!129175.java!!!	Module(in idModule : int, in nomModule : String, inout typeModule : Module::TypeModule, inout etatActivation : boolean, inout etatNotification : boolean, in couleur : String, inout baseDeDonnees : BaseDeDonnees)
+        Log.d(TAG,
+              "Module(" + idModule + "," + nomModule + "," + typeModule + "," + etatActivation +
+                "," + etatNotification + ")");
         this.idModule         = idModule;
         this.nomModule        = nomModule;
         this.typeModule       = typeModule;
         this.etatActivation   = etatActivation;
-        this.etatModification = etatModification;
+        this.etatNotification = etatNotification;
+        this.couleur          = couleur;
+        this.baseDeDonnees    = baseDeDonnees;
+!!!164266.java!!!	getIdModule() : int
+        return this.idModule;
+!!!164394.java!!!	getNomModule() : String
+        return this.nomModule;
+!!!164522.java!!!	getTypeModule() : Module::TypeModule
+        return this.typeModule;
+!!!164650.java!!!	estActif() : boolean
+        return this.etatActivation;
+!!!164778.java!!!	estNotifie() : boolean
+        return this.etatNotification;
+!!!164906.java!!!	getCouleur() : String
+        return this.couleur;
+!!!165034.java!!!	setNomModule(in nomModule : String) : void
+        this.nomModule = nomModule;
+!!!165162.java!!!	setTypeModule(inout typeModule : Module::TypeModule) : void
+        this.typeModule = typeModule;
+!!!165290.java!!!	setEtatActivation(inout etat : boolean) : void
+        if(this.etatActivation != etat)
+        {
+            this.etatActivation = etat;
+            baseDeDonnees.mettreAJourEtatActivationModule(idModule,
+                                                          getTypeModule().ordinal(),
+                                                          etat);
+        }
+!!!165418.java!!!	setActif(inout actif : boolean) : void
+        this.setEtatActivation(actif);
+!!!165546.java!!!	setEtatNotification(inout etat : boolean) : void
+        if(this.etatNotification != etat)
+        {
+            this.etatNotification = etat;
+            baseDeDonnees.mettreAJourEtatNotificationModule(idModule,
+                                                            getTypeModule().ordinal(),
+                                                            etat);
+        }
+!!!165674.java!!!	setCouleur(in couleur : String) : void
+        if(!this.couleur.equals(couleur))
+        {
+            this.couleur = couleur;
+            baseDeDonnees.mettreAJourCouleurModule(idModule, getTypeModule().ordinal(), couleur);
+        }

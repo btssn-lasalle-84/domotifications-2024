@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Projet domotifications:  Fichier source de ServeurWeb.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="customdoxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="projet-logo.png"/></td>
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Projet domotifications
+   &#160;<span id="projectnumber">1.0</span>
+   </div>
+   <div id="projectbrief">BTS SNIR LaSalle Avignon 2024</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.9.1 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Recherche','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','Recherche');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_serveur_web_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="headertitle">
+<div class="title">ServeurWeb.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_serveur_web_8h.html">Aller à la documentation de ce fichier.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; </div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#ifndef SERVEURWEB_H</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#define SERVEURWEB_H</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;WebServer.h&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;ArduinoJson.h&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="_serveur_web_8h.html#a457747e9f92eb4fc3ce5ab61a5d08eb6">   14</a></span>&#160;<span class="preprocessor">#define DEBUG_SERVEUR_WEB</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="_serveur_web_8h.html#ab71e20e2b03332d5786123f061dac79e">   20</a></span>&#160;<span class="preprocessor">#define NOM_SERVEUR_WEB &quot;station-lumineuse&quot;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="_serveur_web_8h.html#acada9ad8dacc7ad524c257f091b13f01">   26</a></span>&#160;<span class="preprocessor">#define PORT_SERVEUR_WEB 80</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="_serveur_web_8h.html#a11a025c8bafe7b0ac9a8cf71dab9e79e">   32</a></span>&#160;<span class="preprocessor">#define TAILLE_JSON 512</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="_serveur_web_8h.html#a55f8ba0fa93c1deea43ae39ea74891f3">   38</a></span>&#160;<span class="preprocessor">#define ID_INVALIDE -1</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">class </span><a class="code" href="class_station_lumineuse.html">StationLumineuse</a>;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="class_serveur_web.html">   46</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_serveur_web.html">ServeurWeb</a> : <span class="keyword">public</span> <a class="code" href="class_web_server.html">WebServer</a></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;{</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="class_serveur_web.html#a8d37983975578b93e06b8792eb5943c4">   49</a></span>&#160;    <a class="code" href="class_station_lumineuse.html">StationLumineuse</a>*               <a class="code" href="class_serveur_web.html#a8d37983975578b93e06b8792eb5943c4">stationLumineuse</a>;</div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="class_serveur_web.html#a4566392acbd1940336f6a527ba44af75">   50</a></span>&#160;    StaticJsonDocument&lt;TAILLE_JSON&gt; <a class="code" href="class_serveur_web.html#a4566392acbd1940336f6a527ba44af75">documentJSON</a>;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_serveur_web.html#a60f62c9f2a9f49f38870f745c92aea5c">installerGestionnairesRequetes</a>();</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_serveur_web.html#a5f26f8eccef15a8c0097c63be61b526c">afficherAccueil</a>();</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_serveur_web.html#aaecca9c5962378e9adb491b935371dd8">traiterRequeteNonTrouvee</a>();</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_serveur_web.html#a2bac18a29021fb907c9145be38230c83">testerBandeau</a>();</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_serveur_web.html#a8ab613cd2c681479178b3cf20ad5020a">envoyerReponseJSON</a>();</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <a class="code" href="class_serveur_web.html#adacabc4ec1197c3fa27786c79f9e5a96">ServeurWeb</a>(<a class="code" href="class_station_lumineuse.html">StationLumineuse</a>* <a class="code" href="class_serveur_web.html#a8d37983975578b93e06b8792eb5943c4">stationLumineuse</a> = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_serveur_web.html#a7147869e70008982dd3e2985326db7a2">demarrer</a>();</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_serveur_web.html#ae67b92478d41e2b4c9b8b172c6360418">traiterRequetes</a>();</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="comment">// pour les modules Poubelle</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_serveur_web.html#aff3349ff36e92579a681c6688df258b7">traiterRequeteGetPoubelles</a>();</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_serveur_web.html#ad5a4cf0906f42e5ef85f237eb9ab3668">traiterRequeteGetPoubelle</a>();</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_serveur_web.html#ab54d69108c7ec342e73ac283187a8e47">traiterRequeteUpdatePoubelle</a>();</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="comment">// pour les modules Machine</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_serveur_web.html#ade0be7da77813af1d396c2ad8ae46fd8">traiterRequeteGetMachines</a>();</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_serveur_web.html#a1e89f4de78124133b8cb94a122a7c273">traiterRequeteGetMachine</a>();</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_serveur_web.html#ab9f2c097e60939dd42c2037753811ebc">traiterRequeteUpdateMachine</a>();</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="comment">// pour les modules Boite</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_serveur_web.html#a3c1d5791f02f025b80f429ccad07acc8">traiterRequeteGetBoites</a>();</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_serveur_web.html#a0a1702809dd4936923e181ab5eb00fd6">traiterRequeteGetBoite</a>();</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_serveur_web.html#a8d08e8e1c99f54b2c535fcfed1919ba6">traiterRequeteUpdateBoite</a>();</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;};</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// SERVEURWEB_H</span></div>
+<div class="ttc" id="aclass_serveur_web_html"><div class="ttname"><a href="class_serveur_web.html">ServeurWeb</a></div><div class="ttdoc">Déclaration de la classe ServeurWeb.</div><div class="ttdef"><b>Definition:</b> <a href="_serveur_web_8h_source.html#l00046">ServeurWeb.h:47</a></div></div>
+<div class="ttc" id="aclass_serveur_web_html_a0a1702809dd4936923e181ab5eb00fd6"><div class="ttname"><a href="class_serveur_web.html#a0a1702809dd4936923e181ab5eb00fd6">ServeurWeb::traiterRequeteGetBoite</a></div><div class="ttdeci">void traiterRequeteGetBoite()</div><div class="ttdef"><b>Definition:</b> <a href="_serveur_web_8cpp_source.html#l00620">ServeurWeb.cpp:620</a></div></div>
+<div class="ttc" id="aclass_serveur_web_html_a1e89f4de78124133b8cb94a122a7c273"><div class="ttname"><a href="class_serveur_web.html#a1e89f4de78124133b8cb94a122a7c273">ServeurWeb::traiterRequeteGetMachine</a></div><div class="ttdeci">void traiterRequeteGetMachine()</div><div class="ttdef"><b>Definition:</b> <a href="_serveur_web_8cpp_source.html#l00430">ServeurWeb.cpp:430</a></div></div>
+<div class="ttc" id="aclass_serveur_web_html_a2bac18a29021fb907c9145be38230c83"><div class="ttname"><a href="class_serveur_web.html#a2bac18a29021fb907c9145be38230c83">ServeurWeb::testerBandeau</a></div><div class="ttdeci">void testerBandeau()</div><div class="ttdoc">Traite La requête qui qui permet de tester les leds du bandeau.</div><div class="ttdef"><b>Definition:</b> <a href="_serveur_web_8cpp_source.html#l00164">ServeurWeb.cpp:164</a></div></div>
+<div class="ttc" id="aclass_serveur_web_html_a3c1d5791f02f025b80f429ccad07acc8"><div class="ttname"><a href="class_serveur_web.html#a3c1d5791f02f025b80f429ccad07acc8">ServeurWeb::traiterRequeteGetBoites</a></div><div class="ttdeci">void traiterRequeteGetBoites()</div><div class="ttdef"><b>Definition:</b> <a href="_serveur_web_8cpp_source.html#l00585">ServeurWeb.cpp:585</a></div></div>
+<div class="ttc" id="aclass_serveur_web_html_a4566392acbd1940336f6a527ba44af75"><div class="ttname"><a href="class_serveur_web.html#a4566392acbd1940336f6a527ba44af75">ServeurWeb::documentJSON</a></div><div class="ttdeci">StaticJsonDocument&lt; TAILLE_JSON &gt; documentJSON</div><div class="ttdef"><b>Definition:</b> <a href="_serveur_web_8h_source.html#l00050">ServeurWeb.h:50</a></div></div>
+<div class="ttc" id="aclass_serveur_web_html_a5f26f8eccef15a8c0097c63be61b526c"><div class="ttname"><a href="class_serveur_web.html#a5f26f8eccef15a8c0097c63be61b526c">ServeurWeb::afficherAccueil</a></div><div class="ttdeci">void afficherAccueil()</div><div class="ttdoc">Affiche la page d'accueil du serveur web.</div><div class="ttdef"><b>Definition:</b> <a href="_serveur_web_8cpp_source.html#l00111">ServeurWeb.cpp:111</a></div></div>
+<div class="ttc" id="aclass_serveur_web_html_a60f62c9f2a9f49f38870f745c92aea5c"><div class="ttname"><a href="class_serveur_web.html#a60f62c9f2a9f49f38870f745c92aea5c">ServeurWeb::installerGestionnairesRequetes</a></div><div class="ttdeci">void installerGestionnairesRequetes()</div><div class="ttdoc">Installe les gestionnaires de requêtes de l'API HTTP REST.</div><div class="ttdef"><b>Definition:</b> <a href="_serveur_web_8cpp_source.html#l00070">ServeurWeb.cpp:70</a></div></div>
+<div class="ttc" id="aclass_serveur_web_html_a7147869e70008982dd3e2985326db7a2"><div class="ttname"><a href="class_serveur_web.html#a7147869e70008982dd3e2985326db7a2">ServeurWeb::demarrer</a></div><div class="ttdeci">void demarrer()</div><div class="ttdoc">Démarre le serveur web et installe les gestionnaires de requêtes.</div><div class="ttdef"><b>Definition:</b> <a href="_serveur_web_8cpp_source.html#l00031">ServeurWeb.cpp:31</a></div></div>
+<div class="ttc" id="aclass_serveur_web_html_a8ab613cd2c681479178b3cf20ad5020a"><div class="ttname"><a href="class_serveur_web.html#a8ab613cd2c681479178b3cf20ad5020a">ServeurWeb::envoyerReponseJSON</a></div><div class="ttdeci">void envoyerReponseJSON()</div><div class="ttdoc">Envoie une réponse HTTP 200 avec le contenu JSON.</div><div class="ttdef"><b>Definition:</b> <a href="_serveur_web_8cpp_source.html#l00186">ServeurWeb.cpp:186</a></div></div>
+<div class="ttc" id="aclass_serveur_web_html_a8d08e8e1c99f54b2c535fcfed1919ba6"><div class="ttname"><a href="class_serveur_web.html#a8d08e8e1c99f54b2c535fcfed1919ba6">ServeurWeb::traiterRequeteUpdateBoite</a></div><div class="ttdeci">void traiterRequeteUpdateBoite()</div><div class="ttdef"><b>Definition:</b> <a href="_serveur_web_8cpp_source.html#l00670">ServeurWeb.cpp:670</a></div></div>
+<div class="ttc" id="aclass_serveur_web_html_a8d37983975578b93e06b8792eb5943c4"><div class="ttname"><a href="class_serveur_web.html#a8d37983975578b93e06b8792eb5943c4">ServeurWeb::stationLumineuse</a></div><div class="ttdeci">StationLumineuse * stationLumineuse</div><div class="ttdef"><b>Definition:</b> <a href="_serveur_web_8h_source.html#l00049">ServeurWeb.h:49</a></div></div>
+<div class="ttc" id="aclass_serveur_web_html_aaecca9c5962378e9adb491b935371dd8"><div class="ttname"><a href="class_serveur_web.html#aaecca9c5962378e9adb491b935371dd8">ServeurWeb::traiterRequeteNonTrouvee</a></div><div class="ttdeci">void traiterRequeteNonTrouvee()</div><div class="ttdoc">Traite une requête qui n'a pas été trouvée.</div><div class="ttdef"><b>Definition:</b> <a href="_serveur_web_8cpp_source.html#l00132">ServeurWeb.cpp:132</a></div></div>
+<div class="ttc" id="aclass_serveur_web_html_ab54d69108c7ec342e73ac283187a8e47"><div class="ttname"><a href="class_serveur_web.html#ab54d69108c7ec342e73ac283187a8e47">ServeurWeb::traiterRequeteUpdatePoubelle</a></div><div class="ttdeci">void traiterRequeteUpdatePoubelle()</div><div class="ttdef"><b>Definition:</b> <a href="_serveur_web_8cpp_source.html#l00290">ServeurWeb.cpp:290</a></div></div>
+<div class="ttc" id="aclass_serveur_web_html_ab9f2c097e60939dd42c2037753811ebc"><div class="ttname"><a href="class_serveur_web.html#ab9f2c097e60939dd42c2037753811ebc">ServeurWeb::traiterRequeteUpdateMachine</a></div><div class="ttdeci">void traiterRequeteUpdateMachine()</div><div class="ttdef"><b>Definition:</b> <a href="_serveur_web_8cpp_source.html#l00480">ServeurWeb.cpp:480</a></div></div>
+<div class="ttc" id="aclass_serveur_web_html_ad5a4cf0906f42e5ef85f237eb9ab3668"><div class="ttname"><a href="class_serveur_web.html#ad5a4cf0906f42e5ef85f237eb9ab3668">ServeurWeb::traiterRequeteGetPoubelle</a></div><div class="ttdeci">void traiterRequeteGetPoubelle()</div><div class="ttdef"><b>Definition:</b> <a href="_serveur_web_8cpp_source.html#l00240">ServeurWeb.cpp:240</a></div></div>
+<div class="ttc" id="aclass_serveur_web_html_adacabc4ec1197c3fa27786c79f9e5a96"><div class="ttname"><a href="class_serveur_web.html#adacabc4ec1197c3fa27786c79f9e5a96">ServeurWeb::ServeurWeb</a></div><div class="ttdeci">ServeurWeb(StationLumineuse *stationLumineuse=nullptr)</div><div class="ttdoc">Constructeur de la classe ServeurWeb.</div><div class="ttdef"><b>Definition:</b> <a href="_serveur_web_8cpp_source.html#l00022">ServeurWeb.cpp:22</a></div></div>
+<div class="ttc" id="aclass_serveur_web_html_ade0be7da77813af1d396c2ad8ae46fd8"><div class="ttname"><a href="class_serveur_web.html#ade0be7da77813af1d396c2ad8ae46fd8">ServeurWeb::traiterRequeteGetMachines</a></div><div class="ttdeci">void traiterRequeteGetMachines()</div><div class="ttdef"><b>Definition:</b> <a href="_serveur_web_8cpp_source.html#l00395">ServeurWeb.cpp:395</a></div></div>
+<div class="ttc" id="aclass_serveur_web_html_ae67b92478d41e2b4c9b8b172c6360418"><div class="ttname"><a href="class_serveur_web.html#ae67b92478d41e2b4c9b8b172c6360418">ServeurWeb::traiterRequetes</a></div><div class="ttdeci">void traiterRequetes()</div><div class="ttdoc">traite les requêtes reçues par le serveur web</div><div class="ttdef"><b>Definition:</b> <a href="_serveur_web_8cpp_source.html#l00058">ServeurWeb.cpp:58</a></div></div>
+<div class="ttc" id="aclass_serveur_web_html_aff3349ff36e92579a681c6688df258b7"><div class="ttname"><a href="class_serveur_web.html#aff3349ff36e92579a681c6688df258b7">ServeurWeb::traiterRequeteGetPoubelles</a></div><div class="ttdeci">void traiterRequeteGetPoubelles()</div><div class="ttdoc">Traite la requête GET pour obtenir la liste des poubelles.</div><div class="ttdef"><b>Definition:</b> <a href="_serveur_web_8cpp_source.html#l00205">ServeurWeb.cpp:205</a></div></div>
+<div class="ttc" id="aclass_station_lumineuse_html"><div class="ttname"><a href="class_station_lumineuse.html">StationLumineuse</a></div><div class="ttdoc">Déclaration de la classe StationLumineuse.</div><div class="ttdef"><b>Definition:</b> <a href="_station_lumineuse_8h_source.html#l00030">StationLumineuse.h:31</a></div></div>
+<div class="ttc" id="aclass_web_server_html"><div class="ttname"><a href="class_web_server.html">WebServer</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.1-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_8a6b28a2de8f5454d633fd89588b20ee.html">domotifications-esp32</a></li><li class="navelem"><a class="el" href="dir_7190b8d59f9b5cb005bcf0bfc78ab91e.html">lib</a></li><li class="navelem"><a class="el" href="dir_22b94982783299ec2637ff395be988a3.html">ServeurWeb</a></li><li class="navelem"><a class="el" href="_serveur_web_8h.html">ServeurWeb.h</a></li>
+    <li class="footer"><img class="footer" src="lasalle-logo.png" height="31" alt="La Salle Avignon"/>&nbsp;<b>Campus La Salle Avignon</b>&nbsp;-&nbsp;9 Rue Notre Dame des 7 douleurs&nbsp;-&nbsp;BP 50165&nbsp;-&nbsp;84008 Avignon&nbsp;-&nbsp;Généré le Samedi 8 Juin 2024 23:47:14 pour Projet domotifications par&nbsp;<a href="https://www.doxygen.org/index.html">doxygen</a>&nbsp;1.9.1&nbsp;</li>
+  </ul>
+</div>
+</body>
+</html>

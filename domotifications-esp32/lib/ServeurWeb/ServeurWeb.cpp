@@ -2,7 +2,7 @@
  * @file ServeurWeb.cpp
  * @brief Définition de la classe ServeurWeb
  * @author Corentin MOUTTE
- * @version 0.1
+ * @version 1.0
  */
 
 #include "ServeurWeb.h"
@@ -350,11 +350,32 @@ void ServeurWeb::traiterRequeteUpdatePoubelle()
         bool etatPoubelle = documentJSON["etat"].as<bool>();
         poubelle->setEtatNotification(etatPoubelle);
     }
+    // Mise à jour de la couleur de la led
     if(objetJSON.containsKey("couleur"))
     {
-        // @todo extraire la couleur de la poubelle du JSON (String)
-
-        // @todo mettre à jour la couleur de la led pour cette poubelle avec setCouleurLed()
+        String couleurPoubelle = documentJSON["couleur"].as<String>();
+        poubelle->setCouleurLed(couleurPoubelle);
+        // si le module est en notification alors il faut (re)allumer la led
+        if(poubelle->getEtatNotification())
+        {
+            poubelle->allumerNotification();
+        }
+    }
+    // Mise à jour du bandeau
+    if(poubelle->getActivation())
+    {
+        if(poubelle->getEtatNotification())
+        {
+            poubelle->allumerNotification();
+        }
+        else
+        {
+            poubelle->eteindreNotification();
+        }
+    }
+    else
+    {
+        poubelle->eteindreNotification();
     }
 
     // Sauvegarde les états de ce module
@@ -519,11 +540,32 @@ void ServeurWeb::traiterRequeteUpdateMachine()
         bool etatMachine = documentJSON["etat"].as<bool>();
         machine->setEtatNotification(etatMachine);
     }
+    // Mise à jour la couleur de la led
     if(objetJSON.containsKey("couleur"))
     {
-        // @todo extraire la couleur du JSON (String)
-
-        // @todo mettre à jour la couleur de la led pour cette machine avec setCouleurLed()
+        String couleurMachine = documentJSON["couleur"].as<String>();
+        machine->setCouleurLed(couleurMachine);
+        // si le module est en notification alors il faut (re)allumer la led
+        if(machine->getEtatNotification())
+        {
+            machine->allumerNotification();
+        }
+    }
+    // Mise à jour du bandeau
+    if(machine->getActivation())
+    {
+        if(machine->getEtatNotification())
+        {
+            machine->allumerNotification();
+        }
+        else
+        {
+            machine->eteindreNotification();
+        }
+    }
+    else
+    {
+        machine->eteindreNotification();
     }
 
     // Sauvegarde les états de ce module
@@ -688,11 +730,32 @@ void ServeurWeb::traiterRequeteUpdateBoite()
         bool etatBoite = documentJSON["etat"].as<bool>();
         boite->setEtatNotification(etatBoite);
     }
+    // Mise à jour la couleur de la led
     if(objetJSON.containsKey("couleur"))
     {
-        // @todo extraire la couleur du JSON (String)
-
-        // @todo mettre à jour la couleur de la led pour cette boite avec setCouleurLed()
+        String couleurBoite = documentJSON["couleur"].as<String>();
+        boite->setCouleurLed(couleurBoite);
+        // si le module est en notification alors il faut (re)allumer la led
+        if(boite->getEtatNotification())
+        {
+            boite->allumerNotification();
+        }
+    }
+    // Mise à jour du bandeau
+    if(boite->getActivation())
+    {
+        if(boite->getEtatNotification())
+        {
+            boite->allumerNotification();
+        }
+        else
+        {
+            boite->eteindreNotification();
+        }
+    }
+    else
+    {
+        boite->eteindreNotification();
     }
 
     // Sauvegarde les états de ce module

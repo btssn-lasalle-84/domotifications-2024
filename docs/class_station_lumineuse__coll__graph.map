@@ -1,0 +1,5 @@
+<map id="StationLumineuse" name="StationLumineuse">
+<area shape="rect" id="node1" title="Déclaration de la classe StationLumineuse." alt="" coords="5,5,233,479"/>
+<area shape="rect" id="node2" href="$class_serveur_web.html" title="Déclaration de la classe ServeurWeb." alt="" coords="114,541,359,853"/>
+<area shape="rect" id="node3" href="$class_web_server.html" title=" " alt="" coords="297,203,389,281"/>
+</map>

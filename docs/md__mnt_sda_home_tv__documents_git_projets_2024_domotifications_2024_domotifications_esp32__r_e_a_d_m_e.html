@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Projet domotifications: Station de notifications lumineuses</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="customdoxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="projet-logo.png"/></td>
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Projet domotifications
+   &#160;<span id="projectnumber">1.0</span>
+   </div>
+   <div id="projectbrief">BTS SNIR LaSalle Avignon 2024</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.9.1 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Recherche','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','Recherche');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('md__mnt_sda_home_tv__documents_git_projets_2024_domotifications_2024_domotifications_esp32__r_e_a_d_m_e.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="PageDoc"><div class="header">
+  <div class="headertitle">
+<div class="title">Station de notifications lumineuses </div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><ul>
+<li><a href="#station-de-notifications-lumineuses">Station de notifications lumineuses</a><ul>
+<li><a href="#présentation">Présentation</a></li>
+<li><a href="#configuration-du-projet">Configuration du projet</a></li>
+<li><a href="#configuration-wifi">Configuration WiFi</a></li>
+</ul>
+</li>
+</ul>
+<h1>Présentation</h1>
+<p>La station de notifications lumineuses permet de notifier visuellement des évènements domotiques (quand et quelle poubelle sortir, quand est-ce qu’un colis a été livré dans la boîte aux lettres et quand est-ce qu’une des machines à laver ou sécher le linge a terminé, ...).</p>
+<p>La station de notifications lumineuses doit permettre d’avoir d’un simple coup d’œil les informations concernant les poubelles, les livraisons et les machines de linge. Cela a pour but d’apporter confort et sérénité.</p>
+<p>Elle est composée d’un bandeau circulaire à leds (WS2812B GRB) et d'un micro-contôleur D1 mini ESP32.</p>
+<p>Le bandeau circulaire à leds est découpé en trois groupes distincts pour les notifications :</p>
+<ul>
+<li>en vert : la notification d’une machine terminée (le système peut gérer jusqu’à 6 machines individuellement),</li>
+<li>en rouge/bleu/vert/gris/jaune : la notification d'une poubelle de tri à sortir (5 types de poubelle),</li>
+<li>en rouge : la présence d’un colis dans la boîte aux lettres.</li>
+</ul>
+<h1>Configuration du projet</h1>
+<p>Le fichier <code>platformio.ini</code> de configuration du projet :</p>
+<div class="fragment"><div class="line">[env:wemos_d1_mini32]</div>
+<div class="line">platform = espressif32</div>
+<div class="line">board = wemos_d1_mini32</div>
+<div class="line">framework = arduino</div>
+<div class="line">lib_deps =</div>
+<div class="line">    adafruit/Adafruit NeoPixel @ ^1.10.5</div>
+<div class="line">    bblanchon/ArduinoJson @ ^6.19.4</div>
+<div class="line">    https://github.com/tzapu/WiFiManager.git</div>
+<div class="line">upload_port = /dev/ttyUSB0</div>
+<div class="line">upload_speed = 115200</div>
+<div class="line">monitor_port = /dev/ttyUSB0</div>
+<div class="line">monitor_speed = 115200</div>
+</div><!-- fragment --><h1>Configuration WiFi</h1>
+<ol type="1">
+<li>Allumer la station de notifications lumineuses</li>
+<li>Avec un terminal WiFi, il faut se connecter au point d'accès de la station de notifications lumineuses (<code>ESP32_XXYYZZ</code>)</li>
+<li>À partir de la page wb de configuration, il faut renseigner le SSID et le mot de passe Wifi puis sauvegarder</li>
+<li>Redémarrer la station de notifications lumineuses et vérifier son adresse IP à partir du terminal, par exemple :</li>
+</ol>
+<div class="fragment"><div class="line">...</div>
+<div class="line">*wm:[1] connectTimeout not set, ESP waitForConnectResult...</div>
+<div class="line">*wm:[2] Connection result: WL_CONNECTED</div>
+<div class="line">*wm:[1] AutoConnect: SUCCESS</div>
+<div class="line">*wm:[2] Connected in 929 ms</div>
+<div class="line">*wm:[1] STA IP Address: 192.168.52.34</div>
+<div class="line">Serveur HTTP Rest ok</div>
+<div class="line">Adresse IP : 192.168.52.34</div>
+<div class="line">...</div>
+</div><!-- fragment --><hr  />
+<p> Auteur : Corentin MOUTTE 2024 </p>
+</div></div><!-- contents -->
+</div><!-- PageDoc -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.1-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer"><img class="footer" src="lasalle-logo.png" height="31" alt="La Salle Avignon"/>&nbsp;<b>Campus La Salle Avignon</b>&nbsp;-&nbsp;9 Rue Notre Dame des 7 douleurs&nbsp;-&nbsp;BP 50165&nbsp;-&nbsp;84008 Avignon&nbsp;-&nbsp;Généré le Samedi 8 Juin 2024 23:47:14 pour Projet domotifications par&nbsp;<a href="https://www.doxygen.org/index.html">doxygen</a>&nbsp;1.9.1&nbsp;</li>
+  </ul>
+</div>
+</body>
+</html>

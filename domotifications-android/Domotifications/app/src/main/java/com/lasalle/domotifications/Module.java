@@ -30,6 +30,7 @@ public class Module
                   TypeModule    typeModule,
                   boolean       etatActivation,
                   boolean       etatNotification,
+                  String        couleur,
                   BaseDeDonnees baseDeDonnees)
 
     {
@@ -41,6 +42,7 @@ public class Module
         this.typeModule       = typeModule;
         this.etatActivation   = etatActivation;
         this.etatNotification = etatNotification;
+        this.couleur          = couleur;
         this.baseDeDonnees    = baseDeDonnees;
     }
 
@@ -69,7 +71,7 @@ public class Module
         return this.etatNotification;
     }
 
-    private String getCouleur()
+    public String getCouleur()
     {
         return this.couleur;
     }
@@ -86,10 +88,12 @@ public class Module
 
     public void setEtatActivation(boolean etat)
     {
-        if (this.etatActivation != etat)
+        if(this.etatActivation != etat)
         {
             this.etatActivation = etat;
-            baseDeDonnees.mettreAJourEtatActivationModule(idModule, getTypeModule().ordinal(), etat);
+            baseDeDonnees.mettreAJourEtatActivationModule(idModule,
+                                                          getTypeModule().ordinal(),
+                                                          etat);
         }
     }
 
@@ -100,15 +104,21 @@ public class Module
 
     public void setEtatNotification(boolean etat)
     {
-        if (this.etatNotification != etat)
+        if(this.etatNotification != etat)
         {
             this.etatNotification = etat;
-            baseDeDonnees.mettreAJourEtatNotificationModule(idModule, getTypeModule().ordinal(), etat);
+            baseDeDonnees.mettreAJourEtatNotificationModule(idModule,
+                                                            getTypeModule().ordinal(),
+                                                            etat);
         }
     }
 
     public void setCouleur(String couleur)
     {
-        this.couleur = couleur;
+        if(!this.couleur.equals(couleur))
+        {
+            this.couleur = couleur;
+            baseDeDonnees.mettreAJourCouleurModule(idModule, getTypeModule().ordinal(), couleur);
+        }
     }
 }

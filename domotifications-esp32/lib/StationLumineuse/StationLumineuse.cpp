@@ -2,7 +2,7 @@
  * @file StationLumineuse.cpp
  * @brief Définition de la classe StationLumineuse
  * @author Corentin MOUTTE
- * @version 0.1
+ * @version 1.0
  */
 
 #include "StationLumineuse.h"
@@ -187,6 +187,7 @@ void StationLumineuse::sauvegarderEtatsPoubelle(int id)
     preferences.putBool(cle, poubelles[id - 1]->getEtatNotification());
     sprintf((char*)cle, "%s%d", "actif_p", id);
     preferences.putBool(cle, poubelles[id - 1]->getActivation());
+    sauvegarderCouleurPoubelle(id);
 }
 
 std::size_t StationLumineuse::getNbBoites() const
@@ -217,6 +218,7 @@ void StationLumineuse::sauvegarderEtatsBoite(int id)
     preferences.putBool(cle, boites[id - 1]->getEtatNotification());
     sprintf((char*)cle, "%s%d", "actif_b", id);
     preferences.putBool(cle, boites[id - 1]->getActivation());
+    sauvegarderCouleurBoite(id);
 }
 
 std::size_t StationLumineuse::getNbMachines() const
@@ -247,12 +249,86 @@ void StationLumineuse::sauvegarderEtatsMachine(int id)
     preferences.putBool(cle, machines[id - 1]->getEtatNotification());
     sprintf((char*)cle, "%s%d", "actif_m", id);
     preferences.putBool(cle, machines[id - 1]->getActivation());
+    sauvegarderCouleurMachine(id);
 }
 
 // Méthodes statiques
 uint32_t StationLumineuse::convertirCouleurRGB(uint8_t r, uint8_t g, uint8_t b)
 {
     return ((uint32_t)r << 16) | ((uint32_t)g << 8) | b;
+}
+
+void StationLumineuse::sauvegarderCouleurPoubelle(int id)
+{
+    if(id < 1 || id > poubelles.size() || poubelles[id - 1] == nullptr)
+    {
+        return;
+    }
+    char cle[64] = "";
+    sprintf(cle, "couleur_p%d", id);
+    preferences.putString(cle, poubelles[id - 1]->getCouleur());
+}
+
+void StationLumineuse::restaurerCouleurPoubelle(int id)
+{
+    if(id < 1 || id > poubelles.size() || poubelles[id - 1] == nullptr)
+    {
+        return;
+    }
+
+    char cle[64] = "";
+    sprintf((char*)cle, "%s%d", "couleur_p", id);
+    Poubelle* poubelle = getPoubelle(id);
+    poubelle->setCouleurLed(
+      preferences.getString(cle, StationLumineuse::getCouleurToString(couleursPoubelles[id])));
+}
+
+void StationLumineuse::sauvegarderCouleurBoite(int id)
+{
+    if(id < 1 || id > boites.size() || boites[id - 1] == nullptr)
+    {
+        return;
+    }
+    char cle[64] = "";
+    sprintf(cle, "couleur_b%d", id);
+    preferences.putString(cle, boites[id - 1]->getCouleur());
+}
+
+void StationLumineuse::restaurerCouleurBoite(int id)
+{
+    if(id < 1 || id > boites.size() || boites[id - 1] == nullptr)
+    {
+        return;
+    }
+    char cle[64] = "";
+    sprintf(cle, "couleur_b%d", id);
+    Boite* boite = getBoite(id);
+    boite->setCouleurLed(
+      preferences.getString(cle, StationLumineuse::getCouleurToString(leds.Color(255, 0, 0))));
+}
+
+void StationLumineuse::sauvegarderCouleurMachine(int id)
+{
+    if(id < 1 || id > machines.size() || machines[id - 1] == nullptr)
+    {
+        return;
+    }
+    char cle[64] = "";
+    sprintf(cle, "couleur_m%d", id);
+    preferences.putString(cle, machines[id - 1]->getCouleur());
+}
+
+void StationLumineuse::restaurerCouleurMachine(int id)
+{
+    if(id < 1 || id > machines.size() || machines[id - 1] == nullptr)
+    {
+        return;
+    }
+    char cle[64] = "";
+    sprintf(cle, "couleur_m%d", id);
+    Machine* machine = getMachine(id);
+    machine->setCouleurLed(
+      preferences.getString(cle, StationLumineuse::getCouleurToString(leds.Color(0, 255, 0))));
 }
 
 // Méthodes privées
@@ -273,14 +349,29 @@ void StationLumineuse::restaurerEtats()
         {
             continue;
         }
-        // "p" pour poubelle
         sprintf((char*)cle, "%s%d", "notif_p", i);
         poubelle->setEtatNotification(preferences.getBool(cle, false));
         sprintf((char*)cle, "%s%d", "actif_p", i);
         poubelle->setActivation(preferences.getBool(cle, false));
+        restaurerCouleurPoubelle(i);
+        if(poubelle->getActivation())
+        {
+            if(poubelle->getEtatNotification())
+            {
+                poubelle->allumerNotification();
+            }
+            else
+            {
+                poubelle->eteindreNotification();
+            }
+        }
+        else
+        {
+            poubelle->eteindreNotification();
+        }
     }
 
-    // pour les modules boites
+    // Restaurer les états des modules Boite
     Boite* boite = nullptr;
     for(int i = 1; i <= getNbBoites(); i++)
     {
@@ -289,14 +380,29 @@ void StationLumineuse::restaurerEtats()
         {
             continue;
         }
-        // "b" pour boite
         sprintf((char*)cle, "%s%d", "notif_b", i);
         boite->setEtatNotification(preferences.getBool(cle, false));
         sprintf((char*)cle, "%s%d", "actif_b", i);
         boite->setActivation(preferences.getBool(cle, false));
+        restaurerCouleurBoite(i);
+        if(boite->getActivation())
+        {
+            if(boite->getEtatNotification())
+            {
+                boite->allumerNotification();
+            }
+            else
+            {
+                boite->eteindreNotification();
+            }
+        }
+        else
+        {
+            boite->eteindreNotification();
+        }
     }
 
-    // pour les modules machines
+    // Restaurer les états des modules Machine
     Machine* machine = nullptr;
     for(int i = 1; i <= getNbMachines(); i++)
     {
@@ -305,10 +411,25 @@ void StationLumineuse::restaurerEtats()
         {
             continue;
         }
-        // "m" pour machine
         sprintf((char*)cle, "%s%d", "notif_m", i);
-        boite->setEtatNotification(preferences.getBool(cle, false));
+        machine->setEtatNotification(preferences.getBool(cle, false));
         sprintf((char*)cle, "%s%d", "actif_m", i);
-        boite->setActivation(preferences.getBool(cle, false));
+        machine->setActivation(preferences.getBool(cle, false));
+        restaurerCouleurMachine(i);
+        if(machine->getActivation())
+        {
+            if(machine->getEtatNotification())
+            {
+                machine->allumerNotification();
+            }
+            else
+            {
+                machine->eteindreNotification();
+            }
+        }
+        else
+        {
+            machine->eteindreNotification();
+        }
     }
 }

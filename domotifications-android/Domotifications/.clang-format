@@ -1,4 +1,3 @@
----
 BasedOnStyle: Mozilla
 AlignConsecutiveAssignments: "true"
 AlignConsecutiveDeclarations: "true"
@@ -49,4 +48,3 @@ SpacesInSquareBrackets: "false"
 TabWidth: "4"
 BreakStringLiterals: "true"
 BreakAfterJavaFieldAnnotations: "true"
----
