@@ -2,7 +2,7 @@
  * @file StationLumineuse.h
  * @brief Déclaration de la classe StationLumineuse
  * @author Corentin MOUTTE
- * @version 0.1
+ * @version 1.0
  */
 
 #ifndef STATIONLUMINEUSE_H

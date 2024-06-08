@@ -2,7 +2,7 @@
  * @file ServeurWeb.cpp
  * @brief Définition de la classe ServeurWeb
  * @author Corentin MOUTTE
- * @version 0.1
+ * @version 1.0
  */
 
 #include "ServeurWeb.h"

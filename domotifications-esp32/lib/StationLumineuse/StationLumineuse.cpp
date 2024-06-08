@@ -2,7 +2,7 @@
  * @file StationLumineuse.cpp
  * @brief Définition de la classe StationLumineuse
  * @author Corentin MOUTTE
- * @version 0.1
+ * @version 1.0
  */
 
 #include "StationLumineuse.h"
