@@ -8,6 +8,7 @@
   - [Présentation](#présentation)
   - [Fonctionnalités](#fonctionnalités)
   - [Screenshots](#screenshots)
+  - [Diaporamas de présentation](#diaporamas-de-présentation)
   - [Diagramme de classes](#diagramme-de-classes)
   - [Protocole](#protocole)
   - [Historique des versions](#historique-des-versions)
@@ -57,6 +58,11 @@ La station de notifications lumineuses est composée d’un bandeau circulaire �
 ## Screenshots
 
 ![](images/domotifications-android-v1.0.gif)
+
+## Diaporamas de présentation
+
+- [Diaporama Oral LATYAOUI.pptx](diaporamas/Diaporama%20Oral%20LATYAOUI.pptx) (Android)
+- [Diaporama Oral MOUTTE.pptx](diaporamas/Diaporama%20Oral%20MOUTTE.pptx) (ESP32)
 
 ## Diagramme de classes
 
